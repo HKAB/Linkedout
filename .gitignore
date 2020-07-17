@@ -1,5 +1,23 @@
-# Byte-compiled / optimized / DLL files
+
+# Created by https://www.toptal.com/developers/gitignore/api/django,react
+# Edit at https://www.toptal.com/developers/gitignore?templates=django,react
+
+### Django ###
+*.log
+*.pot
+*.pyc
 __pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+
+# If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
+# in your Git repository. Update and uncomment the following line accordingly.
+# <django-project-name>/staticfiles/
+
+### Django.Python Stack ###
+# Byte-compiled / optimized / DLL files
 *.py[cod]
 *$py.class
 
@@ -8,7 +26,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -21,9 +38,12 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -38,21 +58,21 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+.nox/
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
 *.cover
+*.py,cover
 .hypothesis/
+.pytest_cache/
 
 # Translations
 *.mo
-*.pot
 
 # Django stuff:
-*.log
-local_settings.py
 
 # Flask stuff:
 instance/
@@ -70,23 +90,39 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# IPython
+profile_default/
+ipython_config.py
+
 # pyenv
 .python-version
 
-# celery beat schedule file
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
 celerybeat-schedule
+celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
 
-# dotenv
+# Environments
 .env
-
-# virtualenv
 .venv
+env/
 venv/
 ENV/
-.vscode
+env.bak/
+venv.bak/
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -99,38 +135,29 @@ ENV/
 
 # mypy
 .mypy_cache/
+.dmypy.json
+dmypy.json
 
-.DS_Store
-*.sqlite3
-media/
-*.pyc
-*.db
-*.pid
-# django migrations 
-**/migrations/**
-!**/migrations
-!**/migrations/__init__.py
+# Pyre type checker
+.pyre/
 
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# pytype static type analyzer
+.pytype/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+### react ###
+.DS_*
+logs
+**/*.backup.*
+**/*.back.*
 
-# testing
-/coverage
+node_modules
+bower_components
 
-# production
-/build
+*.sublime*
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+psd
+thumb
+sketch
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# End of https://www.toptal.com/developers/gitignore/api/django,react
+
