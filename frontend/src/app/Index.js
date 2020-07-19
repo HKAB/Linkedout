@@ -1,11 +1,15 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+
 import { Nav } from '@/components';
+import { Login } from '@/account';
 
 function App() {
   return (
     <div className="app-container">
-    <Nav />
-    This is app
+    <Switch>
+    	<Route path='/login' component={Login}/>
+    </Switch>
     </div>
   );
 }
