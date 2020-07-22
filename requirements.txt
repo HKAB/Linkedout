@@ -1,4 +1,5 @@
 django
-djangorestframework
 pyjwt
+djangorestframework
 django-cors-headers
+drf-yasg

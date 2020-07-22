@@ -4,6 +4,8 @@ import jwt
 import re
 
 from django.db import transaction
+from rest_framework import status
+from rest_framework.exceptions import AuthenticationFailed
 
 from backend.settings import SECRET_KEY
 from app.models.account import Account
@@ -12,32 +14,49 @@ from app.exceptions import InvalidInputFormat
 
 PASSWORD_SALT = 'SALT'
 
+
 @transaction.atomic
-def create_account(*, username: str, password: str, email: str) -> Account:
+def create_account(*, username: str, password: str, email: str, account_type: str) -> Account:
     """
     Create user account if not exist. Return Account object on success, None on failure.
     """
     username_format_check(username)
     password_format_check(password)
+    account_type_check(account_type)
     account = Account.objects.filter(username=username).first()
     if account:
         return None
     m = sha256()
     m.update((password + PASSWORD_SALT).encode('utf-8'))
     password_hash = m.hexdigest()
-    account = Account(username=username, password=password_hash)
+    account = Account(username=username, password=password_hash,
+                      account_type=account_type)
     account.save()
     create_email(email=email, account=account)
     return account
 
-def login(*, username: str, password: str) -> Account:
+
+def login(*, username: str, password: str) -> dict:
     """
-    Login with plaintext password. Return Account object on success, None on failure.
+    Login with plaintext password. Return dictionary contains access_token and Account fields.
     """
     m = sha256()
     m.update((password + PASSWORD_SALT).encode('utf-8'))
     password_hash = m.hexdigest()
-    return Account.objects.filter(username=username, password=password_hash).first()
+    account = Account.objects.filter(
+        username=username, password=password_hash).first()
+    if not account:
+        raise AuthenticationFailed("Incorrect username or password.")
+    access_token = generate_access_token(account)
+    return {
+        'access_token': access_token,
+        'account': {
+            'id': account.id,
+            'username': account.username,
+            'account_type': account.account_type,
+        }
+    }
+
 
 def generate_access_token(account: Account) -> str:
     """
@@ -48,13 +67,16 @@ def generate_access_token(account: Account) -> str:
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=10),
         'iat': datetime.datetime.utcnow(),
     }
-    access_token = jwt.encode(access_token_payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+    access_token = jwt.encode(access_token_payload,
+                              SECRET_KEY, algorithm='HS256').decode('utf-8')
     return access_token
+
 
 def username_format_check(username: str, raise_exception=True) -> bool:
     if len(username) > 36 or len(username) < 6:
         if raise_exception:
-            raise InvalidInputFormat("Username must be 6 to 36 characters long.")
+            raise InvalidInputFormat(
+                "Username must be 6 to 36 characters long.")
         return False
     match = re.fullmatch(r'[A-Za-z0-9.]+', username)
     if not match:
@@ -63,10 +85,20 @@ def username_format_check(username: str, raise_exception=True) -> bool:
         return False
     return True
 
+
 def password_format_check(password: str, raise_exception=True) -> bool:
     if len(password) > 36 or len(password) < 8:
         if raise_exception:
-            raise InvalidInputFormat("Password must be 8 to 36 characters long.")
+            raise InvalidInputFormat(
+                "Password must be 8 to 36 characters long.")
         return False
     return True
-    
+
+
+def account_type_check(account_type: str, raise_exception=True) -> bool:
+    if not account_type in ['student', 'company']:
+        if raise_exception:
+            raise InvalidInputFormat(
+                'account_type should be "student" or "company".')
+            return False
+    return True

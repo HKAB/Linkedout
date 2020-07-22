@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app.apps.AppConfig',
     'rest_framework',
     'corsheaders',
-    'app.apps.AppConfig',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -139,6 +140,6 @@ REST_FRAMEWORK = {
         'app.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', # make all endpoints private
+        'rest_framework.permissions.IsAuthenticated',  # make all endpoints private
     ),
 }
