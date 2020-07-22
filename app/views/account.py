@@ -29,7 +29,6 @@ class LoginView(APIView):
 
         class Meta:
             fields = ['username', 'password']
-
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
