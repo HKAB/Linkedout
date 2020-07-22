@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import exceptions, status, serializers
+from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
 from app.models.account import Account
@@ -53,7 +53,6 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         account = create_account(**serializer.validated_data)
         if account is None:
             return Response("User already exist", status=status.HTTP_409_CONFLICT)

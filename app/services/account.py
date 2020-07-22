@@ -4,7 +4,6 @@ import jwt
 import re
 
 from django.db import transaction
-from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 
 from backend.settings import SECRET_KEY
