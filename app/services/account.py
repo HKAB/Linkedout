@@ -99,6 +99,6 @@ def account_type_check(account_type: str, raise_exception=True) -> bool:
     if not account_type in ['student', 'company']:
         if raise_exception:
             raise InvalidInputFormat(
-                'account_type should be "student" or "company".')
+                "account_type should be 'student' or 'company'.")
             return False
     return True
