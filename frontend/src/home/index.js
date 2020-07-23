@@ -3,8 +3,8 @@ import React from 'react';
 function Home() {
     
     return (
-    	<div>This home is not a house</div>
+    	<div>Homepage</div>
     );
 }
 
-export default Home;
+export { Home };

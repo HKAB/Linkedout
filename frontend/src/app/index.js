@@ -1,11 +1,15 @@
 import React from 'react';
-import { Nav } from '@/components';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Home } from '@/home'
 
 function App() {
   return (
     <div className="app-container">
-    <Nav />
-    This is app
+	    <BrowserRouter>
+	    <Switch>
+	    	<Route path='/' component={ Home }/>
+	    </Switch>
+    </BrowserRouter>
     </div>
   );
 }
