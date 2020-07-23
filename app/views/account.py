@@ -7,7 +7,7 @@ from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
 from app.models.account import Account
-from app.services.account import login, create_account, generate_access_token
+from app.services.account import login, create_account, change_password
 from app.utils import inline_serializer
 
 
@@ -46,6 +46,9 @@ class RegisterView(APIView):
         password = serializers.CharField(required=True)
         email = serializers.CharField(required=True)
         account_type = serializers.CharField(required=True)
+
+        class Meta:
+            fields = ['username', 'password', 'email', 'account_type']
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(query_serializer=InputSerializer, responses={201: "User created"})
@@ -57,3 +60,20 @@ class RegisterView(APIView):
         if account is None:
             return Response("User already exist", status=status.HTTP_409_CONFLICT)
         return Response("User created", status=status.HTTP_201_CREATED)
+
+
+class ChangePasswordView(APIView):
+    class InputSerializer(serializers.Serializer):
+        current_password = serializers.CharField(required=True)
+        new_password = serializers.CharField(required=True)
+
+        class Meta:
+            fields = ['current_password', 'new_password']
+
+    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: "Password changed"})
+    @method_decorator(ensure_csrf_cookie)
+    def post(self, request):
+        serializers = self.InputSerializer(data=request.data)
+        serializers.is_valid(raise_exception=True)
+        change_password(account=request.user, **serializers.validated_data)
+        return Response("Password changed.", status=status.HTTP_200_OK)

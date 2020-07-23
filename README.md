@@ -39,14 +39,6 @@ python -m pip install -r requirements.txt
 
 ### Database migration
 
-First time migration
-
-```bash
-python manage.py migrate
-```
-
-From second time
-
 ```bash
 python manage.py makemigrations
 python manage.py migrate
