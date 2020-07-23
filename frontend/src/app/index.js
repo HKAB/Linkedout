@@ -1,14 +1,17 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-
-import { Login } from "@/account";
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Home } from '@/home'
+import { Profile } from '@/profile'
 
 function App() {
   return (
     <div className="app-container">
-      <Switch>
-        <Route path="/login" component={Login} />
-      </Switch>
+	    <BrowserRouter>
+	    <Switch>
+	    	<Route exact path='/' component={ Home }/>
+	    	<Route exact path='/profile' component={ Profile }/>
+	    </Switch>
+    </BrowserRouter>
     </div>
   );
 }
