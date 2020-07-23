@@ -25,10 +25,7 @@ def create_account(*, username: str, password: str, email: str, account_type: st
     account = Account.objects.filter(username=username).first()
     if account:
         return None
-    m = sha256()
-    m.update((password + PASSWORD_SALT).encode('utf-8'))
-    password_hash = m.hexdigest()
-    account = Account(username=username, password=password_hash,
+    account = Account(username=username, password=hashed_password(password),
                       account_type=account_type)
     account.save()
     create_email(email=email, account=account)
@@ -39,11 +36,8 @@ def login(*, username: str, password: str) -> dict:
     """
     Login with plaintext password. Return dictionary contains access_token and Account fields.
     """
-    m = sha256()
-    m.update((password + PASSWORD_SALT).encode('utf-8'))
-    password_hash = m.hexdigest()
     account = Account.objects.filter(
-        username=username, password=password_hash).first()
+        username=username, password=hashed_password(password)).first()
     if not account:
         raise AuthenticationFailed("Incorrect username or password.")
     access_token = generate_access_token(account)
@@ -55,6 +49,19 @@ def login(*, username: str, password: str) -> dict:
             'account_type': account.account_type,
         }
     }
+
+
+def change_password(*, account: Account, current_password: str, new_password: str) -> Account:
+    if account.password != hashed_password(current_password):
+        raise InvalidInputFormat("Wrong current password.")
+    account.password = hashed_password(new_password)
+    account.save()
+
+
+def hashed_password(password: str) -> str:
+    m = sha256()
+    m.update((password + PASSWORD_SALT).encode('utf-8'))
+    return m.hexdigest()
 
 
 def generate_access_token(account: Account) -> str:
