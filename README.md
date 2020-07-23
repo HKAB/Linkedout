@@ -8,7 +8,7 @@ Project for 1920H_PTUDW class
 
 Install MySql database, then create database and grant permissions.
 
-```
+```sql
 CREATE DATABASE backend;
 CREATE USER 'backend'@'%' IDENTIFIED BY 'backend';
 GRANT ALL PRIVILEGES ON backend.* TO 'backend'@'%';
