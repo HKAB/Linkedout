@@ -8,10 +8,6 @@ const { Header, Sider, Content } = Layout;
 
 class ProfileContent extends Component {
 
-  state = {
-    collapsed: false,
-  };
-
   render(){
     return(
         <Content
