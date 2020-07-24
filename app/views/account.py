@@ -21,6 +21,7 @@ class LoginView(APIView):
         })
 
         class Meta:
+            ref_name = 'Login'
             fields = ['access_token', 'account']
 
     class InputSerializer(serializers.Serializer):
@@ -28,10 +29,11 @@ class LoginView(APIView):
         password = serializers.CharField(required=True)
 
         class Meta:
+            ref_name = 'Login'
             fields = ['username', 'password']
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
+    @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
@@ -48,10 +50,11 @@ class RegisterView(APIView):
         account_type = serializers.CharField(required=True)
 
         class Meta:
+            ref_name = 'RegisterInput'
             fields = ['username', 'password', 'email', 'account_type']
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={201: "User created"})
+    @swagger_auto_schema(request_body=InputSerializer, responses={201: "User created"})
     @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
@@ -68,9 +71,10 @@ class ChangePasswordView(APIView):
         new_password = serializers.CharField(required=True)
 
         class Meta:
+            ref_name = 'ChangePasswordInput'
             fields = ['current_password', 'new_password']
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: "Password changed"})
+    @swagger_auto_schema(request_body=InputSerializer, responses={200: "Password changed"})
     @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         serializers = self.InputSerializer(data=request.data)
