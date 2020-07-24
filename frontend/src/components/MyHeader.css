@@ -2,3 +2,15 @@
     display: flex;
     background-color: #ffffff;
 }
+
+.left-menu {
+    position: absolute;
+    right:16px;
+    display: flex;  
+    padding: 0px;
+    height: 64px;
+}
+
+.username {
+    margin-left: 8px;
+}
