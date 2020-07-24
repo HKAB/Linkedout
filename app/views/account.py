@@ -50,7 +50,7 @@ class RegisterView(APIView):
         account_type = serializers.CharField(required=True)
 
         class Meta:
-            ref_name = 'RegisterInput'
+            ref_name = 'Register'
             fields = ['username', 'password', 'email', 'account_type']
     permission_classes = [AllowAny]
 
@@ -71,7 +71,7 @@ class ChangePasswordView(APIView):
         new_password = serializers.CharField(required=True)
 
         class Meta:
-            ref_name = 'ChangePasswordInput'
+            ref_name = 'ChangePassword'
             fields = ['current_password', 'new_password']
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: "Password changed"})
