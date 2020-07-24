@@ -77,7 +77,7 @@ class ChangePasswordView(APIView):
     @swagger_auto_schema(request_body=InputSerializer, responses={200: "Password changed"})
     @method_decorator(ensure_csrf_cookie)
     def post(self, request):
-        serializers = self.InputSerializer(data=request.data)
-        serializers.is_valid(raise_exception=True)
-        change_password(account=request.user, **serializers.validated_data)
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        change_password(account=request.user, **serializer.validated_data)
         return Response("Password changed.", status=status.HTTP_200_OK)
