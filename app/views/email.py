@@ -7,46 +7,24 @@ from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
 from app.models.account import Account
-from app.services.email import get_email_list, create_email
+from app.services.email import list_email, create_email
 
-class EmailView(APIView):
-    # Default input serializer, use for POST and DELETE
+
+class EmailListView(APIView):
     class InputSerializer(serializers.Serializer):
-        email = serializers.CharField(required=True)
-
-        class Meta:
-            ref_name = 'Email'
-            fields = ['email']
-
-    permission_classes = [AllowAny]
-
-    @swagger_auto_schema(request_body=InputSerializer, responses={201: "Email added"})
-    @method_decorator(ensure_csrf_cookie)
-    def post(self, request):
-        serializer = self.InputSerializer(data=request.data, many=True)
-        serializer.is_valid(raise_exception=True)
-        create_email(**serializer.validated_data)
-        return Response("Email added.", status=status.HTTP_201_CREATED)
-
-    # Input serializer use only for GET
-    class GETInputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
 
         class Meta:
-            ref_name = 'Email'
+            ref_name = 'EmailList'
             fields = ['id']
 
-    class GETOutputSerializer(serializers.Serializer):
-        email_list = serializers.ListField(child = serializers.CharField())
+    class OutputSerializer(serializers.Serializer):
+        pass
 
-        class Meta:
-            ref_name = 'Email'
-            fields = ['email_list']
-
-    @swagger_auto_schema(query_serializer=GETInputSerializer, responses={200: GETOutputSerializer})
+    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: Response()})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializer = self.GETInputSerializer(data=request.query_params)
-        serializer.is_valid(raise_exception=True)
-        result = get_email_list(**serializer.validated_data)
-        return Response(self.GETOutputSerializer(result).data)
+        serializers = self.InputSerializer(data=request.query_params)
+        serializers.is_valid(raise_exception=True)
+        result = list_email(**serializers.validated_data)
+        return Response(result, status=status.HTTP_200_OK)

@@ -4,6 +4,7 @@ from app.models.email import Email
 from app.models.account import Account
 from app.exceptions import InvalidInputFormat
 
+
 def create_email(*, email: str, account: Account) -> Email:
     """
     Create new email with email string and corresponding account, return Email object on success.
@@ -13,11 +14,11 @@ def create_email(*, email: str, account: Account) -> Email:
     new_email.save()
     return new_email
 
-def get_email_list (*, id: int) -> dict:
-    email_list = list(Email.objects.filter(id=id))
-    return {
-        'email_list': [e.email for e in email_list]
-    }
+
+def list_email(*, id: int) -> list:
+    emails = Email.objects.filter(id=id)
+    return [e.email for e in emails]
+
 
 def email_format_check(email: str, raise_exception=True) -> bool:
     # Just place this here for reference later (and I don't have to search again):
