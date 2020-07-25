@@ -49,7 +49,7 @@ class MyHeader extends Component {
 		<span class="left-menu">
 		<Button type="text" style={{height: 64}}><QuestionCircleOutlined/></Button>
 			<Button type="text" style={{height: 64}}><BellOutlined/></Button>
-			<Dropdown overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
+			<Dropdown overlay={menu} placement="bottomCenter"  icon={<UserOutlined />}>
 				<Button type="text" style={{height: 64}}>
 					<Avatar className="avatar-picture" src={avata}/>
 					<span class="username"> Vu Trang Linh</span>
