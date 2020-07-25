@@ -6,23 +6,23 @@ from rest_framework.response import Response
 from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
-from app.services.email import list_email, create_email, update_email, delete_email
+from app.services.phone import list_phone, create_phone, update_phone, delete_phone
 
 
-class EmailListView(APIView):
+class PhoneListView(APIView):
     class InputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
 
         class Meta:
-            ref_name = 'EmailListIn'
+            ref_name = 'PhoneListIn'
             fields = ['id']
 
     class OutputSerializer(serializers.Serializer):
-        emails = serializers.ListField()
+        phones = serializers.ListField()
 
         class Meta:
-            ref_name = 'EmailListOut'
-            fields = ['emails']
+            ref_name = 'PhoneListOut'
+            fields = ['phones']
 
     permission_classes = [AllowAny]
 
@@ -31,24 +31,24 @@ class EmailListView(APIView):
     def get(self, request):
         serializers = self.InputSerializer(data=request.query_params)
         serializers.is_valid(raise_exception=True)
-        result = list_email(**serializers.validated_data)
+        result = list_phone(**serializers.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
-class EmailCreateView(APIView):
+class PhoneCreateView(APIView):
     class InputSerializer(serializers.Serializer):
-        email = serializers.CharField(required=True)
+        phone = serializers.CharField(required=True)
 
         class Meta:
-            ref_name = 'EmailCreateIn'
-            fields = ['email']
+            ref_name = 'PhoneCreateIn'
+            fields = ['phone']
 
     class OutputSerializer(serializers.Serializer):
-        emails = serializers.ListField()
+        phones = serializers.ListField()
 
         class Meta:
-            ref_name = 'EmailCreateOut'
-            fields = ['emails']
+            ref_name = 'PhoneCreateOut'
+            fields = ['phones']
 
     permission_classes = [IsAuthenticated]
 
@@ -57,26 +57,26 @@ class EmailCreateView(APIView):
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = create_email(account=request.user, **
+        result = create_phone(account=request.user, **
                               serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_201_CREATED)
 
 
-class EmailUpdateView(APIView):
+class PhoneUpdateView(APIView):
     class InputSerializer(serializers.Serializer):
-        old_email = serializers.CharField(required=True)
-        new_email = serializers.CharField(required=True)
+        old_phone = serializers.CharField(required=True)
+        new_phone = serializers.CharField(required=True)
 
         class Meta:
-            ref_name = 'EmailUpdateIn'
-            fields = ['old_email', 'new_email']
+            ref_name = 'PhoneUpdateIn'
+            fields = ['old_phone', 'new_phone']
 
     class OutputSerializer(serializers.Serializer):
-        emails = serializers.ListField()
+        phones = serializers.ListField()
 
         class Meta:
-            ref_name = 'EmailUpdateOut'
-            fields = ['emails']
+            ref_name = 'PhoneUpdateOut'
+            fields = ['phones']
 
     permission_classes = [IsAuthenticated]
 
@@ -85,25 +85,25 @@ class EmailUpdateView(APIView):
     def put(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = update_email(account=request.user, **
+        result = update_phone(account=request.user, **
                               serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
-class EmailDeleteView(APIView):
+class PhoneDeleteView(APIView):
     class InputSerializer(serializers.Serializer):
-        email = serializers.CharField(required=True)
+        phone = serializers.CharField(required=True)
 
         class Meta:
-            ref_name = 'EmailDeleteIn'
-            fields = ['email']
+            ref_name = 'PhoneDeleteIn'
+            fields = ['phone']
 
     class OutputSerializer(serializers.Serializer):
-        emails = serializers.ListField()
+        phones = serializers.ListField()
 
         class Meta:
-            ref_name = 'EmailDeleteOut'
-            fields = ['emails']
+            ref_name = 'PhoneDeleteOut'
+            fields = ['phones']
 
     permission_classes = [IsAuthenticated]
 
@@ -112,6 +112,6 @@ class EmailDeleteView(APIView):
     def delete(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = delete_email(account=request.user, **
+        result = delete_phone(account=request.user, **
                               serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_201_CREATED)

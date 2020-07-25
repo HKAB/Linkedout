@@ -54,6 +54,7 @@ def login(*, username: str, password: str) -> dict:
 def change_password(*, account: Account, current_password: str, new_password: str) -> Account:
     if account.password != hashed_password(current_password):
         raise InvalidInputFormat("Wrong current password.")
+    password_format_check(new_password)
     account.password = hashed_password(new_password)
     account.save()
 
