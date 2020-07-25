@@ -4,6 +4,5 @@ from .company import Company
 
 
 class Follow(models.Model):
-    student= models.ForeignKey(Student,on_delete=models.CASCADE)
-    company=models.ForeignKey(Company,on_delete=models.CASCADE)
-
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
