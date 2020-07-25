@@ -1,3 +1,23 @@
 .site-layout-background {
-  background: #fff;
+    background: #fff;
+}
+.user-description{
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  text-align: center;
+  align-self: center;
+  height: 53px;
+  background: white;
+  font-family: Abel;
+  font-style: normal;
+  font-weight: normal;
+}
+.user-fullname {
+  font-size: 20px;
+  line-height: 28px;
+}
+.user-quotes{
+  font-size: 14px;
+  line-height: 21px;
 }
