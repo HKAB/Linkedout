@@ -1,9 +1,16 @@
 from django.db import models
 
+from .account import Account
+from .student import Student
+from .speciality import Speciality
+
 
 class Company(models.Model):
-    company_name = models.CharField(max_length=50)
-    company_size = models.CharField(max_length=50)
-    website = web = models.URLField('Web Address')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    website = models.TextField(null=True)
     description = models.TextField(null=True)
-    company_avatar = models.ImageField()
+    profile_picture = models.ImageField(null=True)
+
+    followers = models.ManyToManyField(Student)
+    specialities = models.ManyToManyField(Speciality)
