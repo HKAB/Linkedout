@@ -35,13 +35,15 @@ class JWTAuthentication(BaseAuthentication):
                                  algorithms=['HS256'])
 
         except jwt.ExpiredSignatureError:
-            raise exceptions.AuthenticationFailed('access_token expired')
+            raise exceptions.AuthenticationFailed('access_token expired.')
         except IndexError:
-            raise exceptions.AuthenticationFailed('Token prefix missing')
+            raise exceptions.AuthenticationFailed('Token prefix missing.')
+        except:
+            raise exceptions.AuthenticationFailed('Invalid access token.')
 
         account = Account.objects.get(id=payload['user_id'])
         if account is None:
-            raise exceptions.AuthenticationFailed('User not found')
+            raise exceptions.AuthenticationFailed('User not found.')
 
         # self.enforce_csrf(request)
         return (account, None)
