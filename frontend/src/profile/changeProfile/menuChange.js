@@ -24,7 +24,7 @@ class MenuChange extends Component {
                             Content of Tab 1
                         </TabPane>
                         <TabPane tab="Thông tin Job" key="2">
-                            Content of Tab 2
+                            
                         </TabPane>
                          <TabPane tab="Settings" key="3">
                              Content of Tab 3
