@@ -14,9 +14,18 @@ def create_email(*, email: str, account: Account) -> Email:
     new_email.save()
     return new_email
 
+
+def list_email(*, id: int) -> list:
+    emails = Email.objects.filter(id=id)
+    return [e.email for e in emails]
+
+
 def email_format_check(email: str, raise_exception=True) -> bool:
-    if not re.fullmatch(r'[\w\-\.]+@([\w\-]+\.)+[\w-]{2,4}', email):
+    # Just place this here for reference later (and I don't have to search again):
+    # https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
+
+    if not re.fullmatch(r'[\w\_\-\.]+@([\w\-]+\.)+[\w-]{2,4}', email):
         if raise_exception:
-            raise InvalidInputFormat('Invalid email.')
+            raise InvalidInputFormat('Invalid email address.')
         return False
     return True

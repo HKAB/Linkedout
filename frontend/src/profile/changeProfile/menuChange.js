@@ -65,6 +65,7 @@ class MenuChange extends Component {
             defaultOpenKeys={['sub1']}
             style={{height:'100%', margin:0, width:'100%'}}>
                 <SubMenu title="Thay đổi" icon={<EditOutlined />}  key="sub1" >
+<<<<<<< HEAD
                     <Tabs  tabPosition="left" style={{marginLeft:24}}>
                         <TabPane tab="Thông tin tài khoản" key="1"  >
                             <span style={{fontWeight: "bold"}}>THÔNG TIN TÀI KHOẢN</span>
@@ -98,6 +99,13 @@ class MenuChange extends Component {
                                     
                                 </Col>
                             </Row>
+=======
+                    <Tabs centered tabPosition={this.state.tabPosition} style={{marginLeft:24}}>
+                        <TabPane tab="Thông tin tài khoản" key="1" >
+                            Content of Tab 1
+                        </TabPane>
+                        <TabPane tab="Thông tin Job" key="2">
+>>>>>>> 53c565b5953ca4339cc99e063baa2769807795b8
                             
                         </TabPane>
                          <TabPane tab="Settings" key="2" style={{fontSize: 16}}>

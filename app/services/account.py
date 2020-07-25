@@ -8,6 +8,8 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from backend.settings import SECRET_KEY
 from app.models.account import Account
+from app.models.email import Email
+from app.models.phone import Phone
 from app.services.email import create_email
 from app.exceptions import InvalidInputFormat
 
