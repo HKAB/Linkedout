@@ -4,6 +4,7 @@ from app.views.account import LoginView, RegisterView, ChangePasswordView
 from app.views.student import StudentGetView, StudentCreateView, StudentUpdateView, StudentProfilePictureView
 from app.views.email import EmailListView, EmailCreateView, EmailUpdateView, EmailDeleteView
 from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, PhoneDeleteView
+from app.views.tag import SkillTagView, TitleTagView, SchoolTagView
 
 account_patterns = [
     path('login', LoginView.as_view()),
@@ -32,9 +33,16 @@ student_patterns = [
     path('upload', StudentProfilePictureView.as_view()),
 ]
 
+tag_patterns = [
+    path('skill', SkillTagView.as_view()),
+    path('title', TitleTagView.as_view()),
+    path('school', SchoolTagView.as_view()),
+]
+
 urlpatterns = [
     path('account/', include((account_patterns, 'account'))),
     path('student/', include((student_patterns, 'student'))),
     path('email/', include((email_patterns, 'email'))),
     path('phone/', include((phone_patterns, 'phone'))),
+    path('tag/', include((tag_patterns, 'tag'))),
 ]
