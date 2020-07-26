@@ -79,7 +79,7 @@ class SchoolTagView(APIView):
 
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
+    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer(many=True)})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
@@ -106,7 +106,7 @@ class CompanyTagView(APIView):
 
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
+    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer(many=True)})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
