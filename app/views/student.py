@@ -4,25 +4,24 @@ from rest_framework import status, serializers
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import MultiPartParser
 from rest_framework.exceptions import ParseError
 from drf_yasg.utils import swagger_auto_schema
 
+from app.exceptions import InvalidInputFormat
 from app.models.student import Student
-from app.services.student import get_student, create_student, update_student
+from app.services.student import get_student, create_student, update_student, set_profile_picture
 
 
 class StudentProfilePictureView(APIView):
-    parser_classes = (FileUploadParser,)
+    parser_classes = (MultiPartParser,)
 
     def post(self, request, format=None):
         try:
-            f = request.data['file']
-            Student.objects.get(account__id=user.id).profile_picture.save(
-                f.name, f, save=True)
+            set_profile_picture(request.user, request.data['file'])
         except KeyError:
             raise ParseError("'file' field missing.")
-        return Response(status=status.HTTP_201_CREATED)
+        return Response("Uploaded.", status=status.HTTP_201_CREATED)
 
 
 class StudentGetView(APIView):
