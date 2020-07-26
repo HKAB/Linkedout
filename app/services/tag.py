@@ -4,7 +4,6 @@ from app.models.skill import Skill
 from app.models.title import Title
 from app.models.school import School
 from app.models.company import Company
-from app.exceptions import InvalidInputFormat
 
 def get_skill_tag(*, query: str) -> dict:
     tmp = Skill.objects.filter(name__istartswith=query)
