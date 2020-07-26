@@ -5,17 +5,12 @@ from app.models.student import Student
 from app.exceptions import InvalidInputFormat
 
 
-def get_student(*, id: int) -> dict:
+def get_student(*, id: int) -> Student:
     s = Student.objects.filter(account__id=id).first()
     if s is None:
         raise InvalidInputFormat(
             "Student with account id {} not found.".format(id))
-    return {
-        "firstname": s.firstname,
-        "lastname": s.lastname,
-        "dateofbirth": s.dateofbirth,
-        "description": s.description,
-    }
+    return s
 
 
 def create_student():
