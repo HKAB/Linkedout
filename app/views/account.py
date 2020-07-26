@@ -31,7 +31,9 @@ class LoginView(APIView):
         class Meta:
             ref_name = 'Login'
             fields = ['username', 'password']
+
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
@@ -52,7 +54,9 @@ class RegisterView(APIView):
         class Meta:
             ref_name = 'Register'
             fields = ['username', 'password', 'email', 'account_type']
+
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     @swagger_auto_schema(request_body=InputSerializer, responses={201: "User created"})
     @method_decorator(ensure_csrf_cookie)

@@ -8,8 +8,6 @@ from rest_framework.exceptions import AuthenticationFailed
 
 from backend.settings import SECRET_KEY
 from app.models.account import Account
-from app.models.email import Email
-from app.models.phone import Phone
 from app.services.email import create_email
 from app.exceptions import InvalidInputFormat
 
@@ -56,6 +54,7 @@ def login(*, username: str, password: str) -> dict:
 def change_password(*, account: Account, current_password: str, new_password: str) -> Account:
     if account.password != hashed_password(current_password):
         raise InvalidInputFormat("Wrong current password.")
+    password_format_check(new_password)
     account.password = hashed_password(new_password)
     account.save()
 
