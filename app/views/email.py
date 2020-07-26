@@ -25,13 +25,14 @@ class EmailListView(APIView):
             fields = ['emails']
 
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializers = self.InputSerializer(data=request.query_params)
-        serializers.is_valid(raise_exception=True)
-        result = list_email(**serializers.validated_data)
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result = list_email(**serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 

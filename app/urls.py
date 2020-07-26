@@ -27,7 +27,9 @@ phone_patterns = [
 
 student_patterns = [
     path('get', StudentGetView.as_view()),
-    path('profilepicture', StudentProfilePictureView.as_view()),
+    path('create', StudentCreateView.as_view()),
+    path('update', StudentUpdateView.as_view()),
+    path('upload', StudentProfilePictureView.as_view()),
 ]
 
 urlpatterns = [

@@ -8,15 +8,15 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.exceptions import ParseError
 from drf_yasg.utils import swagger_auto_schema
 
-from app.exceptions import InvalidInputFormat
 from app.models.student import Student
 from app.services.student import get_student, create_student, update_student, set_profile_picture
 
 
 class StudentProfilePictureView(APIView):
     parser_classes = (MultiPartParser,)
+    permission_classes = [IsAuthenticated]
 
-    def post(self, request, format=None):
+    def post(self, request):
         try:
             set_profile_picture(request.user, request.data['file'])
         except KeyError:
@@ -40,30 +40,30 @@ class StudentGetView(APIView):
                       'profile_picture', 'description']
 
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializers = self.InputSerializer(data=request.query_params)
-        serializers.is_valid(raise_exception=True)
-        result = get_student(**serializers.validated_data)
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result = get_student(**serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
 class StudentCreateView(APIView):
-    class InputSerializer(serializers.Serializer):
-        student = serializers.CharField(required=True)
-
+    class InputSerializer(serializers.ModelSerializer):
         class Meta:
+            model = Student
             ref_name = 'StudentCreateIn'
-            fields = ['student']
+            fields = ['firstname', 'lastname', 'dateofbirth', 'description']
 
-    class OutputSerializer(serializers.Serializer):
-        students = serializers.ListField()
-
+    class OutputSerializer(serializers.ModelSerializer):
         class Meta:
+            model = Student
             ref_name = 'StudentCreateOut'
-            fields = ['students']
+            fields = ['firstname', 'lastname', 'dateofbirth',
+                      'profile_picture', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -78,20 +78,18 @@ class StudentCreateView(APIView):
 
 
 class StudentUpdateView(APIView):
-    class InputSerializer(serializers.Serializer):
-        old_student = serializers.CharField(required=True)
-        new_student = serializers.CharField(required=True)
-
+    class InputSerializer(serializers.ModelSerializer):
         class Meta:
+            model = Student
             ref_name = 'StudentUpdateIn'
-            fields = ['old_student', 'new_student']
+            fields = ['firstname', 'lastname', 'dateofbirth', 'description']
 
-    class OutputSerializer(serializers.Serializer):
-        students = serializers.ListField()
-
+    class OutputSerializer(serializers.ModelSerializer):
         class Meta:
+            model = Student
             ref_name = 'StudentUpdateOut'
-            fields = ['students']
+            fields = ['firstname', 'lastname', 'dateofbirth',
+                      'profile_picture', 'description']
 
     permission_classes = [IsAuthenticated]
 

@@ -14,12 +14,24 @@ def get_student(*, id: int) -> Student:
     return s
 
 
-def create_student():
-    pass
+def create_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, **kwargs) -> Student:
+    student_account_check(account)
+    if student_exist(account.id, raise_exception=False):
+        raise InvalidInputFormat(
+            "Account {} already has a student.".format(account.id))
+    s = Student(account=account, firstname=firstname, lastname=lastname,
+                dateofbirth=dateofbirth, **kwargs)
+    s.save()
+    return s
 
 
-def update_student():
-    pass
+def update_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, **kwargs) -> Student:
+    student_account_check(account)
+    student_exist(account.id)
+    s = Student.objects.filter(account=account)
+    s.update(account=account, firstname=firstname,
+             lastname=lastname, dateofbirth=dateofbirth, **kwargs)
+    return s.first()
 
 
 def set_profile_picture(account: Account, file_instance):
@@ -41,5 +53,14 @@ def student_exist(account_id: str, raise_exception=True) -> bool:
         if raise_exception:
             raise InvalidInputFormat(
                 "Student with account id {} not found.".format(account_id))
+        return False
+    return True
+
+
+def student_account_check(account: Account, raise_exception=True):
+    if account.account_type != 'student':
+        if raise_exception:
+            raise InvalidInputFormat(
+                'Account {} is not a student account.'.format(account.id))
         return False
     return True
