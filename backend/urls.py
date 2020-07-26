@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 from rest_framework import permissions
 from rest_framework.urls import url
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+from backend.settings import MEDIA_ROOT, MEDIA_URL
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -40,3 +43,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('app.urls')),
 ]
+
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
