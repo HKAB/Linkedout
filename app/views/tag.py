@@ -8,6 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from app.services.tag import get_skill_tag, get_title_tag, get_school_tag, get_company_tag
 
+
 class SkillTagView(APIView):
     class InputSerializer(serializers.Serializer):
         query = serializers.CharField(required=True)
@@ -28,10 +29,11 @@ class SkillTagView(APIView):
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializers = self.InputSerializer(data=request.query_params)
-        serializers.is_valid(raise_exception=True)
-        result = get_skill_tag(**serializers.validated_data)
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result = get_skill_tag(**serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
+
 
 class TitleTagView(APIView):
     class InputSerializer(serializers.Serializer):
@@ -53,10 +55,11 @@ class TitleTagView(APIView):
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializers = self.InputSerializer(data=request.query_params)
-        serializers.is_valid(raise_exception=True)
-        result = get_title_tag(**serializers.validated_data)
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result = get_title_tag(**serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
+
 
 class SchoolTagView(APIView):
     class InputSerializer(serializers.Serializer):
@@ -79,10 +82,11 @@ class SchoolTagView(APIView):
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializers = self.InputSerializer(data=request.query_params)
-        serializers.is_valid(raise_exception=True)
-        result = get_school_tag(**serializers.validated_data)
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result = get_school_tag(**serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
+
 
 class CompanyTagView(APIView):
     class InputSerializer(serializers.Serializer):
@@ -105,7 +109,7 @@ class CompanyTagView(APIView):
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializers = self.InputSerializer(data=request.query_params)
-        serializers.is_valid(raise_exception=True)
-        result = get_company_tag(**serializers.validated_data)
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result = get_company_tag(**serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
