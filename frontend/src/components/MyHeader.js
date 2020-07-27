@@ -1,14 +1,12 @@
 import React from 'react'
 import { Component } from 'react';
 import { Layout, Menu, Button, Avatar, Dropdown} from 'antd';
-import './MyHeader.css'
-import avata from '../components/assets/avt.jpg'
-import logo from '../components/assets/logo.png'
+import '../components/assets/css/MyHeader.css'
+import avata from '../components/assets/images/avt.jpg'
+import logo from '../components/assets/images/logo.png'
 import {
   MenuFoldOutlined,MenuUnfoldOutlined, QuestionCircleOutlined,BellOutlined,UserOutlined,SettingOutlined, LogoutOutlined
 } from '@ant-design/icons';
-const {SubMenu}=  Menu
-
 
 const { Header, Content } = Layout;
 
@@ -56,23 +54,6 @@ class MyHeader extends Component {
 				</Button>
 			</Dropdown>
 		</span>
-
-      {/* <Menu theme="white" mode="horizontal" defaultSelectedKeys={['1']} style={{position:'absolute',right:24}}>
-        <Menu.Item key="1" icon={<QuestionCircleOutlined/>}></Menu.Item>
-        <Menu.Item key="2" icon={<BellOutlined/>} ></Menu.Item>
-
-        <Dropdown overlay={menu} placement="bottomLeft">
-          <Button>bottomLeft</Button>
-        </Dropdown>
-
-        <Menu.Item key="3">
-            <Avatar src={avata} /><span> Vu Trang Linh</span>
-                    <Dropdown overlay={menu} placement="bottomLeft">
-                    <span>AAAA</span>
-        </Dropdown>
-        </Menu.Item>
-      </Menu> */}
-
       
     </Header>
     
