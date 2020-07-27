@@ -6,7 +6,7 @@ from app.views.email import EmailListView, EmailCreateView, EmailUpdateView, Ema
 from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, PhoneDeleteView
 from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
 from app.views.experience import ExperienceListView, ExperienceCreateView, ExperienceUpdateView, ExperienceDeleteView
-from app.views.tag import SkillTagView, TitleTagView, SchoolTagView
+from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView
 
 account_patterns = [
     path('login', LoginView.as_view()),
@@ -53,6 +53,7 @@ tag_patterns = [
     path('skill', SkillTagView.as_view()),
     path('title', TitleTagView.as_view()),
     path('school', SchoolTagView.as_view()),
+    path('company', CompanyTagView.as_view())
 ]
 
 urlpatterns = [
