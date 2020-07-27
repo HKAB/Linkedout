@@ -26,7 +26,7 @@ const data = {
            email:"nguyenphutruong2525@god.com",
           password:"1234567890123",
            recoveryEmail:"1122uet@gmai.com",
-           avatar:"https://i.pinimg.com/236x/b0/24/a6/b024a6ea591baa2fbf85604616f1b546--your-name-wallpaper-iphone-anime-wallpapers-iphone.jpg"
+           avatar:"https://image.flaticon.com/icons/svg/3275/3275732.svg"
 }
 class ProfileEdit extends Component {
     constructor(props) {

@@ -18,7 +18,7 @@ function Profile() {
 				<Layout style={{ padding: '0 24px 24px' }}>
 					<Row align="middle">
 						<Col span={4}></Col>
-						<Col span={16}><ProfileEdit/></Col>
+						<Col span={16}><ProfileContent/></Col>
 						<Col span={4}></Col>
 					</Row>
 				</Layout>

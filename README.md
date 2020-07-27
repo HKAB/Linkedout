@@ -44,6 +44,14 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+### Create superuser account for admin site
+
+```bash
+python manage.py createsuperuser
+```
+You will be prompted to enter a username, email address, and strong password.
+
+
 ### Running backend service
 
 ```bash

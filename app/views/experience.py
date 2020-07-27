@@ -47,12 +47,12 @@ class ExperienceCreateView(APIView):
         company_name = serializers.CharField(required=True)
         start_date = serializers.DateField(required=True)
         end_date = serializers.DateField(required=True)  # Does this really required? idk
-        major = serializers.CharField(required=True)
-        degree = serializers.CharField(required=True)
+        title = serializers.CharField(required=True)
+        description = serializers.CharField(required=True)
 
         class Meta:
             ref_name = 'ExperienceCreateIn'
-            fields = ['company_name', 'start_date', 'end_date', 'major', 'degree']
+            fields = ['company_name', 'start_date', 'end_date', 'title', 'description']
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
@@ -84,12 +84,12 @@ class ExperienceUpdateView(APIView):
         school_name = serializers.CharField(required=True)
         start_date = serializers.DateField(required=True)
         end_date = serializers.DateField(required=True)  # Does this really required? idk
-        major = serializers.CharField(required=True)
-        degree = serializers.CharField(required=True)
+        title = serializers.CharField(required=True)
+        description = serializers.CharField(required=True)
 
         class Meta:
             ref_name = 'ExperienceUpdateIn'
-            fields = ['id', 'school_name', 'start_date', 'end_date', 'major', 'degree']
+            fields = ['id', 'school_name', 'start_date', 'end_date', 'title', 'description']
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
