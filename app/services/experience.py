@@ -1,6 +1,6 @@
 from datetime import date
 
-from app.models.experiences import Experience
+from app.models.experience import Experience
 from app.models.student import Student
 from app.models.account import Account
 from app.models.company import Company
@@ -80,11 +80,12 @@ def delete_experience(*, account: Account, id: int) -> list:
     return list_experience(account.id)
 
 
-def get_student_account (account: Account) -> Student:
+def get_student_account(account: Account) -> Student:
     e = Student.objects.filter(account=account).first()
     if e is None:
         raise InvalidInputFormat("Student not found!")
     return e
 
-def get_company_with_name (company_name: str) -> Company:
+
+def get_company_with_name(company_name: str) -> Company:
     return Company.objects.filter(name=company_name).first()

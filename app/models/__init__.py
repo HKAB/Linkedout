@@ -4,7 +4,7 @@ from .city import City
 from .company import Company
 from .education import Education
 from .email import Email
-from .experiences import Experience
+from .experience import Experience
 from .job import Job
 from .phone import Phone
 from .post import Post
