@@ -31,7 +31,7 @@ class MenuChange extends Component {
            email:"mmm@gmail.com",
           password:"12345",
            recoveryEmail:"1122uet@gmai.com",
-           avata:"https://i.pinimg.com/236x/b0/24/a6/b024a6ea591baa2fbf85604616f1b546--your-name-wallpaper-iphone-anime-wallpapers-iphone.jpg"
+           avata:"https://image.flaticon.com/icons/svg/3275/3275732.svg"
         
        };
        
@@ -63,12 +63,11 @@ class MenuChange extends Component {
             <Menu  mode="inline"
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1']}
-            style={{height:'100%', margin:0, width:'100%'}}>
+            style={{marginTop: 24}}>
                 <SubMenu title="Thay đổi" icon={<EditOutlined />}  key="sub1" >
                     <Tabs  tabPosition="left" style={{marginLeft:24}}>
                         <TabPane tab="Thông tin tài khoản" key="1"  >
                             <span style={{fontWeight: "bold"}}>THÔNG TIN TÀI KHOẢN</span>
-                             
                             <Row align="middle">
                                 <Col span="16">
                                     <Form>
@@ -88,9 +87,10 @@ class MenuChange extends Component {
                                             Recovery email
                                             <Input defaultValue={this.state.recoveryEmail} onChange={e => this.changeInputValue(e)}></Input>
                                         </Form.Item>
-                                        <Button type="primary" htmlType="submit"  onClick={e=>{this.check(e)}}>Save</Button>
-                                        
-                                        <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
+                                        <Form.Item>
+                                            <Button type="primary" htmlType="submit"  onClick={e=>{this.check(e)}}>Save</Button>  
+                                            <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
+                                        </Form.Item>
                                     </Form>
                                 </Col>
                                 <Col offset="2">
@@ -100,14 +100,15 @@ class MenuChange extends Component {
                             </Row>
                             
                         </TabPane>
-                         <TabPane tab="Settings" key="2" style={{fontSize: 16}}>
-                             <Menu.Item >Theme Color
+                         <TabPane tab="Settings" key="2">
+                         <span style={{fontWeight: "bold"}}>SETTINGS</span>
+                             <Menu.Item style={{marginTop: 32}}>Notification
                              <Switch  style={{marginLeft: 24, position:'absolute', right: 64 }} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.toggle} />
                              </Menu.Item>
                             
-                              <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
+                              {/* <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
                                   <Button class="changeColor" style={{marginTop:24}}>Color</Button>
-                              </Dropdown>
+                              </Dropdown> */}
                             
                          </TabPane>
                      </Tabs>
