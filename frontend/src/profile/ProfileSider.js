@@ -1,7 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
 import { Layout, Menu, Row, Col } from 'antd';
-
 import {Tabs } from 'antd';
 
 import {
@@ -13,7 +12,7 @@ import {
 } from '@ant-design/icons';
 
 import { ProfileContent } from "@/profile/ProfileContent";
-import  MenuChange  from "@/profile/changeProfile/menuChange";
+import {ProfileEdit} from "@/profile/ProfileEdit";
 import  ProfileChange  from "@/profile/ProfileChange";
 
 const { TabPane } = Tabs;
@@ -41,7 +40,7 @@ class ProfileSider extends Component {
                 <Layout style={{ padding: '0 24px 24px' }}>
                   <Row align="middle">
                     <Col span={4}></Col>
-                    <Col span={16}><MenuChange/></Col>
+                    <Col span={16}><ProfileEdit/></Col>
                     <Col span={4}></Col>
                   </Row>
                 </Layout>
