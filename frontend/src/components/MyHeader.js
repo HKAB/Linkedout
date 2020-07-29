@@ -2,7 +2,6 @@ import React from 'react'
 import { Component } from 'react';
 import { Layout, Menu, Button, Avatar, Dropdown} from 'antd';
 import '../components/assets/css/MyHeader.css'
-import avata from '../components/assets/images/avt.jpg'
 import logo from '../components/assets/images/logo.png'
 import {
   MenuFoldOutlined,MenuUnfoldOutlined, QuestionCircleOutlined,BellOutlined,UserOutlined,SettingOutlined, LogoutOutlined
@@ -49,8 +48,8 @@ class MyHeader extends Component {
 			<Button type="text" style={{height: 64}}><BellOutlined/></Button>
 			<Dropdown overlay={menu} placement="bottomCenter"  icon={<UserOutlined />}>
 				<Button type="text" style={{height: 64}}>
-					<Avatar className="avatar-picture" src={avata}/>
-					<span class="username"> Vu Trang Linh</span>
+					<Avatar className="avatar-picture" src="https://image.flaticon.com/icons/svg/3084/3084416.svg"/>
+					<span class="username">Nguyen Phu Truong</span>
 				</Button>
 			</Dropdown>
 		</span>

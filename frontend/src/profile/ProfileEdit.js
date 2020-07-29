@@ -1,8 +1,8 @@
 import React from 'react'
 import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown} from  'antd';
+import {Tabs,Menu, Form, Input, Button, Dropdown, Upload} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd'
-import {EditOutlined} from '@ant-design/icons';             
+import {EditOutlined, UploadOutlined} from '@ant-design/icons';             
 
 
 const {SubMenu}= Menu
@@ -26,7 +26,7 @@ const data = {
            email:"nguyenphutruong2525@god.com",
           password:"1234567890123",
            recoveryEmail:"1122uet@gmai.com",
-           avatar:"https://image.flaticon.com/icons/svg/3275/3275732.svg"
+           avatar:"https://image.flaticon.com/icons/svg/3084/3084416.svg"
 }
 class ProfileEdit extends Component {
     constructor(props) {
@@ -102,15 +102,22 @@ class ProfileEdit extends Component {
                                 </Col>
                                 <Col span="6" offset="2">
                                     <Avatar style={{width: 180, height: 180, position:'absolute',top:-150}}src={data.avatar} ></Avatar>
-                                    
+                                    <Upload>
+                                    <Button style={{top: 40, left: 20}}>
+                                        <UploadOutlined /> Change avatar
+                                    </Button>
+                                    </Upload>
                                 </Col>
                             </Row>
                             
                         </TabPane>
                          <TabPane tab="Settings" key="2" style={{fontSize: 16}}>
-                             <Menu.Item >Theme Color
-                             <Switch  style={{marginLeft: 24, position:'absolute', right: 64 }}   checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} />
-                             </Menu.Item>
+                             <Row>
+                                <Col>Theme Color</Col>
+                                <Col style={{position:'absolute', right:64}}> <Switch    checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
+                             </Row>
+                            
+                            
                             
                               <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
                                   <Button class="changeColor" style={{marginTop:24}}>Color</Button>
