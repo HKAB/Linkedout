@@ -2,6 +2,7 @@ from django.urls import path, include
 
 from app.views.account import LoginView, RegisterView, ChangePasswordView
 from app.views.student import StudentGetView, StudentCreateView, StudentUpdateView, StudentProfilePictureView
+from app.views.skill import SkillListView, SkillCreateView, SkillDeleteView
 from app.views.email import EmailListView, EmailCreateView, EmailUpdateView, EmailDeleteView
 from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, PhoneDeleteView
 from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
@@ -35,6 +36,12 @@ student_patterns = [
     path('upload', StudentProfilePictureView.as_view()),
 ]
 
+skill_patterns = [
+    path('list', SkillListView.as_view()),
+    path('create', SkillCreateView.as_view()),
+    path('delete', SkillDeleteView.as_view()),
+]
+
 education_patterns = [
     path('list', EducationListView.as_view()),
     path('create', EducationCreateView.as_view()),
@@ -59,6 +66,7 @@ tag_patterns = [
 urlpatterns = [
     path('account/', include((account_patterns, 'account'))),
     path('student/', include((student_patterns, 'student'))),
+    path('skill/', include((skill_patterns, 'skill'))),
     path('email/', include((email_patterns, 'email'))),
     path('phone/', include((phone_patterns, 'phone'))),
     path('education/', include((education_patterns, 'education'))),
