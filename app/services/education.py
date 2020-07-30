@@ -12,7 +12,7 @@ def list_education(*, id: int) -> list:
     return [
         {
             'id': e.id,
-            'school_name': e.school__name,
+            'school_name': e.school.name,
             'start_date': e.start_date,
             'end_date': e.end_date,
             'major': e.major,
@@ -55,13 +55,14 @@ def delete_education(*, account: Account, id: int) -> list:
     return list_education(id=account.id)
 
 
-def get_student_account (account: Account) -> Student:
+def get_student_account(account: Account) -> Student:
     e = Student.objects.filter(account=account).first()
     if e is None:
         raise InvalidInputFormat("Student not found!")
     return e
 
-def get_school_with_name (school_name: str) -> School:
+
+def get_school_with_name(school_name: str) -> School:
     e = School.objects.filter(name=school_name).first()
     if e is None:
         raise InvalidInputFormat("School not exist!")
