@@ -2,7 +2,7 @@ from django.db import models
 
 from .account import Account
 from .student import Student
-from .speciality import Speciality
+from .specialty import Specialty
 
 
 class Company(models.Model):
@@ -13,4 +13,4 @@ class Company(models.Model):
     profile_picture = models.ImageField(null=True)
 
     followers = models.ManyToManyField(Student)
-    specialities = models.ManyToManyField(Speciality)
+    specialties = models.ManyToManyField(Specialty)

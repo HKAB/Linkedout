@@ -10,9 +10,9 @@ from .phone import Phone
 from .post import Post
 from .school import School
 from .skill import Skill
-from .speciality import Speciality
+from .specialty import Specialty
 from .student import Student
 from .title import Title
 
 __all__ = ['Account', 'City', 'Company', 'Education', 'Email', 'Experience',
-           'Job', 'Phone', 'Post', 'School', 'Skill', 'Speciality', 'Student', 'Title']
+           'Job', 'Phone', 'Post', 'School', 'Skill', 'Specialty', 'Student', 'Title']
