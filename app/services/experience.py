@@ -50,26 +50,26 @@ def create_experience(*, account: Account, company_name: str, start_date: date, 
     else:
         e.company = comp
     e.save()
-    return list_experience(account.id)
+    return list_experience(id=account.id)
 
 
-def update_experience(*, account: Account, id: int, company_name: str, start_date: date, end_date: date, title: str, description: str) -> list:
+def update_experience(*, account: Account, id: int, experience: dict) -> list:
     e = Experience.objects.filter(id=id).first()
     if e is None:
         raise InvalidInputFormat("Old experience entry not found!")
-    comp = get_company_with_name(company_name)
-    e.start_date = start_date
-    e.end_date = end_date
-    e.title = title
-    e.description = description
+    comp = get_company_with_name(experience.company_name)
+    e.start_date = experience.start_date
+    e.end_date = experience.end_date
+    e.title = experience.title
+    e.description = experience.description
     if comp is None:
         e.company = None
-        e.company_name = company_name
+        e.company_name = experience.company_name
     else:
         e.company = comp
         e.company_name = None
     e.save()
-    return list_experience(account.id)
+    return list_experience(id=account.id)
 
 
 def delete_experience(*, account: Account, id: int) -> list:
@@ -77,7 +77,7 @@ def delete_experience(*, account: Account, id: int) -> list:
     if e is None:
         raise InvalidInputFormat("Experience entry not found!")
     e.delete()
-    return list_experience(account.id)
+    return list_experience(id=account.id)
 
 
 def get_student_account(account: Account) -> Student:

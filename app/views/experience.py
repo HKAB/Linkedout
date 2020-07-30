@@ -7,6 +7,7 @@ from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
 from app.services.experience import list_experience, create_experience, update_experience, delete_experience
+from app.utils import inline_serializer
 
 
 class ExperienceListView(APIView):
@@ -81,15 +82,17 @@ class ExperienceCreateView(APIView):
 class ExperienceUpdateView(APIView):
     class InputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
-        school_name = serializers.CharField(required=True)
-        start_date = serializers.DateField(required=True)
-        end_date = serializers.DateField(required=True)  # Does this really required? idk
-        title = serializers.CharField(required=True)
-        description = serializers.CharField(required=True)
+        experience = inline_serializer(fields={
+            'school_name': serializers.CharField(required=True),
+            'start_date': serializers.DateField(required=True),
+            'end_date': serializers.DateField(required=True),  # Does this really required? idk
+            'title': serializers.CharField(required=True),
+            'description': serializers.CharField(required=True),
+        })
 
         class Meta:
             ref_name = 'ExperienceUpdateIn'
-            fields = ['id', 'school_name', 'start_date', 'end_date', 'title', 'description']
+            fields = ['id', 'experience']
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()

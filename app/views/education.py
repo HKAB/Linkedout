@@ -7,6 +7,7 @@ from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
 from app.services.education import list_education, create_education, update_education, delete_education
+from app.utils import inline_serializer
 
 
 class EducationListView(APIView):
@@ -79,15 +80,17 @@ class EducationCreateView(APIView):
 class EducationUpdateView(APIView):
     class InputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
-        school_name = serializers.CharField(required=True)
-        start_date = serializers.DateField(required=True)
-        end_date = serializers.DateField(required=True)  # Does this really required? idk
-        major = serializers.CharField(required=True)
-        degree = serializers.CharField(required=True)
+        education = inline_serializer(fields={
+            'school_name': serializers.CharField(required=True),
+            'start_date': serializers.DateField(required=True),
+            'end_date': serializers.DateField(required=True),  # Does this really required? idk
+            'major': serializers.CharField(required=True),
+            'degree': serializers.CharField(required=True),
+        })
 
         class Meta:
             ref_name = 'EducationUpdateIn'
-            fields = ['id', 'school_name', 'start_date', 'end_date', 'major', 'degree']
+            fields = ['id', 'education']
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
