@@ -8,7 +8,6 @@ import Meta from 'antd/lib/card/Meta';
 import { List, Avatar } from 'antd';
 import Item from 'antd/lib/list/Item';
 //import Form from 'antd/lib/form/Form';
-import { ProfileChangeServices } from "@/services"
 const { RangePicker } = DatePicker;
 const data_experiences = [
     
@@ -118,14 +117,14 @@ const data_experiences = [
 
   const addExpFinish = values => {
 		console.log(values);
-		ProfileChangeServices.addexp(values.companyname, values.description, values.title, values.startdate, values.enddate).then()
-		.then(() => {
-			alert("Experiences added");
-		//	history.go();
-		})
-		.catch(error => {
-			alert(error);
-		});
+		// ProfileChangeServices.addexp(values.companyname, values.description, values.title, values.startdate, values.enddate).then()
+		// .then(() => {
+		// 	alert("Experiences added");
+		// //	history.go();
+		// })
+		// .catch(error => {
+		// 	alert(error);
+		// });
 	}
 
 

@@ -1,2 +1,2 @@
 export * from './account.service';
-export * from './ProfileChange.service';
+export * from './student.service';

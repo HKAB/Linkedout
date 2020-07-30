@@ -32,7 +32,7 @@ function Login({ history }) {
 		accountServices.login(values.login_username, values.login_password).then()
 		.then(() => {
 			alert("Login successfully!!");
-			history.push("/");
+			history.push("/profile");
 		})
 		.catch(error => {
 			alert(error);

@@ -1,4 +1,5 @@
 
+import { accountServices } from "@/services"
 
 export const fetchWrapper = {
 	get,
@@ -45,10 +46,20 @@ function _delete(url) {
 
 
 function authHeader(url) {
-	return {}
+	const user = accountServices.userValue;
+
+	const isLoggedIn = user && user.access_token
+
+	if (isLoggedIn) {
+		return {Authorization: `Bearer ${user.access_token}`};
+	}
+	else {
+		return {}
+	}
 }
 
 function handleRequest(response) {
+	// console.log(response);
 	return response.text().then(text => {
 		const data = JSON.parse(text);
 

@@ -7,39 +7,11 @@ import Column from 'antd/lib/table/Column';
 import {MailOutlined, ScheduleOutlined, PhoneOutlined} from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 
+import { studentServices } from "@/services"
+import { accountServices } from "@/services"
+
 
 const { Header, Sider, Content } = Layout;
-const data = {
-  avatar:'https://image.flaticon.com/icons/svg/3084/3084416.svg',
-  name:'Nguyen Phu Truong',
-  quotes:'No pain, no gain',
-  email:'nguyenphutruong2707@gmail.com',
-  phone:'0981285376',
-  DoB:'27/07/2000',
-};
-const exp_data = [
-{
-  avatar:'https://image.flaticon.com/icons/svg/2950/2950372.svg',
-  title_href:'https://ant.design',
-  title: 'Ant',
-  ex_pos: 'Dev',
-  date: 'June 1997 - Present',
-},
-{
-  avatar:'https://image.flaticon.com/icons/svg/508/508123.svg',
-  title_href:'https://ant.design',
-  title: 'Facebook',
-  ex_pos: 'Dev',
-  date: 'January 1998 - Present',
-},
-{
-  avatar:'https://image.flaticon.com/icons/svg/2111/2111425.svg',
-  title_href:'https://ant.design',
-  title: 'Github',
-  ex_pos: 'dev, tester',
-  date: 'November 1999 - Present',
-},
-];
 const follow_data = [
 {
   avatar:'https://image.flaticon.com/icons/svg/1532/1532495.svg',
@@ -95,87 +67,76 @@ const skill_data = [
   },
   ];
 
-  const education_data = [
-    {
-        school_name: "THCS Le Quy Don",
-        start_date: "Feb 2011",
-        end_date: "Jan 2015",
-        degree: "Associate degree",
-        major: "No"
-    },
-    {
-        school_name: "THPT Moc Ly",
-        start_date: "Feb 2015",
-        end_date: "Jan 2018",
-        degree: "Associate degree",
-        major: "No"
-    },
-    {
-        school_name: "Life",
-        start_date: "Feb 2018",
-        end_date: "Jan 2019",
-        degree: "Bachelor's degree",
-        major: "No"
-    },
-    {
-        school_name: "UET",
-        start_date: "Feb 2019",
-        end_date: "Jan 2024",
-        degree: "Bachelor's degree",
-        major: "IT"
-    },
-  ];
-
-  const timeline_element = [];
-  education_data.forEach(item => {
-      timeline_element.push(<Timeline.Item label={item.start_date + " - " + item.end_date}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
-  });
 class ProfileContent extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      basic_profile_data: {},
+      experience_data: [],
+      follow_data: {},
+      skill_data: {},
+	  education_data: {},
+	  education_element: [],
+	  phone_data: {},
+	  email_data: {}
+    }
+  }
+
+
+  componentDidMount() {
+    let user = accountServices.userValue;
+    if (user) {
+      studentServices.getStudent(user.account.id).then(student => {
+
+		this.setState({basic_profile_data: student.basic_data});
+		this.setState({experience_data: student.experience});
+		this.setState({education_data: student.education});
+		this.setState({email_data: student.email});
+		this.setState({phone_data: student.phone});
+
+		var timeline_element = []
+		this.state.education_data.forEach(item => {
+			timeline_element.push(<Timeline.Item label={item.start_date + " - " + item.end_date}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
+		});
+
+		this.setState({education_element: timeline_element});
+
+		console.log(this.state)
+      });
+      
+    }
+    else {
+      console.log("Oh no!");
+    }
+  }
   render(){
-
-
     return(
         <>
         <Card
           style={{
-        //     padding: 24,
-        //     margin: 0,
-        //     minHeight: 300,
             marginTop: 24,
 		  }}
         >
 			<Row>
 				<Col style={{textAlign: "center"}} span={24}>
-					<Avatar style={{marginBottom: 32}} size={128} src={data.avatar}></Avatar>
-					<div className = "user-fullname"><h1>{data.name}</h1></div>
-					<span classname = "user-quotes">{data.quotes}</span>
+					<Avatar style={{marginBottom: 32}} size={128} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture}></Avatar>
+					<div className = "user-fullname"><h1>{this.state.basic_profile_data.firstname + this.state.basic_profile_data.lastname}</h1></div>
+					<span classname = "user-quotes">{this.state.basic_profile_data.description}</span>
 				</Col>
 			</Row>
 			<Row style={{marginTop: 32}}>
-				<Col style={{textAlign: "center"}} span={8}><MailOutlined /> Email: {data.email}</Col>
-				<Col style={{textAlign: "center"}} span={8}><PhoneOutlined /> Phone: {data.phone}</Col>
-				<Col style={{textAlign: "center"}} span={8}><ScheduleOutlined /> DoB: {data.DoB}</Col>
+				<Col style={{textAlign: "center"}} span={8}><MailOutlined /> Email: {this.state.email_data[0]}</Col>
+				<Col style={{textAlign: "center"}} span={8}><PhoneOutlined /> Phone: {this.state.phone_data[0]}</Col>
+				<Col style={{textAlign: "center"}} span={8}><ScheduleOutlined /> DoB: {this.state.basic_profile_data.dateofbirth}</Col>
 			</Row>
-			{/* <Meta avatar={<Avatar size={128} src={data.avatar}></Avatar>}></Meta>
-			<div className = "user-fullname">{data.name}</div> 
-            <div classname = "user-quotes">{data.quotes}</div>
-          {/* <Avatar size ={128} src={data.avatar}></Avatar> */}
-          {/* <Layout className = "user-description">
-            <div className = "user-fullname">{data.name}</div> 
-            <div classname = "user-quotes">{data.quotes}</div>
-            <Descriptions style = {{marginTop:24}}>
-              <Descriptions.Item label="Email">{data.email}</Descriptions.Item>
-              <Descriptions.Item label="Phone">{data.phone}</Descriptions.Item>
-              <Descriptions.Item label="DoB">{data.DoB}</Descriptions.Item>
-            </Descriptions>
-          </Layout> */}
         </Card>
         <Row gutter={[24, 24]} style = {{marginTop:24}}>
             <Col span={12}>
               <Card>
 			  <Meta title="Education"></Meta>
 				<Timeline style={{marginTop: 24, paddingTop: 16}} mode="left">
-						{timeline_element}
+						{this.state.education_element}
 					</Timeline>
               </Card>
             </Col>
@@ -185,15 +146,15 @@ class ProfileContent extends Component {
                 <List 
 				  itemLayout= "vertical"
 				  style={{marginTop: 24}}
-                  dataSource={exp_data}
+                  dataSource={this.state.experience_data}
                   renderItem={item =>(
 					<List.Item>
                             <List.Item.Meta
-                                avatar={<Avatar src={item.avatar}></Avatar>}
-                                title={item.title}
-                                description={<div className="company-info">
-												<div>{"Title: " + item.ex_pos}</div>
-												<div>{"Time: " + item.date}</div>
+                                avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                                title={item.company_name}
+                                description={<div className="company-info" id={item.id}>
+												<div>{"Title: " + item.title}</div>
+												<div>{"Time: " + item.start_date + " " + item.end_date}</div>
 											</div>}
                             />
 					</List.Item>
@@ -240,5 +201,4 @@ class ProfileContent extends Component {
       )
   }
 }
-
 export { ProfileContent };

@@ -12,7 +12,7 @@ def list_education(*, id: int) -> list:
     return [
         {
             'id': e.id,
-            'school_name': e.school__name,
+            'school_name': e.school.name,
             'start_date': e.start_date,
             'end_date': e.end_date,
             'major': e.major,

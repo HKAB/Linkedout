@@ -14,8 +14,8 @@ def list_experience(*, id: int) -> list:
         if e.company:
             result.append({
                 'id': e.id,
-                'company_name': e.company__name,
-                'profile_picture': e.company__profile_picture,
+                'company_name': e.company.name,
+                'profile_picture': e.company.profile_picture,
                 'start_date': e.start_date,
                 'end_date': e.end_date,
                 'title': e.title,
