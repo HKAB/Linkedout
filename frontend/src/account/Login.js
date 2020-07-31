@@ -52,7 +52,8 @@ function Login({ history }) {
 			accountServices.register(values.register_username, values.register_email, values.register_password, values.register_account_type).then()
 			.then(() => {
 				alert("Register successfully!! Now login :)");
-				history.go();
+				//history.go();
+				history.push("/createStudent");
 			})
 			.catch(error => {
 				alert(error);
