@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload} from  'antd';
+import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd'
 import {EditOutlined, UploadOutlined} from '@ant-design/icons';             
 
@@ -100,13 +100,16 @@ class ProfileEdit extends Component {
                                         <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
                                     </Form>
                                 </Col>
-                                <Col span="6" offset="2">
-                                    <Avatar style={{width: 180, height: 180, position:'absolute',top:-150}}src={data.avatar} ></Avatar>
-                                    <Upload>
-                                    <Button style={{top: 40, left: 20}}>
+                                <Col span="6" offset="11" style={{position:'absolute',top:150}}>
+                                    <Avatar style={{width: 180, height: 180, marginBottom:10}}src={data.avatar} ></Avatar>
+                                    <Space style={{position:'relative', right:-20}}>
+                                        <Upload >
+                                    <Button >
                                         <UploadOutlined /> Change avatar
                                     </Button>
                                     </Upload>
+                                    </Space>
+                                    
                                 </Col>
                             </Row>
                             
@@ -116,12 +119,12 @@ class ProfileEdit extends Component {
                                 <Col>Theme Color</Col>
                                 <Col style={{position:'absolute', right:64}}> <Switch    checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
                              </Row>
-                            
-                            
-                            
-                              <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
+                            <Row>
+                                <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
                                   <Button class="changeColor" style={{marginTop:24}}>Color</Button>
                               </Dropdown>
+                            </Row>
+                              
                             
                          </TabPane>
                      </Tabs>
