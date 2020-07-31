@@ -2,7 +2,7 @@ import React from 'react'
 import { Component } from 'react';
 import {EditOutlined, DeleteOutlined, PlusOutlined, MinusCircleOutlined} from '@ant-design/icons';
 
-import { Skeleton, Switch, Card, Button, Timeline, Form,Input, Space, DatePicker} from 'antd';
+import { Skeleton, Switch, Card, Button, Timeline, Form,Input, Space, DatePicker, Badge} from 'antd';
 import Meta from 'antd/lib/card/Meta';
 
 import { List, Avatar } from 'antd';
@@ -166,83 +166,83 @@ class ProfileChange extends Component {
                             
                         </List.Item>
                     )}>
-                    <Form name="add-exp" autoComplete="off" onFinish={addExpFinish}>
-              <Form.List name="exp-info">
-                {(fields, { add, remove }) => {
-                  return (
-                    <div>
-                     {fields.map(field => (
-                       <Space key={field.key} style={{ display: 'flex', marginBottom: 8, marginTop:8 }} align="start">
-                          <Form.Item //name = "companyname"
-                            {...field}
-                            name={[field.name, 'companyname']}
-                            fieldKey={[field.fieldKey, 'companyname']}
-                            rules={[{ required: true, message: 'Missing company name' }]}
-                          > 
-                            
-                            <Input placeholder="Company Name" />
-                          </Form.Item>
-                      
-                          <Form.Item //name = "description"
-                            {...field}
-                            name={[field.name, 'description']}
-                            fieldKey={[field.fieldKey, 'description']}
-                            rules={[{ required: true, message: 'Missing Description' }]}
-                          >
-                            <Input placeholder="Description" />
-                          </Form.Item>
+                <Form name="add-exp" autoComplete="off" onFinish={addExpFinish}>
+                  <Form.List name="exp-info">
+                    {(fields, { add, remove }) => {
+                      return (
+                        <div>
+                          {fields.map(field => (
+                            <Space key={field.key} style={{ display: 'flex', marginBottom: 8, marginTop: 8 }} align="start">
+                              <Form.Item //name = "companyname"
+                                {...field}
+                                name={[field.name, 'companyname']}
+                                fieldKey={[field.fieldKey, 'companyname']}
+                                rules={[{ required: true, message: 'Missing company name' }]}
+                              >
 
-                          <Form.Item //name = "title"
-                            {...field}
-                            name={[field.name, 'title']}
-                            fieldKey={[field.fieldKey, 'title']}
-                            rules={[{ required: true, message: 'Missing title' }]}
-                          >
-                            <Input placeholder="Title" />
-                          </Form.Item>
+                                <Input placeholder="Company Name" />
+                              </Form.Item>
 
-                          <Form.Item //name = "startdate"
-                            {...field}
-                            name={[field.name, 'startdate']}
-                            fieldKey={[field.fieldKey, 'startdate']}
-                            rules={[{ required: true, message: 'Missing start date' }]}
-                          >
-                            <DatePicker placeholder = "Start date"/>
-                          </Form.Item>
+                              <Form.Item //name = "description"
+                                {...field}
+                                name={[field.name, 'description']}
+                                fieldKey={[field.fieldKey, 'description']}
+                                rules={[{ required: true, message: 'Missing Description' }]}
+                              >
+                                <Input placeholder="Description" />
+                              </Form.Item>
 
-                          <Form.Item //name = "enddate"
-                            {...field}
-                            name={[field.name, 'enddate']}
-                            fieldKey={[field.fieldKey, 'enddate']}
-                            rules={[{ required: false }]}
-                          >
-                            <DatePicker placeholder = "End date"/>
-                          </Form.Item>
+                              <Form.Item //name = "title"
+                                {...field}
+                                name={[field.name, 'title']}
+                                fieldKey={[field.fieldKey, 'title']}
+                                rules={[{ required: true, message: 'Missing title' }]}
+                              >
+                                <Input placeholder="Title" />
+                              </Form.Item>
 
-                          <MinusCircleOutlined
-                            onClick={() => {
-                              remove(field.name);
-                            }}
-                          />
-                        </Space>
-                     ))}
+                              <Form.Item //name = "startdate"
+                                {...field}
+                                name={[field.name, 'startdate']}
+                                fieldKey={[field.fieldKey, 'startdate']}
+                                rules={[{ required: true, message: 'Missing start date' }]}
+                              >
+                                <DatePicker placeholder="Start date" />
+                              </Form.Item>
 
-                     <Form.Item>
-                        <Button type="dashed" onClick={() => {add()}} block>
-                          <PlusOutlined /> Add Experience
+                              <Form.Item //name = "enddate"
+                                {...field}
+                                name={[field.name, 'enddate']}
+                                fieldKey={[field.fieldKey, 'enddate']}
+                                rules={[{ required: false }]}
+                              >
+                                <DatePicker placeholder="End date" />
+                              </Form.Item>
+
+                              <MinusCircleOutlined style={{ color: 'red' }}
+                                onClick={() => {
+                                  remove(field.name);
+                                }}
+                              />
+                            </Space>
+                          ))}
+
+                          <Form.Item>
+                            <Button type="dashed" onClick={() => { add() }} block>
+                              <PlusOutlined /> Add Experience
                         </Button>
-                      </Form.Item>
-                    </div>
-                  );
-                }}
-              </Form.List>
+                          </Form.Item>
+                        </div>
+                      );
+                    }}
+                  </Form.List>
 
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Submit
                 </Button>
-             </Form.Item>
-            </Form>
+                  </Form.Item>
+                </Form>
                 </List>
             </Card>
             <Card style={{marginTop: 24}}>
@@ -253,6 +253,83 @@ class ProfileChange extends Component {
                     <Timeline.Item>Technical testing</Timeline.Item>
                     <Timeline.Item label="2015-09-01 09:12:11">Network problems being solved</Timeline.Item> */}
                 </Timeline>
+                <Form name="add-edu" autoComplete="off">
+                  <Form.List name="edu-info">
+                    {(fields, { add, remove }) => {
+                      return (
+                        <div>
+                          {fields.map(field => (
+                            <Space key={field.key} style={{ display: 'flex', marginBottom: 8, marginTop: 8 }} align="start">
+                              <Form.Item
+                                {...field}
+                                name={[field.name, 'schoolname']}
+                                fieldKey={[field.fieldKey, 'schoolname']}
+                                rules={[{ required: true, message: 'Missing school name' }]}
+                              >
+
+                                <Input placeholder="School Name" />
+                              </Form.Item>
+
+                              <Form.Item
+                                {...field}
+                                name={[field.name, 'degree']}
+                                fieldKey={[field.fieldKey, 'degree']}
+                                rules={[{ required: true, message: 'Missing Degree' }]}
+                              >
+                                <Input placeholder="Degree" />
+                              </Form.Item>
+
+                              <Form.Item 
+                                {...field}
+                                name={[field.name, 'major']}
+                                fieldKey={[field.fieldKey, 'major']}
+                                rules={[{ required: true, message: 'Missing major' }]}
+                              >
+                                <Input placeholder="Major" />
+                              </Form.Item>
+
+                              <Form.Item
+                                {...field}
+                                name={[field.name, 'startdate']}
+                                fieldKey={[field.fieldKey, 'startdate']}
+                                rules={[{ required: true, message: 'Missing start date' }]}
+                              >
+                                <DatePicker placeholder="Start date" />
+                              </Form.Item>
+
+                              <Form.Item
+                                {...field}
+                                name={[field.name, 'enddate']}
+                                fieldKey={[field.fieldKey, 'enddate']}
+                                rules={[{ required: false }]}
+                              >
+                                <DatePicker placeholder="End date" />
+                              </Form.Item>
+
+                              <MinusCircleOutlined style={{ color: 'red' }}
+                                onClick={() => {
+                                  remove(field.name);
+                                }}
+                              />
+                            </Space>
+                          ))}
+
+                          <Form.Item>
+                            <Button type="dashed" onClick={() => { add() }} block>
+                              <PlusOutlined /> Add Education
+                        </Button>
+                          </Form.Item>
+                        </div>
+                      );
+                    }}
+                  </Form.List>
+
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                </Button>
+                  </Form.Item>
+                </Form>
             </Card>
             <Card style = {{marginTop: 24}}>
 			        <Meta  title="Skill"></Meta>
@@ -261,7 +338,7 @@ class ProfileChange extends Component {
                 renderItem = {item =>(
                   <List.Item>
                     <List.Item.Meta
-                      avatar={<Avatar src = {item.avatar}/>}
+                      avatar={<Badge style ={{color:'red'}} count={<MinusCircleOutlined />}><Avatar src = {item.avatar}/> </Badge>}
                       title ={<a href={item.title_href}>{item.title}</a>}
                     />
                   </List.Item>
