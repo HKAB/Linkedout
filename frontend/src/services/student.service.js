@@ -6,6 +6,7 @@ import { getEducation, deleleEducation, createEducation, updateEducation} from "
 import { getExperience, deleleExperience, createExperience, updateExperience} from "./student/experience.service";
 import { getEmail, deleteEmail, createEmail, updateEmail } from "./email.service";
 import { getPhone, deletePhone, createPhone, updatePhone } from "./phone.service";
+import { getSkill, deleteSkill, createSkill } from "./skill.service";
 
 const studentObject = new BehaviorSubject(null);
 
@@ -14,6 +15,7 @@ function getStudent (id) {
     let student_experience = getExperience(id);
     let student_email = getEmail(id);
     let student_phone = getPhone(id);    
+    let student_skill = getSkill(id);    
 
     // TODO: Handle error here!
     let student_basic = fetchWrapper.get(`http://127.0.0.1:8000/api/student/get?id=${id}`);
@@ -23,18 +25,21 @@ function getStudent (id) {
         student_education, 
         student_experience, 
         student_email, 
-        student_phone
+        student_phone,
+        student_skill
     ]).then(([  student_basic_data, 
                 student_education_data, 
                 student_experience_data, 
                 student_email_data, 
-                student_phone_data]) => {
+                student_phone_data,
+                student_skill_data]) => {
                     let student = {};
                     student.basic_data = student_basic_data
                     student.education = student_education_data;
                     student.experience = student_experience_data;
                     student.email = student_email_data.emails;
                     student.phone = student_phone_data.phones;
+                    student.skill = student_skill_data.skills;
                     studentObject.next(student);
                     return student;
     })
@@ -43,16 +48,6 @@ function getStudent (id) {
         console.log(error);
         return {};
     });
-
-    // return 
-    // .then(student => {
-    //     student.education = student_education;
-    //     // student.experience = student_experience;
-    //     // student.email = student_email;
-    //     // student.phone = student_phone;
-	// 	studentObject.next(student);
-	// 	return student;
-	// })
 }
 
 // basic info of student
@@ -99,8 +94,8 @@ function updateStudentExperience(id, school_name, start_date, end_date, title, d
     return deleleExperience(id, school_name, start_date, end_date, title, description);
 }
 
-function createStudentExperience(company_name,start_date, end_date, title, description) {
-    return createExperience(company_name,start_date, end_date, title, description);
+function createStudentExperience(company_name, start_date, end_date, title, description) {
+    return createExperience(company_name, start_date, end_date, title, description);
 }
 
 function deleteStudentExperience(id) {
@@ -122,6 +117,21 @@ function deleteStudentEducation(id) {
     return deleleEducation(id);
 }
 
+// student skill
+
+function getStudentSkill(id) {
+    return getSkill(id);
+}
+
+function createStudentSkill(skill) {
+    return createSkill(skill);
+}
+
+function deleteStudentSkill(id) {
+    return deleleEducation(id);
+}
+
+//
 
 export const studentServices = {
     getStudent,
@@ -144,7 +154,10 @@ export const studentServices = {
     createStudentExperience,
     deleteStudentExperience,
 
+    getStudentSkill,
+    createStudentSkill,
+    deleteStudentSkill,
 
-
-    get studentValue () { return studentObject.value}
+    get studentValue () { return studentObject.value},
+    studentObject
 }

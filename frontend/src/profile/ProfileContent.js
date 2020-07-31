@@ -7,9 +7,10 @@ import Column from 'antd/lib/table/Column';
 import {MailOutlined, ScheduleOutlined, PhoneOutlined} from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 
-import { studentServices } from "@/services"
-import { accountServices } from "@/services"
+import { studentServices } from "@/services";
+import { accountServices } from "@/services";
 
+import dayjs from 'dayjs';
 
 const { Header, Sider, Content } = Layout;
 const follow_data = [
@@ -39,33 +40,6 @@ const follow_data = [
   title: 'Tesla',
 },
 ];
-const skill_data = [
-  {
-    avatar:'https://dwglogo.com/wp-content/uploads/2017/09/c_logo.png',
-    title_href:'https://ant.design',
-    title: 'C++',
-  },
-  {
-    avatar:'https://image.flaticon.com/icons/svg/919/919851.svg',
-    title_href:'https://ant.design',
-    title: 'React',
-  },
-  {
-    avatar:'https://image.flaticon.com/icons/svg/1822/1822899.svg',
-    title_href:'https://ant.design',
-    title: 'Python',
-  },
-  {
-    avatar:'https://image.flaticon.com/icons/svg/1387/1387539.svg',
-    title_href:'https://ant.design',
-    title: 'Java',
-  },
-  {
-    avatar:'https://image.flaticon.com/icons/svg/919/919830.svg',
-    title_href:'https://ant.design',
-    title: 'PHP',
-  },
-  ];
 
 class ProfileContent extends Component {
 
@@ -79,7 +53,8 @@ class ProfileContent extends Component {
 	  education_data: {},
 	  education_element: [],
 	  phone_data: {},
-	  email_data: {}
+	  email_data: {},
+	  skill_data: []
     }
   }
 
@@ -87,24 +62,24 @@ class ProfileContent extends Component {
   componentDidMount() {
     let user = accountServices.userValue;
     if (user) {
-      studentServices.getStudent(user.account.id).then(student => {
-
-		this.setState({basic_profile_data: student.basic_data});
-		this.setState({experience_data: student.experience});
-		this.setState({education_data: student.education});
-		this.setState({email_data: student.email});
-		this.setState({phone_data: student.phone});
-
-		var timeline_element = []
-		this.state.education_data.forEach(item => {
-			timeline_element.push(<Timeline.Item label={item.start_date + " - " + item.end_date}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
-		});
-
-		this.setState({education_element: timeline_element});
-
-		console.log(this.state)
-      });
-      
+	  studentServices.getStudent(user.account.id);
+	  studentServices.studentObject.subscribe((student) => {
+		  if (student) {
+			this.setState({basic_profile_data: student.basic_data});
+			this.setState({experience_data: student.experience});
+			this.setState({education_data: student.education});
+			this.setState({email_data: student.email});
+			this.setState({phone_data: student.phone});
+			this.setState({skill_data: student.skill});
+	
+			var timeline_element = []
+			student.education.forEach(item => {
+				timeline_element.push(<Timeline.Item label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
+			});
+	
+			this.setState({education_element: timeline_element});
+		  }
+	  });
     }
     else {
       console.log("Oh no!");
@@ -128,8 +103,8 @@ class ProfileContent extends Component {
 			<Row style={{marginTop: 32}}>
 				<Col style={{textAlign: "center"}} span={8}><MailOutlined /> Email: {this.state.email_data[0]}</Col>
 				<Col style={{textAlign: "center"}} span={8}><PhoneOutlined /> Phone: {this.state.phone_data[0]}</Col>
-				<Col style={{textAlign: "center"}} span={8}><ScheduleOutlined /> DoB: {this.state.basic_profile_data.dateofbirth}</Col>
-			</Row>
+				<Col style={{textAlign: "center"}} span={8}><ScheduleOutlined /> DoB: {dayjs(this.state.basic_profile_data.dateofbirth).format("DD MMMM YYYY")}</Col>
+				</Row>
         </Card>
         <Row gutter={[24, 24]} style = {{marginTop:24}}>
             <Col span={12}>
@@ -154,7 +129,7 @@ class ProfileContent extends Component {
                                 title={item.company_name}
                                 description={<div className="company-info" id={item.id}>
 												<div>{"Title: " + item.title}</div>
-												<div>{"Time: " + item.start_date + " " + item.end_date}</div>
+												<div>{"Time: " + dayjs(item.start_date).format("MMMM YYYY") + " to " + dayjs(item.end_date).format("MMMM YYYY")}</div>
 											</div>}
                             />
 					</List.Item>
@@ -184,12 +159,12 @@ class ProfileContent extends Component {
             <Card>
 			<Meta  title="Skill"></Meta>
               <List style = {{marginTop:24}} grid = {{column:2}}
-                dataSource = {skill_data}
+                dataSource = {this.state.skill_data}
                 renderItem = {item =>(
                   <List.Item>
                     <List.Item.Meta
-                      avatar={<Avatar src = {item.avatar}/>}
-                      title ={<a href={item.title_href}>{item.title}</a>}
+                      avatar={<Avatar/>}
+                      title = {item}
                     />
                   </List.Item>
                 )}

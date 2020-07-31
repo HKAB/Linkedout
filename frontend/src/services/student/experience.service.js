@@ -17,6 +17,7 @@ function deleleExperience(id) {
 }
 
 function createExperience(company_name,start_date, end_date, title, description) {
+	console.log(company_name);
 	return fetchWrapper.post(`http://127.0.0.1:8000/api/experience/create`, {company_name,start_date, end_date, title, description})
 }
 
