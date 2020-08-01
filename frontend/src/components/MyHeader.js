@@ -43,13 +43,13 @@ class MyHeader extends Component {
            onClick: this.toggle,
         })}
       </Button>
-		<span class="left-menu">
+		<span className="left-menu">
 		<Button type="text" style={{height: 64}}><QuestionCircleOutlined/></Button>
 			<Button type="text" style={{height: 64}}><BellOutlined/></Button>
 			<Dropdown overlay={menu} placement="bottomCenter"  icon={<UserOutlined />}>
 				<Button type="text" style={{height: 64}}>
 					<Avatar className="avatar-picture" src="https://image.flaticon.com/icons/svg/3084/3084416.svg"/>
-					<span class="username">Nguyen Phu Truong</span>
+					<span className="username">Nguyen Phu Truong</span>
 				</Button>
 			</Dropdown>
 		</span>

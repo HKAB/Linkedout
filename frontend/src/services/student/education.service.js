@@ -13,15 +13,15 @@ function getEducation(id) {
 }
 
 function deleleEducation(id) {
-	return fetchWrapper._delete(`http://127.0.0.1:8000/api/education/delete?id=${id}`)
+	return fetchWrapper.delete(`http://127.0.0.1:8000/api/education/delete`, {id})
 }
 
-function createEducation(school_name, start_name, end_date, major, degree) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/education/create`, {school_name, start_name, end_date, major, degree})
+function createEducation(school_name, start_date, end_date, major, degree) {
+	return fetchWrapper.post(`http://127.0.0.1:8000/api/education/create`, {school_name, start_date, end_date, major, degree})
 }
 
-function updateEducation(id, school_name, start_name, end_date, major, degree) {
-	return fetchWrapper.put(`http://127.0.0.1:8000/api/education/update`, {id, school_name, start_name, end_date, major, degree})
+function updateEducation(id, school_name, start_date, end_date, major, degree) {
+	return fetchWrapper.put(`http://127.0.0.1:8000/api/education/update`, {id, school_name, start_date, end_date, major, degree})
 }
 
 export {

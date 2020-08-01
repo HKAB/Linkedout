@@ -19,6 +19,7 @@ import {
   Space,
   DatePicker,
   Modal,
+  Popconfirm
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
@@ -40,7 +41,7 @@ const onAddExperienceFinish = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      alert("done!");
+      alert("done create student experience!");
     })
     .catch((error) => {
       console.log(error);
@@ -48,9 +49,42 @@ const onAddExperienceFinish = (values) => {
     });
 };
 
+const onConfirmDeleteEducation = (id) => {
+	console.log(id);
+	studentServices.deleteStudentEducation(id)
+	.then(() => {
+		studentServices.getStudent(accountServices.userValue.account.id);
+		alert("done delete fucking school!");
+	})
+	.catch((error) => {
+		console.log(error);
+		alert(error);
+	  });
+}
+
+
+const onAddEducationFinish = (values) => {
+	studentServices
+	  .createStudentEducation(
+		values.education_info[0].schoolname,
+		values.education_info[0].startdate.format("YYYY-MM-DD"),
+		values.education_info[0].enddate.format("YYYY-MM-DD"),
+		values.education_info[0].major,
+		values.education_info[0].degree
+	  )
+	  .then(() => {
+		studentServices.getStudent(accountServices.userValue.account.id);
+		alert("done create freaking student!");
+	  })
+	  .catch((error) => {
+		console.log(error);
+		alert(error);
+	  });
+  };
+
 class ProfileChange extends Component {
   constructor(props) {
-    super(props);
+	super(props);
     this.state = {
       experience_data: [],
       education_data: {},
@@ -61,6 +95,8 @@ class ProfileChange extends Component {
       selected_experience_item: {},
     };
   }
+
+  formRef = React.createRef();
 
   // handle modal
   showModal = () => {
@@ -73,6 +109,7 @@ class ProfileChange extends Component {
     this.setState({ visible: false });
   };
 
+
   handleCancel = (e) => {
     this.setState({ visible: false });
   };
@@ -81,7 +118,7 @@ class ProfileChange extends Component {
   onModify = (item) => {
     console.log(item);
     this.showModal();
-    // this.setState({selected_experience_item: item});
+    this.setState({selected_experience_item: item});
   };
 
   componentDidMount() {
@@ -97,7 +134,7 @@ class ProfileChange extends Component {
         student.education.forEach((item) => {
           timeline_element.push(
             <Timeline.Item
-              key={item.school_name}
+              key={item.id}
               label={item.start_date + " - " + item.end_date}
             >
               <div>
@@ -105,19 +142,17 @@ class ProfileChange extends Component {
               </div>
               <div>{"Degree: " + item.degree}</div>
               <div>{"Major: " + item.major}</div>
-              <DeleteOutlined
-                style={{ color: "red" }}
-                onClick={() => {
-                  for (let id = 0; id < timeline_element.length; id++) {
-                    if (timeline_element[id].key == item.school_name) {
-                      console.log(item.school_name);
-                      timeline_element.splice(id, 1);
-                      break;
-                    }
-                  }
-                  //console.log(timeline_element.length);
-                }}
-              />
+			  <Popconfirm
+				title="Bạn có muốn xóa cái này?"
+				onConfirm={() => onConfirmDeleteEducation(item.id)}
+				okText="Yes"
+				cancelText="No"
+				placement="right"
+				>
+					<DeleteOutlined
+						style={{ color: "red" }}
+					/>
+				</Popconfirm>
             </Timeline.Item>
           );
         });
@@ -142,9 +177,11 @@ class ProfileChange extends Component {
             >
               Save
             </Button>,
-          ]}
+		  ]}
         >
+			{/* {<Node item={this.state.selected_experience_item}></Node>} */}
           <Form
+		  	ref={this.formRef}
             id="experience-edit"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
@@ -159,11 +196,12 @@ class ProfileChange extends Component {
             </Form.Item>
             <Form.Item
               label="Title"
-              name="title"
+			  name="title"
               rules={[{ required: true, message: "Title name is required!" }]}
             >
-              <Input defaultValue={this.state.selected_experience_item.title} />
+              <Input type="text" value="bababa" />
             </Form.Item>
+			<Input type="text" value="bababa" />
             <Form.Item
               label="Time"
               rules={[{ required: true, message: "Time is required!" }]}
@@ -194,7 +232,7 @@ class ProfileChange extends Component {
             itemLayout="horizontal"
             dataSource={this.state.experience_data}
             renderItem={(item) => (
-              <List.Item key={item}>
+              <List.Item key={item.id}>
                 <List.Item.Meta
                   avatar={
                     <Avatar
@@ -340,8 +378,8 @@ class ProfileChange extends Component {
           <Timeline mode="left" style={{ marginTop: 24 }}>
             {this.state.education_element}
           </Timeline>
-          <Form name="add-edu" autoComplete="off">
-            <Form.List name="edu-info">
+          <Form name="add-edu" autoComplete="off" onFinish={onAddEducationFinish}>
+            <Form.List name="education_info">
               {(fields, { add, remove }) => {
                 return (
                   <div>

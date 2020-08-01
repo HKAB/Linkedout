@@ -1,13 +1,6 @@
 
 import { accountServices } from "@/services"
 
-export const fetchWrapper = {
-	get,
-	post,
-	put,
-	delete: _delete
-}
-
 function get(url) {
 	const requestOptions = {
 		method: "GET",
@@ -17,6 +10,9 @@ function get(url) {
 }
 
 function post(url, body) {
+	console.log('im posting....');
+	console.log(authHeader(url));
+	console.log(body);
 	const requestOptions = {
 		method: "POST",
 		headers: { "Content-Type": "application/json", ...authHeader(url) },
@@ -29,18 +25,30 @@ function post(url, body) {
 function put(url, body) {
 	const requestOptions = {
 		method: "PUT",
-		header: { "Content-Type": "application/json", ...authHeader(url) },
+		headers: { "Content-Type": "application/json", ...authHeader(url) },
 		credentials: "include",
 		body: JSON.stringify(body)
 	}
 	return fetch(url, requestOptions).then(handleRequest)
 }
 
-function _delete(url) {
+function _delete(url, body) {
+	console.log('im deleting....');
+	console.log(authHeader(url));
+	console.log(body);
+
+	// var myHeaders = new Headers();
+	// myHeaders.append("Authorization", authHeader(url).Authorization);
+	// myHeaders.append("Authorization", authHeader(url).Authorization);
+	// myHeaders.append("Content-Type", "application/json");
+
+
 	const requestOptions = {
 		method: "DELETE",
-		header: authHeader(url)
+		body: JSON.stringify(body),
+		headers: { "Content-Type": "application/json", ...authHeader(url) },
 	}
+	console.log(requestOptions);
 	return fetch(url, requestOptions).then(handleRequest)
 }
 
@@ -72,3 +80,9 @@ function handleRequest(response) {
 	});
 }
 
+export const fetchWrapper = {
+	get,
+	post,
+	put,
+	delete: _delete
+}
