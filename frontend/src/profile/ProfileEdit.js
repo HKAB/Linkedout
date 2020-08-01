@@ -1,11 +1,12 @@
 import React from 'react'
 import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space} from  'antd';
-import{ Row, Col, Avatar, Switch} from 'antd'
+import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space, DatePicker} from  'antd';
+import{ Row, Col, Avatar, Switch} from 'antd';
 import {EditOutlined, UploadOutlined} from '@ant-design/icons';             
+import moment from 'moment';
 
-
-const {SubMenu}= Menu
+const dateFormat = 'YYYY/MM/DD';
+const {SubMenu}= Menu;
 
 const  {TabPane} =  Tabs;
 const color = (
@@ -20,43 +21,65 @@ const color = (
         <Button key='10'title="Purple" style={{backgroundColor:"rgb(114,46,209)"}}>Purple</Button>
     </Menu>
     )
-const data = {
-            userName: "hkab",
-           id:"1234",
-           email:"nguyenphutruong2525@god.com",
-          password:"1234567890123",
-           recoveryEmail:"1122uet@gmai.com",
-           avatar:"https://image.flaticon.com/icons/svg/3084/3084416.svg"
-}
 class ProfileEdit extends Component {
     constructor(props) {
         super(props);
         this.state={
             disabled:false,
+            userName: "hkab",
+           id:"1234",
+           email:"nguyenphutruong2525@god.com",
+          password:"1234567890123",
+          phoneNumber:"0987987987",
+          dateOfBirth:'2000/02/27',
+           avatar:"https://image.flaticon.com/icons/svg/3084/3084416.svg",
         }
     }
+
     changeDisabled = () =>{
         this.setState({
             disabled: !this.state.disabled,
           });
     }
-    handleChangeUserName =  (e) =>{
-        data.userName=e.target.value;
+
+    onFinishChangeIn4 = values => {
+        if(values.userName!=="")
+        {
+            this.setState({
+                userName:values.userName,
+            })
+        }
+        if(values.email!=="")
+        {
+            this.setState({
+                email:values.email,
+            })
+        }
+        if(values.dateOfBirth!=="")
+        {
+            this.setState({
+                dateOfBirth:values.dateOfBirth,
+            })
+        }
+        if(values.phoneNumber!=="")
+        {
+            this.setState({
+                phoneNumber:values.phoneNumber,
+            })
+        }
+        console.log(this.state.dateOfBirth)
     }
-    handleChangePassword =  (e) =>{
-        data.password=e.target.value;
-    }
-    handleChangeEmail =  (e) =>{
-        data.email=e.target.value;
-    }
-    handleChangeReEmail =  (e) =>{
-        data.recoveryEmail=e.target.value;
-    }
-    submitValue = () =>{
-        if(data.userName=="") alert('Nhập UserName đi nhé :)');
-        else if (data.email=="") alert('Nhập Email đi nhé :)');
-        else if (data.password=="") alert('Nhập Password đi nhé :)');
-        else alert('Success');
+    onFinishChangePass =values =>{
+            if(values.oldPass !== this.state.password)
+            {
+                alert('Incorrect password.');
+            }
+            else {
+                if (values.newPass===values.confPass){
+                alert('Success.')
+                }
+                else alert('Password not match!');
+            }
     }
     render()
     {
@@ -67,41 +90,45 @@ class ProfileEdit extends Component {
             style={{padding: 24,
                 margin: 0,
                 minHeight: 300,
-                
                 marginTop: 24,
-                }}>
-                <SubMenu title="Thay đổi" icon={<EditOutlined />}  key="sub1" >
+                }}
+                title="Thay đổi" icon={<EditOutlined />}  key="sub1"
+                >
                     <Tabs  tabPosition="left" style={{marginLeft:24}}>
-                        <TabPane tab="Thông tin tài khoản" key="1" >
+                        <TabPane tab="Thông tin tài khoản" key="1" style={{marginTop:20}}>
                             <span style={{fontWeight: "bold"}}>THÔNG TIN TÀI KHOẢN</span>
-                             
                             <Row align="middle">
                             
                                 <Col span="14">
-                                    <Form>
-                                        <Form.Item  className="form-group" style={{marginTop:32}} >
-                                            User Display
-                                            <Input  defaultValue={data.userName} onChange={this.handleChangeUserName}/>
+                                    <Form onFinish={this.onFinishChangeIn4}style={{marginTop:32}} >
+
+
+                                        <span >User Name</span>
+                                        <Form.Item name="userName" >
+                                            <Input  defaultValue={this.state.userName}  autoFocus={true} ></Input>
                                         </Form.Item>
-                                        <Form.Item className="form-group" style={{marginTop:32}}>
-                                            Email
-                                            <Input  defaultValue={data.email} onChange={this.handleChangeEmail}></Input>
+
+                                        <span>Email</span>
+                                        <Form.Item  name="email" >
+                                            <Input defaultValue={this.state.email} ></Input>
                                         </Form.Item>
-                                        <Form.Item  className="form-group" style={{marginTop:32}} >
-                                            Password
-                                            <Input.Password defaultValue={data.password}  onChange={this.handleChangePassword} ></Input.Password>
+
+                                        <span>Phone Number</span>
+                                        <Form.Item  name="phoneNumber"  >
+                                            <Input  defaultValue={this.state.phoneNumber}/>
                                         </Form.Item>
-                                        <Form.Item name="reEmail" style={{marginTop:32}}>
-                                            Recovery email
-                                            <Input defaultValue={data.recoveryEmail} onChange={this.handleChangeReEmail}></Input>
+
+                                        <span>Date of birth</span>
+                                        <Form.Item  name="dateOfBirth">
+                                            <DatePicker  defaultValue={moment(this.state.dateOfBirth, dateFormat)} format={dateFormat} />
                                         </Form.Item>
-                                        <Button type="primary" htmlType="submit" onClick={this.submitValue} >Save</Button>
                                         
+                                        <Button type="primary" htmlType="submit">Save</Button>
                                         <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
                                     </Form>
                                 </Col>
                                 <Col span="6" offset="11" style={{position:'absolute',top:150}}>
-                                    <Avatar style={{width: 180, height: 180, marginBottom:10}}src={data.avatar} ></Avatar>
+                                <Avatar style={{width: 180, height: 180, marginBottom:10}}src={this.state.avatar} ></Avatar>
                                     <Space style={{position:'relative', right:-20}}>
                                         <Upload >
                                     <Button >
@@ -114,7 +141,30 @@ class ProfileEdit extends Component {
                             </Row>
                             
                         </TabPane>
-                         <TabPane tab="Settings" key="2" style={{fontSize: 16}}>
+                        <TabPane tab="Change Password" key="3" style={{ marginTop:20}}   >
+                        <span style={{fontWeight: "bold"}}>CHANGE PASSWORD</span>
+                            <Form  onFinish={this.onFinishChangePass} style={{marginTop:32, marginRight:150}} >
+                                            <span> Old Password</span>
+                                            <Form.Item  span="6" name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Input.Password    placeholder="Old Password"  ></Input.Password>
+                                            </Form.Item>
+
+                                            <span>New Password</span>
+                                            <Form.Item span="6" name="newPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Input.Password   placeholder="New Password"  ></Input.Password>
+                                            </Form.Item>
+
+                                            <span> Confirm Password</span>
+                                            <Form.Item span="6" name="confPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Input.Password   placeholder="Confirm Password" ></Input.Password>
+                                            </Form.Item>
+
+                                            <Button type="primary" htmlType="submit" >Save</Button>
+                                            <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
+                            </Form>
+                        
+                            </TabPane>
+                         <TabPane tab="Settings" key="2" style={{fontSize: 16, marginTop:32}}>
                              <Row>
                                 <Col>Theme Color</Col>
                                 <Col style={{position:'absolute', right:64}}> <Switch    checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
@@ -124,12 +174,9 @@ class ProfileEdit extends Component {
                                   <Button class="changeColor" style={{marginTop:24}}>Color</Button>
                               </Dropdown>
                             </Row>
-                              
-                            
                          </TabPane>
+                        
                      </Tabs>
-                 </SubMenu>
-
              </Menu>
         
            
