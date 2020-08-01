@@ -2,16 +2,16 @@ import React from 'react';
 
 import { ProfileSider } from "@/profile/ProfileSider";
 import { MyHeader } from "@/components"
-import { Layout} from 'antd';
+import { Layout } from 'antd';
 
 
 
 function Profile() {
 	return (
 		<Layout>
-			<MyHeader/>
+			<MyHeader />
 			<Layout>
-				<ProfileSider/>
+				<ProfileSider />
 			</Layout>
 		</Layout>
 	);

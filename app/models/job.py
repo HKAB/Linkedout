@@ -12,6 +12,7 @@ class Job(models.Model):
     seniority_level = models.CharField(max_length=16)
     employment_type = models.CharField(max_length=16)  # full-time or part-time
     published_date = models.DateField()
+    recruitment_url = models.CharField(max_length=1024, default='#')
 
     cities = models.ManyToManyField(City)
     skills = models.ManyToManyField(Skill)

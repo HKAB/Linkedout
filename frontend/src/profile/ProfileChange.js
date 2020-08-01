@@ -28,6 +28,7 @@ import { List, Avatar } from "antd";
 import { studentServices } from "@/services";
 import { accountServices } from "@/services";
 import dayjs from "dayjs";
+import moment from 'moment';
 
 const onAddExperienceFinish = (values) => {
   console.log(values.experience_info[0].start_date.format("D MMMM YYYY"));
@@ -94,8 +95,9 @@ class ProfileChange extends Component {
       visible: false,
       selected_experience_item: {},
     };
+    this.formRef = React.createRef();
   }
-
+  
   // handle modal
   showModal = () => {
     this.setState({ visible: true });
@@ -111,12 +113,19 @@ class ProfileChange extends Component {
   handleCancel = (e) => {
     this.setState({ visible: false });
   };
+  
 
   // modify experience list item
   onModify = (item) => {
     console.log(item);
-    this.showModal();
+    //this.formRef.current.resetFields();
     this.setState({selected_experience_item: item});
+    this.formRef.current.setFieldsValue({
+      company_name: item.company_name,
+      title: item.title,
+      description: item.description
+    });
+    this.showModal();
   };
 
   componentDidMount() {
@@ -163,6 +172,7 @@ class ProfileChange extends Component {
     return (
       <>
         <Modal
+          forceRender
           title="Đổi thông tin"
           visible={this.state.visible}
           onCancel={this.handleCancel}
@@ -182,41 +192,49 @@ class ProfileChange extends Component {
             id="experience-edit"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
+            ref = {this.formRef}
           >
             <Form.Item
-              defaultValue="abc"
+              initialValue = "abc"
               label="Company"
               name="company_name"
               rules={[{ required: true, message: "Company name is required!" }]}
             >
-              <Input value="damn" />
+              <Input 
+                />
             </Form.Item>
             <Form.Item
+              initialValue = "def"
               label="Title"
 			  name="title"
               rules={[{ required: true, message: "Title name is required!" }]}
             >
-              <Input type="text" value="bababa" />
+              <Input 
+              //defaultValue = {this.state.selected_experience_item.title}
+              />
             </Form.Item>
 			<Input type="text" value="bababa" />
             <Form.Item
               label="Time"
               rules={[{ required: true, message: "Time is required!" }]}
             >
-              <Form.Item name="start-date" style={{ display: "inline-block" }}>
+              <Form.Item name="start-date" style={{ display: "inline-block" }} 
+                initialValue={moment('2000-07-08', 'YYYY-MM-DD')}
+              >
                 <DatePicker placeholder="Start date" />
               </Form.Item>
               <Form.Item
                 name="end-date"
                 style={{ display: "inline-block", marginLeft: 8 }}
+                initialValue={moment('2020-07-08', 'YYYY-MM-DD')}
               >
                 <DatePicker placeholder="End date" />
               </Form.Item>
             </Form.Item>
 
-            <Form.Item label="Description" name="description">
-              <Input
-                defaultValue={this.state.selected_experience_item.description}
+            <Form.Item  label="Description" name="description" initialValue = "des">
+              <Input 
+              //defaultValue = {this.state.selected_experience_item.description}
               />
             </Form.Item>
           </Form>
@@ -253,7 +271,7 @@ class ProfileChange extends Component {
                 <Button
                   type="dashed"
                   shape="circle"
-                  onClick={() => this.onModify(item)}
+                  onClick={() => this.onModify(item) }
                   icon={<EditOutlined />}
                 />
               </List.Item>
