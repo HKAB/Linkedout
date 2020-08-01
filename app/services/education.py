@@ -38,7 +38,7 @@ def update_education(*, account: Account, id: int, education: dict) -> list:
     e = Education.objects.filter(id=id).first()
     if e is None:
         raise InvalidInputFormat("Old education entry not found!")
-        
+
     e.school = get_school_with_name(education['school_name'])
     e.start_date = education['start_date']
     e.end_date = education['end_date']

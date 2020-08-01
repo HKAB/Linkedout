@@ -2,7 +2,6 @@ import os
 
 from app.models.account import Account
 from app.models.company import Company
-from app.models.specialty import Specialty
 from app.exceptions import InvalidInputFormat
 from backend.settings import MEDIA_ROOT
 
@@ -21,9 +20,7 @@ def create_company(*, account: Account, name: str, website: str, specialties: li
         raise InvalidInputFormat(
             "Account {} already has a company account.".format(account.id))
     c = Company(account=account, name=name, website=website, **kwargs)
-    for spec in specialties:
-        s = Specialty.objects.filter(name=spec).first()
-        c.specialties.add(s)
+    c.specialties.add(*specialties)
     c.save()
     return c
 
@@ -33,9 +30,7 @@ def update_company(*, account: Account, name: str, website: str, specialties: li
     company_exist(account.id)
     c = Company.objects.filter(account=account)
     c.update(account=account, name=name, website=website, **kwargs)
-    for spec in specialties:
-        s = Specialty.objects.filter(name=spec).first()
-        c.first().specialties.add(s)
+    c.first().specialties.add(*specialties)
     return c.first()
 
 
