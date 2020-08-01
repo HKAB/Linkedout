@@ -140,6 +140,9 @@ class ProfileChange extends Component {
       skill_data: ["C#"],
       //for modal
       visible: false,
+      experience_visible:false,
+      education_visible:false,
+      skill_visible:false,
       selected_experience_item: {},
       selected_skill: {}
     };
@@ -149,6 +152,30 @@ class ProfileChange extends Component {
   // handle modal
   showModal = () => {
     this.setState({ visible: true });
+  };
+
+  showExperienceModal = () => {
+    this.setState({ experience_visible: true });
+  };
+
+  showEducationModal = () => {
+    this.setState({ education_visible: true });
+  };
+
+  showSkillModal = () => {
+    this.setState({ skill_visible: true });
+  };
+
+  handleExperienceCancel = (e) => {
+    this.setState({ experience_visible: false });
+  };
+
+  handleEducationCancel = (e) => {
+    this.setState({ education_visible: false });
+  };
+
+  handleSkillCancel = (e) => {
+    this.setState({ skill_visible: false });
   };
 
   onSaveExperience = (fieldsValue) => {
@@ -293,12 +320,70 @@ class ProfileChange extends Component {
           </Form>
         </Modal>
 
+        <Modal
+          forceRender
+          title="Experiences"
+          footer = {null}
+          visible={this.state.experience_visible}
+          onCancel={this.handleExperienceCancel}
+        >
+          <List
+            itemLayout="vertical"
+            style={{ marginTop: 24 }}
+            dataSource={this.state.experience_data}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                  title={item.company_name}
+                  description={<div className="company-info" id={item.id}>
+                    <div>{"Title: " + item.title}</div>
+                    <div>{"Time: " + item.start_date + " " + item.end_date}</div>
+                  </div>}
+                />
+              </List.Item>
+            )}
+          />
+        </Modal>
+        
+        <Modal
+          forceRender
+          title="Educations"
+          footer = {null}
+          visible={this.state.education_visible}
+          onCancel={this.handleEducationCancel}
+        >
+          <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
+            {this.state.education_element}
+          </Timeline>
+        </Modal>
+
+        <Modal
+          forceRender
+          title="Skills"
+          footer = {null}
+          visible={this.state.skill_visible}
+          onCancel={this.handleSkillCancel}
+        >
+          <List style={{ marginTop: 24 }}
+            dataSource={this.state.skill_data}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar />}
+                  title={item}
+                />
+              </List.Item>
+            )}
+          />
+        </Modal>
+
         <Card style={{ marginTop: 24 }}>
           <Meta title="Experiences"></Meta>
           <List
             style={{ marginTop: 24 }}
             itemLayout="horizontal"
-            dataSource={this.state.experience_data}
+            dataSource={this.state.experience_data.slice(0, 4)}
             renderItem={(item) => (
               <List.Item key={item.id}>
                 <List.Item.Meta
@@ -422,6 +507,11 @@ class ProfileChange extends Component {
 
               <Form.Item>
                 <Button type="primary" htmlType="submit"> Save </Button>
+                <Button
+                  type="primary"
+                  style={{ float: 'right' }}
+                  onClick={() => this.showExperienceModal()}> Show all
+                </Button>
               </Form.Item>
             </Form>
           </List>
@@ -431,7 +521,7 @@ class ProfileChange extends Component {
           <Meta title="Education"></Meta>
           
           <Timeline mode="left" style={{ marginTop: 24 }}>
-            {this.state.education_element}
+            {this.state.education_element.slice(0, 4)}
           </Timeline>
           
           <Form name="add-education" autoComplete="off" onFinish={onAddEducationFinish}>
@@ -521,6 +611,11 @@ class ProfileChange extends Component {
 
             <Form.Item>
               <Button type="primary" htmlType="submit"> Submit </Button>
+              <Button 
+                type = "primary" 
+                style = {{float:'right'}} 
+                onClick = {()=>this.showEducationModal()}> Show all
+              </Button>
             </Form.Item>
           </Form>
         </Card>
@@ -529,7 +624,7 @@ class ProfileChange extends Component {
           <List
             style={{ marginTop: 24 }}
             grid={{ column: 2 }}
-            dataSource={this.state.skill_data}
+            dataSource={this.state.skill_data.slice(0, 6)}
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
@@ -588,8 +683,7 @@ class ProfileChange extends Component {
                     ))}
 
                     <Form.Item>
-                      <Button
-                        type="dashed" shape="circle"
+                      <Button type="dashed" shape="circle"
                         onClick={() => {
                           add();
                         }}
@@ -604,6 +698,11 @@ class ProfileChange extends Component {
 
             <Form.Item>
               <Button type="primary" htmlType="submit"> Submit </Button>
+              <Button
+                type="primary"
+                style={{ float: 'right' }}
+                onClick={() => this.showSkillModal()}> Show all
+              </Button>
             </Form.Item>
           </Form>
         </Card>

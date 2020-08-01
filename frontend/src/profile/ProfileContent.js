@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
-import { Layout, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete } from 'antd';
+import { Layout, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
 
 import './assets/css/profileContent.css';
 import Column from 'antd/lib/table/Column';
@@ -53,10 +53,37 @@ class ProfileContent extends Component {
       education_data: {},
       education_element: [],
       phone_data: {},
-      email_data: {}
+      email_data: {},
+      //modal
+      experience_visible:false,
+      education_visible:false,
+      skill_visible:false,
     }
   }
 
+  showExperienceModal = () => {
+    this.setState({ experience_visible: true });
+  };
+
+  showEducationModal = () => {
+    this.setState({ education_visible: true });
+  };
+
+  showSkillModal = () => {
+    this.setState({ skill_visible: true });
+  };
+
+  handleExperienceCancel = (e) => {
+    this.setState({ experience_visible: false });
+  };
+
+  handleEducationCancel = (e) => {
+    this.setState({ education_visible: false });
+  };
+
+  handleSkillCancel = (e) => {
+    this.setState({ skill_visible: false });
+  };
 
   componentDidMount() {
     let user = accountServices.userValue;
@@ -75,8 +102,9 @@ class ProfileContent extends Component {
 			student.education.forEach(item => {
 				timeline_element.push(<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
 			});
-	
-			this.setState({education_element: timeline_element});
+      if (timeline_element.length == 0) this.setState({education_element: <Empty/>});  
+      else this.setState({education_element: timeline_element});
+      console.log(this.state.education_element);
 		  }
 	  });
     }
@@ -105,22 +133,29 @@ class ProfileContent extends Component {
             <Col style={{ textAlign: "center" }} span={8}><ScheduleOutlined /> DoB: {this.state.basic_profile_data.dateofbirth}</Col>
           </Row>
         </Card>
+
         <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
           <Col span={12}>
             <Card>
               <Meta title="Education"></Meta>
               <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
-                {this.state.education_element}
+                  {this.state.education_element.slice(0, 4)}
               </Timeline>
+              <Button 
+                type = "primary" 
+                style = {{float:'right'}} 
+                onClick = {()=>this.showEducationModal()}> Show all
+              </Button>
             </Card>
           </Col>
+
           <Col span={12}>
             <Card>
               <Meta title="Experiences"></Meta>
               <List
                 itemLayout="vertical"
                 style={{ marginTop: 24 }}
-                dataSource={this.state.experience_data}
+                dataSource={this.state.experience_data.slice(0, 4)}
                 renderItem={item => (
                   <List.Item>
                     <List.Item.Meta
@@ -134,9 +169,73 @@ class ProfileContent extends Component {
                   </List.Item>
                 )}
               />
+              <Button 
+                type = "primary" 
+                style = {{float:'right'}} 
+                onClick = {()=>this.showExperienceModal()}> Show all
+              </Button>
             </Card>
           </Col>
         </Row>
+        
+        <Modal
+          forceRender
+          title="Educations"
+          footer = {null}
+          visible={this.state.education_visible}
+          onCancel={this.handleEducationCancel}
+        >
+          <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
+            {this.state.education_element}
+          </Timeline>
+        </Modal>
+
+        <Modal
+          forceRender
+          title="Experiences"
+          footer = {null}
+          visible={this.state.experience_visible}
+          onCancel={this.handleExperienceCancel}
+        >
+          <List
+            itemLayout="vertical"
+            style={{ marginTop: 24 }}
+            dataSource={this.state.experience_data}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                  title={item.company_name}
+                  description={<div className="company-info" id={item.id}>
+                    <div>{"Title: " + item.title}</div>
+                    <div>{"Time: " + item.start_date + " " + item.end_date}</div>
+                  </div>}
+                />
+              </List.Item>
+            )}
+          />
+        </Modal>
+
+        <Modal
+          forceRender
+          title="Skills"
+          footer = {null}
+          visible={this.state.skill_visible}
+          onCancel={this.handleSkillCancel}
+        >
+          <List style={{ marginTop: 24 }}
+            dataSource={this.state.skill_data}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar />}
+                  title={item}
+                />
+              </List.Item>
+            )}
+          />
+        </Modal>
+
         <Row gutter={[24, 24]}>
           <Col span={12}>
             <Card>
@@ -158,7 +257,7 @@ class ProfileContent extends Component {
             <Card>
               <Meta title="Skill"></Meta>
               <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-                dataSource={this.state.skill_data}
+                dataSource={this.state.skill_data.slice(0, 6)}
                 renderItem={item => (
                   <List.Item>
                     <List.Item.Meta
@@ -168,6 +267,11 @@ class ProfileContent extends Component {
                   </List.Item>
                 )}
               />
+              <Button 
+                type = "primary" 
+                style = {{float:'right'}} 
+                onClick = {()=>this.showSkillModal()}> Show all
+              </Button>
             </Card>
           </Col>
         </Row>
