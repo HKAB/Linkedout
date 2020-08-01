@@ -83,7 +83,7 @@ class ExperienceUpdateView(APIView):
     class InputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
         experience = inline_serializer(fields={
-            'school_name': serializers.CharField(required=True),
+            'company_name': serializers.CharField(required=True),
             'start_date': serializers.DateField(required=True),
             'end_date': serializers.DateField(required=True),  # Does this really required? idk
             'title': serializers.CharField(required=True),
