@@ -20,6 +20,7 @@ import {
   DatePicker,
   Modal,
   Popconfirm,
+  Empty
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
@@ -135,9 +136,9 @@ class ProfileChange extends Component {
     super(props);
     this.state = {
       experience_data: [],
-      education_data: {},
+      education_data: [],
       education_element: [],
-      skill_data: ["C#"],
+      skill_data: [],
       //for modal
       visible: false,
       experience_visible:false,
@@ -521,7 +522,7 @@ class ProfileChange extends Component {
           <Meta title="Education"></Meta>
           
           <Timeline mode="left" style={{ marginTop: 24 }}>
-            {this.state.education_element.slice(0, 4)}
+          {this.state.education_element.slice(0, 4)}
           </Timeline>
           
           <Form name="add-education" autoComplete="off" onFinish={onAddEducationFinish}>

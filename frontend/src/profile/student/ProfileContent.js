@@ -2,7 +2,7 @@ import React from 'react'
 import { Component } from 'react';
 import { Layout, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
 
-import './assets/css/profileContent.css';
+import '../assets/css/profileContent.css';
 import Column from 'antd/lib/table/Column';
 import { MailOutlined, ScheduleOutlined, PhoneOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
@@ -51,7 +51,7 @@ class ProfileContent extends Component {
       follow_data: {},
       skill_data: [],
       education_data: {},
-      education_element: [],
+      education_element: [<Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>],
       phone_data: {},
       email_data: {},
       //modal
@@ -102,7 +102,7 @@ class ProfileContent extends Component {
 			student.education.forEach(item => {
 				timeline_element.push(<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
 			});
-      if (timeline_element.length == 0) this.setState({education_element: <Empty/>});  
+      if (timeline_element.length == 0) this.setState({education_element: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />});  
       else this.setState({education_element: timeline_element});
       console.log(this.state.education_element);
 		  }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ProfileSider } from "@/profile/ProfileSider";
+import { ProfileSider } from "@/profile/student/ProfileSider";
 import { MyHeader } from "@/components"
 import { Layout } from 'antd';
 

@@ -11,9 +11,9 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 
-import { ProfileContent } from "@/profile/ProfileContent";
-import {ProfileEdit} from "@/profile/ProfileEdit";
-import  ProfileChange  from "@/profile/ProfileChange";
+import { ProfileContent } from "@/profile/student/ProfileContent";
+import {ProfileEdit} from "@/profile/student/ProfileEdit";
+import  ProfileChange  from "@/profile/student/ProfileChange";
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
