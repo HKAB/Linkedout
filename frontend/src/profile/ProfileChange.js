@@ -505,10 +505,10 @@ class ProfileChange extends Component {
                       style={{ color: "red" }}
                       count={<MinusCircleOutlined />}
                     >
-                      <Avatar src={item.avatar} />{" "}
+                      <Avatar />{" "}
                     </Badge>
                   }
-                  title={<a href={item.title_href}>{item.title}</a>}
+                  title={item}
                 />
               </List.Item>
             )}
