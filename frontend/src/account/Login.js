@@ -3,7 +3,7 @@ import {Row, Col} from 'antd';
 import { Tabs } from 'antd';
 import { Typography } from 'antd';
 import { Layout, Menu, Breadcrumb, Select } from 'antd';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, Modal } from 'antd';
 import { UserOutlined, LockOutlined, UserAddOutlined, LoginOutlined, MailOutlined, ShopOutlined, SmileOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 import { accountServices } from "@/services"
@@ -31,27 +31,27 @@ function Login({ history }) {
 		// console.log(values);
 		accountServices.login(values.login_username, values.login_password).then()
 		.then(() => {
-			alert("Login successfully!!");
+			Modal.success({title: "uWu", content: "Login successfully!!"});
 			history.push("/profile");
 		})
 		.catch(error => {
-			alert(error);
+			Modal.error({title: "uWu", content: "Login unsuccessfully!!"});
 		})
 	}
 
 	const onRegisterFinish = values => {
 		console.log(values);
 		if (values.register_password !== values.register_repassword) {
-			alert("Password not match!");
+			Modal.error({title: "uWu", content: "Password not match!"});
 		}
 		else if (!values.license_agreement)
 		{
-			alert("Not agree?! Fuckoff plz");	
+			Modal.warn({title: "uWu", content: "Not agree?!"});	
 		}
 		else {
 			accountServices.register(values.register_username, values.register_email, values.register_password, values.register_account_type).then()
 			.then(() => {
-				alert("Register successfully!! Now login :)");
+				Modal.success({title: "uWu", content: "Register successfully!! Now login :)"});
 				//history.go();
 				history.push("/createStudent");
 			})

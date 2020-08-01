@@ -90,8 +90,8 @@ function deleteStudentPhone(phone) {
 
 // student experience
 
-function updateStudentExperience(id, school_name, start_date, end_date, title, description) {
-    return deleleExperience(id, school_name, start_date, end_date, title, description);
+function updateStudentExperience(id, company_name, start_date, end_date, title, description) {
+    return updateExperience(id, company_name, start_date, end_date, title, description);
 }
 
 function createStudentExperience(company_name, start_date, end_date, title, description) {
@@ -99,18 +99,18 @@ function createStudentExperience(company_name, start_date, end_date, title, desc
 }
 
 function deleteStudentExperience(id) {
-    return updateExperience(id);
+    return deleleExperience(id);
 }
 //
 
 // student education
 
-function updateStudentEducation(id, school_name, start_name, end_date, major, degree) {
-    return updateEducation(id, school_name, start_name, end_date, major, degree);
+function updateStudentEducation(id, school_name, start_date, end_date, major, degree) {
+    return updateEducation(id, school_name, start_date, end_date, major, degree);
 }
 
-function createStudentEducation(school_name, start_name, end_date, major, degree) {
-    return createEducation(school_name, start_name, end_date, major, degree);
+function createStudentEducation(school_name, start_date, end_date, major, degree) {
+    return createEducation(school_name, start_date, end_date, major, degree);
 }
 
 function deleteStudentEducation(id) {
@@ -127,8 +127,8 @@ function createStudentSkill(skill) {
     return createSkill(skill);
 }
 
-function deleteStudentSkill(id) {
-    return deleleEducation(id);
+function deleteStudentSkill(skill) {
+    return deleteSkill(skill);
 }
 
 //

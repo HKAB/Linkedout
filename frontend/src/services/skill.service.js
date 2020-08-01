@@ -8,7 +8,7 @@ function getSkill(id) {
 }
 
 function deleteSkill(skill) {
-	return fetchWrapper._delete(`http://127.0.0.1:8000/api/skill/delete?skill=${skill}`)
+	return fetchWrapper.delete(`http://127.0.0.1:8000/api/skill/delete`, {skill})
 }
 
 function createSkill(skill) {
