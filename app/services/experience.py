@@ -57,14 +57,15 @@ def update_experience(*, account: Account, id: int, experience: dict) -> list:
     e = Experience.objects.filter(id=id).first()
     if e is None:
         raise InvalidInputFormat("Old experience entry not found!")
-    comp = get_company_with_name(experience.company_name)
-    e.start_date = experience.start_date
-    e.end_date = experience.end_date
-    e.title = experience.title
-    e.description = experience.description
+    comp = get_company_with_name(experience['company_name'])
+
+    e.start_date = experience['start_date']
+    e.end_date = experience['end_date']
+    e.title = experience['title']
+    e.description = experience['description']
     if comp is None:
         e.company = None
-        e.company_name = experience.company_name
+        e.company_name = experience['company_name']
     else:
         e.company = comp
         e.company_name = None
