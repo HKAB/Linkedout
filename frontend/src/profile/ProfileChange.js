@@ -19,7 +19,7 @@ import {
   Space,
   DatePicker,
   Modal,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
@@ -42,11 +42,11 @@ const onAddExperienceFinish = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      alert("done create student experience!");
+      Modal.success({title: "uWu", content: "done create student experience!"});
     })
     .catch((error) => {
       console.log(error);
-      alert(error);
+      Modal.error({title: "uWu", content: error});
     });
 };
 
@@ -55,11 +55,11 @@ const onConfirmDeleteEducation = (id) => {
 	studentServices.deleteStudentEducation(id)
 	.then(() => {
 		studentServices.getStudent(accountServices.userValue.account.id);
-		alert("done delete fucking school!");
+		Modal.success({title: "uWu", content: "done delete fucking school!"});
 	})
 	.catch((error) => {
 		console.log(error);
-		alert(error);
+		Modal.error({title: "uWu", content: error});
 	  });
 }
 
@@ -75,13 +75,47 @@ const onAddEducationFinish = (values) => {
 	  )
 	  .then(() => {
 		studentServices.getStudent(accountServices.userValue.account.id);
-		alert("done create freaking student!");
+		Modal.success({title: "uWu", content: "done create freaking student!"});
 	  })
 	  .catch((error) => {
 		console.log(error);
-		alert(error);
+		Modal.error({title: "uWu", content: error});
 	  });
   };
+
+  const onEditExperience = (values) => {
+    studentServices
+      .updateStudentExperience(
+        values.id,
+        values.company_name,
+        values.start_date.format("YYYY-MM-DD"),
+        values.end_date.format("YYYY-MM-DD"),
+        values.title,
+        values.description
+      )
+      .then(() => {
+      studentServices.getStudent(accountServices.userValue.account.id);
+        Modal.success({title: "uWu", content: "done update freaking student!"});
+      })
+      .catch((error) => {
+      console.log(error);
+      Modal.error({title: "uWu", content: error});
+      });
+    };
+
+    const onConfirmDeleteSkill = (skill) => {
+      console.log(skill);
+      studentServices.deleteStudentSkill(skill)
+      .then(() => {
+        studentServices.getStudent(accountServices.userValue.account.id);
+        Modal.success({title: "uWu", content: "done delete fucking skill!"});
+      })
+      .catch((error) => {
+        console.log(error);
+        Modal.error({title: "uWu", content: error});
+        });
+    }
+    
 
 class ProfileChange extends Component {
   constructor(props) {
@@ -90,10 +124,11 @@ class ProfileChange extends Component {
       experience_data: [],
       education_data: {},
       education_element: [],
-      skill_data: [],
+      skill_data: ["C#"],
       //for modal
       visible: false,
       selected_experience_item: {},
+      selected_skill: {}
     };
     this.formRef = React.createRef();
   }
@@ -123,7 +158,8 @@ class ProfileChange extends Component {
     this.formRef.current.setFieldsValue({
       company_name: item.company_name,
       title: item.title,
-      description: item.description
+      description: item.description,
+      id: item.id
     });
     this.showModal();
   };
@@ -176,18 +212,27 @@ class ProfileChange extends Component {
           title="Đổi thông tin"
           visible={this.state.visible}
           onCancel={this.handleCancel}
-          footer={[
-            <Button
-              type="primary"
-              key="submit"
-              form="experience-edit"
-              htmlType="submit"
-            >
-              Save
-            </Button>,
-		  ]}
+          onOk={() => {
+            this.formRef.current.validateFields()
+            .then(values => {
+              console.log(values);
+              onEditExperience(values);
+            })
+            .catch(info  => {
+              console.log(info);
+            })
+          }}
+      //     footer={[
+      //       <Button
+      //         type="primary"
+      //         key="submit"
+      //         form="experience-edit"
+      //         htmlType="submit"
+      //       >
+      //         Save
+      //       </Button>,
+		  // ]}
         >
-			{/* {<Node item={this.state.selected_experience_item}></Node>} */}
           <Form
             id="experience-edit"
             labelCol={{ span: 6 }}
@@ -209,22 +254,19 @@ class ProfileChange extends Component {
 			  name="title"
               rules={[{ required: true, message: "Title name is required!" }]}
             >
-              <Input 
-              //defaultValue = {this.state.selected_experience_item.title}
-              />
+              <Input />
             </Form.Item>
-			<Input type="text" value="bababa" />
             <Form.Item
               label="Time"
               rules={[{ required: true, message: "Time is required!" }]}
             >
-              <Form.Item name="start-date" style={{ display: "inline-block" }} 
+              <Form.Item name="start_date" style={{ display: "inline-block" }} 
                 initialValue={moment('2000-07-08', 'YYYY-MM-DD')}
               >
                 <DatePicker placeholder="Start date" />
               </Form.Item>
               <Form.Item
-                name="end-date"
+                name="end_date"
                 style={{ display: "inline-block", marginLeft: 8 }}
                 initialValue={moment('2020-07-08', 'YYYY-MM-DD')}
               >
@@ -236,6 +278,10 @@ class ProfileChange extends Component {
               <Input 
               //defaultValue = {this.state.selected_experience_item.description}
               />
+            </Form.Item>
+
+            <Form.Item hidden="true" name="id">
+              <Input type="hidden"/>
             </Form.Item>
           </Form>
         </Modal>
@@ -501,12 +547,20 @@ class ProfileChange extends Component {
               <List.Item>
                 <List.Item.Meta
                   avatar={
-                    <Badge
-                      style={{ color: "red" }}
-                      count={<MinusCircleOutlined />}
-                    >
-                      <Avatar />{" "}
-                    </Badge>
+                    <Popconfirm 
+                      title="Bạn có muốn xóa cái này?"
+                      onConfirm={() => onConfirmDeleteSkill(item)}
+                      okText="Yes"
+                      cancelText="No">
+                      <a>
+                      <Badge
+                        style={{ color: "red" }}
+                        count={<MinusCircleOutlined />}
+                      >
+                        <Avatar />
+                      </Badge>
+                      </a>
+                    </Popconfirm>
                   }
                   title={item}
                 />

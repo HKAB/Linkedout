@@ -21,8 +21,8 @@ function createExperience(company_name,start_date, end_date, title, description)
 	return fetchWrapper.post(`http://127.0.0.1:8000/api/experience/create`, {company_name,start_date, end_date, title, description})
 }
 
-function updateExperience(id, school_name, start_date, end_date, title, description) {
-	return fetchWrapper.put(`http://127.0.0.1:8000/api/experience/update`, {id, school_name, start_date, end_date, title, description})
+function updateExperience(id, company_name, start_date, end_date, title, description) {
+	return fetchWrapper.put(`http://127.0.0.1:8000/api/experience/update`, {"id": id, "experience": {company_name, start_date, end_date, title, description}})
 }
 
 export {
