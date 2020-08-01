@@ -8,6 +8,7 @@ from app.views.email import EmailListView, EmailCreateView, EmailUpdateView, Ema
 from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, PhoneDeleteView
 from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
 from app.views.experience import ExperienceListView, ExperienceCreateView, ExperienceUpdateView, ExperienceDeleteView
+from app.views.job import JobGetView, JobListView, JobCreateView, JobUpdateView, JobDeleteView
 from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView
 
 account_patterns = [
@@ -64,6 +65,14 @@ experience_patterns = [
     path('delete', ExperienceDeleteView.as_view()),
 ]
 
+job_patterns = [
+    path('get', JobGetView.as_view()),
+    path('list', JobListView.as_view()),
+    path('create', JobCreateView.as_view()),
+    path('update', JobUpdateView.as_view()),
+    path('delete', JobDeleteView.as_view()),
+]
+
 tag_patterns = [
     path('skill', SkillTagView.as_view()),
     path('title', TitleTagView.as_view()),
@@ -80,5 +89,6 @@ urlpatterns = [
     path('phone/', include((phone_patterns, 'phone'))),
     path('education/', include((education_patterns, 'education'))),
     path('experience/', include((experience_patterns, 'experience'))),
+    path('job/', include((job_patterns, 'job'))),
     path('tag/', include((tag_patterns, 'tag'))),
 ]
