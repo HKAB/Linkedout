@@ -96,8 +96,6 @@ class ProfileChange extends Component {
     };
   }
 
-  formRef = React.createRef();
-
   // handle modal
   showModal = () => {
     this.setState({ visible: true });
@@ -181,7 +179,6 @@ class ProfileChange extends Component {
         >
 			{/* {<Node item={this.state.selected_experience_item}></Node>} */}
           <Form
-		  	ref={this.formRef}
             id="experience-edit"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
