@@ -4,6 +4,8 @@ from app.models.skill import Skill
 from app.models.title import Title
 from app.models.school import School
 from app.models.company import Company
+from app.models.specialty import Specialty
+from app.models.city import City
 
 def get_skill_tag(*, query: str) -> dict:
     tmp = Skill.objects.filter(name__istartswith=query)
@@ -40,3 +42,24 @@ def get_company_tag(*, query: str) -> dict:
     tag_contain_query = [{'name': t.name, 'logo': t.profile_picture} for t in temp]
 
     return (tag_startwith_query + tag_contain_query)[:10]
+
+
+def get_speciality_tag(*, query: str) -> dict:
+    temp=Speciality.objects.filter(name__istartswith =query)
+    tag_startwith_query =[s.name for s in temp]
+    temp=Speciality.objects.filter(Q(name__icontains=query) & ~Q(name__istartswith=query))
+    tag_contain_query=[s.name for s in temp]
+
+    return {
+        'tag': (tag_startwith_query + tag_contain_query)[:10]
+    }
+
+def get_location_tag(*,query: str) -> dict:      
+    temp = City.objects.filter(name__istartswith=query)
+    tag_startwith_query = [s.name for s in temp]
+    temp = City.objects.filter(Q(name__icontains=query) & ~Q(name__istartswith=query))
+    tag_contain_query = [s.name for s in temp]
+
+    return {
+        'tag': (tag_startwith_query + tag_contain_query)[:10]
+    }

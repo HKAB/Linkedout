@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
-from app.services.tag import get_skill_tag, get_title_tag, get_school_tag, get_company_tag
+from app.services.tag import get_skill_tag, get_title_tag, get_school_tag, get_company_tag, get_speciality_tag, get_location_tag
 
 
 class SkillTagView(APIView):
@@ -113,3 +113,55 @@ class CompanyTagView(APIView):
         serializer.is_valid(raise_exception=True)
         result = get_company_tag(**serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
+
+
+class SpecialityTagView(APIView):
+    class InputSerializer(serializers.Serializer):
+        query = serializers.CharField(required=True)
+
+        class Meta:
+            ref_name = 'SpecialityTagIn'
+            fields = ['query']
+
+    class OutputSerializer(serializers.Serializer):
+        tag = serializers.ListField()
+
+        class Meta:
+            ref_name = 'SpecialityTagOut'
+            fields = ['tag']
+
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request):
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result =get_speciality_tag(**serializer.validated_data)
+        return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)   
+
+
+class LocationTagView(APIView):
+    class InputSerializer(serializers.Serializer):
+        query = serializers.CharField(required=True)
+
+        class Meta:
+            ref_name = 'LocationTagIn'
+            fields = ['query']
+
+    class OutputSerializer(serializers.Serializer):
+        tag = serializers.ListField()
+
+        class Meta:
+            ref_name = 'LocationTagOut'
+            fields = ['tag']
+
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request):
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result =get_location_tag(**serializer.validated_data)
+        return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK) 
