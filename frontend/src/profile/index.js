@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ProfileTab } from "@/profile/company/ProfileTab";
 import { ProfileSider } from "@/profile/student/ProfileSider";
 import { MyHeader } from "@/components"
 import { Layout } from 'antd';
@@ -11,7 +12,7 @@ function Profile() {
 		<Layout>
 			<MyHeader />
 			<Layout>
-				<ProfileSider />
+				<ProfileTab />
 			</Layout>
 		</Layout>
 	);

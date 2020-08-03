@@ -32,7 +32,7 @@ class MyHeader extends Component {
 		return(
     <Header className="site-layout-background">
       <div className="logo" style={{fontWeight:"bold"}}>
-          <img src={logo} style={{width:32, height:32, marginRight: 10}}></img>
+          <img src="https://image.flaticon.com/icons/svg/3092/3092591.svg" style={{width:32, height:32, marginRight: 10}}></img>
           SUNSHINE
       </div>
        
@@ -48,8 +48,8 @@ class MyHeader extends Component {
 			<Button type="text" style={{height: 64}}><BellOutlined/></Button>
 			<Dropdown overlay={menu} placement="bottomCenter"  icon={<UserOutlined />}>
 				<Button type="text" style={{height: 64}}>
-					<Avatar className="avatar-picture" src="https://image.flaticon.com/icons/svg/3084/3084416.svg"/>
-					<span className="username">Nguyen Phu Truong</span>
+					<Avatar className="avatar-picture" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"/>
+					<span className="username">Facebook</span>
 				</Button>
 			</Dropdown>
 		</span>

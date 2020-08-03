@@ -121,7 +121,7 @@ class ProfileContent extends Component {
           }}
         >
           <Row>
-            <Col style={{ textAlign: "center" }} span={24}>
+            <Col span={24}>
               <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture}></Avatar>
               <div className="user-fullname"><h1>{this.state.basic_profile_data.firstname + this.state.basic_profile_data.lastname}</h1></div>
               <span classname="user-quotes">{this.state.basic_profile_data.description}</span>
