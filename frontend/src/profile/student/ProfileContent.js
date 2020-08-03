@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { Layout, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
 
 import '../assets/css/profileContent.css';
+import {DEFAULT_AVATAR} from '../../config/consts';
 import Column from 'antd/lib/table/Column';
 import { MailOutlined, ScheduleOutlined, PhoneOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
@@ -147,6 +148,21 @@ class ProfileContent extends Component {
                 onClick = {()=>this.showEducationModal()}> Show all
               </Button>
             </Card>
+
+            <Card style = {{marginTop:24}}>
+              <Meta title="Following"></Meta>
+              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
+                dataSource={follow_data}
+                renderItem={item => (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={<Avatar src={item.avatar} />}
+                      title={<a href={item.title_href}>{item.title}</a>}
+                    />
+                  </List.Item>
+                )}
+              />
+            </Card>
           </Col>
 
           <Col span={12}>
@@ -173,6 +189,26 @@ class ProfileContent extends Component {
                 type = "primary" 
                 style = {{float:'right'}} 
                 onClick = {()=>this.showExperienceModal()}> Show all
+              </Button>
+            </Card>
+
+            <Card style = {{marginTop:24}}>
+              <Meta title="Skill"></Meta>
+              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
+                dataSource={this.state.skill_data.slice(0, 6)}
+                renderItem={item => (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={<Avatar src = {DEFAULT_AVATAR}/>}
+                      title={item}
+                    />
+                  </List.Item>
+                )}
+              />
+              <Button 
+                type = "primary" 
+                style = {{float:'right'}} 
+                onClick = {()=>this.showSkillModal()}> Show all
               </Button>
             </Card>
           </Col>
@@ -236,7 +272,7 @@ class ProfileContent extends Component {
           />
         </Modal>
 
-        <Row gutter={[24, 24]}>
+        {/* <Row gutter={[24, 24]}>
           <Col span={12}>
             <Card>
               <Meta title="Following"></Meta>
@@ -274,7 +310,7 @@ class ProfileContent extends Component {
               </Button>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </>
     )
   }

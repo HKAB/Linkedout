@@ -1,1 +1,1 @@
-export 
+export const DEFAULT_AVATAR = '../assets/default-logo.png';
