@@ -1,13 +1,14 @@
 import React from 'react'
 import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space, DatePicker} from  'antd';
+import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space, DatePicker, Modal} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd';
 import {EditOutlined, UploadOutlined} from '@ant-design/icons';             
 import moment from 'moment';
+import { studentServices } from "@/services";
+import { accountServices } from "@/services";
+
 
 const dateFormat = 'YYYY/MM/DD';
-const {SubMenu}= Menu;
-
 const  {TabPane} =  Tabs;
 const color = (
     <Menu style={{ marginLeft:450}}>
@@ -26,13 +27,14 @@ class ProfileEdit extends Component {
         super(props);
         this.state={
             disabled:false,
-            userName: "hkab",
-           id:"1234",
+            firstName:'Phu Truong',
+            lastName:'Nguyen',
            email:"nguyenphutruong2525@god.com",
           password:"1234567890123",
           phoneNumber:"0987987987",
           dateOfBirth:'2000/02/27',
            avatar:"https://image.flaticon.com/icons/svg/3084/3084416.svg",
+           description:"hihihi"
         }
     }
 
@@ -40,47 +42,53 @@ class ProfileEdit extends Component {
         this.setState({
             disabled: !this.state.disabled,
           });
-    }
+        }
+    editProfileStudent = values =>{
+        if(values.firstName==null) values.firstName =  this.state.firstName;
+        if(values.lastName==null) values.lastName =  this.state.lastName;
+        if(values.email==null) values.email =  this.state.email;
+        if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
+        if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
 
-    onFinishChangeIn4 = values => {
-        if(values.userName!=="")
-        {
-            this.setState({
-                userName:values.userName,
-            })
-        }
-        if(values.email!=="")
-        {
-            this.setState({
-                email:values.email,
-            })
-        }
-        if(values.dateOfBirth!=="")
-        {
-            this.setState({
-                dateOfBirth:values.dateOfBirth,
-            })
-        }
-        if(values.phoneNumber!=="")
-        {
-            this.setState({
-                phoneNumber:values.phoneNumber,
-            })
-        }
-        console.log(this.state.dateOfBirth)
+        console.log(values);
+        studentServices.updateBasicStudent(
+            values.firstName,
+            values.lastName,
+            values.dateOfBirth,
+            this.state.description
+        )
+        studentServices
+        .updateStudentPhone(
+            values.phoneNumber,
+        )
+        studentServices
+        .updateStudentEmail(
+            values.email,
+        )
+        .then(() => {
+            Modal.success({title: "\^o^/", content: "Success"});
+        })
+        .catch((error)=>{
+            console.log(error);
+            Modal.error({title: "╯︿╰", content: error});
+        });
+        
+        
     }
     onFinishChangePass =values =>{
-            if(values.oldPass !== this.state.password)
-            {
-                alert('Incorrect password.');
+        console.log(values.newPass, values.oldPass);
+            if (values.newPass!==values.confPass){
+               alert('Password not match!');
+            }else{
+                accountServices.changePassword(values.oldPass, values.newPass).then()
+                .then(()=>{
+                    Modal.success({title: "\^o^/", content: "Change Password successfully!!!"});
+                })
+                .catch((error)=>{
+                    Modal.error({title: "╯︿╰", content:error});
+                })
             }
-            else {
-                if (values.newPass===values.confPass){
-                alert('Success.')
-                }
-                else alert('Password not match!');
-            }
-    }
+        }
     render()
     {
         return(
@@ -89,7 +97,7 @@ class ProfileEdit extends Component {
             defaultOpenKeys={['sub1']}
             style={{padding: 24,
                 margin: 0,
-                minHeight: 300,
+                minHeight: 600,
                 marginTop: 24,
                 }}
                 title="Thay đổi" icon={<EditOutlined />}  key="sub1"
@@ -100,29 +108,32 @@ class ProfileEdit extends Component {
                             <Row align="middle">
                             
                                 <Col span="14">
-                                    <Form onFinish={this.onFinishChangeIn4}style={{marginTop:32}} >
-
-
-                                        <span >User Name</span>
-                                        <Form.Item name="userName" >
-                                            <Input  defaultValue={this.state.userName}  autoFocus={true} ></Input>
+                                    <Form  onFinish={this.editProfileStudent} style={{marginTop:32}} >
+                                        
+                                        <span>First Name</span>
+                                        <Form.Item name="firstName" >
+                                            <Input  defaultValue={this.state.firstName}   ></Input>
+                                        </Form.Item>
+                                        <span>Last Name</span>
+                                        <Form.Item name="lastName" >
+                                            <Input  defaultValue={this.state.lastName} ></Input>
                                         </Form.Item>
 
                                         <span>Email</span>
                                         <Form.Item  name="email" >
-                                            <Input defaultValue={this.state.email} ></Input>
-                                        </Form.Item>
-
-                                        <span>Phone Number</span>
-                                        <Form.Item  name="phoneNumber"  >
-                                            <Input  defaultValue={this.state.phoneNumber}/>
+                                            <Input defaultValue={this.state.email}  ></Input>
                                         </Form.Item>
 
                                         <span>Date of birth</span>
                                         <Form.Item  name="dateOfBirth">
-                                            <DatePicker  defaultValue={moment(this.state.dateOfBirth, dateFormat)} format={dateFormat} />
+                                            <DatePicker  defaultValue={moment(this.state.dateOfBirth, dateFormat)} format={dateFormat}  />
                                         </Form.Item>
                                         
+                                        <span>Phone Number</span>
+                                        <Form.Item  name="phoneNumber"  >
+                                            <Input  defaultValue={this.state.phoneNumber}  />
+                                        </Form.Item>
+
                                         <Button type="primary" htmlType="submit">Save</Button>
                                         <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
                                     </Form>
