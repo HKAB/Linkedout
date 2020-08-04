@@ -12,7 +12,7 @@ function Profile() {
 		<Layout>
 			<MyHeader />
 			<Layout>
-				<ProfileTab />
+				<ProfileSider />
 			</Layout>
 		</Layout>
 	);

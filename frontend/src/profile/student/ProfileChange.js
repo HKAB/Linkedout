@@ -31,39 +31,50 @@ import { accountServices } from "@/services";
 import dayjs from "dayjs";
 import moment from 'moment';
 
+var addExperienceRef = React.createRef();
+var addEducationRef = React.createRef();
+var addSkillRef = React.createRef();
+
 const onAddExperienceFinish = (values) => {
-  console.log(values.experience_info[0].start_date.format("D MMMM YYYY"));
-  studentServices
+
+  values.experience_info.forEach((experience_info) => {
+    studentServices
     .createStudentExperience(
-      values.experience_info[0].company_name,
-      values.experience_info[0].start_date.format("YYYY-MM-DD"),
-      values.experience_info[0].end_date.format("YYYY-MM-DD"),
-      values.experience_info[0].title,
-      values.experience_info[0].description
+      experience_info.company_name,
+      experience_info.start_date.format("YYYY-MM-DD"),
+      experience_info.end_date.format("YYYY-MM-DD"),
+      experience_info.title,
+      experience_info.description
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done create student experience!" });
+      Modal.success({ title: "uWu", content: "Experience created!" });
+      addExperienceRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
       Modal.error({ title: "uWu", content: error });
     });
+  })
 };
 
 const onAddSkillFinish = (values) => {
-  studentServices
+
+  values.skill_info.forEach((skill_info) => {
+    studentServices
     .createStudentSkill(
-      values.skill_info[0].skill_name,
+      skill_info.skill_name,
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done create student skill!" });
+      Modal.success({ title: "uWu", content: "Student skill created!" });
+      addSkillRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
       Modal.error({ title: "uWu", content: error });
     });
+  })
 };
 
 const onConfirmDeleteEducation = (id) => {
@@ -71,7 +82,20 @@ const onConfirmDeleteEducation = (id) => {
   studentServices.deleteStudentEducation(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done delete fucking school!" });
+      Modal.success({ title: "uWu", content: "Education created!" });
+    })
+    .catch((error) => {
+      console.log(error);
+      Modal.error({ title: "uWu", content: error });
+    });
+}
+
+const onConfirmDeleteExperience = (id) => {
+  console.log(id);
+  studentServices.deleteStudentExperience(id)
+    .then(() => {
+      studentServices.getStudent(accountServices.userValue.account.id);
+      Modal.success({ title: "uWu", content: "Experience deleted!" });
     })
     .catch((error) => {
       console.log(error);
@@ -80,22 +104,25 @@ const onConfirmDeleteEducation = (id) => {
 }
 
 const onAddEducationFinish = (values) => {
-  studentServices
+  values.education_info.forEach((education_info) => {
+    studentServices
     .createStudentEducation(
-      values.education_info[0].schoolname,
-      values.education_info[0].startdate.format("YYYY-MM-DD"),
-      values.education_info[0].enddate.format("YYYY-MM-DD"),
-      values.education_info[0].major,
-      values.education_info[0].degree
+      education_info.schoolname,
+      education_info.startdate.format("YYYY-MM-DD"),
+      education_info.enddate.format("YYYY-MM-DD"),
+      education_info.major,
+      education_info.degree
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done create freaking student!" });
+      Modal.success({ title: "uWu", content: "Done creating " +  education_info.schoolname});
+      addEducationRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
       Modal.error({ title: "uWu", content: error });
     });
+  })
 };
 
 const onEditExperience = (values) => {
@@ -110,7 +137,7 @@ const onEditExperience = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done update freaking student!" });
+      Modal.success({ title: "uWu", content: "Experience updated!" });
     })
     .catch((error) => {
       console.log(error);
@@ -123,7 +150,7 @@ const onConfirmDeleteSkill = (skill) => {
   studentServices.deleteStudentSkill(skill)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done delete fucking skill!" });
+      Modal.success({ title: "uWu", content: "Skill deleted!" });
     })
     .catch((error) => {
       console.log(error);
@@ -141,42 +168,16 @@ class ProfileChange extends Component {
       skill_data: [],
       //for modal
       visible: false,
-      experience_visible:false,
-      education_visible:false,
-      skill_visible:false,
       selected_experience_item: {},
       selected_skill: {}
     };
     this.formRef = React.createRef();
+    //this.addExperienceRef = React.createRef();
   }
 
   // handle modal
   showModal = () => {
     this.setState({ visible: true });
-  };
-
-  showExperienceModal = () => {
-    this.setState({ experience_visible: true });
-  };
-
-  showEducationModal = () => {
-    this.setState({ education_visible: true });
-  };
-
-  showSkillModal = () => {
-    this.setState({ skill_visible: true });
-  };
-
-  handleExperienceCancel = (e) => {
-    this.setState({ experience_visible: false });
-  };
-
-  handleEducationCancel = (e) => {
-    this.setState({ education_visible: false });
-  };
-
-  handleSkillCancel = (e) => {
-    this.setState({ skill_visible: false });
   };
 
   onSaveExperience = (fieldsValue) => {
@@ -321,70 +322,12 @@ class ProfileChange extends Component {
           </Form>
         </Modal>
 
-        <Modal
-          forceRender
-          title="Experiences"
-          footer = {null}
-          visible={this.state.experience_visible}
-          onCancel={this.handleExperienceCancel}
-        >
-          <List
-            itemLayout="vertical"
-            style={{ marginTop: 24 }}
-            dataSource={this.state.experience_data}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
-                  title={item.company_name}
-                  description={<div className="company-info" id={item.id}>
-                    <div>{"Title: " + item.title}</div>
-                    <div>{"Time: " + item.start_date + " " + item.end_date}</div>
-                  </div>}
-                />
-              </List.Item>
-            )}
-          />
-        </Modal>
-        
-        <Modal
-          forceRender
-          title="Educations"
-          footer = {null}
-          visible={this.state.education_visible}
-          onCancel={this.handleEducationCancel}
-        >
-          <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
-            {this.state.education_element}
-          </Timeline>
-        </Modal>
-
-        <Modal
-          forceRender
-          title="Skills"
-          footer = {null}
-          visible={this.state.skill_visible}
-          onCancel={this.handleSkillCancel}
-        >
-          <List style={{ marginTop: 24 }}
-            dataSource={this.state.skill_data}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar />}
-                  title={item}
-                />
-              </List.Item>
-            )}
-          />
-        </Modal>
-
         <Card style={{ marginTop: 24 }}>
           <Meta title="Experiences"></Meta>
           <List
             style={{ marginTop: 24 }}
             itemLayout="horizontal"
-            dataSource={this.state.experience_data.slice(0, 4)}
+            dataSource={this.state.experience_data}
             renderItem={(item) => (
               <List.Item key={item.id}>
                 <List.Item.Meta
@@ -411,6 +354,21 @@ class ProfileChange extends Component {
                   onClick={() => this.onModify(item)}
                   icon={<EditOutlined />}
                 />
+                
+                <Popconfirm
+                  title="Bạn có muốn xóa cái này?"
+                  onConfirm={() => onConfirmDeleteExperience(item.id)}
+                  okText="Yes"
+                  cancelText="No">
+                  <a>
+                    <Button
+                      type="dashed"
+                      shape="circle"
+                      style={{ color: 'red', marginLeft: 5 }}
+                      icon={<MinusCircleOutlined />}
+                    />
+                  </a>
+                </Popconfirm>
 
               </List.Item>
             )}
@@ -419,6 +377,7 @@ class ProfileChange extends Component {
               name="add-experience"
               autoComplete="off"
               onFinish={onAddExperienceFinish}
+              ref = {addExperienceRef}
             >
               <Form.List name="experience_info">
                 {(fields, { add, remove }) => {
@@ -494,7 +453,7 @@ class ProfileChange extends Component {
                         <Button 
                           type="dashed" 
                           onClick={() => { 
-                          add(); 
+                            add(); 
                           }} 
                           block
                         >
@@ -508,11 +467,6 @@ class ProfileChange extends Component {
 
               <Form.Item>
                 <Button type="primary" htmlType="submit"> Save </Button>
-                <Button
-                  type="primary"
-                  style={{ float: 'right' }}
-                  onClick={() => this.showExperienceModal()}> Show all
-                </Button>
               </Form.Item>
             </Form>
           </List>
@@ -522,10 +476,15 @@ class ProfileChange extends Component {
           <Meta title="Education"></Meta>
           
           <Timeline mode="left" style={{ marginTop: 24 }}>
-          {this.state.education_element.slice(0, 4)}
+          {this.state.education_element}
           </Timeline>
           
-          <Form name="add-education" autoComplete="off" onFinish={onAddEducationFinish}>
+          <Form 
+            name="add-education" 
+            autoComplete="off" 
+            onFinish={onAddEducationFinish}
+            ref = {addEducationRef}
+          >
             <Form.List name="education_info">
               {(fields, { add, remove }) => {
                 return (
@@ -612,11 +571,6 @@ class ProfileChange extends Component {
 
             <Form.Item>
               <Button type="primary" htmlType="submit"> Submit </Button>
-              <Button 
-                type = "primary" 
-                style = {{float:'right'}} 
-                onClick = {()=>this.showEducationModal()}> Show all
-              </Button>
             </Form.Item>
           </Form>
         </Card>
@@ -625,7 +579,7 @@ class ProfileChange extends Component {
           <List
             style={{ marginTop: 24 }}
             grid={{ column: 2 }}
-            dataSource={this.state.skill_data.slice(0, 6)}
+            dataSource={this.state.skill_data}
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
@@ -650,7 +604,12 @@ class ProfileChange extends Component {
               </List.Item>
             )}
           />
-          <Form name="add-skill" autoComplete="off" onFinish={onAddSkillFinish}>
+          <Form 
+            name="add-skill" 
+            autoComplete="off" 
+            onFinish={onAddSkillFinish}
+            ref = {addSkillRef}
+          >
             <Form.List name="skill_info">
               {(fields, { add, remove }) => {
                 return (
@@ -699,11 +658,6 @@ class ProfileChange extends Component {
 
             <Form.Item>
               <Button type="primary" htmlType="submit"> Submit </Button>
-              <Button
-                type="primary"
-                style={{ float: 'right' }}
-                onClick={() => this.showSkillModal()}> Show all
-              </Button>
             </Form.Item>
           </Form>
         </Card>

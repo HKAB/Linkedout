@@ -1,10 +1,10 @@
 import React from 'react'
 import { Component } from 'react';
-import { Layout, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
+import { Spin, Layout, Typography, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
 
 import '../assets/css/profileContent.css';
 import Column from 'antd/lib/table/Column';
-import { MailOutlined, ScheduleOutlined, PhoneOutlined } from '@ant-design/icons';
+import { MailOutlined, ScheduleOutlined, PhoneOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 
 import { studentServices } from "@/services"
@@ -13,6 +13,7 @@ import { accountServices } from "@/services"
 import dayjs from 'dayjs';
 
 const { Header, Sider, Content } = Layout;
+const { Title, Text } = Typography;
 const follow_data = [
   {
     avatar: 'https://image.flaticon.com/icons/svg/1532/1532495.svg',
@@ -58,6 +59,8 @@ class ProfileContent extends Component {
       experience_visible:false,
       education_visible:false,
       skill_visible:false,
+      // page loading
+      isLoading: false
     }
   }
 
@@ -86,6 +89,9 @@ class ProfileContent extends Component {
   };
 
   componentDidMount() {
+
+	this.setState({isLoading: true});
+
     let user = accountServices.userValue;
     if (user) {
 	  studentServices.getStudent(user.account.id);
@@ -103,16 +109,23 @@ class ProfileContent extends Component {
 				timeline_element.push(<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
 			});
       if (timeline_element.length == 0) this.setState({education_element: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />});  
-      else this.setState({education_element: timeline_element});
+	  else this.setState({education_element: timeline_element});
+	  this.setState({isLoading: false});
       console.log(this.state.education_element);
 		  }
-	  });
+    });
+    this.setState({isLoading: false});
     }
     else {
       console.log("Oh no!");
     }
   }
   render() {
+    if (this.state.isLoading) {
+      return (
+		  <Spin/>
+	  );
+	}
     return (
       <>
         <Card
@@ -120,11 +133,13 @@ class ProfileContent extends Component {
             marginTop: 24,
           }}
         >
-          <Row>
-            <Col span={24}>
-              <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture}></Avatar>
-              <div className="user-fullname"><h1>{this.state.basic_profile_data.firstname + this.state.basic_profile_data.lastname}</h1></div>
-              <span classname="user-quotes">{this.state.basic_profile_data.description}</span>
+          <Row justify="center">
+            <Col textAlign="center">
+              <div style={{textAlign: "center"}}>
+                <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} onError={(e)=>{console.log(e);}}></Avatar>
+                <Title level={2} className="user-fullname">{this.state.basic_profile_data.firstname + " " + this.state.basic_profile_data.lastname}</Title>
+                <Text copyable classname="user-quotes">{this.state.basic_profile_data.description}</Text>
+              </div>
             </Col>
           </Row>
           <Row style={{ marginTop: 32 }}>
@@ -142,10 +157,25 @@ class ProfileContent extends Component {
                   {this.state.education_element.slice(0, 4)}
               </Timeline>
               <Button 
-                type = "primary" 
+                type = "link" 
                 style = {{float:'right'}} 
-                onClick = {()=>this.showEducationModal()}> Show all
+                onClick = {()=>this.showEducationModal()}> Show all <DoubleRightOutlined />
               </Button>
+            </Card>
+
+            <Card style = {{marginTop:24}}>
+              <Meta title="Following"></Meta>
+              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
+                dataSource={follow_data}
+                renderItem={item => (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={<Avatar src={item.avatar} />}
+                      title={<a href={item.title_href}>{item.title}</a>}
+                    />
+                  </List.Item>
+                )}
+              />
             </Card>
           </Col>
 
@@ -170,9 +200,29 @@ class ProfileContent extends Component {
                 )}
               />
               <Button 
-                type = "primary" 
+                type = "link" 
                 style = {{float:'right'}} 
-                onClick = {()=>this.showExperienceModal()}> Show all
+                onClick = {()=>this.showExperienceModal()}> Show all <DoubleRightOutlined />
+              </Button>
+            </Card>
+
+            <Card style = {{marginTop:24}}>
+              <Meta title="Skill"></Meta>
+              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
+                dataSource={this.state.skill_data.slice(0, 6)}
+                renderItem={item => (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={<Avatar/>}
+                      title={item}
+                    />
+                  </List.Item>
+                )}
+              />
+              <Button 
+                type = "link" 
+                style = {{float:'right'}} 
+                onClick = {()=>this.showSkillModal()}> Show all <DoubleRightOutlined />
               </Button>
             </Card>
           </Col>
@@ -236,7 +286,7 @@ class ProfileContent extends Component {
           />
         </Modal>
 
-        <Row gutter={[24, 24]}>
+        {/* <Row gutter={[24, 24]}>
           <Col span={12}>
             <Card>
               <Meta title="Following"></Meta>
@@ -274,7 +324,7 @@ class ProfileContent extends Component {
               </Button>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </>
     )
   }

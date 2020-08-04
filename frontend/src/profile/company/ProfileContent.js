@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
-import { Layout, Statistic, Carousel, Avatar, Progress, Divider, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty, Tag } from 'antd';
+import { Spin, Layout, Statistic, Carousel, Avatar, Progress, Divider, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty, Tag } from 'antd';
 
 import { Typography } from 'antd';
 import Column from 'antd/lib/table/Column';
@@ -71,10 +71,12 @@ class ProfileContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+		isLoading: true
     }
   }
 
   componentDidMount() {
+	this.setState({isLoading: false});
     let user = accountServices.userValue;
     if (user) {
         studentServices.getStudent(user.account.id);
@@ -88,122 +90,129 @@ class ProfileContent extends Component {
     }
   }
   render() {
-    return (
-      <>
-        <Card
-          style={{
-            marginTop: 24,
-          }}
-        >
-            <Row>
-                <Col style={rowStyle} span={4}>
-                    <Avatar src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style={centerInRowStyle} size={128}></Avatar>
-                </Col>
-                <Col style={{marginLeft: 24, marginTop: 64}} span={17}>
-                    <Title level={3}>{data.company_name}</Title>
-                    <div>{"Địa điểm: " + data.location}</div>
-                    <div>Website: <a>{data.website}</a></div>
-                    <div>{"Nhân công: " + data.company_size}</div>
-                    <div>
-                        <MailOutlined />{" Email: " + data.email}
-                        <Divider type="vertical" />
-                        <PhoneOutlined />{" Phone: " + data.phone}
-                    </div>
-                    
-                </Col>
-                <Col style={{position: "relative"}}>
-                    <Button style={{position: "absolute", bottom: 0}} type="primary">Follow+</Button>
-                </Col>
-            </Row>
-        </Card>
-
-        <Card          
+	  if (this.state.isLoading) {
+		  return (
+			<Spin />
+		  );
+	  }
+	  else {
+		return (
+		<>
+			<Card
 			style={{
 				marginTop: 24,
-			}}>
-              <Meta title="Mô tả"></Meta>
-			  <div style={{marginTop: 16}}>{data.description}</div>
-              {/* <span styles={{marginTop: 100}}>{data.description}</span> */}
-        </Card>
-
-		<Card          
-			style={{
-				marginTop: 24,
-			}}>
+			}}
+			>
 				<Row>
-					<Col style={{textAlign: "center"}} span={8}><Title level={4}>Sử dụng NodeJS</Title></Col>
-					<Col  style={{textAlign: "center"}} span={8}><Title level={4}>Tỉ lệ apply thành công</Title></Col>
-					<Col  style={{textAlign: "center"}} span={8}><Title level={4}>Đánh giá của chúng tôi</Title></Col>
-				</Row>
-				<Row align="middle">
-					<Col span={8} style={{textAlign: "center"}}>
-						<Progress type="circle" percent={75} />
+					<Col style={rowStyle} span={4}>
+						<Avatar src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style={centerInRowStyle} size={128}></Avatar>
 					</Col>
-					{/* <Divider type="vertical"/> */}
-					<Col span={8}>
-						<Progress percent={30} status="exception" />
-						<Progress percent={50} status="active" />
-						<Progress percent={100} status="success" />
+					<Col style={{marginLeft: 24, marginTop: 64}} span={17}>
+						<Title level={3}>{data.company_name}</Title>
+						<div>{"Địa điểm: " + data.location}</div>
+						<div>Website: <a>{data.website}</a></div>
+						<div>{"Nhân công: " + data.company_size}</div>
+						<div>
+							<MailOutlined />{" Email: " + data.email}
+							<Divider type="vertical" />
+							<PhoneOutlined />{" Phone: " + data.phone}
+						</div>
+						
 					</Col>
-					{/* <Divider type="vertical"/> */}
-					<Col span={8}>
-						<Statistic
-							title="Active"
-							value={11.28}
-							precision={2}
-							valueStyle={{ color: '#3f8600' }}
-							prefix={<LikeOutlined />}
-              suffix="%"
-              style={{textAlign: "center"}}
-						/>
+					<Col style={{position: "relative"}}>
+						<Button style={{position: "absolute", bottom: 0}} type="primary">Follow+</Button>
 					</Col>
 				</Row>
-        </Card>
+			</Card>
 
-		<Card          
-			style={{
-				marginTop: 24,
-			}}>
-			<Meta title="Việc làm"></Meta>
-				<List
-					grid={{gutter: 24, column: 2}}
-					dataSource={jobs}
-					renderItem={item => (
-						<List.Item>
-						<Card 
-							style={{marginTop: 16 }}
-							actions={[
-							<SettingOutlined key="setting" />,
-							<EditOutlined key="edit" />,
-							]}
-						>
-							<Meta 
-								avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
-								title={item.title}
-								description={<div>
-									<div>Yêu cầu: {item.seniority}</div>
-									<div>Địa điểm: {item.seniority}</div>
-									<div>Công việc: {item.seniority}</div>
-								<List dataSource={item.tag} renderItem={tag => (<Tag>{tag}</Tag>)}></List>
-								</div>}
+			<Card          
+				style={{
+					marginTop: 24,
+				}}>
+				<Meta title="Mô tả"></Meta>
+				<div style={{marginTop: 16}}>{data.description}</div>
+				{/* <span styles={{marginTop: 100}}>{data.description}</span> */}
+			</Card>
+
+			<Card          
+				style={{
+					marginTop: 24,
+				}}>
+					<Row>
+						<Col style={{textAlign: "center"}} span={8}><Title level={4}>Sử dụng NodeJS</Title></Col>
+						<Col  style={{textAlign: "center"}} span={8}><Title level={4}>Tỉ lệ apply thành công</Title></Col>
+						<Col  style={{textAlign: "center"}} span={8}><Title level={4}>Đánh giá của chúng tôi</Title></Col>
+					</Row>
+					<Row align="middle">
+						<Col span={8}>
+							<Progress type="circle" percent={75} />
+						</Col>
+						{/* <Divider type="vertical"/> */}
+						<Col span={8}>
+							<Progress percent={30} status="exception" />
+							<Progress percent={50} status="active" />
+							<Progress percent={100} status="success" />
+						</Col>
+						{/* <Divider type="vertical"/> */}
+						<Col span={8}>
+							<Statistic
+								title="Active"
+								value={11.28}
+								precision={2}
+								valueStyle={{ color: '#3f8600' }}
+								prefix={<LikeOutlined />}
+				suffix="%"
+				style={{textAlign: "center"}}
 							/>
-						</Card>
-						</List.Item>
-					)}>
-				</List>
-        </Card>
-		
+						</Col>
+					</Row>
+			</Card>
 
-		<Card          
-			style={{
-				marginTop: 24,
-			}}>
-		<Carousel>
-			<img src={pic1} style={{maxWidth: "100%", maxHeight: "50%"}}></img>
-			<img  src={pic2} style={{maxWidth: "100%", maxHeight: "50%"}}></img>
-		</Carousel>
-		</Card>
-    </>
-    )}
+			<Card          
+				style={{
+					marginTop: 24,
+				}}>
+				<Meta title="Việc làm"></Meta>
+					<List
+						grid={{gutter: 24, column: 2}}
+						dataSource={jobs}
+						renderItem={item => (
+							<List.Item>
+							<Card 
+								style={{marginTop: 16 }}
+								actions={[
+								<SettingOutlined key="setting" />,
+								<EditOutlined key="edit" />,
+								]}
+							>
+								<Meta 
+									avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+									title={item.title}
+									description={<div>
+										<div>Yêu cầu: {item.seniority}</div>
+										<div>Địa điểm: {item.seniority}</div>
+										<div>Công việc: {item.seniority}</div>
+									<List dataSource={item.tag} renderItem={tag => (<Tag>{tag}</Tag>)}></List>
+									</div>}
+								/>
+							</Card>
+							</List.Item>
+						)}>
+					</List>
+			</Card>
+			
+
+			<Card          
+				style={{
+					marginTop: 24,
+				}}>
+			<Carousel>
+				<img src={pic1} style={{maxWidth: "100%", maxHeight: "50%"}}></img>
+				<img  src={pic2} style={{maxWidth: "100%", maxHeight: "50%"}}></img>
+			</Carousel>
+			</Card>
+		</>
+		)}
+	}
 }
 export { ProfileContent };

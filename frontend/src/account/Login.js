@@ -31,7 +31,6 @@ function Login({ history }) {
 		// console.log(values);
 		accountServices.login(values.login_username, values.login_password).then()
 		.then(() => {
-			Modal.success({title: "uWu", content: "Login successfully!!"});
 			history.push("/profile");
 		})
 		.catch(error => {
