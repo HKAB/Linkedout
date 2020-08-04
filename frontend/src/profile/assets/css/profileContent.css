@@ -1,23 +1,11 @@
-/* .site-layout-background {
-    background: #fff;
-}
-.user-description{
-  display: flex;
-  flex-direction: column;
-  padding-top: 20px;
+/* .ant-carousel .slick-slide {
   text-align: center;
-  align-self: center;
-  height: 53px;
-  background: white;
-  font-family: Abel;
-  font-style: normal;
-  font-weight: normal;
+  height: 160px;
+  line-height: 160px;
+  background: #364d79;
+  overflow: hidden;
+}
+
+.ant-carousel .slick-slide h3 {
+  color: #fff;
 } */
-.user-fullname {
-  font-size: 20px;
-  line-height: 28px;
-}
-.user-quotes{
-  font-size: 14px;
-  line-height: 21px;
-}

@@ -7,6 +7,8 @@ import {
   QuestionCircleOutlined,BellOutlined,UserOutlined,SettingOutlined, LogoutOutlined
 } from '@ant-design/icons';
 
+import { accountServices } from "@/services"
+
 const { Header, Content } = Layout;
 
 const menu = (
@@ -18,11 +20,31 @@ const menu = (
     )
 
 class MyHeader extends Component {
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            account_data: {}
+        }
+    }
+
+
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed,
         });
     };
+
+    componentDidMount() {
+        let user = accountServices.userValue;
+        if (user) {
+            this.setState({account_data: user.account})
+        }
+        else {
+          console.log("Oh no!");
+        }
+      }
 
 	render(){
 		return(
@@ -36,8 +58,8 @@ class MyHeader extends Component {
 			<Button type="text" style={{height: 64}}><BellOutlined/></Button>
 			<Dropdown overlay={menu} placement="bottomCenter"  icon={<UserOutlined />}>
 				<Button type="text" style={{height: 64}}>
-					<Avatar className="avatar-picture" src="https://image.flaticon.com/icons/svg/3084/3084416.svg"/>
-					<span className="username">Nguyen Phu Truong</span>
+					<Avatar className="avatar-picture"/>
+                    <span className="username">{this.state.account_data.username}</span>
 				</Button>
 			</Dropdown>
 		</span>

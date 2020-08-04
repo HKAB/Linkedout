@@ -8,7 +8,8 @@ import { studentServices } from "@/services";
 import { accountServices } from "@/services";
 
 
-const dateFormat = 'YYYY/MM/DD';
+const dateFormat = 'YYYY-MM-DD';
+
 const  {TabPane} =  Tabs;
 const color = (
     <Menu style={{ marginLeft:450}}>
@@ -26,17 +27,33 @@ class ProfileEdit extends Component {
     constructor(props) {
         super(props);
         this.state={
-            disabled:false,
-            firstName:'Phu Truong',
-            lastName:'Nguyen',
-           email:"nguyenphutruong2525@god.com",
-          password:"1234567890123",
-          phoneNumber:"0987987987",
-          dateOfBirth:'2000/02/27',
-           avatar:"https://image.flaticon.com/icons/svg/3084/3084416.svg",
-           description:"hihihi"
+            disabled: false,
+            basic_profile_data: {},
+            email_data: [],
+            phone_data: []
         }
+        this.formRef = React.createRef();
     }
+
+
+    componentDidMount() {
+        let user = accountServices.userValue;
+        if (user) {
+          studentServices.getStudent(user.account.id);
+          studentServices.studentObject.subscribe((student) => {
+              if (student) {
+                this.setState({basic_profile_data: student.basic_data});
+                this.setState({email_data: student.email});
+                this.setState({phone_data: student.phone});
+
+                this.formRef.current.resetFields();
+              }
+          });
+        }
+        else {
+          console.log("Oh no!");
+        }
+      }
 
     changeDisabled = () =>{
         this.setState({
@@ -44,25 +61,53 @@ class ProfileEdit extends Component {
           });
         }
     editProfileStudent = values =>{
-        if(values.firstName==null) values.firstName =  this.state.firstName;
-        if(values.lastName==null) values.lastName =  this.state.lastName;
-        if(values.email==null) values.email =  this.state.email;
-        if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
-        if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
+        // if(values.firstName==null) values.firstName =  this.state.firstName;
+        // if(values.lastName==null) values.lastName =  this.state.lastName;
+        // if(values.email==null) values.email =  this.state.email;
+        // if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
+        // if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
+
+        // if(values.firstName==null) values.firstName =  this.state.firstName;
+        // if(values.lastName==null) values.lastName =  this.state.lastName;
+        // if(values.email==null) values.email =  this.state.email;
+        // if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
+        // if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
 
         console.log(values);
         studentServices.updateBasicStudent(
             values.firstName,
             values.lastName,
-            values.dateOfBirth,
-            this.state.description
+            values.dateOfBirth.format("YYYY-MM-DD"),
+            values.description
+            // this.state.description
         )
+        .then(() => {
+            studentServices.getStudent(accountServices.userValue.account.id);
+            Modal.success({ title: "uWu", content: "Basic information updated!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            Modal.error({ title: "uWu", content: error });
+          });
+
+
         studentServices
         .updateStudentPhone(
+            this.state.phone_data[0],
             values.phoneNumber,
         )
+        .then(() => {
+            studentServices.getStudent(accountServices.userValue.account.id);
+            Modal.success({ title: "uWu", content: "Phone updated!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            Modal.error({ title: "uWu", content: error });
+          });
+
         studentServices
         .updateStudentEmail(
+            this.state.email_data[0],
             values.email,
         )
         .then(() => {
@@ -75,10 +120,10 @@ class ProfileEdit extends Component {
         
         
     }
-    onFinishChangePass =values =>{
+    onFinishChangePass = values =>{
         console.log(values.newPass, values.oldPass);
             if (values.newPass!==values.confPass){
-               alert('Password not match!');
+                Modal.error({title: "╯︿╰", content: 'Password not match!'});
             }else{
                 accountServices.changePassword(values.oldPass, values.newPass).then()
                 .then(()=>{
@@ -108,30 +153,46 @@ class ProfileEdit extends Component {
                             <Row align="middle">
                             
                                 <Col span="14">
-                                    <Form  onFinish={this.editProfileStudent} style={{marginTop:32}} >
+                                    <Form 
+                                    ref={this.formRef} 
+                                    onFinish={this.editProfileStudent} 
+                                    style={{marginTop:32}} 
+                                    initialValues={{firstName: this.state.basic_profile_data.firstname,
+                                                    lastName: this.state.basic_profile_data.lastname,
+                                                    email: this.state.email_data[0],
+                                                    dateOfBirth: moment(this.state.basic_profile_data.dateofbirth, dateFormat),
+                                                    phoneNumber: this.state.phone_data[0],
+                                                    description: this.state.basic_profile_data.description
+                                                }}
+                                    >
                                         
                                         <span>First Name</span>
                                         <Form.Item name="firstName" >
-                                            <Input  defaultValue={this.state.firstName}   ></Input>
+                                            <Input></Input>
                                         </Form.Item>
                                         <span>Last Name</span>
                                         <Form.Item name="lastName" >
-                                            <Input  defaultValue={this.state.lastName} ></Input>
+                                            <Input></Input>
                                         </Form.Item>
 
                                         <span>Email</span>
                                         <Form.Item  name="email" >
-                                            <Input defaultValue={this.state.email}  ></Input>
+                                            <Input ></Input>
                                         </Form.Item>
 
                                         <span>Date of birth</span>
                                         <Form.Item  name="dateOfBirth">
-                                            <DatePicker  defaultValue={moment(this.state.dateOfBirth, dateFormat)} format={dateFormat}  />
+                                            <DatePicker format={dateFormat}  />
                                         </Form.Item>
                                         
                                         <span>Phone Number</span>
                                         <Form.Item  name="phoneNumber"  >
-                                            <Input  defaultValue={this.state.phoneNumber}  />
+                                            <Input/>
+                                        </Form.Item>
+
+                                        <span>Short description</span>
+                                        <Form.Item  name="description" >
+                                            <Input/>
                                         </Form.Item>
 
                                         <Button type="primary" htmlType="submit">Save</Button>
@@ -139,7 +200,7 @@ class ProfileEdit extends Component {
                                     </Form>
                                 </Col>
                                 <Col span="6" offset="11" style={{position:'absolute',top:150}}>
-                                <Avatar style={{width: 180, height: 180, marginBottom:10}}src={this.state.avatar} ></Avatar>
+                                <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} ></Avatar>
                                     <Space style={{position:'relative', right:-20}}>
                                         <Upload >
                                     <Button >
@@ -178,7 +239,7 @@ class ProfileEdit extends Component {
                          <TabPane tab="Settings" key="2" style={{fontSize: 16, marginTop:32}}>
                              <Row>
                                 <Col>Theme Color</Col>
-                                <Col style={{position:'absolute', right:64}}> <Switch    checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
+                                <Col style={{position:'absolute', right:64}}> <Switch checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
                              </Row>
                             <Row>
                                 <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >

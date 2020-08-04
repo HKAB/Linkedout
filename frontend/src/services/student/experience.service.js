@@ -13,7 +13,7 @@ function getExperience(id) {
 }
 
 function deleleExperience(id) {
-	return fetchWrapper.delete(`http://127.0.0.1:8000/api/experience/delete?id=${id}`)
+	return fetchWrapper.delete(`http://127.0.0.1:8000/api/experience/delete`, {id})
 }
 
 function createExperience(company_name,start_date, end_date, title, description) {

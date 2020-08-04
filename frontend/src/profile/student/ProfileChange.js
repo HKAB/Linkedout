@@ -36,40 +36,45 @@ var addEducationRef = React.createRef();
 var addSkillRef = React.createRef();
 
 const onAddExperienceFinish = (values) => {
-  console.log(values.experience_info[0].start_date.format("D MMMM YYYY"));
-  studentServices
+
+  values.experience_info.forEach((experience_info) => {
+    studentServices
     .createStudentExperience(
-      values.experience_info[0].company_name,
-      values.experience_info[0].start_date.format("YYYY-MM-DD"),
-      values.experience_info[0].end_date.format("YYYY-MM-DD"),
-      values.experience_info[0].title,
-      values.experience_info[0].description
+      experience_info.company_name,
+      experience_info.start_date.format("YYYY-MM-DD"),
+      experience_info.end_date.format("YYYY-MM-DD"),
+      experience_info.title,
+      experience_info.description
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done create student experience!" });
+      Modal.success({ title: "uWu", content: "Experience created!" });
       addExperienceRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
       Modal.error({ title: "uWu", content: error });
     });
+  })
 };
 
 const onAddSkillFinish = (values) => {
-  studentServices
+
+  values.skill_info.forEach((skill_info) => {
+    studentServices
     .createStudentSkill(
-      values.skill_info[0].skill_name,
+      skill_info.skill_name,
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done create student skill!" });
+      Modal.success({ title: "uWu", content: "Student skill created!" });
       addSkillRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
       Modal.error({ title: "uWu", content: error });
     });
+  })
 };
 
 const onConfirmDeleteEducation = (id) => {
@@ -77,7 +82,7 @@ const onConfirmDeleteEducation = (id) => {
   studentServices.deleteStudentEducation(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done delete fucking school!" });
+      Modal.success({ title: "uWu", content: "Education created!" });
     })
     .catch((error) => {
       console.log(error);
@@ -90,7 +95,7 @@ const onConfirmDeleteExperience = (id) => {
   studentServices.deleteStudentExperience(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done delete student experience!" });
+      Modal.success({ title: "uWu", content: "Experience deleted!" });
     })
     .catch((error) => {
       console.log(error);
@@ -99,23 +104,25 @@ const onConfirmDeleteExperience = (id) => {
 }
 
 const onAddEducationFinish = (values) => {
-  studentServices
+  values.education_info.forEach((education_info) => {
+    studentServices
     .createStudentEducation(
-      values.education_info[0].schoolname,
-      values.education_info[0].startdate.format("YYYY-MM-DD"),
-      values.education_info[0].enddate.format("YYYY-MM-DD"),
-      values.education_info[0].major,
-      values.education_info[0].degree
+      education_info.schoolname,
+      education_info.startdate.format("YYYY-MM-DD"),
+      education_info.enddate.format("YYYY-MM-DD"),
+      education_info.major,
+      education_info.degree
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done create freaking student!" });
+      Modal.success({ title: "uWu", content: "Done creating " +  education_info.schoolname});
       addEducationRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
       Modal.error({ title: "uWu", content: error });
     });
+  })
 };
 
 const onEditExperience = (values) => {
@@ -130,7 +137,7 @@ const onEditExperience = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done update freaking student!" });
+      Modal.success({ title: "uWu", content: "Experience updated!" });
     })
     .catch((error) => {
       console.log(error);
@@ -143,7 +150,7 @@ const onConfirmDeleteSkill = (skill) => {
   studentServices.deleteStudentSkill(skill)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "done delete fucking skill!" });
+      Modal.success({ title: "uWu", content: "Skill deleted!" });
     })
     .catch((error) => {
       console.log(error);
@@ -350,7 +357,7 @@ class ProfileChange extends Component {
                 
                 <Popconfirm
                   title="Bạn có muốn xóa cái này?"
-                  onConfirm={() => onConfirmDeleteSkill(item)}
+                  onConfirm={() => onConfirmDeleteExperience(item.id)}
                   okText="Yes"
                   cancelText="No">
                   <a>
