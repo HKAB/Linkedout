@@ -1,0 +1,7 @@
+django
+pyjwt
+pillow
+mysqlclient
+djangorestframework
+django-cors-headers
+drf-yasg
