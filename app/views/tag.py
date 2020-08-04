@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
 
-from app.services.tag import get_skill_tag, get_title_tag, get_school_tag, get_company_tag, get_speciality_tag, get_location_tag
+from app.utils import inline_serializer
+from app.services.tag import get_skill_tag, get_title_tag, get_school_tag, get_company_tag, get_specialty_tag, get_location_tag
 
 
 class SkillTagView(APIView):
@@ -115,19 +116,19 @@ class CompanyTagView(APIView):
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
 
 
-class SpecialityTagView(APIView):
+class SpecialtyTagView(APIView):
     class InputSerializer(serializers.Serializer):
         query = serializers.CharField(required=True)
 
         class Meta:
-            ref_name = 'SpecialityTagIn'
+            ref_name = 'SpecialtyTagIn'
             fields = ['query']
 
     class OutputSerializer(serializers.Serializer):
         tag = serializers.ListField()
 
         class Meta:
-            ref_name = 'SpecialityTagOut'
+            ref_name = 'SpecialtyTagOut'
             fields = ['tag']
 
     permission_classes = [AllowAny]
@@ -137,8 +138,8 @@ class SpecialityTagView(APIView):
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        result =get_speciality_tag(**serializer.validated_data)
-        return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)   
+        result = get_specialty_tag(**serializer.validated_data)
+        return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
 class LocationTagView(APIView):
@@ -163,5 +164,5 @@ class LocationTagView(APIView):
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        result =get_location_tag(**serializer.validated_data)
-        return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK) 
+        result = get_location_tag(**serializer.validated_data)
+        return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)

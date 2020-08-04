@@ -15,7 +15,9 @@ class Company(models.Model):
     name = models.CharField(max_length=50)
     website = models.TextField(null=True)
     description = models.TextField(null=True)
-    profile_picture = models.ImageField(null=True)
+    profile_picture = models.ImageField(
+        upload_to=store_picture, default='profile/default.jpg')
 
-    followers = models.ManyToManyField(Student)
+    followers = models.ManyToManyField(
+        Student, related_name='company_followed')
     specialties = models.ManyToManyField(Specialty)
