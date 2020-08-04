@@ -18,7 +18,7 @@ import  ProfileChange  from "@/profile/student/ProfileChange";
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 
-class ProfileSider extends Component {
+class ProfileTabStudent extends Component {
 
   state = {
     collapsed: false,
@@ -59,4 +59,4 @@ class ProfileSider extends Component {
 	}
 }
 
-export { ProfileSider };
+export { ProfileTabStudent };

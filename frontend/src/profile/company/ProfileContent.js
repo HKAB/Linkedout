@@ -11,7 +11,6 @@ import '../assets/css/profileContent.css';
 import pic1 from '../assets/images/abc.jpg'
 import pic2 from '../assets/images/xyz.jpg'
 
-import { studentServices } from "@/services"
 import { accountServices } from "@/services"
 
 const { Header, Sider, Content } = Layout;
@@ -79,11 +78,11 @@ class ProfileContent extends Component {
 	this.setState({isLoading: false});
     let user = accountServices.userValue;
     if (user) {
-        studentServices.getStudent(user.account.id);
-        studentServices.studentObject.subscribe((student) => {
-		  if (student) {
-		  }
-	    });
+        // studentServices.getStudent(user.account.id);
+        // studentServices.studentObject.subscribe((student) => {
+		//   if (student) {
+		//   }
+	    // });
     }
     else {
       console.log("Oh no!");
@@ -143,8 +142,8 @@ class ProfileContent extends Component {
 						<Col  style={{textAlign: "center"}} span={8}><Title level={4}>Tỉ lệ apply thành công</Title></Col>
 						<Col  style={{textAlign: "center"}} span={8}><Title level={4}>Đánh giá của chúng tôi</Title></Col>
 					</Row>
-					<Row align="middle">
-						<Col span={8}>
+					<Row justify="center" align="middle">
+						<Col span={8} style={{textAlign: "center"}}>
 							<Progress type="circle" percent={75} />
 						</Col>
 						{/* <Divider type="vertical"/> */}
@@ -207,8 +206,8 @@ class ProfileContent extends Component {
 					marginTop: 24,
 				}}>
 			<Carousel>
-				<img src={pic1} style={{maxWidth: "100%", maxHeight: "50%"}}></img>
-				<img  src={pic2} style={{maxWidth: "100%", maxHeight: "50%"}}></img>
+				<img src={pic1} style={{maxWidth: "100%", maxHeight: "100%"}}></img>
+				<img  src={pic2} style={{maxWidth: "100%", maxHeight: "100%"}}></img>
 			</Carousel>
 			</Card>
 		</>

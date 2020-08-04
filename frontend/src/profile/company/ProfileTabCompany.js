@@ -16,7 +16,7 @@ import  ProfileChange  from "@/profile/company/ProfileChange";
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 
-class ProfileTab extends Component {
+class ProfileTabCompany extends Component {
 
   state = {
     collapsed: false,
@@ -57,4 +57,4 @@ class ProfileTab extends Component {
 	}
 }
 
-export { ProfileTab };
+export { ProfileTabCompany };

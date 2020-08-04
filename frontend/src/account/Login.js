@@ -9,7 +9,7 @@ import { UserOutlined, LockOutlined, UserAddOutlined, LoginOutlined, MailOutline
 import { accountServices } from "@/services"
 
 import leftLoginPicture from "./assets/login.svg"
-import logo from "./assets/flower.png"
+import logo from "./assets/logo.png"
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -52,7 +52,8 @@ function Login({ history }) {
 			.then(() => {
 				Modal.success({title: "uWu", content: "Register successfully!! Now login :)"});
 				//history.go();
-				history.push("/createStudent");
+				// history.push("/createStudent");
+				history.push("/profile");
 			})
 			.catch(error => {
 				alert(error);

@@ -1,20 +1,35 @@
 import React from 'react';
 
-import { ProfileTab } from "@/profile/company/ProfileTab";
-import { ProfileSider } from "@/profile/student/ProfileSider";
+import { ProfileTabStudent } from "@/profile/student/ProfileTabStudent";
+import { ProfileTabCompany } from "@/profile/company/ProfileTabCompany";
 import { MyHeader } from "@/components"
-import { Layout } from 'antd';
-
+import { Layout, Spin } from 'antd';
+import { accountServices } from "@/services"
 
 
 function Profile() {
-	return (
-		<Layout>
-			<MyHeader />
+	
+	const user = accountServices.userValue;
+
+	var profileRender = (<Spin></Spin>);
+	if (user)
+	{
+		if (user.account.account_type == "student")
+			profileRender = (<ProfileTabStudent/>);
+		else
+			profileRender = (<ProfileTabCompany/>);
+
+		return (
 			<Layout>
-				<ProfileSider />
+				<MyHeader />
+				<Layout>
+					{profileRender}
+				</Layout>
 			</Layout>
-		</Layout>
+		);
+	}
+	return (
+		<Spin></Spin>
 	);
 }
 
