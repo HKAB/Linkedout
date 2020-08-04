@@ -17,37 +17,42 @@ const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
 
 const data = {
-    company_name: "Facebook",
-    location: "Hà Nội, thủ đô của nước Cộng hòa Xã hội chủ nghĩa Việt Nam",
-    website: "lotus.vn",
-    company_size: "4000+",
+    name: "Facebook",
+    // cities: "Hà Nội, thủ đô của nước Cộng hòa Xã hội chủ nghĩa Việt Nam",
+	website: "lotus.vn",
+	profile_picture: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+	// company_size: "4000+",
+	specialties: ["Ban buon ban le :)"],
     email: "omegalul@gmail.com",
     phone: "0981285376",
-    description: "Founded in 2004, Facebook’s mission is to give people the power to build community and bring the world closer together. Over 2 billion people use Facebook, Instagram, WhatsApp, or Messenger every month to stay connected with friends and family, to discover what’s going on in the world, and to share and express what matters to them.\n \
-                  Facebook is defined by our unique culture – one that rewards impact. We encourage people to be bold and solve the problems they care most about. We work in small teams and move fast to develop new products, constantly iterating. The phrase “this journey is 1% finished” reminds us that we’ve only begun to fulfill our mission."
+    description: (<b>Founded in 2004, Facebook’s mission is to give people the power to build community and bring the world closer together. Over 2 billion people use Facebook, Insskillsram, WhatsApp, or Messenger every month to stay connected with friends and family, to discover what’s going on in the world, and to share and express what matters to them.
+                  Facebook is defined by our unique culture – one that rewards impact. We encourage people to be bold and solve the problems they care most about. We work in small teams and move fast to develop new products, constantly iterating. The phrase “this journey is 1% finished” reminds us that we’ve only begun to fulfill our mission.</b>)
 }
 
 const jobs = [
 	{
 		title: "Tuyển Dev tại facebook.wap.sh",
-		seniority: "15 năm",
-		employee_type: "Dev",
-		location: "Hà Nội",
-		tag: ["Python", "C++", "C#", "Java", "Coffee"]
+		seniority_level: "Junior",
+		employment_type: "Full time",
+		cities: "Hà Nội",
+		skills: ["Python", "C++", "C#", "Java", "Coffee"],
+		description: ""
 	},
 	{
 		title: "Tuyển Dev tại facebook.wap.sh",
-		seniority: "15 năm",
-		employee_type: "Dev",
-		location: "Hà Nội",
-		tag: ["Python", "C++", "C#", "Java", "Coffee"]
+		seniority_level: "Mid level",
+		employment_type: "Part time",
+		cities: "Hà Nội",
+		skills: ["Python", "C++", "C#", "Java", "Coffee"],
+		description: ""
 	},
 	{
 		title: "Tuyển Dev tại facebook.wap.sh",
-		seniority: "15 năm",
-		employee_type: "Dev",
-		location: "Hà Nội",
-		tag: ["Python", "C++", "C#", "Java", "Coffee"]
+		seniority_level: "Fresher",
+		employment_type: "Remote",
+		cities: "Hà Nội",
+		skills: ["Python", "C++", "C#", "Java", "Coffee"],
+		description: ""
 	}
 ]
 
@@ -104,13 +109,10 @@ class ProfileContent extends Component {
 			>
 				<Row>
 					<Col style={rowStyle} span={4}>
-						<Avatar src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" style={centerInRowStyle} size={128}></Avatar>
+						<Avatar src={data.profile_picture} style={centerInRowStyle} size={128}></Avatar>
 					</Col>
 					<Col style={{marginLeft: 24, marginTop: 64}} span={17}>
-						<Title level={3}>{data.company_name}</Title>
-						<div>{"Địa điểm: " + data.location}</div>
-						<div>Website: <a>{data.website}</a></div>
-						<div>{"Nhân công: " + data.company_size}</div>
+						<Title level={3}>{data.name}</Title>
 						<div>
 							<MailOutlined />{" Email: " + data.email}
 							<Divider type="vertical" />
@@ -188,10 +190,10 @@ class ProfileContent extends Component {
 									avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
 									title={item.title}
 									description={<div>
-										<div>Yêu cầu: {item.seniority}</div>
-										<div>Địa điểm: {item.seniority}</div>
-										<div>Công việc: {item.seniority}</div>
-									<List dataSource={item.tag} renderItem={tag => (<Tag>{tag}</Tag>)}></List>
+										<div>Yêu cầu: {item.seniority_level}</div>
+										<div>Địa điểm: {item.seniority_level}</div>
+										<div>Công việc: {item.seniority_level}</div>
+									<List dataSource={item.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
 									</div>}
 								/>
 							</Card>
