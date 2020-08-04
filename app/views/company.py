@@ -53,7 +53,8 @@ class CompanyGetView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyGetOut'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'profile_picture',
+                      'specialties', 'description']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -77,7 +78,7 @@ class CompanyCreateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyCreateIn'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'specialties', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         specialties = SpecialtyRelatedField(
@@ -88,7 +89,8 @@ class CompanyCreateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyCreateOut'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'profile_picture',
+                      'specialties', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -97,7 +99,8 @@ class CompanyCreateView(APIView):
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = create_company(account=request.user, **serializer.validated_data)
+        result = create_company(account=request.user, **
+                                serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_201_CREATED)
 
 
@@ -111,7 +114,7 @@ class CompanyUpdateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyUpdateIn'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'specialties', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         specialties = SpecialtyRelatedField(
@@ -122,7 +125,8 @@ class CompanyUpdateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyUpdateOut'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'profile_picture',
+                      'specialties', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -131,5 +135,6 @@ class CompanyUpdateView(APIView):
     def put(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = update_company(account=request.user, **serializer.validated_data)
+        result = update_company(account=request.user, **
+                                serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
