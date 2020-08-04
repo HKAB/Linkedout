@@ -8,8 +8,6 @@ from drf_yasg.utils import swagger_auto_schema
 
 from app.services.post import list_post, create_post, update_post, delete_post
 from app.utils import inline_serializer
-from app.models.post import Post
-from app.models.student import Student
 
 '''
 class StudentRelatedField(serializers.RelatedField):
@@ -23,27 +21,28 @@ class StudentRelatedField(serializers.RelatedField):
         return Student.objects.get(name=data)
 '''
 
+
 class PostListView(APIView):
     class InputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
-
 
         class Meta:
             ref_name = 'PostListIn'
             fields = ['id']
 
     class OutputSerializer(serializers.Serializer):
-        id=serializers.IntegerField()
-        content=serializers.CharField()
-        published_date=serializers.DateField()
-        interested_students=serializers.ListField()
-        #interested_students=StudentRelatedField(queryset=Student.objects.all(),many=True)
+        id = serializers.IntegerField()
+        content = serializers.CharField()
+        published_date = serializers.DateField()
+        interested_students = serializers.ListField()
+        # interested_students=StudentRelatedField(queryset=Student.objects.all(),many=True)
 
         class Meta:
             ref_name = 'PostListOut'
-            fields = ['id','content','published_date','interested_students']
+            fields = ['id', 'content', 'published_date', 'interested_students']
     permission_classes = [AllowAny]
     authentication_classes = []
+
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer(many=True)})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
@@ -55,23 +54,24 @@ class PostListView(APIView):
 
 class PostCreateView(APIView):
     class InputSerializer(serializers.Serializer):
-        content=serializers.CharField(required=True)
-        published_date=serializers.DateField(required=True)
-        interested_students=serializers.ListField()
+        content = serializers.CharField(required=True)
+        published_date = serializers.DateField(required=True)
+        interested_students = serializers.ListField()
+
         class Meta:
-            ref_name='PostCreateIn'
-            fields = ['id','content','published_date','interested_students']
-        
+            ref_name = 'PostCreateIn'
+            fields = ['id', 'content', 'published_date', 'interested_students']
+
     class OutputSerializer(serializers.Serializer):
-        id=serializers.IntegerField()
-        content=serializers.CharField()
-        published_date=serializers.DateField()
-        interested_students=serializers.ListField()
+        id = serializers.IntegerField()
+        content = serializers.CharField()
+        published_date = serializers.DateField()
+        interested_students = serializers.ListField()
 
         class Meta:
             ref_name = 'PostCreateOut'
-            fields = ['id','content','published_date','interested_students']
-     
+            fields = ['id', 'content', 'published_date', 'interested_students']
+
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=InputSerializer, responses={201: OutputSerializer(many=True)})
@@ -87,9 +87,9 @@ class PostUpdateView(APIView):
     class InputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
         post = inline_serializer(fields={
-            'content':serializers.CharField(required=True),
-            'published_date':serializers.DateField(required=True),
-            'interested_students':serializers.ListField(required=True),
+            'content': serializers.CharField(required=True),
+            'published_date': serializers.DateField(required=True),
+            'interested_students': serializers.ListField(required=True),
         })
 
         class Meta:
@@ -97,14 +97,14 @@ class PostUpdateView(APIView):
             fields = ['id', 'post']
 
     class OutputSerializer(serializers.Serializer):
-        id=serializers.IntegerField()
-        content=serializers.CharField()
-        published_date=serializers.DateField()
-        interested_students=serializers.ListField()
+        id = serializers.IntegerField()
+        content = serializers.CharField()
+        published_date = serializers.DateField()
+        interested_students = serializers.ListField()
 
         class Meta:
             ref_name = 'PostUpdateOut'
-            fields = ['id','content','published_date','interested_students']
+            fields = ['id', 'content', 'published_date', 'interested_students']
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer(many=True)})
@@ -115,6 +115,7 @@ class PostUpdateView(APIView):
         result = update_post(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
 
+
 class PostDeleteView(APIView):
     class InputSerializer(serializers.Serializer):
         id = serializers.IntegerField(required=True)
@@ -124,14 +125,14 @@ class PostDeleteView(APIView):
             fields = ['id']
 
     class OutputSerializer(serializers.Serializer):
-        id=serializers.IntegerField()
-        content=serializers.CharField()
-        published_date=serializers.DateField()
-        interested_students=serializers.ListField()
+        id = serializers.IntegerField()
+        content = serializers.CharField()
+        published_date = serializers.DateField()
+        interested_students = serializers.ListField()
 
         class Meta:
             ref_name = 'PostDeleteOut'
-            fields = ['id','content','published_date','interested_students']
+            fields = ['id', 'content', 'published_date', 'interested_students']
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer(many=True)})
