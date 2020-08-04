@@ -81,6 +81,7 @@ def company_account_check(account: Account, raise_exception=True):
         return False
     return True
 
+
 def job_type_check(employment_type: str, raise_exception=True):
     if employment_type not in ['Part-time', 'Full-time']:
         if raise_exception:

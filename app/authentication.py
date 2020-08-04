@@ -3,7 +3,6 @@ Module for taking care of JWT based authentication.
 https://dev.to/a_atalla/django-rest-framework-custom-jwt-authentication-5n5
 """
 
-from django.contrib.auth.models import User
 import jwt
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import exceptions
