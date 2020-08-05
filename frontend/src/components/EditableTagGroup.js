@@ -5,12 +5,22 @@ import { Tag, Input, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 class EditableTagGroup extends React.Component {
-  state = {
-    tags: ['Unremovable', 'Tag 2', 'Tag 3'],
-    inputVisible: false,
-    inputValue: '',
-    editInputIndex: -1,
-    editInputValue: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      tags: [],
+      inputVisible: false,
+      inputValue: '',
+      editInputIndex: -1,
+      editInputValue: '',
+    };
+    this.setTags = this.setTags.bind(this);
+  }
+  
+
+   
+  setTags(skilltags){
+    this.setState({tags: skilltags})
   };
 
   handleClose = removedTag => {
@@ -92,17 +102,17 @@ class EditableTagGroup extends React.Component {
             <Tag
               className="edit-tag"
               key={tag}
-              closable={index !== 0}
+              closable
               onClose={() => this.handleClose(tag)}
             >
               <span
                 onDoubleClick={e => {
-                  if (index !== 0) {
+                  //if (index !== 0) {
                     this.setState({ editInputIndex: index, editInputValue: tag }, () => {
                       this.editInput.focus();
                     });
                     e.preventDefault();
-                  }
+                  //}
                 }}
               >
                 {isLongTag ? `${tag.slice(0, 20)}...` : tag}
@@ -130,7 +140,7 @@ class EditableTagGroup extends React.Component {
           />
         )}
         {!inputVisible && (
-          <Tag className="site-tag-plus" onClick={this.showInput}>
+          <Tag className="site-tag-plus" onClick={this.showInput} style = {{marginTop:10}}>
             <PlusOutlined /> New Tag
           </Tag>
         )}
@@ -138,5 +148,6 @@ class EditableTagGroup extends React.Component {
     );
   }
 }
-
+//const EditTag = new EditableTagGroup();
+export {EditableTagGroup};
 // ReactDOM.render(<EditableTagGroup />, document.getElementById('container'));
