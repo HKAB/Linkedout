@@ -81,12 +81,14 @@ tag_patterns = [
     path('specialty', SpecialtyTagView.as_view()),
     path('location', LocationTagView.as_view()),
 ]
+
 post_patterns = [
     path('list', PostListView.as_view()),
     path('create', PostCreateView.as_view()),
     path('update', PostUpdateView.as_view()),
     path('delete', PostDeleteView.as_view()),
 ]
+
 urlpatterns = [
     path('account/', include((account_patterns, 'account'))),
     path('student/', include((student_patterns, 'student'))),

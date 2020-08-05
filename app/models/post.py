@@ -1,6 +1,7 @@
 from django.db import models
 
 from .student import Student
+from .skill import Skill
 
 
 class Post(models.Model):
@@ -8,5 +9,6 @@ class Post(models.Model):
     content = models.TextField(max_length=1024)
     published_date = models.DateField()
 
+    skills = models.ManyToManyField(Skill)
     interested_students = models.ManyToManyField(
         Student, related_name='interest')
