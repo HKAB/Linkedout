@@ -8,28 +8,16 @@ import { accountServices } from "@/services"
 
 
 function Profile() {
-<<<<<<< Updated upstream
-	
-	const user = accountServices.userValue;
-=======
 
 	// const user = accountServices.userValue;
->>>>>>> Stashed changes
 
-	var profileRender = (<Spin></Spin>);
+	// var profileRender = (<Spin></Spin>);
 	// if (user)
 	// {
-<<<<<<< Updated upstream
 	// 	if (user.account.account_type == "student")
 	// 		profileRender = (<ProfileTabStudent/>);
 	// 	else
 	// 		profileRender = (<ProfileTabCompany/>);
-=======
-	// if (user.account.account_type == "student")
-	// 	profileRender = (<ProfileTabStudent/>);
-	// else
-	// 	profileRender = (<ProfileTabCompany/>);
->>>>>>> Stashed changes
 
 	return (
 		<Layout>
