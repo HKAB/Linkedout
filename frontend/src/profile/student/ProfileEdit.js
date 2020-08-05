@@ -1,8 +1,8 @@
 import React from 'react'
 import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space, DatePicker, Modal} from  'antd';
+import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space,message, DatePicker, Modal} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd';
-import {EditOutlined, UploadOutlined} from '@ant-design/icons';             
+import {EditOutlined, UploadOutlined, LoadingOutlined, PlusOutlined} from '@ant-design/icons';             
 import moment from 'moment';
 import { studentServices } from "@/services";
 import { accountServices } from "@/services";
@@ -23,6 +23,25 @@ const color = (
         <Button key='10'title="Purple" style={{backgroundColor:"rgb(114,46,209)"}}>Purple</Button>
     </Menu>
     )
+
+    function getBase64(img, callback) {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+      }
+      
+      function beforeUpload(file) {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+          message.error('You can only upload JPG/PNG file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          message.error('Image must smaller than 2MB!');
+        }
+        return isJpgOrPng && isLt2M;
+      }
+
 class ProfileEdit extends Component {
     constructor(props) {
         super(props);
@@ -30,12 +49,24 @@ class ProfileEdit extends Component {
             disabled: false,
             basic_profile_data: {},
             email_data: [],
-            phone_data: []
+            phone_data: [],
+            loading: false,
+            imageUrl:null,
         }
-        this.formRef = React.createRef();
+        this.formRef = React.createRef();   
     }
+   
 
-
+    handleChange = info => {
+       
+          getBase64(info.file.originFileObj, picture =>
+            this.setState({
+              imageUrl:picture,
+              loading: false,
+            }),
+          );
+      };
+      
     componentDidMount() {
         let user = accountServices.userValue;
         if (user) {
@@ -45,7 +76,6 @@ class ProfileEdit extends Component {
                 this.setState({basic_profile_data: student.basic_data});
                 this.setState({email_data: student.email});
                 this.setState({phone_data: student.phone});
-
                 this.formRef.current.resetFields();
               }
           });
@@ -61,25 +91,12 @@ class ProfileEdit extends Component {
           });
         }
     editProfileStudent = values =>{
-        // if(values.firstName==null) values.firstName =  this.state.firstName;
-        // if(values.lastName==null) values.lastName =  this.state.lastName;
-        // if(values.email==null) values.email =  this.state.email;
-        // if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
-        // if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
-
-        // if(values.firstName==null) values.firstName =  this.state.firstName;
-        // if(values.lastName==null) values.lastName =  this.state.lastName;
-        // if(values.email==null) values.email =  this.state.email;
-        // if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
-        // if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
-
         console.log(values);
         studentServices.updateBasicStudent(
             values.firstName,
             values.lastName,
             values.dateOfBirth.format("YYYY-MM-DD"),
             values.description
-            // this.state.description
         )
         .then(() => {
             studentServices.getStudent(accountServices.userValue.account.id);
@@ -136,6 +153,14 @@ class ProfileEdit extends Component {
         }
     render()
     {
+        let imgPreview;
+        if (this.state.imageUrl!=null) {
+            imgPreview = <Avatar style={{width: 180, height: 180, marginBottom:10}} src={this.state.imageUrl} alt=''></Avatar>
+        }
+        else 
+        {
+            imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} ></Avatar>
+        }
         return(
             <Menu  mode="inline"
             defaultSelectedKeys={['1']}
@@ -200,15 +225,22 @@ class ProfileEdit extends Component {
                                     </Form>
                                 </Col>
                                 <Col span="6" offset="11" style={{position:'absolute',top:150}}>
-                                <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} ></Avatar>
-                                    <Space style={{position:'relative', right:-20}}>
-                                        <Upload >
-                                    <Button >
-                                        <UploadOutlined /> Change avatar
-                                    </Button>
+                                <Space >
+                                <Upload
+                                          name="avatar"
+                                         
+                                          className="avatar-uploader"
+                                          showUploadList={false}
+                                        beforeUpload={beforeUpload}
+                                        onChange={this.handleChange}
+                                    >
+                                        {imgPreview}
+                                    
+                                       <Button style={{position:'relative', right:-20}}>
+                                           Change Avatar
+                                        </Button>
                                     </Upload>
                                     </Space>
-                                    
                                 </Col>
                             </Row>
                             

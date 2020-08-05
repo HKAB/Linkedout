@@ -9,15 +9,15 @@ import { accountServices } from "@/services"
 
 function Profile() {
 	
-	// const user = accountServices.userValue;
+	const user = accountServices.userValue;
 
-	// var profileRender = (<Spin></Spin>);
+	var profileRender = (<Spin></Spin>);
 	// if (user)
 	// {
-		// if (user.account.account_type == "student")
-		// 	profileRender = (<ProfileTabStudent/>);
-		// else
-		// 	profileRender = (<ProfileTabCompany/>);
+	// 	if (user.account.account_type == "student")
+	// 		profileRender = (<ProfileTabStudent/>);
+	// 	else
+	// 		profileRender = (<ProfileTabCompany/>);
 
 		return (
 			<Layout>
