@@ -1,0 +1,105 @@
+import { BehaviorSubject} from 'rxjs'
+
+import { fetchWrapper } from "@/helpers"
+
+// import { getEducation, deleleEducation, createEducation, updateEducation} from "./company/education.service";
+// import { getExperience, deleleExperience, createExperience, updateExperience} from "./company/experience.service";
+import { getEmail, deleteEmail, createEmail, updateEmail } from "./email.service";
+import { getPhone, deletePhone, createPhone, updatePhone } from "./phone.service";
+import { listJob } from "./job.service";
+
+const companyObject = new BehaviorSubject(null);
+
+function getCompany (company_id, account_id) {
+    let company_email = getEmail(account_id);
+    let company_phone = getPhone(account_id);    
+    let list_job = listJob(account_id);
+    // TODO: Handle error here!
+    let company_basic = fetchWrapper.get(`http://127.0.0.1:8000/api/company/get?id=${company_id}`);
+    // {
+    //     "name": "Facebook",
+    //     "website": "facebook.com",
+    //     "profile_picture": "/media/agriculture-background-bell-pepper-broccoli-1414651_CILReVl.jpg",
+    //     "specialties": [
+    //       "An hai"
+    //     ],
+    //     "description": "We are anonymous, we are invincible"
+    //   }
+
+    return Promise.all([
+        company_basic, 
+        company_email, 
+        company_phone,
+        list_job
+    ]).then(([  company_basic_data, 
+                company_email_data, 
+                company_phone_data,
+                company_listjob_data]) => {
+                    let company = {};
+                    company.basic_data = company_basic_data;
+                    company.email = company_email_data.emails;
+                    company.phone = company_phone_data.phones;
+                    company.job = company_listjob_data;
+                    companyObject.next(company);
+                    return company;
+    })
+    .catch((error) =>
+    {
+        console.log(error);
+        return {};
+    });
+}
+
+// basic info of company
+function createBasicCompany (name, website, specialties, description) {
+	return fetchWrapper.post(`http://127.0.0.1:8000/api/company/create`, {name, website, specialties, description})
+}
+
+function updateBasicCompany (name, website, specialties, description) {
+	return fetchWrapper.put(`http://127.0.0.1:8000/api/company/update`, {name, website, specialties, description})
+}
+//
+
+// company email
+function updateCompanyEmail(old_email, new_email) {
+    return updateEmail(old_email, new_email);
+}
+
+function createCompanyEmail(email) {
+    return createEmail(email);
+}
+
+function deleteCompanyEmail(email) {
+    return deleteEmail(email);
+}
+
+
+// company phone
+function updateCompanyPhone(old_phone, new_phone) {
+    return updatePhone(old_phone, new_phone);
+}
+
+function createCompanyPhone(phone) {
+    return createPhone(phone);
+}
+
+function deleteCompanyPhone(phone) {
+    return deletePhone(phone);
+}
+//
+
+export const companyServices = {
+    getCompany,
+    createBasicCompany,
+    updateBasicCompany,
+
+    createCompanyEmail,
+    updateCompanyEmail,
+
+    createCompanyPhone,
+    updateCompanyPhone,
+    
+
+    get companyValue () { return companyObject.value},
+    companyObject
+}

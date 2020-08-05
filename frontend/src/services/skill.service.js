@@ -2,9 +2,6 @@ import { fetchWrapper } from "@/helpers"
 
 function getSkill(id) {
 	return fetchWrapper.get(`http://127.0.0.1:8000/api/skill/list?id=${id}`)
-	.then(skill => {
-		return skill;
-	})
 }
 
 function deleteSkill(skill) {
