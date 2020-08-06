@@ -2,7 +2,7 @@ import React from 'react'
 import { Component } from 'react';
 import { Spin, Layout, Typography, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
 
-import '../assets/css/profileContent.css';
+import '../assets/css/profile.css';
 import Column from 'antd/lib/table/Column';
 import { MailOutlined, ScheduleOutlined, PhoneOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
@@ -51,7 +51,7 @@ class ProfileContent extends Component {
       experience_data: [],
       follow_data: {},
       skill_data: [],
-      education_data: {},
+      education_data: [],
       education_element: [<Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>],
       phone_data: {},
       email_data: {},
@@ -90,7 +90,7 @@ class ProfileContent extends Component {
 
   componentDidMount() {
 
-	this.setState({isLoading: true});
+	// this.setState({isLoading: true});
 
     let user = accountServices.userValue;
     if (user) {
@@ -103,13 +103,14 @@ class ProfileContent extends Component {
 			this.setState({email_data: student.email});
 			this.setState({phone_data: student.phone});
 			this.setState({skill_data: student.skill});
-	
+        console.log(student);
 			var timeline_element = []
 			student.education.forEach(item => {
 				timeline_element.push(<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
 			});
-      if (timeline_element.length == 0) this.setState({education_element: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />});  
-	  else this.setState({education_element: timeline_element});
+      if (timeline_element.length == 0) this.setState({education_element: [<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]});  
+      // if (this.state.education_data.length == 0) this.setState({education_data : []});
+	  // else this.setState({education_element: timeline_element});
 	  this.setState({isLoading: false});
       console.log(this.state.education_element);
 		  }
@@ -129,6 +130,7 @@ class ProfileContent extends Component {
     return (
       <>
         <Card
+          className="card-info"
           style={{
             marginTop: 24,
           }}
@@ -151,10 +153,10 @@ class ProfileContent extends Component {
 
         <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
           <Col span={12}>
-            <Card>
-              <Meta title="Education"></Meta>
+            <Card className="card-info">
+              <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
               <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
-                  {this.state.education_element.slice(0, 4)}
+                  {(this.state.education_element)?this.state.education_element.slice(0, 4):null}
               </Timeline>
               <Button 
                 type = "link" 
@@ -163,8 +165,8 @@ class ProfileContent extends Component {
               </Button>
             </Card>
 
-            <Card style = {{marginTop:24}}>
-              <Meta title="Following"></Meta>
+            <Card className="card-info" style = {{marginTop:24}}>
+              <Meta title={<Title level={3}>Theo dõi</Title>}></Meta>
               <List style={{ marginTop: 24 }} grid={{ column: 2 }}
                 dataSource={follow_data}
                 renderItem={item => (
@@ -180,8 +182,8 @@ class ProfileContent extends Component {
           </Col>
 
           <Col span={12}>
-            <Card>
-              <Meta title="Experiences"></Meta>
+            <Card className="card-info">
+              <Meta title={<Title level={3}>Kinh nghiệm</Title>}></Meta>
               <List
                 itemLayout="vertical"
                 style={{ marginTop: 24 }}
@@ -206,8 +208,8 @@ class ProfileContent extends Component {
               </Button>
             </Card>
 
-            <Card style = {{marginTop:24}}>
-              <Meta title="Skill"></Meta>
+            <Card className="card-info" style = {{marginTop:24}}>
+              <Meta title={<Title level={3}>Kỹ năng</Title>}></Meta>
               <List style={{ marginTop: 24 }} grid={{ column: 2 }}
                 dataSource={this.state.skill_data.slice(0, 6)}
                 renderItem={item => (
@@ -285,46 +287,6 @@ class ProfileContent extends Component {
             )}
           />
         </Modal>
-
-        {/* <Row gutter={[24, 24]}>
-          <Col span={12}>
-            <Card>
-              <Meta title="Following"></Meta>
-              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-                dataSource={follow_data}
-                renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.avatar} />}
-                      title={<a href={item.title_href}>{item.title}</a>}
-                    />
-                  </List.Item>
-                )}
-              />
-            </Card>
-          </Col>
-          <Col span={12}>
-            <Card>
-              <Meta title="Skill"></Meta>
-              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-                dataSource={this.state.skill_data.slice(0, 6)}
-                renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar />}
-                      title={item}
-                    />
-                  </List.Item>
-                )}
-              />
-              <Button 
-                type = "primary" 
-                style = {{float:'right'}} 
-                onClick = {()=>this.showSkillModal()}> Show all
-              </Button>
-            </Card>
-          </Col>
-        </Row> */}
       </>
     )
   }

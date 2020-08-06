@@ -6,36 +6,26 @@ import { MyHeader } from "@/components"
 import { Layout, Spin } from 'antd';
 import { accountServices } from "@/services"
 
+import './assets/css/profile.css';
 
 function Profile() {
-<<<<<<< Updated upstream
-	
-	const user = accountServices.userValue;
-=======
 
 	// const user = accountServices.userValue;
->>>>>>> Stashed changes
 
-	var profileRender = (<Spin></Spin>);
+	// var profileRender = (<Spin></Spin>);
 	// if (user)
 	// {
-<<<<<<< Updated upstream
 	// 	if (user.account.account_type == "student")
 	// 		profileRender = (<ProfileTabStudent/>);
 	// 	else
 	// 		profileRender = (<ProfileTabCompany/>);
-=======
-	// if (user.account.account_type == "student")
-	// 	profileRender = (<ProfileTabStudent/>);
-	// else
-	// 	profileRender = (<ProfileTabCompany/>);
->>>>>>> Stashed changes
 
 	return (
 		<Layout>
 			<MyHeader />
 			<Layout>
 				{/* {profileRender} */}
+				{/* <ProfileTabCompany /> */}
 				<ProfileTabStudent />
 			</Layout>
 		</Layout>
