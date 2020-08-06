@@ -25,8 +25,8 @@ function Profile() {
 			<MyHeader />
 			<Layout>
 				{/* {profileRender} */}
-				{/* <ProfileTabCompany /> */}
-				<ProfileTabStudent />
+				<ProfileTabCompany />
+				{/* <ProfileTabStudent /> */}
 			</Layout>
 		</Layout>
 	);

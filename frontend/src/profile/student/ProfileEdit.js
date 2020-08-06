@@ -57,7 +57,7 @@ class ProfileEdit extends Component {
     }
    
 
-    handleChange = info => {
+    handleChangeAvatar = info => {
        
           getBase64(info.file.originFileObj, picture =>
             this.setState({
@@ -218,16 +218,16 @@ class ProfileEdit extends Component {
                                 <Col span={10} style={{textAlign: "center"}}>
                                     <Space style={{marginTop: 32}} direction="vertical">
                                 <Upload
-                                          name="avatar"
-                                         
-                                          className="avatar-uploader"
-                                          showUploadList={false}
+                                        name="avatar"
+                                        className="avatar-uploader"
+                                        showUploadList={false}
                                         beforeUpload={beforeUpload}
-                                        onChange={this.handleChange}
+                                        onChange={this.handleChangeAvatar}
+
                                     >
                                         {imgPreview}
                                     </Upload>
-                                    </Space>
+                                 </Space>
                                 </Col>
                             </Row>
                             

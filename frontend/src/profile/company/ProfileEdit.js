@@ -69,6 +69,17 @@ class ProfileEdit extends Component {
 
       }
 
+    handleChangeAvatar = info => {
+       
+        getBase64(info.file.originFileObj, picture =>
+          this.setState({
+            imageUrl:picture,
+            loading: false,
+          }),
+        );
+    };
+    
+
     changeDisabled = () =>{
         this.setState({
             disabled: !this.state.disabled,
@@ -95,9 +106,7 @@ class ProfileEdit extends Component {
                                 <Col span={10} offset={4}>
                                 <Form 
                                     ref={this.formRef} 
-                                   
-                                    style={{marginTop:32}} 
-            
+                                    style={{marginTop:32}}
                                     >
                                         <span>Company Name</span>
                                         <Form.Item name="lastName" >
@@ -147,6 +156,7 @@ class ProfileEdit extends Component {
                                     </Upload>
                                     </Space>
                                 </Col>
+                                
                             </Row>
                             
                         </TabPane>
