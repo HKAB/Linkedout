@@ -14,14 +14,14 @@ class InterestCheckView(APIView):
         id = serializers.IntegerField(required=True)
 
         class Meta:
-            ref_name = 'CheckInterestIn'
+            ref_name = 'InterestCheckIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.ModelSerializer):
+    class OutputSerializer(serializers.Serializer):
         interested = serializers.BooleanField()
 
         class Meta:
-            ref_name = 'CheckInterestOut'
+            ref_name = 'InterestCheckOut'
             fields = ['interested']
 
     permission_classes = [AllowAny]
@@ -41,22 +41,22 @@ class InterestCreateView(APIView):
         id = serializers.IntegerField(required=True)
 
         class Meta:
-            ref_name = 'CreateInterestIn'
+            ref_name = 'InterestCreateIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.ModelSerializer):
+    class OutputSerializer(serializers.Serializer):
         interested = serializers.BooleanField()
 
         class Meta:
-            ref_name = 'CreateInterestOut'
+            ref_name = 'InterestCreateOut'
             fields = ['interested']
 
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={201: OutputSerializer})
+    @swagger_auto_schema(request_body=InputSerializer, responses={201: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
     def post(self, request):
-        serializer = self.InputSerializer(data=request.query_params)
+        serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = create_interest(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_201_CREATED)
@@ -67,22 +67,22 @@ class InterestDeleteView(APIView):
         id = serializers.IntegerField(required=True)
 
         class Meta:
-            ref_name = 'DeleteInterestIn'
+            ref_name = 'InterestDeleteIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.ModelSerializer):
+    class OutputSerializer(serializers.Serializer):
         interested = serializers.BooleanField()
 
         class Meta:
-            ref_name = 'DeleteInterestOut'
+            ref_name = 'InterestDeleteOut'
             fields = ['interested']
 
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
+    @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
-    def post(self, request):
-        serializer = self.InputSerializer(data=request.query_params)
+    def delete(self, request):
+        serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = delete_interest(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
@@ -93,14 +93,14 @@ class InterestCountView(APIView):
         id = serializers.IntegerField(required=True)
 
         class Meta:
-            ref_name = 'CountInterestIn'
+            ref_name = 'InterestCountIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.ModelSerializer):
+    class OutputSerializer(serializers.Serializer):
         count = serializers.IntegerField()
 
         class Meta:
-            ref_name = 'CountInterestOut'
+            ref_name = 'InterestCountOut'
             fields = ['count']
 
     permission_classes = [AllowAny]
@@ -123,7 +123,7 @@ class AccountInterestedView(APIView):
             ref_name = 'AccountInterestedIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.ModelSerializer):
+    class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
         firstname = serializers.CharField()
         lastname = serializers.CharField()
@@ -133,9 +133,9 @@ class AccountInterestedView(APIView):
             ref_name = 'AccountInterestedOut'
             fields = ['id', 'firstname', 'lastname', 'profile_picture']
 
-    permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
-    # authentication_classes = []
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer(many=True)})
     @method_decorator(ensure_csrf_cookie)
@@ -154,7 +154,7 @@ class PostInterestedView(APIView):
             ref_name = 'PostInterestedIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.ModelSerializer):
+    class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
         title = serializers.CharField()
         content = serializers.CharField()
@@ -164,9 +164,9 @@ class PostInterestedView(APIView):
             ref_name = 'PostInterestedOut'
             fields = ['id', 'title', 'content', 'interest_count']
 
-    permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
-    # authentication_classes = []
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer(many=True)})
     @method_decorator(ensure_csrf_cookie)
