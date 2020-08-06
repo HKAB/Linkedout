@@ -1,14 +1,19 @@
 import React from 'react'
 import { Component } from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown} from 'antd';
+import { Layout, Menu, Button, Avatar, Dropdown, Typography, Space} from 'antd';
 import '../components/assets/css/MyHeader.css'
 import logo from '../components/assets/images/logo.png'
 import {
   QuestionCircleOutlined,BellOutlined,UserOutlined,SettingOutlined, LogoutOutlined
 } from '@ant-design/icons';
 
+import {
+    Link
+  } from "react-router-dom";
+
 import { accountServices } from "@/services"
 
+const {Title} = Typography;
 const { Header, Content } = Layout;
 
 const menu = (
@@ -29,13 +34,6 @@ class MyHeader extends Component {
         }
     }
 
-
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    };
-
     componentDidMount() {
         let user = accountServices.userValue;
         if (user) {
@@ -49,16 +47,18 @@ class MyHeader extends Component {
 	render(){
 		return(
     <Header className="site-layout-background">
-      <div className="logo" style={{fontWeight:"bold"}}>
-          <img src={logo} style={{width:32, height:32, marginRight: 10, marginTop:-15}}></img>
-          THĂM NGÀN NETWORK
-      </div>
+      {/* <div className="logo"> */}
+      <Space>
+            <Link to="/"><img src={logo} width="48" height="48"></img></Link>
+            <Title level={2}>Thăm ngàn Network</Title>
+      </Space>
+      {/* </div> */}
 		<span className="left-menu">
-		<Button type="text" style={{height: 64}}><QuestionCircleOutlined/></Button>
-			<Button type="text" style={{height: 64}}><BellOutlined/></Button>
+		<Button type="text" style={{height: 64, fontSize: "20px"}}><QuestionCircleOutlined/></Button>
+			<Button type="text" style={{height: 64, fontSize: "20px"}}><BellOutlined/></Button>
 			<Dropdown overlay={menu} placement="bottomCenter"  icon={<UserOutlined />}>
 				<Button type="text" style={{height: 64}}>
-					<Avatar className="avatar-picture"/>
+					<Avatar size="large" className="avatar-picture"/>
                     <span className="username">{this.state.account_data.username}</span>
 				</Button>
 			</Dropdown>

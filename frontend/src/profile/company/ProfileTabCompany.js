@@ -1,60 +1,91 @@
-import React from 'react'
-import { Component } from 'react';
-import { Layout, Menu, Row, Col } from 'antd';
-import {Tabs } from 'antd';
+import React from "react";
+import { Component } from "react";
+import { Tooltip, Layout, Icon, Menu, Row, Col, Button, Space, Avatar } from "antd";
+import { Tabs } from "antd";
 
 import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
   UserOutlined,
   InfoOutlined,
   EditOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
 import { ProfileContent } from "@/profile/company/ProfileContent";
-import {ProfileEdit} from "@/profile/company/ProfileEdit";
-import  ProfileChange  from "@/profile/company/ProfileChange";
+import { ProfileEdit } from "@/profile/company/ProfileEdit";
+import ProfileChange from "@/profile/company/ProfileChange";
+
+import QueueAnim from 'rc-queue-anim';
+import Animate from 'rc-animate';
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 
-class ProfileTabCompany extends Component {
 
+class ProfileTabCompany extends Component {
   state = {
-    collapsed: false,
+	renderComponent: <ProfileContent/>,
   };
 
-	render(){
-		return(
-            <Tabs tabPosition="left" style={{marginTop: 24}}>
-              <TabPane tab={<><UserOutlined/> Thông tin profile</>} key="1">
-                <Layout style={{ padding: '0 24px 24px' }}>
-                  <Row align="middle">
-                    <Col span={4}></Col>
-                    <Col span={16}><ProfileContent/></Col>
-                    <Col span={4}></Col>
-                  </Row>
-                </Layout>
-                </TabPane>
-              <TabPane tab={<><InfoOutlined /> Thông tin tài khoản</>} key="2">
-                <Layout style={{ padding: '0 24px 24px' }}>
-                  <Row align="middle">
-                    <Col span={4}></Col>
-                    <Col span={16}><ProfileEdit/></Col>
-                    <Col span={4}></Col>
-                  </Row>
-                </Layout>
-              </TabPane>
-              <TabPane tab={<><EditOutlined /> Chỉnh sửa thông tin</>} key="3">
-                <Layout style={{ padding: '0 24px 24px' }}>
-                  <Row align="middle">
-                    <Col span={4}></Col>
-                    <Col span={16}><ProfileChange/></Col>
-                    <Col span={4}></Col>
-                  </Row>
-                </Layout>
-              </TabPane>
-          </Tabs>
-			);
-	}
+	changeTabButton = (
+		<Space direction="vertical" style={{position: "fixed"}}>
+		<Tooltip placement="right" title={"Profile nè"}>
+			<Button
+			style={{boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56}}
+			shape="circle-outline"
+			icon={<UserOutlined style={{ fontSize: '24px' }}></UserOutlined>}
+		// size="large"
+			onClick={() => {
+				this.setState({renderComponent: <ProfileContent/>});
+			}}
+			/>
+		</Tooltip>
+		<Tooltip placement="right" title={"Thông tin tài khoản nè"}>
+		<Button
+		style={{boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56}}
+		shape="circle-outline"
+		icon={<InfoOutlined style={{ fontSize: '24px' }} />}
+		size="large"
+		onClick={() => {
+			this.setState({renderComponent: <ProfileEdit/>})
+		}}
+		/>
+		</Tooltip>
+		<Tooltip placement="right" title={"Thông tin CV nè"}>
+		<Button
+		style={{boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56}}
+		shape="circle-outline"
+		icon={<EditOutlined style={{ fontSize: '24px' }}/>}
+		size="large"
+		onClick={() => {
+			this.setState({renderComponent: <ProfileChange/>})
+		}}
+		/>
+		</Tooltip>
+	</Space>
+)
+
+  render() {
+    return (
+      <Row>
+        <Col></Col>
+        <Col span={24}>
+              <Layout style={{ padding: "0 24px 24px" }}>
+                <Row>
+                  <Col span={5} style={{paddingLeft: "5vw", marginTop: "20vh"}}>
+				  	{this.changeTabButton}
+                  </Col>
+                  <Col span={14}>
+					  {this.state.renderComponent}
+                  </Col>
+                  <Col span={5}></Col>
+                </Row>
+              </Layout>
+        </Col>
+        <Col></Col>
+      </Row>
+    );
+  }
 }
 
 export { ProfileTabCompany };

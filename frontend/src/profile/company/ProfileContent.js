@@ -7,7 +7,7 @@ import Column from 'antd/lib/table/Column';
 import { MailOutlined, ScheduleOutlined, PhoneOutlined, LikeOutlined, SettingOutlined, EditOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 
-import '../assets/css/profileContent.css';
+import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg'
 import pic2 from '../assets/images/xyz.jpg'
 
@@ -106,6 +106,7 @@ class ProfileContent extends Component {
 			style={{
 				marginTop: 24,
 			}}
+			className="card-info"
 			>
 				<Row>
 					<Col style={rowStyle} span={4}>
@@ -126,16 +127,18 @@ class ProfileContent extends Component {
 				</Row>
 			</Card>
 
-			<Card          
+			<Card   
+				className="card-info"       
 				style={{
 					marginTop: 24,
 				}}>
-				<Meta title="Mô tả"></Meta>
+				<Meta title={<Title level={3}>Mô tả</Title>}></Meta>
 				<div style={{marginTop: 16}}>{data.description}</div>
 				{/* <span styles={{marginTop: 100}}>{data.description}</span> */}
 			</Card>
 
-			<Card          
+			<Card   
+				className="card-info"       
 				style={{
 					marginTop: 24,
 				}}>
@@ -169,11 +172,12 @@ class ProfileContent extends Component {
 					</Row>
 			</Card>
 
-			<Card          
+			<Card 
+				className="card-info"         
 				style={{
 					marginTop: 24,
 				}}>
-				<Meta title="Việc làm"></Meta>
+				<Meta title={<Title level={3}>Việc làm</Title>}></Meta>
 					<List
 						grid={{gutter: 24, column: 2}}
 						dataSource={jobs}
@@ -203,7 +207,8 @@ class ProfileContent extends Component {
 			</Card>
 			
 
-			<Card          
+			<Card        
+				className="card-info"  
 				style={{
 					marginTop: 24,
 				}}>

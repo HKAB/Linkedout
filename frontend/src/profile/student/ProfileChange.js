@@ -20,7 +20,8 @@ import {
   DatePicker,
   Modal,
   Popconfirm,
-  Empty
+  Empty,
+  Typography
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
@@ -31,6 +32,7 @@ import { accountServices } from "@/services";
 import dayjs from "dayjs";
 import moment from 'moment';
 
+const {Title} = Typography;
 var addExperienceRef = React.createRef();
 var addEducationRef = React.createRef();
 var addSkillRef = React.createRef();
@@ -322,8 +324,8 @@ class ProfileChange extends Component {
           </Form>
         </Modal>
 
-        <Card style={{ marginTop: 24 }}>
-          <Meta title="Experiences"></Meta>
+        <Card className="card-info" style={{ marginTop: 24 }}>
+          <Meta title={<Title level={3}>Kinh nghiệm</Title>}></Meta>
           <List
             style={{ marginTop: 24 }}
             itemLayout="horizontal"
@@ -472,8 +474,8 @@ class ProfileChange extends Component {
           </List>
         </Card>
 
-        <Card style={{ marginTop: 24 }}>
-          <Meta title="Education"></Meta>
+        <Card className="card-info" style={{ marginTop: 24 }}>
+          <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
           
           <Timeline mode="left" style={{ marginTop: 24 }}>
           {this.state.education_element}
@@ -574,8 +576,8 @@ class ProfileChange extends Component {
             </Form.Item>
           </Form>
         </Card>
-        <Card style={{ marginTop: 24 }}>
-          <Meta title="Skill"></Meta>
+        <Card className="card-info" style={{ marginTop: 24 }}>
+          <Meta title={<Title level={3}>Kỹ năng</Title>}></Meta>
           <List
             style={{ marginTop: 24 }}
             grid={{ column: 2 }}

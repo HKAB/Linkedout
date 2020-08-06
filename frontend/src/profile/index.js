@@ -6,12 +6,13 @@ import { MyHeader } from "@/components"
 import { Layout, Spin } from 'antd';
 import { accountServices } from "@/services"
 
+import './assets/css/profile.css';
 
 function Profile() {
-	
-	const user = accountServices.userValue;
 
-	var profileRender = (<Spin></Spin>);
+	// const user = accountServices.userValue;
+
+	// var profileRender = (<Spin></Spin>);
 	// if (user)
 	// {
 	// 	if (user.account.account_type == "student")
@@ -19,15 +20,16 @@ function Profile() {
 	// 	else
 	// 		profileRender = (<ProfileTabCompany/>);
 
-		return (
+	return (
+		<Layout>
+			<MyHeader />
 			<Layout>
-				<MyHeader />
-				<Layout>
-					{/* {profileRender} */}
-					<ProfileTabCompany/>
-				</Layout>
+				{/* {profileRender} */}
+				{/* <ProfileTabCompany /> */}
+				<ProfileTabStudent />
 			</Layout>
-		);
+		</Layout>
+	);
 	// }
 	// return (
 	// 	<Spin></Spin>

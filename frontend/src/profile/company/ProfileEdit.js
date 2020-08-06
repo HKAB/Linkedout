@@ -1,12 +1,13 @@
 import React from 'react'
 import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space, DatePicker, Modal} from  'antd';
+import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space,message, DatePicker, Modal, Card} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd';
-import {EditOutlined, UploadOutlined} from '@ant-design/icons';             
+import {EditOutlined, UploadOutlined, LoadingOutlined, PlusOutlined} from '@ant-design/icons';             
 import moment from 'moment';
-
 import { accountServices } from "@/services";
 
+
+const dateFormat = 'YYYY-MM-DD';
 
 const  {TabPane} =  Tabs;
 const color = (
@@ -21,60 +22,91 @@ const color = (
         <Button key='10'title="Purple" style={{backgroundColor:"rgb(114,46,209)"}}>Purple</Button>
     </Menu>
     )
+
+    function getBase64(img, callback) {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+      }
+      
+      function beforeUpload(file) {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+          message.error('You can only upload JPG/PNG file!');
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          message.error('Image must smaller than 2MB!');
+        }
+        return isJpgOrPng && isLt2M;
+      }
+
 class ProfileEdit extends Component {
     constructor(props) {
         super(props);
         this.state={
             disabled: false,
+            imageUrl:null,
         }
-        this.formRef = React.createRef();
+        this.formRef = React.createRef();   
     }
+   
 
+    handleChange = info => {
+       
+          getBase64(info.file.originFileObj, picture =>
+            this.setState({
+              imageUrl:picture,
+              loading: false,
+            }),
+          );
+      };
+      
+    componentDidMount() {
+        let user = accountServices.userValue;
+        if (user) {
+        }
+
+      }
+
+    handleChangeAvatar = info => {
+       
+        getBase64(info.file.originFileObj, picture =>
+          this.setState({
+            imageUrl:picture,
+            loading: false,
+          }),
+        );
+    };
+    
 
     changeDisabled = () =>{
         this.setState({
             disabled: !this.state.disabled,
           });
         }
-   
-    onFinishChangePass = values =>{
-        console.log(values.newPass, values.oldPass);
-            if (values.newPass!==values.confPass){
-                Modal.error({title: "╯︿╰", content: 'Password not match!'});
-            }else{
-                accountServices.changePassword(values.oldPass, values.newPass).then()
-                .then(()=>{
-                    Modal.success({title: "\^o^/", content: "Change Password successfully!!!"});
-                })
-                .catch((error)=>{
-                    Modal.error({title: "╯︿╰", content:error});
-                })
-            }
-        }
+
     render()
     {
+        let imgPreview;
+        if (this.state.imageUrl!=null) {
+            imgPreview = <Avatar style={{width: 180, height: 180, marginBottom:10}} src={this.state.imageUrl} alt=''></Avatar>
+        }
+        else 
+        {
+            imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} ></Avatar>
+        }
         return(
-            <Menu  mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{padding: 24,
-                margin: 0,
-                minHeight: 600,
-                marginTop: 24,
-                }}
-                title="Thay đổi" icon={<EditOutlined />}  key="sub1"
-                >
-                    <Tabs  tabPosition="left" style={{marginLeft:24}}>
+                    <Card style={{marginTop: "10vh", minHeight: "60vh"}}>
+                    <Tabs tabPosition="left" style={{marginLeft:24}}>
                         <TabPane tab="Thông tin tài khoản" key="1" style={{marginTop:20}}>
                             <span style={{fontWeight: "bold"}}>THÔNG TIN TÀI KHOẢN</span>
-                            <Row align="middle">
+                            <Row>
                             
-                                <Col span="14">
-                                    <Form 
+                                <Col span={10} offset={4}>
+                                <Form 
                                     ref={this.formRef} 
-                                   
-                                    style={{marginTop:32}} 
-            
+                                    style={{marginTop:32}}
                                     >
                                         <span>Company Name</span>
                                         <Form.Item name="lastName" >
@@ -110,57 +142,72 @@ class ProfileEdit extends Component {
                                         <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
                                     </Form>
                                 </Col>
-                                <Col span="6" offset="11" style={{position:'absolute',top:150}}>
-                                <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000"} ></Avatar>
-                                    <Space style={{position:'relative', right:-20}}>
-                                        <Upload >
-                                    <Button >
-                                        <UploadOutlined /> Change avatar
-                                    </Button>
+                                <Col span={10} style={{textAlign: "center"}}>
+                                    <Space style={{marginTop: 32}} direction="vertical">
+                                <Upload
+                                          name="avatar"
+                                         
+                                          className="avatar-uploader"
+                                          showUploadList={false}
+                                        beforeUpload={beforeUpload}
+                                        onChange={this.handleChange}
+                                    >
+                                        {imgPreview}
                                     </Upload>
                                     </Space>
-                                    
                                 </Col>
+                                
                             </Row>
                             
                         </TabPane>
                         <TabPane tab="Change Password" key="3" style={{ marginTop:20}}   >
                         <span style={{fontWeight: "bold"}}>CHANGE PASSWORD</span>
-                            <Form  onFinish={this.onFinishChangePass} style={{marginTop:32, marginRight:150}} >
+                        <Row>
+                            <Col span={10} offset={4}>
+                            <Form
+                              onFinish={this.onFinishChangePass} 
+                              style={{marginTop:32}} >
                                             <span> Old Password</span>
-                                            <Form.Item  span="6" name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Form.Item  name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
                                             <Input.Password    placeholder="Old Password"  ></Input.Password>
                                             </Form.Item>
 
                                             <span>New Password</span>
-                                            <Form.Item span="6" name="newPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Form.Item name="newPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
                                             <Input.Password   placeholder="New Password"  ></Input.Password>
                                             </Form.Item>
 
                                             <span> Confirm Password</span>
-                                            <Form.Item span="6" name="confPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Form.Item name="confPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
                                             <Input.Password   placeholder="Confirm Password" ></Input.Password>
                                             </Form.Item>
-
-                                            <Button type="primary" htmlType="submit" >Save</Button>
-                                            <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
+                                            
+                                            <Space>
+                                                <Button type="primary" htmlType="submit" >Save</Button>
+                                                <Button type="primary" htmlType="cancel" >Cancel</Button>
+                                            </Space>
                             </Form>
-                        
-                            </TabPane>
-                         <TabPane tab="Settings" key="2" style={{fontSize: 16, marginTop:32}}>
-                             <Row>
-                                <Col>Theme Color</Col>
-                                <Col style={{position:'absolute', right:64}}> <Switch checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
+                        </Col>
+                        <Col span={10}></Col>
+                        </Row>
+                    </TabPane>
+                         <TabPane tab="Settings" key="2" style={{marginTop:20}}>
+                            <span style={{fontWeight: "bold"}}>CHANGE PASSWORD</span>
+                             <Row style={{marginTop: 56}}>
+                                <Col span={20} offset={4}> 
+                                    <span>Notification</span>
+                                    <Switch style={{position:'absolute', right:64}} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} />
+                                </Col>
                              </Row>
-                            <Row>
+                            {/* <Row>
                                 <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
                                   <Button class="changeColor" style={{marginTop:24}}>Color</Button>
                               </Dropdown>
-                            </Row>
+                            </Row> */}
                          </TabPane>
                         
                      </Tabs>
-             </Menu>
+                     </Card>
         
            
         );
