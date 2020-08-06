@@ -57,7 +57,7 @@ class ProfileEdit extends Component {
     }
    
 
-    handleChange = info => {
+    handleChangeAvatar = info => {
        
           getBase64(info.file.originFileObj, picture =>
             this.setState({
@@ -177,7 +177,7 @@ class ProfileEdit extends Component {
                             <span style={{fontWeight: "bold"}}>THÔNG TIN TÀI KHOẢN</span>
                             <Row align="middle">
                             
-                                <Col span="14">
+                                <Col span={12} >
                                     <Form 
                                     ref={this.formRef} 
                                     onFinish={this.editProfileStudent} 
@@ -224,23 +224,21 @@ class ProfileEdit extends Component {
                                         <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
                                     </Form>
                                 </Col>
-                                <Col span="6" offset="11" style={{position:'absolute',top:150}}>
-                                <Space >
+                                <Col span={4} offset={3} style={{position:'relative',top:-100}}>
                                 <Upload
-                                          name="avatar"
-                                         
-                                          className="avatar-uploader"
-                                          showUploadList={false}
+                                        name="avatar"
+                                        className="avatar-uploader"
+                                        showUploadList={false}
                                         beforeUpload={beforeUpload}
-                                        onChange={this.handleChange}
+                                        onChange={this.handleChangeAvatar}
+
                                     >
                                         {imgPreview}
-                                    
-                                       <Button style={{position:'relative', right:-20}}>
+                                       <Button style={{position:'relative', right:-30, top:10}}>
                                            Change Avatar
                                         </Button>
                                     </Upload>
-                                    </Space>
+                                 
                                 </Col>
                             </Row>
                             
