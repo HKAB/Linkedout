@@ -9,7 +9,7 @@ from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, Pho
 from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
 from app.views.experience import ExperienceListView, ExperienceCreateView, ExperienceUpdateView, ExperienceDeleteView
 from app.views.job import JobGetView, JobListView, JobCreateView, JobUpdateView, JobDeleteView
-from app.views.post import PostListView, PostCreateView, PostUpdateView, PostDeleteView
+from app.views.post import PostGetView, PostListView, PostCreateView, PostUpdateView, PostDeleteView
 from app.views.interest import InterestCheckView, InterestCreateView, InterestDeleteView, InterestCountView, AccountInterestedView, PostInterestedView
 from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView, SpecialtyTagView, LocationTagView
 account_patterns = [
@@ -75,6 +75,7 @@ job_patterns = [
 ]
 
 post_patterns = [
+    path('get', PostGetView.as_view()),
     path('list', PostListView.as_view()),
     path('create', PostCreateView.as_view()),
     path('update', PostUpdateView.as_view()),
