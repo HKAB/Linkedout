@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Row, Col} from 'antd';
+import {Row, Col, Card} from 'antd';
 import { Tabs } from 'antd';
 import { Typography } from 'antd';
 import { Layout, Menu, Breadcrumb, Select } from 'antd';
@@ -8,7 +8,7 @@ import { UserOutlined, LockOutlined, UserAddOutlined, LoginOutlined, MailOutline
 
 import { accountServices } from "@/services"
 
-import leftLoginPicture from "./assets/login.svg"
+import leftLoginPicture from "./assets/leftLogin.svg"
 import logo from "./assets/logo.png"
 
 const { Option } = Select;
@@ -29,7 +29,7 @@ function Login({ history }) {
 
 	const onLoginFinish = values => {
 		// console.log(values);
-		accountServices.login(values.login_username, values.login_password).then()
+		accountServices.login(values.login_username, values.login_password)
 		.then(() => {
 			history.push("/profile");
 		})
@@ -50,10 +50,16 @@ function Login({ history }) {
 		else {
 			accountServices.register(values.register_username, values.register_email, values.register_password, values.register_account_type).then()
 			.then(() => {
-				Modal.success({title: "uWu", content: "Register successfully!! Now login :)"});
+				Modal.success({title: "uWu", content: "Register successfully!! Now gimme some infomation :)"});
+				accountServices.login(values.register_username, values.register_password)
+				.then(() => {
+					history.push("/create-profile");
+				})
+				.catch(error => {
+					Modal.error({title: "uWu", content: "Register unsuccessfully!! Plz try again later"});
+				})
 				//history.go();
-				// history.push("/createStudent");
-				history.push("/profile");
+				// history.push("/create-profile");
 			})
 			.catch(error => {
 				alert(error);
@@ -63,11 +69,12 @@ function Login({ history }) {
 
 	return (
 		<>
-		<Row align="middle">
-			<Col span={10} offset={2}>
-				<img src={leftLoginPicture} width="900px" height="900px"></img>
+		<Row align="middle" style={{minHeight: "100vh"}}>
+			<Col span={10} offset={3}>
+				<img src={leftLoginPicture} style={{minWidth: "40vw", minHeight: "40vh"}}></img>
 			</Col>
-      		<Col span={4} offset={4}>
+      		<Col span={5} offset={3}>
+				  <Card style={{boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" }}>
       			<div align="center" className="logo"><img src={logo} width="64" height="64"></img></div>
       			 <Title align="center">THĂM NGÀN NETWORK</Title>
       			 <Tabs centered>
@@ -91,8 +98,8 @@ function Login({ history }) {
 		      			</Form.Item>
 
 		      			<Form.Item>
-		      				<Button  type="primary" htmlType="submit" className="login-form-button">
-		      					Login
+		      				<Button shape="round"  type="primary" htmlType="submit" className="login-form-button">
+		      					Đăng nhập
 		      				</Button>
 		      			</Form.Item>
 	      			</Form>
@@ -125,13 +132,14 @@ function Login({ history }) {
 		      					<Checkbox>Với việc đăng ký, bạn đã chấp nhận mọi hậu quả sau khi đăng ký. List <a>hậu quả</a></Checkbox>
 		      				</Form.Item>
 			      			<Form.Item style={{paddingTop: 16}}>
-			      				<Button type="primary" htmlType="submit" className="register-form-button">
-			      					Register
+			      				<Button shape="round" type="primary" htmlType="submit" className="register-form-button">
+			      					Đăng ký
 			      				</Button>
 			      			</Form.Item>
 		      			</Form>
 	      			</TabPane>
 	      		</Tabs>
+				  </Card>
       		</Col>
 		</Row>
 		</>)

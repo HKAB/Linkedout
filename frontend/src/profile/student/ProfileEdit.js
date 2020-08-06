@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space,message, DatePicker, Modal} from  'antd';
+import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space,message, DatePicker, Modal, Card} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd';
 import {EditOutlined, UploadOutlined, LoadingOutlined, PlusOutlined} from '@ant-design/icons';             
 import moment from 'moment';
@@ -76,7 +76,7 @@ class ProfileEdit extends Component {
                 this.setState({basic_profile_data: student.basic_data});
                 this.setState({email_data: student.email});
                 this.setState({phone_data: student.phone});
-                this.formRef.current.resetFields();
+                if (this.formRef.current) this.formRef.current.resetFields();
               }
           });
         }
@@ -162,22 +162,13 @@ class ProfileEdit extends Component {
             imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} ></Avatar>
         }
         return(
-            <Menu  mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{padding: 24,
-                margin: 0,
-                minHeight: 600,
-                marginTop: 24,
-                }}
-                title="Thay đổi" icon={<EditOutlined />}  key="sub1"
-                >
-                    <Tabs  tabPosition="left" style={{marginLeft:24}}>
+                    <Card style={{marginTop: "10vh", minHeight: "60vh"}}>
+                    <Tabs tabPosition="left" style={{marginLeft:24}}>
                         <TabPane tab="Thông tin tài khoản" key="1" style={{marginTop:20}}>
                             <span style={{fontWeight: "bold"}}>THÔNG TIN TÀI KHOẢN</span>
-                            <Row align="middle">
+                            <Row>
                             
-                                <Col span="14">
+                                <Col span={10} offset={4}>
                                     <Form 
                                     ref={this.formRef} 
                                     onFinish={this.editProfileStudent} 
@@ -206,8 +197,8 @@ class ProfileEdit extends Component {
                                         </Form.Item>
 
                                         <span>Date of birth</span>
-                                        <Form.Item  name="dateOfBirth">
-                                            <DatePicker format={dateFormat}  />
+                                        <Form.Item name="dateOfBirth">
+                                            <DatePicker style={{width: "100%"}} format={dateFormat}  />
                                         </Form.Item>
                                         
                                         <span>Phone Number</span>
@@ -224,8 +215,8 @@ class ProfileEdit extends Component {
                                         <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
                                     </Form>
                                 </Col>
-                                <Col span="6" offset="11" style={{position:'absolute',top:150}}>
-                                <Space >
+                                <Col span={10} style={{textAlign: "center"}}>
+                                    <Space style={{marginTop: 32}} direction="vertical">
                                 <Upload
                                           name="avatar"
                                          
@@ -235,10 +226,6 @@ class ProfileEdit extends Component {
                                         onChange={this.handleChange}
                                     >
                                         {imgPreview}
-                                    
-                                       <Button style={{position:'relative', right:-20}}>
-                                           Change Avatar
-                                        </Button>
                                     </Upload>
                                     </Space>
                                 </Col>
@@ -247,41 +234,52 @@ class ProfileEdit extends Component {
                         </TabPane>
                         <TabPane tab="Change Password" key="3" style={{ marginTop:20}}   >
                         <span style={{fontWeight: "bold"}}>CHANGE PASSWORD</span>
-                            <Form  onFinish={this.onFinishChangePass} style={{marginTop:32, marginRight:150}} >
+                        <Row>
+                            <Col span={10} offset={4}>
+                            <Form
+                              onFinish={this.onFinishChangePass} 
+                              style={{marginTop:32}} >
                                             <span> Old Password</span>
-                                            <Form.Item  span="6" name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Form.Item  name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
                                             <Input.Password    placeholder="Old Password"  ></Input.Password>
                                             </Form.Item>
 
                                             <span>New Password</span>
-                                            <Form.Item span="6" name="newPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Form.Item name="newPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
                                             <Input.Password   placeholder="New Password"  ></Input.Password>
                                             </Form.Item>
 
                                             <span> Confirm Password</span>
-                                            <Form.Item span="6" name="confPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
+                                            <Form.Item name="confPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
                                             <Input.Password   placeholder="Confirm Password" ></Input.Password>
                                             </Form.Item>
-
-                                            <Button type="primary" htmlType="submit" >Save</Button>
-                                            <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
+                                            
+                                            <Space>
+                                                <Button type="primary" htmlType="submit" >Save</Button>
+                                                <Button type="primary" htmlType="cancel" >Cancel</Button>
+                                            </Space>
                             </Form>
-                        
-                            </TabPane>
-                         <TabPane tab="Settings" key="2" style={{fontSize: 16, marginTop:32}}>
-                             <Row>
-                                <Col>Theme Color</Col>
-                                <Col style={{position:'absolute', right:64}}> <Switch checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
+                        </Col>
+                        <Col span={10}></Col>
+                        </Row>
+                    </TabPane>
+                         <TabPane tab="Settings" key="2" style={{marginTop:20}}>
+                            <span style={{fontWeight: "bold"}}>CHANGE PASSWORD</span>
+                             <Row style={{marginTop: 56}}>
+                                <Col span={20} offset={4}> 
+                                    <span>Notification</span>
+                                    <Switch style={{position:'absolute', right:64}} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} />
+                                </Col>
                              </Row>
-                            <Row>
+                            {/* <Row>
                                 <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
                                   <Button class="changeColor" style={{marginTop:24}}>Color</Button>
                               </Dropdown>
-                            </Row>
+                            </Row> */}
                          </TabPane>
                         
                      </Tabs>
-             </Menu>
+                     </Card>
         
            
         );

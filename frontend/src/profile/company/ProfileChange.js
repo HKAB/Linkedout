@@ -20,7 +20,7 @@ import {
 import Meta from "antd/lib/card/Meta";
 
 
-import { List, Avatar } from "antd";
+import { List, Avatar, Typography } from "antd";
 
 import { studentServices } from "@/services";
 import { accountServices } from "@/services";
@@ -29,11 +29,14 @@ import moment from 'moment';
 import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/index.css'
 
+import '../assets/css/profile.css';
+
 import Markdown from 'braft-extensions/dist/markdown'
 //import Form from "antd/lib/form/Form";
 import {EditableTagGroup} from '@/components';
 
 const { Option } = Select;
+const { Title } = Typography;
 const jobs = [
 	{
 		title: "Tuyển Dev tại facebook.wap.sh",
@@ -179,7 +182,7 @@ class ProfileChange extends Component {
 		);
 		return (
 			<>
-				<Card style={{ marginTop: 24 }} title="Mô tả">
+				<Card className="card-info" style={{ marginTop: 24 }} title={<Title level={3}>Mô tả</Title>}>
 					<BraftEditor 
 						language="en"
 						value={editorState}
@@ -189,10 +192,11 @@ class ProfileChange extends Component {
 				</Card>
 
 				<Card
+					className="card-info"
 					style={{
 						marginTop: 24,
 					}}>
-					<Meta title="Việc làm"></Meta>
+					<Meta title={<Title level={3}>Việc làm</Title>}></Meta>
 					<List
 						grid={{ gutter: 24, column: 2 }}
 						dataSource={jobs}
@@ -386,7 +390,7 @@ class ProfileChange extends Component {
 						</Form.Item>
 					</Form>
 				</Modal>
-				<Card style={{ marginTop: 24 }}>
+				<Card className="card-info" style={{ marginTop: 24 }}>
 					<Upload
 						//action ???
 						listType="picture-card"

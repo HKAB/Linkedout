@@ -6,6 +6,7 @@ import { MyHeader } from "@/components"
 import { Layout, Spin } from 'antd';
 import { accountServices } from "@/services"
 
+import './assets/css/profile.css';
 
 function Profile() {
 
@@ -24,6 +25,7 @@ function Profile() {
 			<MyHeader />
 			<Layout>
 				{/* {profileRender} */}
+				{/* <ProfileTabCompany /> */}
 				<ProfileTabStudent />
 			</Layout>
 		</Layout>
