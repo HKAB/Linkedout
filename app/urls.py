@@ -9,8 +9,9 @@ from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, Pho
 from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
 from app.views.experience import ExperienceListView, ExperienceCreateView, ExperienceUpdateView, ExperienceDeleteView
 from app.views.job import JobGetView, JobListView, JobCreateView, JobUpdateView, JobDeleteView
-from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView, SpecialtyTagView, LocationTagView
 from app.views.post import PostListView, PostCreateView, PostUpdateView, PostDeleteView
+from app.views.interest import InterestCheckView, InterestCreateView, InterestDeleteView, InterestCountView, AccountInterestedView, PostInterestedView
+from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView, SpecialtyTagView, LocationTagView
 account_patterns = [
     path('login', LoginView.as_view()),
     path('register', RegisterView.as_view()),
@@ -73,6 +74,22 @@ job_patterns = [
     path('delete', JobDeleteView.as_view()),
 ]
 
+post_patterns = [
+    path('list', PostListView.as_view()),
+    path('create', PostCreateView.as_view()),
+    path('update', PostUpdateView.as_view()),
+    path('delete', PostDeleteView.as_view()),
+]
+
+interest_patterns = [
+    path('check', InterestCheckView.as_view()),
+    path('create', InterestCreateView.as_view()),
+    path('delete', InterestDeleteView.as_view()),
+    path('count', InterestCountView.as_view()),
+    path('account_interested', AccountInterestedView.as_view()),
+    path('post_interested', PostInterestedView.as_view()),
+]
+
 tag_patterns = [
     path('skill', SkillTagView.as_view()),
     path('title', TitleTagView.as_view()),
@@ -81,12 +98,7 @@ tag_patterns = [
     path('specialty', SpecialtyTagView.as_view()),
     path('location', LocationTagView.as_view()),
 ]
-post_patterns = [
-    path('list', PostListView.as_view()),
-    path('create', PostCreateView.as_view()),
-    path('update', PostUpdateView.as_view()),
-    path('delete', PostDeleteView.as_view()),
-]
+
 urlpatterns = [
     path('account/', include((account_patterns, 'account'))),
     path('student/', include((student_patterns, 'student'))),
@@ -97,7 +109,7 @@ urlpatterns = [
     path('education/', include((education_patterns, 'education'))),
     path('experience/', include((experience_patterns, 'experience'))),
     path('job/', include((job_patterns, 'job'))),
-    path('tag/', include((tag_patterns, 'tag'))),
     path('post/', include((post_patterns, 'post'))),
-
+    path('interest/', include((interest_patterns, 'interest'))),
+    path('tag/', include((tag_patterns, 'tag'))),
 ]
