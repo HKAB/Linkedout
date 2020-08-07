@@ -14,7 +14,7 @@ function createPhone(phone) {
 	return fetchWrapper.post(`http://127.0.0.1:8000/api/phone/create`, {phone})
 }
 
-function updatePhone(old_phone, new_phone) {
+function updatePhone(old_phone="", new_phone) {
 	return fetchWrapper.put(`http://127.0.0.1:8000/api/phone/update`, {old_phone, new_phone})
 }
 

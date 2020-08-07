@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Component } from 'react';
 import { Spin, Layout, Statistic, Carousel, Avatar, Progress, Divider, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty, Tag } from 'antd';
 
@@ -12,6 +12,7 @@ import pic1 from '../assets/images/abc.jpg'
 import pic2 from '../assets/images/xyz.jpg'
 
 import { accountServices } from "@/services"
+import { companyServices } from "@/services"
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -70,31 +71,36 @@ const centerInRowStyle = {
   margin: "auto"
 }
 
-class ProfileContent extends Component {
+function ProfileContent() {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-		isLoading: true
-    }
-  }
+  const [isLoading, setIsLoading] = useState(true);
 
-  componentDidMount() {
-	this.setState({isLoading: false});
-    let user = accountServices.userValue;
+  useEffect(() =>  {
+	setIsLoading(false);
+	let user = accountServices.userValue;
+	console.log(user);
     if (user) {
-        // studentServices.getStudent(user.account.id);
-        // studentServices.studentObject.subscribe((student) => {
-		//   if (student) {
-		//   }
-	    // });
+		let company = companyServices.companyObject;
+		// console.log(company);
+		// console.log(user.account.id);
+		companyServices.getCompany(user.account.id);
+        const subscription = companyServices.companyObject.subscribe((company) => {
+		  if (company) {
+			  console.log(company);
+		  }
+		});
+		
+		return () => {
+			subscription.unsubscribe();
+		}
     }
     else {
       console.log("Oh no!");
     }
-  }
-  render() {
-	  if (this.state.isLoading) {
+  }, [])
+
+
+	  if (isLoading) {
 		  return (
 			<Spin />
 		  );
@@ -219,6 +225,5 @@ class ProfileContent extends Component {
 			</Card>
 		</>
 		)}
-	}
 }
 export { ProfileContent };

@@ -10,30 +10,30 @@ import './assets/css/profile.css';
 
 function Profile() {
 
-	// const user = accountServices.userValue;
+	const user = accountServices.userValue;
 
-	// var profileRender = (<Spin></Spin>);
-	// if (user)
-	// {
-	// 	if (user.account.account_type == "student")
-	// 		profileRender = (<ProfileTabStudent/>);
-	// 	else
-	// 		profileRender = (<ProfileTabCompany/>);
+	var profileRender = (<Spin></Spin>);
+	if (user)
+	{
+		if (user.account.account_type == "student")
+			profileRender = (<ProfileTabStudent/>);
+		else
+			profileRender = (<ProfileTabCompany/>);
 
 	return (
 		<Layout>
 			<MyHeader />
 			<Layout>
-				{/* {profileRender} */}
+				{profileRender}
 				{/* <ProfileTabCompany /> */}
-				<ProfileTabStudent />
+				{/* <ProfileTabStudent /> */}
 			</Layout>
 		</Layout>
 	);
-	// }
-	// return (
-	// 	<Spin></Spin>
-	// );
+	}
+	return (
+		<Spin></Spin>
+	);
 }
 
 export { Profile }

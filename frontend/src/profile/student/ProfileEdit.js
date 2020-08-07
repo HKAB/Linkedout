@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Component } from 'react';
 import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space,message, DatePicker, Modal, Card} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd';
@@ -42,55 +42,51 @@ const color = (
         return isJpgOrPng && isLt2M;
       }
 
-class ProfileEdit extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            disabled: false,
-            basic_profile_data: {},
-            email_data: [],
-            phone_data: [],
-            loading: false,
-            imageUrl:null,
-        }
-        this.formRef = React.createRef();   
-    }
-   
+function ProfileEdit(){
 
-    handleChangeAvatar = info => {
-       
-          getBase64(info.file.originFileObj, picture =>
-            this.setState({
-              imageUrl:picture,
-              loading: false,
-            }),
+    const [disabled, setDisabled] = useState([]);
+    const [basicProfileData, setBasicProfileData] = useState([]);
+    const [emailData, setEmailData] = useState([]);
+    const [phoneData, setPhoneData] = useState([]);
+    const [loading, setLoading] = useState([]);
+    const [imageUrl, setImageUrl] = useState("");
+   
+    const [formEditBasicInfo] = Form.useForm();
+
+    const handleChangeAvatar = info => {
+          getBase64(info.file.originFileObj, picture => 
+            setImageUrl(picture)
           );
       };
       
-    componentDidMount() {
+    useEffect(() => {
         let user = accountServices.userValue;
         if (user) {
           studentServices.getStudent(user.account.id);
-          studentServices.studentObject.subscribe((student) => {
+          const subscription = studentServices.studentObject.subscribe((student) => {
               if (student) {
-                this.setState({basic_profile_data: student.basic_data});
-                this.setState({email_data: student.email});
-                this.setState({phone_data: student.phone});
-                if (this.formRef.current) this.formRef.current.resetFields();
+                student.basic_data.profile_picture = "http://127.0.0.1:8000" + student.basic_data.profile_picture;
+                setBasicProfileData(student.basic_data);
+                setEmailData(student.email);
+                setPhoneData(student.phone);
+                // if (formRef.current) formRef.current.resetFields();
+                console.log(basicProfileData)
+                formEditBasicInfo.resetFields();
               }
           });
+          return () => {
+			    subscription.unsubscribe();
+		    }
         }
         else {
           console.log("Oh no!");
         }
-      }
+      }, [])
 
-    changeDisabled = () =>{
-        this.setState({
-            disabled: !this.state.disabled,
-          });
+      const changeDisabled = () =>{
+          setDisabled(!disabled);
         }
-    editProfileStudent = values =>{
+    const editProfileStudent = values =>{
         console.log(values);
         studentServices.updateBasicStudent(
             values.firstName,
@@ -107,24 +103,38 @@ class ProfileEdit extends Component {
             Modal.error({ title: "uWu", content: error });
           });
 
-
-        studentServices
-        .updateStudentPhone(
-            this.state.phone_data[0],
-            values.phoneNumber,
-        )
-        .then(() => {
-            studentServices.getStudent(accountServices.userValue.account.id);
-            Modal.success({ title: "uWu", content: "Phone updated!" });
-          })
-          .catch((error) => {
-            console.log(error);
-            Modal.error({ title: "uWu", content: error });
-          });
+        if (!phoneData[0]){
+            studentServices.createStudentPhone(
+                values.phoneNumber
+            )
+            .then(() => {
+                studentServices.getStudent(accountServices.userValue.account.id);
+                Modal.success({ title: "uWu", content: "Phone updated!" });
+              })
+              .catch((error) => {
+                console.log(error);
+                Modal.error({ title: "uWu", content: error });
+              });
+        }
+        else {
+            studentServices
+            .updateStudentPhone(
+                phoneData[0],
+                values.phoneNumber,
+            )
+            .then(() => {
+                studentServices.getStudent(accountServices.userValue.account.id);
+                Modal.success({ title: "uWu", content: "Phone updated!" });
+            })
+            .catch((error) => {
+                console.log(error);
+                Modal.error({ title: "uWu", content: error });
+            });
+        }
 
         studentServices
         .updateStudentEmail(
-            this.state.email_data[0],
+            emailData[0],
             values.email,
         )
         .then(() => {
@@ -137,7 +147,7 @@ class ProfileEdit extends Component {
         
         
     }
-    onFinishChangePass = values =>{
+    const onFinishChangePass = values =>{
         console.log(values.newPass, values.oldPass);
             if (values.newPass!==values.confPass){
                 Modal.error({title: "╯︿╰", content: 'Password not match!'});
@@ -151,16 +161,18 @@ class ProfileEdit extends Component {
                 })
             }
         }
-    render()
-    {
-        let imgPreview;
-        if (this.state.imageUrl!=null) {
-            imgPreview = <Avatar style={{width: 180, height: 180, marginBottom:10}} src={this.state.imageUrl} alt=''></Avatar>
-        }
-        else 
-        {
-            imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} ></Avatar>
-        }
+
+
+        // let imgPreview;
+        // if (imageUrl!=null) {
+        //     imgPreview = <Avatar style={{width: 180, height: 180, marginBottom:10}} src={imageUrl} alt=''></Avatar>
+        // }
+        // else 
+        // {
+        //     imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + basicProfileData.profile_picture} ></Avatar>
+        // }
+
+        
         return(
                     <Card style={{marginTop: "10vh", minHeight: "60vh"}}>
                     <Tabs tabPosition="left" style={{marginLeft:24}}>
@@ -170,16 +182,18 @@ class ProfileEdit extends Component {
                             
                                 <Col span={10} offset={4}>
                                     <Form 
-                                    ref={this.formRef} 
-                                    onFinish={this.editProfileStudent} 
-                                    style={{marginTop:32}} 
-                                    initialValues={{firstName: this.state.basic_profile_data.firstname,
-                                                    lastName: this.state.basic_profile_data.lastname,
-                                                    email: this.state.email_data[0],
-                                                    dateOfBirth: moment(this.state.basic_profile_data.dateofbirth, dateFormat),
-                                                    phoneNumber: this.state.phone_data[0],
-                                                    description: this.state.basic_profile_data.description
-                                                }}
+                                    // ref={formRef}
+                                    form = {formEditBasicInfo}
+                                    onFinish={editProfileStudent} 
+                                    style={{marginTop:32}}
+                                    initialValues={{
+                                        firstName: basicProfileData.firstname,
+                                        lastName: basicProfileData.lastname,
+                                        email: emailData[0],
+                                        dateOfBirth: moment(basicProfileData.dateofbirth, dateFormat),
+                                        phoneNumber: phoneData[0],
+                                        description: basicProfileData.description
+                                    }}
                                     >
                                         
                                         <span>First Name</span>
@@ -222,10 +236,10 @@ class ProfileEdit extends Component {
                                         className="avatar-uploader"
                                         showUploadList={false}
                                         beforeUpload={beforeUpload}
-                                        onChange={this.handleChangeAvatar}
+                                        onChange={handleChangeAvatar}
 
                                     >
-                                        {imgPreview}
+                                        <Avatar style={{width: 180, height: 180, marginBottom:10}} src={imageUrl?imageUrl:basicProfileData.profile_picture} alt=''></Avatar>
                                     </Upload>
                                  </Space>
                                 </Col>
@@ -237,7 +251,7 @@ class ProfileEdit extends Component {
                         <Row>
                             <Col span={10} offset={4}>
                             <Form
-                              onFinish={this.onFinishChangePass} 
+                              onFinish={onFinishChangePass} 
                               style={{marginTop:32}} >
                                             <span> Old Password</span>
                                             <Form.Item  name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
@@ -268,11 +282,11 @@ class ProfileEdit extends Component {
                              <Row style={{marginTop: 56}}>
                                 <Col span={20} offset={4}> 
                                     <span>Notification</span>
-                                    <Switch style={{position:'absolute', right:64}} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} />
+                                    <Switch style={{position:'absolute', right:64}} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={changeDisabled} />
                                 </Col>
                              </Row>
                             {/* <Row>
-                                <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
+                                <Dropdown disabled={disabled} overlay={color} placement="bottomCenter" >
                                   <Button class="changeColor" style={{marginTop:24}}>Color</Button>
                               </Dropdown>
                             </Row> */}
@@ -283,7 +297,6 @@ class ProfileEdit extends Component {
         
            
         );
-    }
 }
  
 export {ProfileEdit};

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Component } from "react";
 import {
   EditOutlined,
@@ -21,7 +21,8 @@ import {
   Modal,
   Popconfirm,
   Empty,
-  Typography
+  Typography,
+  AutoComplete
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
@@ -29,13 +30,14 @@ import { List, Avatar } from "antd";
 
 import { studentServices } from "@/services";
 import { accountServices } from "@/services";
+import { getCompanyName, getSchoolName, getSkillName } from "@/services";
+
 import dayjs from "dayjs";
 import moment from 'moment';
 
 const {Title} = Typography;
-var addExperienceRef = React.createRef();
-var addEducationRef = React.createRef();
-var addSkillRef = React.createRef();
+
+const dateFormat = 'YYYY-MM-DD';
 
 const onAddExperienceFinish = (values) => {
 
@@ -51,7 +53,7 @@ const onAddExperienceFinish = (values) => {
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
       Modal.success({ title: "uWu", content: "Experience created!" });
-      addExperienceRef.current.resetFields();
+      // this.formExperienceRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
@@ -70,7 +72,6 @@ const onAddSkillFinish = (values) => {
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
       Modal.success({ title: "uWu", content: "Student skill created!" });
-      addSkillRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
@@ -118,7 +119,6 @@ const onAddEducationFinish = (values) => {
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
       Modal.success({ title: "uWu", content: "Done creating " +  education_info.schoolname});
-      addEducationRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
@@ -160,64 +160,129 @@ const onConfirmDeleteSkill = (skill) => {
     });
 }
 
-class ProfileChange extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      experience_data: [],
-      education_data: [],
-      education_element: [],
-      skill_data: [],
-      //for modal
-      visible: false,
-      selected_experience_item: {},
-      selected_skill: {}
-    };
-    this.formRef = React.createRef();
-    //this.addExperienceRef = React.createRef();
-  }
+function ProfileChange() {
+
+  const [experienceData, setExperienceData] = useState([]);
+  const [educationData, setEducationData] = useState([]);
+  const [educationElement, setEducationElement] = useState([]);
+  const [skillData, setSkillData] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [selectedExperienceItem, setSelectedExperienceItem] = useState({});
+  const [selectedSkill, setSelectedSkill] = useState({});
+  const [autoCompleteCompany, setAutoCompleteCompany] = useState([]);
+  const [autoCompleteSchool, setAutoCompleteSchool] = useState([]);
+  const [autoCompleteSkill, setAutoCompleteSkill] = useState([]);
+
+
+	// handle form
+	const [formEditExperience] = Form.useForm();
 
   // handle modal
-  showModal = () => {
-    this.setState({ visible: true });
+  const showModal = () => {
+    setVisible(true)
   };
 
-  onSaveExperience = (fieldsValue) => {
+  const onSaveExperience = (fieldsValue) => {
     console.log(fieldsValue);
     // TODO: handle request here!!
-    this.setState({ visible: false });
+    setVisible(false)
   };
 
-  handleCancel = (e) => {
-    this.setState({ visible: false });
+  const handleCancel = (e) => {
+    setVisible(false)
   };
 
   // modify experience list item
-  onModify = (item) => {
-    console.log(item);
-    //this.formRef.current.resetFields();
-    this.setState({ selected_experience_item: item });
-    this.formRef.current.setFieldsValue({
-      company_name: item.company_name,
-      title: item.title,
-      description: item.description,
-      id: item.id
-    });
-    this.showModal();
+  const onModify = (item) => {
+	console.log(item);
+	
+	formEditExperience.setFieldsValue({
+		company_name: item.company_name,
+		title: item.title,
+		start_date: moment(item.start_date, dateFormat),
+		end_date: moment(item.end_date, dateFormat),
+		description: item.description,
+		id: item.id
+	  });
+
+    setSelectedExperienceItem(item);
+    showModal();
   };
 
-  componentDidMount() {
-    studentServices.studentObject.subscribe((student) => {
+
+  // handle auto complete
+	const onChangeAutocompleteCompany = (text) => {
+		if (text)
+		{
+			getCompanyName(text).then( data => {
+				console.log(data);
+				if (data)
+				{
+					var data_name = data.map(x => ({value: x.name}));
+					setAutoCompleteCompany(data_name);
+				}
+			})
+			.catch(error => {
+				alert(error);
+			})
+		}
+		else {
+			setAutoCompleteCompany([]);
+		}
+	};
+
+	const onChangeAutocompleteSchool = (text) => {
+		if (text)
+		{
+			getSchoolName(text).then( data => {
+				console.log(data);
+				if (data)
+				{
+					var data_name = data.map(x => ({value: x.name}));
+					setAutoCompleteSchool(data_name);
+				}
+			})
+			.catch(error => {
+				alert(error);
+			})
+		}
+		else {
+			setAutoCompleteSchool([]);
+		}
+	};
+
+	const onChangeAutocompleteSkill = (text) => {
+		if (text)
+		{
+			getSkillName(text).then( data => {
+				console.log(data.tag);
+				if (data)
+				{
+					var data_name = data.tag.map(x => ({value: x}));
+					setAutoCompleteSkill(data_name);
+				}
+			})
+			.catch(error => {
+				alert(error);
+			})
+		}
+		else {
+			setAutoCompleteSkill([]);
+		}
+	};
+
+  useEffect(() =>  {
+    const subscription = studentServices.studentObject.subscribe((student) => {
       if (student) {
         console.log("updateee");
-        this.setState({ experience_data: student.experience });
-        this.setState({ education_data: student.education });
-        this.setState({ skill_data: student.skill });
+        setExperienceData(student.experience);
+        setEducationData(student.education);
+        setSkillData(student.skill);
 
         var timeline_element = [];
 
         student.education.forEach((item) => {
-          timeline_element.push(
+          timeline_element.push((
             <Timeline.Item key={item.id} label={item.start_date + " - " + item.end_date}>
               <div>
                 <b>{item.school_name}</b>
@@ -236,23 +301,28 @@ class ProfileChange extends Component {
                 />
               </Popconfirm>
             </Timeline.Item>
-          );
-        });
-        this.setState({ education_element: timeline_element });
+          ));
+		});
+		console.log("timeline_element");
+        console.log(timeline_element);
+        setEducationElement(timeline_element);
       }
-    });
-  }
+	});
+	
+	return () => {
+		subscription.unsubscribe();
+	}
+  }, [])
 
-  render() {
     return (
       <>
         <Modal 
           forceRender 
           title="Đổi thông tin" 
-          visible={this.state.visible} 
-          onCancel={this.handleCancel}
+          visible={visible} 
+          onCancel={handleCancel}
           onOk={() => {
-            this.formRef.current.validateFields()
+            formEditExperience.validateFields()
               .then(values => {
                 console.log(values);
                 onEditExperience(values);
@@ -261,22 +331,13 @@ class ProfileChange extends Component {
                 console.log(info);
               })
           }}
-        //     footer={[
-        //       <Button
-        //         type="primary"
-        //         key="submit"
-        //         form="experience-edit"
-        //         htmlType="submit"
-        //       >
-        //         Save
-        //       </Button>,
-        // ]}
         >
           <Form
+		  	form={formEditExperience}
             id="experience-edit"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
-            ref={this.formRef}
+            // ref={this.formRef}
           >
             <Form.Item
               initialValue="abc"
@@ -329,7 +390,7 @@ class ProfileChange extends Component {
           <List
             style={{ marginTop: 24 }}
             itemLayout="horizontal"
-            dataSource={this.state.experience_data}
+            dataSource={experienceData}
             renderItem={(item) => (
               <List.Item key={item.id}>
                 <List.Item.Meta
@@ -353,7 +414,7 @@ class ProfileChange extends Component {
                 <Button
                   type="dashed"
                   shape="circle"
-                  onClick={() => this.onModify(item)}
+                  onClick={() => onModify(item)}
                   icon={<EditOutlined />}
                 />
                 
@@ -379,7 +440,7 @@ class ProfileChange extends Component {
               name="add-experience"
               autoComplete="off"
               onFinish={onAddExperienceFinish}
-              ref = {addExperienceRef}
+              // ref = {this.formExperienceRef}
             >
               <Form.List name="experience_info">
                 {(fields, { add, remove }) => {
@@ -396,12 +457,12 @@ class ProfileChange extends Component {
                           align="start"
                         >
                           <Form.Item
-                            {...field}
+							{...field}
                             name={[field.name, "company_name"]}
                             fieldKey={[field.fieldKey, "company_name"]}
-                            rules={[{required: true, message: "Missing company name",},]}
+							rules={[{required: true, message: "Missing company name",}]}
                           >
-                            <Input placeholder="Company Name" />
+							<AutoComplete style={{width: 200}} options={autoCompleteCompany} onChange={onChangeAutocompleteCompany} placeholder="Tên công ty" ></AutoComplete>
                           </Form.Item>
 
                           <Form.Item
@@ -478,14 +539,13 @@ class ProfileChange extends Component {
           <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
           
           <Timeline mode="left" style={{ marginTop: 24 }}>
-          {this.state.education_element}
+          	{educationElement}
           </Timeline>
           
           <Form 
             name="add-education" 
             autoComplete="off" 
             onFinish={onAddEducationFinish}
-            ref = {addEducationRef}
           >
             <Form.List name="education_info">
               {(fields, { add, remove }) => {
@@ -507,7 +567,8 @@ class ProfileChange extends Component {
                           fieldKey={[field.fieldKey, "schoolname"]}
                           rules={[{ required: true, message: "Missing school name" },]}
                         >
-                          <Input placeholder="School Name" />
+                          {/* <Input placeholder="School Name" /> */}
+						  <AutoComplete style={{width: 200}} options={autoCompleteSchool} onChange={onChangeAutocompleteSchool} placeholder="Tên trường" ></AutoComplete>
                         </Form.Item>
 
                         <Form.Item
@@ -581,7 +642,7 @@ class ProfileChange extends Component {
           <List
             style={{ marginTop: 24 }}
             grid={{ column: 2 }}
-            dataSource={this.state.skill_data}
+            dataSource={skillData}
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
@@ -610,7 +671,6 @@ class ProfileChange extends Component {
             name="add-skill" 
             autoComplete="off" 
             onFinish={onAddSkillFinish}
-            ref = {addSkillRef}
           >
             <Form.List name="skill_info">
               {(fields, { add, remove }) => {
@@ -632,7 +692,9 @@ class ProfileChange extends Component {
                           fieldKey={[field.fieldKey, "skill_name"]}
                           rules={[{ required: true, message: "Missing skill name" },]}
                         >
-                          <Input placeholder="Skill Name" />
+                          {/* <Input placeholder="Skill Name" /> */}
+						  <AutoComplete style={{width: 100}} options={autoCompleteSkill} onChange={onChangeAutocompleteSkill} placeholder="Tên kỹ năng" ></AutoComplete>
+						  
                         </Form.Item>
 
                         <MinusCircleOutlined
@@ -665,7 +727,6 @@ class ProfileChange extends Component {
         </Card>
       </>
     );
-  }
 }
 
 export default ProfileChange;

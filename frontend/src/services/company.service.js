@@ -10,12 +10,12 @@ import { listJob } from "./job.service";
 
 const companyObject = new BehaviorSubject(null);
 
-function getCompany (company_id, account_id) {
+function getCompany (account_id) {
     let company_email = getEmail(account_id);
     let company_phone = getPhone(account_id);    
     let list_job = listJob(account_id);
     // TODO: Handle error here!
-    let company_basic = fetchWrapper.get(`http://127.0.0.1:8000/api/company/get?id=${company_id}`);
+    let company_basic = fetchWrapper.get(`http://127.0.0.1:8000/api/company/get?id=${account_id}`);
     // {
     //     "name": "Facebook",
     //     "website": "facebook.com",
@@ -52,7 +52,12 @@ function getCompany (company_id, account_id) {
 
 // basic info of company
 function createBasicCompany (name, website, specialties, description) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/company/create`, {name, website, specialties, description})
+    return fetchWrapper.post(`http://127.0.0.1:8000/api/company/create`, {name, website, specialties, description})
+    .catch((error) =>
+    {
+        console.log(error);
+        return {};
+    });
 }
 
 function updateBasicCompany (name, website, specialties, description) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Component } from "react";
 import {
 	EditOutlined,
@@ -22,7 +22,6 @@ import Meta from "antd/lib/card/Meta";
 
 import { List, Avatar, Typography } from "antd";
 
-import { studentServices } from "@/services";
 import { accountServices } from "@/services";
 import dayjs from "dayjs";
 import moment from 'moment';
@@ -79,69 +78,53 @@ function getBase64(file) {
 	});
 }
 
-class ProfileChange extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			visible: false,
-			//create and edit job
-			createJob_visible:false,
-			editJob_visible:false,
-			editorState:null,
-			//editor
-			outputHTML:null,
-			//upload image
-			previewVisible: false,
-    		previewImage: "",
-    		previewTitle: "",
-    		fileList: [],
-		};
-		this.editFormRef = React.createRef();
-	}
+function ProfileChange() {
 
-	componentDidMount() {
-		studentServices.studentObject.subscribe((student) => {
-			if (student) {
+	const [visible, setVisible] = useState(false);
+	const [createJob_visible, setCreateJob_visible] = useState(false);
+	const [editJob_visible, setEditJob_visible] = useState(false);
+	const [editorState, setEditorState] = useState(null);
+	const [outputHTML, setOutputHTML] = useState(null);
+	const [previewVisible, setPreviewVisible] = useState(false);
+	const [previewImage, setPreviewImage] = useState("");
+	const [previewTitle, setPreviewTitle] = useState("");
+	const [fileList, setfileList] = useState([]);
 
-			}
-		});
-	}
+	const [formEdit] = Form.useForm();
 	
-	handleEditorChange = (editorState) => {
-		this.setState({
-			editorState: editorState,
-			//outputHTML: editorState.toHTML()
-		})
-		//console.log(this.state.outputHTML);	
+	const handleEditorChange = (editorState) => {
+		setEditorState(editorState);
+		//outputHTML: editorState.toHTML()
+		//console.log(state.outputHTML);	
 	}
-	onEditorFinish = () =>{
-		this.setState({outputHTML: this.state.editorState.toHTML()});
-		console.log(this.state.outputHTML);
+	const onEditorFinish = () =>{
+		setOutputHTML(editorState.toHTML());
+		// console.log(state.outputHTML);
 	};
 
-	handleCancel = (e) => {
-		this.setState({ visible: false });
+	const handleCancel = (e) => {
+		setVisible(false);
 	};
 
-	showCreateJobModal = () => {
-		this.setState({ createJob_visible: true });
+	const showCreateJobModal = () => {
+		setCreateJob_visible(true);
 	};
 
-	handleCreateJobCancel = (e) => {
-		this.setState({ createJob_visible: false });
+	const handleCreateJobCancel = (e) => {
+		setCreateJob_visible(false);
 	};
 
-	showEditJobModal = () => {
-		this.setState({ editJob_visible: true });
+	const showEditJobModal = () => {
+		setEditJob_visible(true);
 	};
 
-	handleEditJobCancel = (e) => {
-		this.setState({ editJob_visible: false });
+	const handleEditJobCancel = (e) => {
+		setEditJob_visible(false);
 	};
 
-	onJobModify = (item) => {
+	const onJobModify = (item) => {
 		console.log(item);
-		this.editFormRef.current.setFieldsValue({
+		formEdit.setFieldsValue({
 			editjobtitle: item.title,
 			editsenioritylevel: item.seniority_level,
 			editcity: item.cities,
@@ -150,30 +133,32 @@ class ProfileChange extends Component {
 			editrecruitmenturl: item.recruitment_url,
 		});
 		//EditTag.setState({tags: item.skills});
-		this.editTags.setTags(item.skills);
-		this.showEditJobModal();
+		// editTags.setTags(item.skills);
+		showEditJobModal();
 	};
 	
-	handlePreviewCancel = () => this.setState({ previewVisible: false });
+	const handlePreviewCancel = () => setPreviewVisible(false);
 
-	handlePreview = async file => {
+	const handlePreview = async file => {
 	  if (!file.url && !file.preview) {
 		file.preview = await getBase64(file.originFileObj);
 	  }
   
-	  this.setState({
-		previewImage: file.url || file.preview,
-		previewVisible: true,
-		previewTitle:
-		  file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-	  });
+	//   setState({
+	// 	previewImage: file.url || file.preview,
+	// 	previewVisible: true,
+	// 	previewTitle:
+	// 	  file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+	//   });
+	  setPreviewImage(file.url || file.preview);
+	  setPreviewVisible(true);
+	  setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf("/") + 1));
 	};
   
-	handleUploadChange = ({ fileList }) => this.setState({ fileList });
+	const handleUploadChange = ({ fileList }) => {
+		// setState({ fileList });
+	}
 
-	render() {
-		const { editorState, outputHTML } = this.state;
-		const { previewVisible, previewImage, fileList, previewTitle } = this.state;
 		const uploadButton = (
 			<div>
 			  <PlusOutlined />
@@ -186,9 +171,9 @@ class ProfileChange extends Component {
 					<BraftEditor 
 						language="en"
 						value={editorState}
-						onChange={this.handleEditorChange}
+						onChange={handleEditorChange}
 					/>
-					<Button type ="primary" htmlType="submit" onClick={()=>this.onEditorFinish()}>Save</Button>
+					<Button type ="primary" htmlType="submit" onClick={()=>onEditorFinish()}>Save</Button>
 				</Card>
 
 				<Card
@@ -206,7 +191,7 @@ class ProfileChange extends Component {
 									style={{ marginTop: 16 }}
 									actions={[
 										<SettingOutlined key="setting" />,
-										<EditOutlined key="edit" onClick={() => this.onJobModify(item)}/>,
+										<EditOutlined key="edit" onClick={() => onJobModify(item)}/>,
 									]}
 								>
 									<Meta
@@ -223,14 +208,14 @@ class ProfileChange extends Component {
 							</List.Item>
 						)}>
 					</List>
-					<Button style={{ float: "right" }} size="large" type="primary" shape="circle" onClick={()=>this.showCreateJobModal()}>+</Button>
+					<Button style={{ float: "right" }} size="large" type="primary" shape="circle" onClick={()=>showCreateJobModal()}>+</Button>
 				</Card>
 				
 				<Modal
 					forceRender
 					title="Tạo việc làm"
-					visible={this.state.createJob_visible}
-					onCancel={this.handleCreateJobCancel}
+					visible={createJob_visible}
+					onCancel={handleCreateJobCancel}
 				>
 					<Form
 						id = "createJob"
@@ -307,14 +292,14 @@ class ProfileChange extends Component {
 				<Modal
 					forceRender
 					title = "Chỉnh sửa việc làm"
-					visible = {this.state.editJob_visible}
-					onCancel = {this.handleEditJobCancel}
+					visible = {editJob_visible}
+					onCancel = {handleEditJobCancel}
 				>
 					<Form
 						id = "editJob"
 						labelCol={{ span: 6 }}
 						wrapperCol={{ span: 18 }}
-						ref = {this.editFormRef}
+						form = {formEdit}
 					>
 						<Form.Item
 							initialValue="title"
@@ -379,15 +364,15 @@ class ProfileChange extends Component {
 							<Input />
 						</Form.Item>
 
-						<Form.Item
+						{/* <Form.Item
 							initialValue="skill"
 							label="Skill:"
 							name="editskill"
 							rules={[{ required: true, message: "Skill is required!" }]}
 						>
-							{/* <EditTag/> */}
-							<EditableTagGroup ref={ref => (this.editTags = ref)} />
-						</Form.Item>
+							<EditTag/>
+							<EditableTagGroup ref={ref => (editTags = ref)} />
+						</Form.Item> */}
 					</Form>
 				</Modal>
 				<Card className="card-info" style={{ marginTop: 24 }}>
@@ -395,8 +380,8 @@ class ProfileChange extends Component {
 						//action ???
 						listType="picture-card"
 						fileList={fileList}
-						onPreview={this.handlePreview}
-						onChange={this.handleUploadChange}
+						onPreview={handlePreview}
+						onChange={handleUploadChange}
 					>
 						{/* max number of image upload */}
 						{fileList.length >= 8 ? null : uploadButton} 
@@ -405,14 +390,14 @@ class ProfileChange extends Component {
 						visible={previewVisible}
 						title={previewTitle}
 						footer={null}
-						onCancel={this.handlePreviewCancel}
+						onCancel={handlePreviewCancel}
 					>
 						<img alt="example" style={{ width: "100%" }} src={previewImage} />
 					</Modal>
 				</Card>
 			</>
 		);
-	}
+	
 }
 
 export default ProfileChange;

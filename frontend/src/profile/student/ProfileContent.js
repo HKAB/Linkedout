@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Component } from 'react';
 import { Spin, Layout, Typography, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
 
@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 
 const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
-const follow_data = [
+const followData = [
   {
     avatar: 'https://image.flaticon.com/icons/svg/1532/1532495.svg',
     title_href: 'https://ant.design',
@@ -42,87 +42,89 @@ const follow_data = [
   },
 ];
 
-class ProfileContent extends Component {
+function ProfileContent() {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      basic_profile_data: {},
-      experience_data: [],
-      follow_data: {},
-      skill_data: [],
-      education_data: [],
-      education_element: [<Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>],
-      phone_data: {},
-      email_data: {},
-      //modal
-      experience_visible:false,
-      education_visible:false,
-      skill_visible:false,
-      // page loading
-      isLoading: false
-    }
-  }
-
-  showExperienceModal = () => {
-    this.setState({ experience_visible: true });
+  const [basicProfileData, setBasicProfileData] = useState([]);
+  const [experienceData, setExperienceData] = useState([]);
+  const [followData, setFollowData] = useState([]);
+  const [skillData, setSkillData] = useState([]);
+  const [educationData, setEducationData] = useState([]);
+  const [educationElement, setEducationElement] = useState([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>]);
+  const [phoneData, setPhoneData] = useState([]);
+  const [emailData, setEmailData] = useState([]);
+  const [experienceVisible, setExperienceVisible] = useState(false);
+  const [educationVisible, setEducationVisible] = useState(false);
+  const [skillVisible, setSkillVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const showExperienceModal = () => {
+    setExperienceVisible(true);
   };
 
-  showEducationModal = () => {
-    this.setState({ education_visible: true });
+  const showEducationModal = () => {
+    setEducationVisible(true);
   };
 
-  showSkillModal = () => {
-    this.setState({ skill_visible: true });
+  const showSkillModal = () => {
+    setSkillVisible(true);
   };
 
-  handleExperienceCancel = (e) => {
-    this.setState({ experience_visible: false });
+  const handleExperienceCancel = (e) => {
+    setExperienceVisible(false);
   };
 
-  handleEducationCancel = (e) => {
-    this.setState({ education_visible: false });
+  const handleEducationCancel = (e) => {
+    setEducationVisible(false);
   };
 
-  handleSkillCancel = (e) => {
-    this.setState({ skill_visible: false });
+  const handleSkillCancel = (e) => {
+    setSkillVisible(false);
   };
 
-  componentDidMount() {
+  useEffect(() => {
 
-	// this.setState({isLoading: true});
+	// setState({isLoading: true});
 
     let user = accountServices.userValue;
     if (user) {
 	  studentServices.getStudent(user.account.id);
-	  studentServices.studentObject.subscribe((student) => {
+	  const subscription = studentServices.studentObject.subscribe((student) => {
 		  if (student) {
-			this.setState({basic_profile_data: student.basic_data});
-			this.setState({experience_data: student.experience});
-			this.setState({education_data: student.education});
-			this.setState({email_data: student.email});
-			this.setState({phone_data: student.phone});
-			this.setState({skill_data: student.skill});
-        console.log(student);
-			var timeline_element = []
-			student.education.forEach(item => {
-				timeline_element.push(<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>);
-			});
-      if (timeline_element.length == 0) this.setState({education_element: [<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]});  
-      // if (this.state.education_data.length == 0) this.setState({education_data : []});
-	  // else this.setState({education_element: timeline_element});
-	  this.setState({isLoading: false});
-      console.log(this.state.education_element);
+        setBasicProfileData(student.basic_data);
+        setExperienceData(student.experience);
+        setEducationData(student.education);
+        setEmailData(student.email);
+        setPhoneData(student.phone);
+        setSkillData(student.skill);
+          console.log(student);
+        var timeline_element = []
+        student.education.forEach(item => {
+          timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
+        });
+		if (timeline_element.length == 0) setEducationElement([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]); 
+		else {
+			setEducationElement(timeline_element); 
+		}
+        // if (educationData.length == 0) setState({educationData : []});
+      // else setState({educationElement: timeline_element});
+      	setIsLoading(false);
+        console.log(educationElement);
 		  }
+
+		  return () => {
+			subscription.unsubscribe();
+		}
     });
-    this.setState({isLoading: false});
+    setIsLoading(false);
     }
     else {
       console.log("Oh no!");
-    }
-  }
-  render() {
-    if (this.state.isLoading) {
+	}
+
+  }, []);
+
+
+    if (isLoading) {
       return (
 		  <Spin/>
 	  );
@@ -138,16 +140,16 @@ class ProfileContent extends Component {
           <Row justify="center">
             <Col textAlign="center">
               <div style={{textAlign: "center"}}>
-                <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} onError={(e)=>{console.log(e);}}></Avatar>
-                <Title level={2} className="user-fullname">{this.state.basic_profile_data.firstname + " " + this.state.basic_profile_data.lastname}</Title>
-                <Text copyable classname="user-quotes">{this.state.basic_profile_data.description}</Text>
+                <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + basicProfileData.profile_picture} onError={(e)=>{console.log(e);}}></Avatar>
+                <Title level={2} className="user-fullname">{basicProfileData.firstname + " " + basicProfileData.lastname}</Title>
+                <Text copyable classname="user-quotes">{basicProfileData.description}</Text>
               </div>
             </Col>
           </Row>
           <Row style={{ marginTop: 32 }}>
-            <Col style={{ textAlign: "center" }} span={8}><MailOutlined /> Email: {this.state.email_data[0]}</Col>
-            <Col style={{ textAlign: "center" }} span={8}><PhoneOutlined /> Phone: {this.state.phone_data[0]}</Col>
-            <Col style={{ textAlign: "center" }} span={8}><ScheduleOutlined /> DoB: {this.state.basic_profile_data.dateofbirth}</Col>
+            <Col style={{ textAlign: "center" }} span={8}><MailOutlined /> Email: {emailData[0]}</Col>
+            <Col style={{ textAlign: "center" }} span={8}><PhoneOutlined /> Phone: {phoneData[0]}</Col>
+            <Col style={{ textAlign: "center" }} span={8}><ScheduleOutlined /> DoB: {basicProfileData.dateofbirth}</Col>
           </Row>
         </Card>
 
@@ -156,19 +158,19 @@ class ProfileContent extends Component {
             <Card className="card-info">
               <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
               <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
-                  {(this.state.education_element)?this.state.education_element.slice(0, 4):null}
+                  {educationElement.slice(0, 4)}
               </Timeline>
               <Button 
                 type = "link" 
                 style = {{float:'right'}} 
-                onClick = {()=>this.showEducationModal()}> Show all <DoubleRightOutlined />
+                onClick = {()=>showEducationModal()}> Show all <DoubleRightOutlined />
               </Button>
             </Card>
 
             <Card className="card-info" style = {{marginTop:24}}>
               <Meta title={<Title level={3}>Theo dõi</Title>}></Meta>
               <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-                dataSource={follow_data}
+                dataSource={followData}
                 renderItem={item => (
                   <List.Item>
                     <List.Item.Meta
@@ -187,7 +189,7 @@ class ProfileContent extends Component {
               <List
                 itemLayout="vertical"
                 style={{ marginTop: 24 }}
-                dataSource={this.state.experience_data.slice(0, 4)}
+                dataSource={experienceData.slice(0, 4)}
                 renderItem={item => (
                   <List.Item>
                     <List.Item.Meta
@@ -204,14 +206,14 @@ class ProfileContent extends Component {
               <Button 
                 type = "link" 
                 style = {{float:'right'}} 
-                onClick = {()=>this.showExperienceModal()}> Show all <DoubleRightOutlined />
+                onClick = {()=>showExperienceModal()}> Show all <DoubleRightOutlined />
               </Button>
             </Card>
 
             <Card className="card-info" style = {{marginTop:24}}>
               <Meta title={<Title level={3}>Kỹ năng</Title>}></Meta>
               <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-                dataSource={this.state.skill_data.slice(0, 6)}
+                dataSource={skillData.slice(0, 6)}
                 renderItem={item => (
                   <List.Item>
                     <List.Item.Meta
@@ -224,7 +226,7 @@ class ProfileContent extends Component {
               <Button 
                 type = "link" 
                 style = {{float:'right'}} 
-                onClick = {()=>this.showSkillModal()}> Show all <DoubleRightOutlined />
+                onClick = {()=>showSkillModal()}> Show all <DoubleRightOutlined />
               </Button>
             </Card>
           </Col>
@@ -234,11 +236,11 @@ class ProfileContent extends Component {
           forceRender
           title="Educations"
           footer = {null}
-          visible={this.state.education_visible}
-          onCancel={this.handleEducationCancel}
+          visible={educationVisible}
+          onCancel={handleEducationCancel}
         >
           <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
-            {this.state.education_element}
+            {educationElement}
           </Timeline>
         </Modal>
 
@@ -246,13 +248,13 @@ class ProfileContent extends Component {
           forceRender
           title="Experiences"
           footer = {null}
-          visible={this.state.experience_visible}
-          onCancel={this.handleExperienceCancel}
+          visible={experienceVisible}
+          onCancel={handleExperienceCancel}
         >
           <List
             itemLayout="vertical"
             style={{ marginTop: 24 }}
-            dataSource={this.state.experience_data}
+            dataSource={experienceData}
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
@@ -272,11 +274,11 @@ class ProfileContent extends Component {
           forceRender
           title="Skills"
           footer = {null}
-          visible={this.state.skill_visible}
-          onCancel={this.handleSkillCancel}
+          visible={skillVisible}
+          onCancel={handleSkillCancel}
         >
           <List style={{ marginTop: 24 }}
-            dataSource={this.state.skill_data}
+            dataSource={skillData}
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
@@ -289,6 +291,5 @@ class ProfileContent extends Component {
         </Modal>
       </>
     )
-  }
 }
 export { ProfileContent };
