@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 
-from app.services.follow import check_follow, create_follow, delete_follow, count_follow, post_followed
+from app.services.follow import check_follow, create_follow, delete_follow, count_follow, company_followed
 
 
 class FollowCheckView(APIView):
@@ -141,5 +141,5 @@ class CompanyFollowedView(APIView):
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        result = post_followed(account=request.user, **serializer.validated_data)
+        result = company_followed(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)

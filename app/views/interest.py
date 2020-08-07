@@ -24,8 +24,7 @@ class InterestCheckView(APIView):
             ref_name = 'InterestCheckOut'
             fields = ['interested']
 
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
     @method_decorator(ensure_csrf_cookie)
