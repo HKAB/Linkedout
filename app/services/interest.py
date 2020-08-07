@@ -4,48 +4,48 @@ from app.models.student import Student
 from app.exceptions import InvalidInputFormat
 
 
-def check(*, account: Account, id: int) -> bool:
+def check_interest(*, account: Account, id: int) -> bool:
     p = Post.objects.filter(id=id).first()
     if not p:
         raise InvalidInputFormat("Post with id {} doesn't exist.".format(id))
-        return False
+        return { 'interested': False }
     else:
         if p.interested_students.filter(account=account).exists():
-            return True
-        return False
+            return { 'interested': True }
+        return { 'interested': False }
 
 
 def create_interest (*, account: Account, id: int) -> bool:
     p = Post.objects.filter(id=id).first()
     if not p:
         raise InvalidInputFormat("Post with id {} doesn't exist.".format(id))
-        return False
+        return { 'interested': False }
 
     student_account = get_student_account(account)
     if p.interested_students.filter(account=student_account).exists():
         raise InvalidInputFormat("User with id {} already interested post with id {}.".format(account.id, id))
     p.interested_students.add(student_account)
-    return True
+    return { 'interested': True }
 
 
 def delete_interest (*, account: Account, id: int) -> bool:
     p = Post.objects.filter(id=id).first()
     if not p:
         raise InvalidInputFormat("Post with id {} doesn't exist.".format(id))
-        return False
+        return { 'interested': False }
 
     student_account = get_student_account(account)
     if not p.interested_students.filter(account=student_account).exists():
-        raise InvalidInputFormat("User with id {} hasn't interest post with id {} yet.".format(account.id, id))
+        raise InvalidInputFormat("User with id {} hasn't interested post with id {} yet.".format(account.id, id))
     p.interested_students.remove(student_account)
-    return False
+    return { 'interested': False }
 
 
 def count_interest (*, account: Account, id: int) -> dict:
     p = Post.objects.filter(id=id).first()
     if not p:
         raise InvalidInputFormat("Post with id {} doesn't exist.".format(id))
-        return 0
+        return { 'count': 0 }
     return {
         'count': p.interested_students.count()
     }

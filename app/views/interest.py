@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 
-from app.services.interest import check, create_interest, delete_interest, count_interest, account_interested, post_interested
+from app.services.interest import check_interest, create_interest, delete_interest, count_interest, account_interested, post_interested
 
 
 class InterestCheckView(APIView):
@@ -32,7 +32,7 @@ class InterestCheckView(APIView):
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        result = check(account=request.user, **serializer.validated_data)
+        result = check_interest(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
