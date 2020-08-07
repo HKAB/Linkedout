@@ -6,6 +6,7 @@ from .skill import Skill
 
 class Post(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    title = models.CharField(max_length=64)
     content = models.TextField(max_length=1024)
     published_date = models.DateField()
 

@@ -1,5 +1,3 @@
-from datetime import date
-
 from app.models.skill import Skill
 from app.models.student import Student
 from app.models.account import Account
