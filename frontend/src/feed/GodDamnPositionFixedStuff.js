@@ -4,6 +4,7 @@ import { StudentProfile } from '@/feed/FeedLeftStuff/StudentProfile';
 import { Col, Row, Space } from 'antd';
 import { FeedFollowSuggestion } from './FeedRightStuff/FeedFollowSuggestion';
 import { FeedItSelf } from './FeedMiddleStuff/FeedItSelf';
+import { FeedJobSuggestion } from './FeedRightStuff/FeedJobsSuggestion';
 
 function GodDamnPositionFixedStuff(props) {
 
@@ -18,6 +19,7 @@ function GodDamnPositionFixedStuff(props) {
         </Col>
         <Col span={4} textAlign="center">
           <FeedFollowSuggestion />
+          <FeedJobSuggestion />
         </Col>
       </Row>
     </>
