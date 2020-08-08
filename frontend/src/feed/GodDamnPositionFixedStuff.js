@@ -18,8 +18,12 @@ function GodDamnPositionFixedStuff(props) {
           <FeedItSelf />
         </Col>
         <Col span={4} textAlign="center">
-          <FeedFollowSuggestion />
-          <FeedJobSuggestion />
+          <Row>
+            <FeedFollowSuggestion />
+          </Row>
+          <Row>
+            <FeedJobSuggestion />
+          </Row>
         </Col>
       </Row>
     </>
