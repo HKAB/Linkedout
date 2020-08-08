@@ -2,7 +2,7 @@ import React from 'react'
 import { Component } from 'react';
 import { Layout, Menu, Button, Avatar, Dropdown, Typography, Space} from 'antd';
 import '../components/assets/css/MyHeader.css'
-import logo from '../components/assets/images/logo.png'
+import logo from "../account/assets/logo.png"
 import {
   QuestionCircleOutlined,BellOutlined,UserOutlined,SettingOutlined, LogoutOutlined
 } from '@ant-design/icons';
@@ -50,7 +50,7 @@ class MyHeader extends Component {
       {/* <div className="logo"> */}
       <Space>
             <Link to="/"><img src={logo} width="48" height="48"></img></Link>
-            <Title level={2}>Thăm ngàn Network</Title>
+            <Title level={2} style={{position:'relative', top: 4}}>Thăm ngàn Network</Title>
       </Space>
       {/* </div> */}
 		<span className="left-menu">

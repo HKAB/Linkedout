@@ -1,13 +1,9 @@
-import React from 'react'
-import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space,message, DatePicker, Modal, Card} from  'antd';
+import React, { useState, useEffect } from 'react'
+import {Tabs,Menu, Form, Input, Button, Upload, Space,message, DatePicker, Modal, Card} from  'antd';
 import{ Row, Col, Avatar, Switch} from 'antd';
-import {EditOutlined, UploadOutlined, LoadingOutlined, PlusOutlined} from '@ant-design/icons';             
-import moment from 'moment';
+import { companyServices } from "@/services";
 import { accountServices } from "@/services";
 
-
-const dateFormat = 'YYYY-MM-DD';
 
 const  {TabPane} =  Tabs;
 const color = (
@@ -41,61 +37,129 @@ const color = (
         return isJpgOrPng && isLt2M;
       }
 
-class ProfileEdit extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            disabled: false,
-            imageUrl:null,
-        }
-        this.formRef = React.createRef();   
-    }
+      
+function ProfileEdit(){
    
+    const [disabled, setDisabled] = useState([]);
+    const [basicProfileData, setBasicProfileData] = useState([]);
+    const [emailData, setEmailData] = useState([]);
+    const [phoneData, setPhoneData] = useState([]);
+    const [loading, setLoading] = useState([]);
+    const [imageUrl, setImageUrl] = useState("");
+   
+    const [formEditBasicInfo] = Form.useForm();
 
-    handleChange = info => {
-       
-          getBase64(info.file.originFileObj, picture =>
-            this.setState({
-              imageUrl:picture,
-              loading: false,
-            }),
+    const handleChangeAvatar = info => {
+          getBase64(info.file.originFileObj, picture => 
+            setImageUrl(picture)
           );
       };
       
-    componentDidMount() {
-        let user = accountServices.userValue;
+    useEffect(() => {
+        let user = companyServices.userValue;
+        console.log(user);
         if (user) {
-        }
-
-      }
-
-    handleChangeAvatar = info => {
-       
-        getBase64(info.file.originFileObj, picture =>
-          this.setState({
-            imageUrl:picture,
-            loading: false,
-          }),
-        );
-    };
-    
-
-    changeDisabled = () =>{
-        this.setState({
-            disabled: !this.state.disabled,
+          companyServices.getCompany(user.account.id);
+          const subscription = companyServices.companyObject
+          .subscribe((company) => {
+              if (company) {
+                company.basic_data.profile_picture = "http://127.0.0.1:8000" + company.basic_data.profile_picture;
+                setBasicProfileData(company.basic_data);
+                setEmailData(company.email);
+                setPhoneData(company.phone);
+                formEditBasicInfo.resetFields();
+              }
           });
+          return () => {
+			    subscription.unsubscribe();
+		    }
+        }
+        else {
+          console.log("Oh no!");
+        }
+      }, [])
+
+      const changeDisabled = () =>{
+          setDisabled(!disabled);
+        }
+    const editProfileCompany = values =>{
+        console.log(values);
+        companyServices
+        .updateBasicCompany(
+            values.name,
+            values.website,
+            values.specialties,
+            values.description
+        )
+        .then(() => {
+            companyServices.getCompany(accountServices.userValue.account.id);
+            Modal.success({ title: "uWu", content: "Basic information updated!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            Modal.error({ title: "uWu", content: error });
+          });
+
+        if (!phoneData[0]){
+            companyServices
+            .createCompanyPhone(
+                values.phoneNumber
+            )
+            .then(() => {
+                companyServices.getCompany(accountServices.userValue.account.id);
+                Modal.success({ title: "uWu", content: "Phone updated!" });
+              })
+              .catch((error) => {
+                console.log(error);
+                Modal.error({ title: "uWu", content: error });
+              });
+        }
+        else {
+            companyServices
+            .updateCompanyPhone(
+                phoneData[0],
+                values.phoneNumber,
+            )
+            .then(() => {
+                companyServices.getCompany(accountServices.userValue.account.id);
+                Modal.success({ title: "uWu", content: "Phone updated!" });
+            })
+            .catch((error) => {
+                console.log(error);
+                Modal.error({ title: "uWu", content: error });
+            });
         }
 
-    render()
-    {
-        let imgPreview;
-        if (this.state.imageUrl!=null) {
-            imgPreview = <Avatar style={{width: 180, height: 180, marginBottom:10}} src={this.state.imageUrl} alt=''></Avatar>
-        }
-        else 
-        {
-            imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} ></Avatar>
-        }
+        companyServices
+        .updateCompanyEmail(
+            emailData[0],
+            values.email,
+        )
+        .then(() => {
+            Modal.success({title: "\^o^/", content: "Success"});
+        })
+        .catch((error)=>{
+            console.log(error);
+            Modal.error({title: "╯︿╰", content: error});
+        });
+        
+        
+    }
+    const onFinishChangePass = values =>{
+        console.log(values.newPass, values.oldPass);
+            if (values.newPass!==values.confPass){
+                Modal.error({title: "╯︿╰", content: 'Password not match!'});
+            }else{
+                accountServices.changePassword(values.oldPass, values.newPass).then()
+                .then(()=>{
+                    Modal.success({title: "\^o^/", content: "Change Password successfully!!!"});
+                })
+                .catch((error)=>{
+                    Modal.error({title: "╯︿╰", content:error});
+                })
+            }
+    }
+        
         return(
                     <Card style={{marginTop: "10vh", minHeight: "60vh"}}>
                     <Tabs tabPosition="left" style={{marginLeft:24}}>
@@ -104,12 +168,23 @@ class ProfileEdit extends Component {
                             <Row>
                             
                                 <Col span={10} offset={4}>
-                                <Form 
-                                    ref={this.formRef} 
+                                    <Form 
+                                    // ref={formRef}
+                                    form = {formEditBasicInfo}
+                                    onFinish={editProfileCompany} 
                                     style={{marginTop:32}}
+                                    initialValues={{
+                                        name: basicProfileData.name,
+                                        website: basicProfileData.website,
+                                        email: emailData[0],
+                                        specialties: basicProfileData.specialties,
+                                        phoneNumber: phoneData[0],
+                                        description: basicProfileData.description
+                                    }}
                                     >
+                                        
                                         <span>Company Name</span>
-                                        <Form.Item name="lastName" >
+                                        <Form.Item name="name" >
                                             <Input></Input>
                                         </Form.Item>
                                         
@@ -145,18 +220,17 @@ class ProfileEdit extends Component {
                                 <Col span={10} style={{textAlign: "center"}}>
                                     <Space style={{marginTop: 32}} direction="vertical">
                                 <Upload
-                                          name="avatar"
-                                         
-                                          className="avatar-uploader"
-                                          showUploadList={false}
+                                        name="avatar"
+                                        className="avatar-uploader"
+                                        showUploadList={false}
                                         beforeUpload={beforeUpload}
-                                        onChange={this.handleChange}
+                                        onChange={handleChangeAvatar}
+
                                     >
-                                        {imgPreview}
+                                        <Avatar style={{width: 180, height: 180, marginBottom:10}} src={imageUrl?imageUrl:basicProfileData.profile_picture} alt=''></Avatar>
                                     </Upload>
-                                    </Space>
+                                 </Space>
                                 </Col>
-                                
                             </Row>
                             
                         </TabPane>
@@ -165,7 +239,7 @@ class ProfileEdit extends Component {
                         <Row>
                             <Col span={10} offset={4}>
                             <Form
-                              onFinish={this.onFinishChangePass} 
+                              onFinish={onFinishChangePass} 
                               style={{marginTop:32}} >
                                             <span> Old Password</span>
                                             <Form.Item  name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
@@ -196,14 +270,9 @@ class ProfileEdit extends Component {
                              <Row style={{marginTop: 56}}>
                                 <Col span={20} offset={4}> 
                                     <span>Notification</span>
-                                    <Switch style={{position:'absolute', right:64}} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} />
+                                    <Switch style={{position:'absolute', right:64}} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={changeDisabled} />
                                 </Col>
                              </Row>
-                            {/* <Row>
-                                <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
-                                  <Button class="changeColor" style={{marginTop:24}}>Color</Button>
-                              </Dropdown>
-                            </Row> */}
                          </TabPane>
                         
                      </Tabs>
@@ -211,7 +280,6 @@ class ProfileEdit extends Component {
         
            
         );
-    }
 }
  
 export {ProfileEdit};
