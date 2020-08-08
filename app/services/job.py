@@ -38,9 +38,9 @@ def create_job(*, account: Account, title: str, description: str, seniority_leve
         recruitment_url=recruitment_url,
         published_date=date.today()
     )
+    j.save()
     j.cities.add(*cities)
     j.skills.add(*skills)
-    j.save()
 
     return list_job(id=account.id)
 
