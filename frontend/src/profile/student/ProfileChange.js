@@ -22,7 +22,9 @@ import {
   Popconfirm,
   Empty,
   Typography,
-  AutoComplete
+  AutoComplete,
+  Row,
+  Col
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
@@ -213,6 +215,7 @@ function ProfileChange() {
 
   // handle auto complete
 	const onChangeAutocompleteCompany = (text) => {
+    console.log(text);
 		if (text)
 		{
 			getCompanyName(text).then( data => {
@@ -220,7 +223,8 @@ function ProfileChange() {
 				if (data)
 				{
 					var data_name = data.map(x => ({value: x.name}));
-					setAutoCompleteCompany(data_name);
+          setAutoCompleteCompany(data_name);
+          console.log(data_name);
 				}
 			})
 			.catch(error => {
@@ -360,7 +364,7 @@ const deleteElementSelected = ()=>
           }}
         >
           <Form
-		  	form={formEditExperience}
+		  	    form={formEditExperience}
             id="experience-edit"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
@@ -502,74 +506,78 @@ const deleteElementSelected = ()=>
               onFinish={onAddExperienceFinish}
               // ref = {this.formExperienceRef}
             >
-              <Form.List name="experience_info">
+              <Form.List name="experience_info"> 
                 {(fields, { add, remove }) => {
                   return (
                     <div>
                       {fields.map((field) => (
-                        <Space
+                        <Row gutter={12, 12}
                           key={field.key}
                           style={{
-                            display: "flex",
                             marginBottom: 8,
                             marginTop: 8,
+                            width: '100%',
                           }}
-                          align="start"
                         >
-                          <Form.Item
-							{...field}
-                            name={[field.name, "company_name"]}
-                            fieldKey={[field.fieldKey, "company_name"]}
-							rules={[{required: true, message: "Missing company name",}]}
-                          >
-							<AutoComplete style={{width: 200}} options={autoCompleteCompany} onChange={onChangeAutocompleteCompany} placeholder="Tên công ty" ></AutoComplete>
-                          </Form.Item>
-
-                          <Form.Item
-                            {...field}
-                            name={[field.name, "description"]}
-                            fieldKey={[field.fieldKey, "description"]}
-                            rules={[{required: true,message: "Missing Description",},]}
-                          >
-                            <Input placeholder="Description" />
-                          </Form.Item>
-
-                          <Form.Item
-                            {...field}
-                            name={[field.name, "title"]}
-                            fieldKey={[field.fieldKey, "title"]}
-                            rules={[{ required: true, message: "Missing title" },]}
-                          >
-                            <Input placeholder="Title" />
-                          </Form.Item>
-
-                          <Form.Item 
-                            {...field}
-                            name={[field.name, "start_date"]}
-                            fieldKey={[field.fieldKey, "start_date"]}
-                            rules={[
-                              { required: true, message: "Missing start date" },
-                            ]}
-                          >
-                            <DatePicker placeholder="Start date" />
-                          </Form.Item>
-
-                          <Form.Item
-                            {...field}
-                            name={[field.name, "end_date"]}
-                            fieldKey={[field.fieldKey, "end_date"]}
-                            rules={[{ required: false }]}
-                          >
-                            <DatePicker placeholder="End date" />
-                          </Form.Item>
-
-                          <MinusCircleOutlined
-                            style={{ color: "red" }}
-                            onClick={() => {
-                              remove(field.name);
-                            }}
-                          />
-                        </Space>
+                          <Col span={5}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, "company_name"]}
+                              fieldKey={[field.fieldKey, "company_name"]}
+                              rules={[{ required: true, message: "Missing company name", }]}
+                            >
+                              <AutoComplete style={{ width: '100%' }} options={autoCompleteCompany} onChange={onChangeAutocompleteCompany} placeholder="Tên công ty" ></AutoComplete>
+                            </Form.Item>
+                          </Col>
+                          <Col span={5}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, "description"]}
+                              fieldKey={[field.fieldKey, "description"]}
+                              rules={[{ required: true, message: "Missing Description", },]}
+                            >
+                              <Input placeholder="Description" style = {{width:'100%'}}/>
+                            </Form.Item>
+                          </Col>
+                          <Col span={5}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, "title"]}
+                              fieldKey={[field.fieldKey, "title"]}
+                              rules={[{ required: true, message: "Missing title" },]}                       
+                            >
+                              <Input placeholder="Title" style = {{width:'100%'}}/>
+                            </Form.Item>
+                          </Col>
+                          <Col span={4}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, "start_date"]}
+                              fieldKey={[field.fieldKey, "start_date"]}
+                              rules={[{ required: true, message: "Missing start date" },]}
+                            >
+                              <DatePicker placeholder="Start date" style = {{width:'100%'}}/>
+                            </Form.Item>
+                          </Col>
+                          <Col span={4}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, "end_date"]}
+                              fieldKey={[field.fieldKey, "end_date"]}
+                              rules={[{ required: false }]}
+                            >
+                              <DatePicker placeholder="End date" style = {{width:'100%'}}/>
+                            </Form.Item>
+                          </Col>
+                          <Col span={1}>
+                            <MinusCircleOutlined
+                              style={{ color: "red"}}
+                              onClick={() => {
+                                remove(field.name);
+                              }}
+                            />
+                          </Col>
+                        </Row>
                       ))}
 
                       <Form.Item>
@@ -614,68 +622,74 @@ const deleteElementSelected = ()=>
                 return (
                   <div>
                     {fields.map((field) => (
-                      <Space
+                      <Row gutter={12, 12}
                         key={field.key}
                         style={{
-                          display: "flex",
                           marginBottom: 8,
                           marginTop: 8,
+                          width: '100%'
                         }}
-                        align="start"
                       >
-                        <Form.Item
-                          {...field}
-                          name={[field.name, "schoolname"]}
-                          fieldKey={[field.fieldKey, "schoolname"]}
-                          rules={[{ required: true, message: "Missing school name" },]}
-                        >
-                          {/* <Input placeholder="School Name" /> */}
-						  <AutoComplete style={{width: 200}} options={autoCompleteSchool} onChange={onChangeAutocompleteSchool} placeholder="Tên trường" ></AutoComplete>
-                        </Form.Item>
-
-                        <Form.Item
-                          {...field}
-                          name={[field.name, "degree"]}
-                          fieldKey={[field.fieldKey, "degree"]}
-                          rules={[{ required: true, message: "Missing Degree" },]}
-                        >
-                          <Input placeholder="Degree" />
-                        </Form.Item>
-
-                        <Form.Item
-                          {...field}
-                          name={[field.name, "major"]}
-                          fieldKey={[field.fieldKey, "major"]}
-                          rules={[{ required: true, message: "Missing major" }]}
-                        >
-                          <Input placeholder="Major" />
-                        </Form.Item>
-
-                        <Form.Item
-                          {...field}
-                          name={[field.name, "startdate"]}
-                          fieldKey={[field.fieldKey, "startdate"]}
-                          rules={[{ required: true, message: "Missing start date" },]}
-                        >
-                          <DatePicker placeholder="Start date" />
-                        </Form.Item>
-
-                        <Form.Item
-                          {...field}
-                          name={[field.name, "enddate"]}
-                          fieldKey={[field.fieldKey, "enddate"]}
-                          rules={[{ required: false }]}
-                        >
-                          <DatePicker placeholder="End date" />
-                        </Form.Item>
-
-                        <MinusCircleOutlined 
-                          style={{ color: "red" }} 
-                          onClick={() => {
-                            remove(field.name);
-                          }}
-                        />
-                      </Space>
+                        <Col span={5}>
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "schoolname"]}
+                            fieldKey={[field.fieldKey, "schoolname"]}
+                            rules={[{ required: true, message: "Missing school name" },]}
+                          >
+                            {/* <Input placeholder="School Name" /> */}
+                            <AutoComplete style={{ width: '100%' }} options={autoCompleteSchool} onChange={onChangeAutocompleteSchool} placeholder="Tên trường" ></AutoComplete>
+                          </Form.Item>
+                        </Col>
+                        <Col span={5}>
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "degree"]}
+                            fieldKey={[field.fieldKey, "degree"]}
+                            rules={[{ required: true, message: "Missing Degree" },]}
+                          >
+                            <Input placeholder="Degree" style={{ width: '100%' }}/>
+                          </Form.Item>
+                        </Col>
+                        <Col span={5}>
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "major"]}
+                            fieldKey={[field.fieldKey, "major"]}
+                            rules={[{ required: true, message: "Missing major" }]}
+                          >
+                            <Input placeholder="Major" style={{ width: '100%' }}/>
+                          </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "startdate"]}
+                            fieldKey={[field.fieldKey, "startdate"]}
+                            rules={[{ required: true, message: "Missing start date" },]}
+                          >
+                            <DatePicker placeholder="Start date" style={{ width: '100%' }}/>
+                          </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "enddate"]}
+                            fieldKey={[field.fieldKey, "enddate"]}
+                            rules={[{ required: false }]}
+                          >
+                            <DatePicker placeholder="End date" style={{ width: '100%' }}/>
+                          </Form.Item>
+                        </Col>
+                        <Col span={1}>
+                          <MinusCircleOutlined
+                            style={{ color: "red" }}
+                            onClick={() => {
+                              remove(field.name);
+                            }}
+                          />
+                        </Col>
+                      </Row>
                     ))}
 
                     <Form.Item>
@@ -755,7 +769,7 @@ const deleteElementSelected = ()=>
                           rules={[{ required: true, message: "Missing skill name" },]}
                         >
                           {/* <Input placeholder="Skill Name" /> */}
-						  <AutoComplete style={{width: 100}} options={autoCompleteSkill} onChange={onChangeAutocompleteSkill} placeholder="Tên kỹ năng" ></AutoComplete>
+						              <AutoComplete style={{width: 100}} options={autoCompleteSkill} onChange={onChangeAutocompleteSkill} placeholder="Tên kỹ năng" ></AutoComplete>
 						  
                         </Form.Item>
 

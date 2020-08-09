@@ -14,15 +14,15 @@ function deleteJob(job_id) {
 	return fetchWrapper._delete(`http://127.0.0.1:8000/api/job/delete`, {job_id})
 }
 
-function createJob(title, description, seniority_level, employment_type, recruiment_level, cities, skills) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/job/create`, {title, description, seniority_level, employment_type, recruiment_level, cities, skills})
+function createJob(title, description, seniority_level, employment_type, recruitment_url, cities, skills) {
+	return fetchWrapper.post(`http://127.0.0.1:8000/api/job/create`, {title, description, seniority_level, employment_type, recruitment_url, cities, skills})
 }
 
-function updateJob(job_id, title, description, seniority_level, employment_type, recruiment_level, cities, skills) {
-	return fetchWrapper.put(`http://127.0.0.1:8000/api/job/update`, {job_id, title, description, seniority_level, employment_type, recruiment_level, cities, skills})
+function updateJob(job_id, title, description, seniority_level, employment_type, recruitment_url, cities, skills) {
+	return fetchWrapper.put(`http://127.0.0.1:8000/api/job/update`, {job_id, title, description, seniority_level, employment_type, recruitment_url, cities, skills})
 }
 
-export {
+export const jobServices = {
     getJob,
     listJob,
     deleteJob,

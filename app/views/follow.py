@@ -31,7 +31,8 @@ class FollowCheckView(APIView):
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        result = check_follow(account=request.user, **serializer.validated_data)
+        result = check_follow(account=request.user, **
+                              serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
@@ -57,7 +58,8 @@ class FollowCreateView(APIView):
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = create_follow(account=request.user, **serializer.validated_data)
+        result = create_follow(account=request.user, **
+                               serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_201_CREATED)
 
 
@@ -83,7 +85,8 @@ class FollowDeleteView(APIView):
     def delete(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = delete_follow(account=request.user, **serializer.validated_data)
+        result = delete_follow(account=request.user, **
+                               serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
@@ -110,7 +113,8 @@ class FollowCountView(APIView):
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        result = count_follow(account=request.user, **serializer.validated_data)
+        result = count_follow(account=request.user, **
+                              serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
 
 
@@ -141,5 +145,6 @@ class CompanyFollowedView(APIView):
     def get(self, request):
         serializer = self.InputSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        result = company_followed(account=request.user, **serializer.validated_data)
+        result = company_followed(
+            account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)

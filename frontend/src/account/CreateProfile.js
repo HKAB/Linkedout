@@ -49,7 +49,7 @@ function CreateProfile({history}){
         {
             if (user.account.account_type == "company") {
                 console.log(values);
-                companyServices.createBasicCompany(values.name, values.website, values.specialities, values.description)
+                companyServices.createBasicCompany(values.name, values.website, [values.specialities], values.description)
                 .then(() => {
                     alert("Create successfully");
                     history.push("/profile")
