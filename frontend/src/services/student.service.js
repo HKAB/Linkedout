@@ -52,7 +52,12 @@ function getStudent (id) {
 
 // basic info of student
 function createBasicStudent (firstname, lastname, dateofbirth, description) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/student/create`, {firstname, lastname, dateofbirth, description})
+    return fetchWrapper.post(`http://127.0.0.1:8000/api/student/create`, {firstname, lastname, dateofbirth, description})
+    .catch((error) =>
+    {
+        console.log(error);
+        return {};
+    });
 }
 
 function updateBasicStudent (firstname, lastname, dateofbirth, description) {
