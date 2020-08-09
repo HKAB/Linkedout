@@ -28,7 +28,7 @@ import {
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
-import { List, Avatar, Checkbox, message,Col, Row } from "antd";
+import { List, Avatar, Checkbox, message } from "antd";
 
 import { studentServices } from "@/services";
 import { accountServices } from "@/services";
@@ -279,7 +279,7 @@ const deleteElementSelected = ()=>
 {
         let arraySelected =[];
         checkList.forEach(d=>{
-          if(d.select){
+          if(d.select && d.id > -1){
             arraySelected.push(d.id);
             onConfirmDeleteExperience(d.id);
           }
@@ -430,7 +430,7 @@ const deleteElementSelected = ()=>
               checked={checkList.filter(e=>e.id===-1)[0]!==undefined ?  checkList.filter(e=>e.id===-1)[0].select: false }
               disabled={checkList.length>1?false: true}
               ></Checkbox>
-             <Button style={{float:'right', backgroundColor:'red',color:'white'}}  shape="round" onClick={deleteElementSelected} disabled={checkList.length>0?false: true} >Delete <DeleteOutlined /> </Button>
+             <Button style={{float:'right'}} type="primary" danger  shape="round" onClick={deleteElementSelected} disabled={checkList.length>0?false: true} >Delete<DeleteOutlined /> </Button>
           </List>
           
         
