@@ -49,14 +49,14 @@ function ProfileContent() {
   const [followData, setFollowData] = useState([]);
   const [skillData, setSkillData] = useState([]);
   const [educationData, setEducationData] = useState([]);
-  const [educationElement, setEducationElement] = useState([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>]);
+  const [educationElement, setEducationElement] = useState([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
   const [phoneData, setPhoneData] = useState([]);
   const [emailData, setEmailData] = useState([]);
   const [experienceVisible, setExperienceVisible] = useState(false);
   const [educationVisible, setEducationVisible] = useState(false);
   const [skillVisible, setSkillVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const showExperienceModal = () => {
     setExperienceVisible(true);
   };
@@ -83,213 +83,213 @@ function ProfileContent() {
 
   useEffect(() => {
 
-	// setState({isLoading: true});
+    // setState({isLoading: true});
 
     let user = accountServices.userValue;
     if (user) {
-	  studentServices.getStudent(user.account.id);
-	  const subscription = studentServices.studentObject.subscribe((student) => {
-		  if (student) {
-        setBasicProfileData(student.basic_data);
-        setExperienceData(student.experience);
-        setEducationData(student.education);
-        setEmailData(student.email);
-        setPhoneData(student.phone);
-        setSkillData(student.skill);
+      studentServices.getStudent(user.account.id);
+      const subscription = studentServices.studentObject.subscribe((student) => {
+        if (student) {
+          setBasicProfileData(student.basic_data);
+          setExperienceData(student.experience);
+          setEducationData(student.education);
+          setEmailData(student.email);
+          setPhoneData(student.phone);
+          setSkillData(student.skill);
           console.log(student);
-        var timeline_element = []
-        student.education.forEach(item => {
-          timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
-        });
-		if (timeline_element.length == 0) setEducationElement([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]); 
-		else {
-			setEducationElement(timeline_element); 
-		}
-        // if (educationData.length == 0) setState({educationData : []});
-      // else setState({educationElement: timeline_element});
-      	setIsLoading(false);
-        console.log(educationElement);
-		  }
+          var timeline_element = []
+          student.education.forEach(item => {
+            timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
+          });
+          if (timeline_element.length == 0) setEducationElement([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
+          else {
+            setEducationElement(timeline_element);
+          }
+          // if (educationData.length == 0) setState({educationData : []});
+          // else setState({educationElement: timeline_element});
+          setIsLoading(false);
+          console.log(educationElement);
+        }
 
-		  return () => {
-			subscription.unsubscribe();
-		}
-    });
-    setIsLoading(false);
+        return () => {
+          subscription.unsubscribe();
+        }
+      });
+      setIsLoading(false);
     }
     else {
       console.log("Oh no!");
-	}
+    }
 
   }, []);
 
 
-    if (isLoading) {
-      return (
-		  <Spin/>
-	  );
-	}
+  if (isLoading) {
     return (
-      <>
-        <Card
-          className="card-info"
-          style={{
-            marginTop: 24,
-          }}
-        >
-          <Row justify="center">
-            <Col textAlign="center">
-              <div style={{textAlign: "center"}}>
-                <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + basicProfileData.profile_picture} onError={(e)=>{console.log(e);}}></Avatar>
-                <Title level={2} className="user-fullname">{basicProfileData.firstname + " " + basicProfileData.lastname}</Title>
-                <Text copyable classname="user-quotes">{basicProfileData.description}</Text>
-              </div>
-            </Col>
-          </Row>
-          <Row style={{ marginTop: 32 }}>
-            <Col style={{ textAlign: "center" }} span={8}><MailOutlined /> Email: {emailData[0]}</Col>
-            <Col style={{ textAlign: "center" }} span={8}><PhoneOutlined /> Phone: {phoneData[0]}</Col>
-            <Col style={{ textAlign: "center" }} span={8}><ScheduleOutlined /> DoB: {basicProfileData.dateofbirth}</Col>
-          </Row>
-        </Card>
-
-        <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
-          <Col span={12}>
-            <Card className="card-info">
-              <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
-              <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
-                  {educationElement.slice(0, 4)}
-              </Timeline>
-              <Button 
-                type = "link" 
-                style = {{float:'right'}} 
-                onClick = {()=>showEducationModal()}> Show all <DoubleRightOutlined />
-              </Button>
-            </Card>
-
-            <Card className="card-info" style = {{marginTop:24}}>
-              <Meta title={<Title level={3}>Theo dõi</Title>}></Meta>
-              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-                dataSource={followData}
-                renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.avatar} />}
-                      title={<a href={item.title_href}>{item.title}</a>}
-                    />
-                  </List.Item>
-                )}
-              />
-            </Card>
-          </Col>
-
-          <Col span={12}>
-            <Card className="card-info">
-              <Meta title={<Title level={3}>Kinh nghiệm</Title>}></Meta>
-              <List
-                itemLayout="vertical"
-                style={{ marginTop: 24 }}
-                dataSource={experienceData.slice(0, 4)}
-                renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
-                      title={item.company_name}
-                      description={<div className="company-info" id={item.id}>
-                        <div>{"Title: " + item.title}</div>
-                        <div>{"Time: " + item.start_date + " " + item.end_date}</div>
-                      </div>}
-                    />
-                  </List.Item>
-                )}
-              />
-              <Button 
-                type = "link" 
-                style = {{float:'right'}} 
-                onClick = {()=>showExperienceModal()}> Show all <DoubleRightOutlined />
-              </Button>
-            </Card>
-
-            <Card className="card-info" style = {{marginTop:24}}>
-              <Meta title={<Title level={3}>Kỹ năng</Title>}></Meta>
-              <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-                dataSource={skillData.slice(0, 6)}
-                renderItem={item => (
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar/>}
-                      title={item}
-                    />
-                  </List.Item>
-                )}
-              />
-              <Button 
-                type = "link" 
-                style = {{float:'right'}} 
-                onClick = {()=>showSkillModal()}> Show all <DoubleRightOutlined />
-              </Button>
-            </Card>
+      <Spin />
+    );
+  }
+  return (
+    <>
+      <Card
+        className="card-info"
+        style={{
+          marginTop: 24,
+        }}
+      >
+        <Row justify="center">
+          <Col textAlign="center">
+            <div style={{ textAlign: "center" }}>
+              <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + basicProfileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
+              <Title level={2} className="user-fullname">{basicProfileData.firstname + " " + basicProfileData.lastname}</Title>
+              <Text copyable className="user-quotes">{basicProfileData.description}</Text>
+            </div>
           </Col>
         </Row>
-        
-        <Modal
-          forceRender
-          title="Educations"
-          footer = {null}
-          visible={educationVisible}
-          onCancel={handleEducationCancel}
-        >
-          <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
-            {educationElement}
-          </Timeline>
-        </Modal>
+        <Row style={{ marginTop: 32 }}>
+          <Col style={{ textAlign: "center" }} span={8}><MailOutlined /> Email: {emailData[0]}</Col>
+          <Col style={{ textAlign: "center" }} span={8}><PhoneOutlined /> Phone: {phoneData[0]}</Col>
+          <Col style={{ textAlign: "center" }} span={8}><ScheduleOutlined /> DoB: {basicProfileData.dateofbirth}</Col>
+        </Row>
+      </Card>
 
-        <Modal
-          forceRender
-          title="Experiences"
-          footer = {null}
-          visible={experienceVisible}
-          onCancel={handleExperienceCancel}
-        >
-          <List
-            itemLayout="vertical"
-            style={{ marginTop: 24 }}
-            dataSource={experienceData}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
-                  title={item.company_name}
-                  description={<div className="company-info" id={item.id}>
-                    <div>{"Title: " + item.title}</div>
-                    <div>{"Time: " + item.start_date + " " + item.end_date}</div>
-                  </div>}
-                />
-              </List.Item>
-            )}
-          />
-        </Modal>
+      <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
+        <Col span={12}>
+          <Card className="card-info">
+            <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
+            <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
+              {educationElement.slice(0, 4)}
+            </Timeline>
+            <Button
+              type="link"
+              style={{ float: 'right' }}
+              onClick={() => showEducationModal()}> Show all <DoubleRightOutlined />
+            </Button>
+          </Card>
 
-        <Modal
-          forceRender
-          title="Skills"
-          footer = {null}
-          visible={skillVisible}
-          onCancel={handleSkillCancel}
-        >
-          <List style={{ marginTop: 24 }}
-            dataSource={skillData}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar />}
-                  title={item}
-                />
-              </List.Item>
-            )}
-          />
-        </Modal>
-      </>
-    )
+          <Card className="card-info" style={{ marginTop: 24 }}>
+            <Meta title={<Title level={3}>Theo dõi</Title>}></Meta>
+            <List style={{ marginTop: 24 }} grid={{ column: 2 }}
+              dataSource={followData}
+              renderItem={item => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={<Avatar src={item.avatar} />}
+                    title={<a href={item.title_href}>{item.title}</a>}
+                  />
+                </List.Item>
+              )}
+            />
+          </Card>
+        </Col>
+
+        <Col span={12}>
+          <Card className="card-info">
+            <Meta title={<Title level={3}>Kinh nghiệm</Title>}></Meta>
+            <List
+              itemLayout="vertical"
+              style={{ marginTop: 24 }}
+              dataSource={experienceData.slice(0, 4)}
+              renderItem={item => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                    title={item.company_name}
+                    description={<div className="company-info" id={item.id}>
+                      <div>{"Title: " + item.title}</div>
+                      <div>{"Time: " + item.start_date + " " + item.end_date}</div>
+                    </div>}
+                  />
+                </List.Item>
+              )}
+            />
+            <Button
+              type="link"
+              style={{ float: 'right' }}
+              onClick={() => showExperienceModal()}> Show all <DoubleRightOutlined />
+            </Button>
+          </Card>
+
+          <Card className="card-info" style={{ marginTop: 24 }}>
+            <Meta title={<Title level={3}>Kỹ năng</Title>}></Meta>
+            <List style={{ marginTop: 24 }} grid={{ column: 2 }}
+              dataSource={skillData.slice(0, 6)}
+              renderItem={item => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={<Avatar />}
+                    title={item}
+                  />
+                </List.Item>
+              )}
+            />
+            <Button
+              type="link"
+              style={{ float: 'right' }}
+              onClick={() => showSkillModal()}> Show all <DoubleRightOutlined />
+            </Button>
+          </Card>
+        </Col>
+      </Row>
+
+      <Modal
+        forceRender
+        title="Educations"
+        footer={null}
+        visible={educationVisible}
+        onCancel={handleEducationCancel}
+      >
+        <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
+          {educationElement}
+        </Timeline>
+      </Modal>
+
+      <Modal
+        forceRender
+        title="Experiences"
+        footer={null}
+        visible={experienceVisible}
+        onCancel={handleExperienceCancel}
+      >
+        <List
+          itemLayout="vertical"
+          style={{ marginTop: 24 }}
+          dataSource={experienceData}
+          renderItem={item => (
+            <List.Item>
+              <List.Item.Meta
+                avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                title={item.company_name}
+                description={<div className="company-info" id={item.id}>
+                  <div>{"Title: " + item.title}</div>
+                  <div>{"Time: " + item.start_date + " " + item.end_date}</div>
+                </div>}
+              />
+            </List.Item>
+          )}
+        />
+      </Modal>
+
+      <Modal
+        forceRender
+        title="Skills"
+        footer={null}
+        visible={skillVisible}
+        onCancel={handleSkillCancel}
+      >
+        <List style={{ marginTop: 24 }}
+          dataSource={skillData}
+          renderItem={item => (
+            <List.Item>
+              <List.Item.Meta
+                avatar={<Avatar />}
+                title={item}
+              />
+            </List.Item>
+          )}
+        />
+      </Modal>
+    </>
+  )
 }
 export { ProfileContent };

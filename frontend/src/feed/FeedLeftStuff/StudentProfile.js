@@ -3,7 +3,7 @@ import { Card, Avatar, Typography, Row, Col, Tag, Divider } from 'antd';
 const { Title, Text } = Typography;
 
 
-function StudentProfile() {
+function StudentProfile(props) {
   const [basicProfileData, setBasicProfiledata] = React.useState({
     profile_picture: "https://i1.sndcdn.com/avatars-000012099000-3lw6y7-t200x200.jpg",
     firstname: "Hai",
@@ -28,7 +28,7 @@ function StudentProfile() {
           <div style={{ textAlign: "center" }}>
             <Avatar style={{ marginBottom: 32 }} size={128} src={/*"http://127.0.0.1:8000" +*/ basicProfileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
             <Title level={2} className="user-fullname">{basicProfileData.firstname + " " + basicProfileData.lastname}</Title>
-            <Text classname="user-quotes">{basicProfileData.description}</Text>
+            <Text className="user-quotes">{basicProfileData.description}</Text>
           </div>
         </Col>
       </Row>

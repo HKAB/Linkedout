@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import { Tag, Input, Tooltip } from 'antd';
+import { Tag, Input, Tooltip, AutoComplete } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { getSkillName } from "@/services";
 
 class EditableTagGroup extends React.Component {
   constructor(props) {
@@ -13,6 +14,9 @@ class EditableTagGroup extends React.Component {
       inputValue: '',
       editInputIndex: -1,
       editInputValue: '',
+      //autocomplete
+      autoCompleteSkillTags:[],
+      autoCompleteEditSkillTags:[],
     };
     this.setTags = this.setTags.bind(this);
   }
@@ -22,6 +26,10 @@ class EditableTagGroup extends React.Component {
   setTags(skilltags){
     this.setState({tags: skilltags})
   };
+
+  getTags(){
+    return this.state.tags;
+  }
 
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
@@ -76,6 +84,48 @@ class EditableTagGroup extends React.Component {
     this.editInput = input;
   };
 
+  onChangeAutocompleteSkillTag = (text) => {
+    this.setState({ inputValue: text });
+    console.log(text);
+    if (text) {
+      getSkillName(text).then(data => {
+        console.log(data);
+        if (data) {
+          var data_tag = data.tag.map(x => ({ value: x }));
+          this.setState({ autoCompleteSkillTags: data_tag });
+
+        }
+      })
+        .catch(error => {
+          alert(error);
+        })
+    }
+    else {
+      this.setState({ autoCompleteSkillTags: [] });
+    }
+  };
+  
+  onChangeAutocompleteEditSkillTag = (text) => {
+    this.setState({ editInputValue: text });
+    console.log(text);
+    if (text) {
+      getSkillName(text).then(data => {
+        console.log(data);
+        if (data) {
+          var data_tag = data.tag.map(x => ({ value: x }));
+          this.setState({ autoCompleteEditSkillTags: data_tag });
+          
+        }
+      })
+        .catch(error => {
+          alert(error);
+        })
+    }
+    else {
+      this.setState({ autoCompleteEditSkillTags: [] });
+    }
+  };
+
   render() {
     const { tags, inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
     return (
@@ -83,15 +133,25 @@ class EditableTagGroup extends React.Component {
         {tags.map((tag, index) => {
           if (editInputIndex === index) {
             return (
-              <Input
+              // <Input
+              //   ref={this.saveEditInputRef}
+              //   key={tag}
+              //   size="small"
+              //   className="tag-input"
+              //   value={editInputValue}
+              //   onChange={this.handleEditInputChange}
+              //   onBlur={this.handleEditInputConfirm}
+              //   onPressEnter={this.handleEditInputConfirm}
+              // />
+              <AutoComplete
                 ref={this.saveEditInputRef}
                 key={tag}
                 size="small"
                 className="tag-input"
                 value={editInputValue}
-                onChange={this.handleEditInputChange}
+                onChange={this.onChangeAutocompleteEditSkillTag}
                 onBlur={this.handleEditInputConfirm}
-                onPressEnter={this.handleEditInputConfirm}
+                options={this.state.autoCompleteEditSkillTags}
               />
             );
           }
@@ -128,15 +188,25 @@ class EditableTagGroup extends React.Component {
           );
         })}
         {inputVisible && (
-          <Input
+          // <Input
+          //   ref={this.saveInputRef}
+          //   type="text"
+          //   size="small"
+          //   className="tag-input"
+          //   value={inputValue}
+          //   onChange={this.handleInputChange}
+          //   onBlur={this.handleInputConfirm}
+          //   onPressEnter={this.handleInputConfirm}
+          // />
+          <AutoComplete
             ref={this.saveInputRef}
             type="text"
-            size="small"
+            size='small'
             className="tag-input"
             value={inputValue}
-            onChange={this.handleInputChange}
+            onChange={this.onChangeAutocompleteSkillTag}
             onBlur={this.handleInputConfirm}
-            onPressEnter={this.handleInputConfirm}
+            options={this.state.autoCompleteSkillTags}
           />
         )}
         {!inputVisible && (
