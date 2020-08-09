@@ -1,6 +1,7 @@
 import { BehaviorSubject} from 'rxjs'
 
 import { fetchWrapper } from "@/helpers"
+import jwt from 'jsonwebtoken'
 
 const userSubject = new BehaviorSubject(null);
 
@@ -9,6 +10,9 @@ function login(username, password) {
 	.then(user => {
 		userSubject.next(user);
 		// start refresh token timer
+		localStorage.setItem('user', JSON.stringify(user));
+		console.log("login success");
+		// console.log(sessionStorage.getItem('user').account);
 		return user;
 	})
 }
@@ -22,5 +26,20 @@ export const accountServices = {
 	changePassword,
 	login,
 	register,
-	get userValue () { return userSubject.value }
+	get userValue () { 
+		var user = JSON.parse(localStorage.getItem('user'));
+		
+		if (user) {
+			var decodedToken = jwt.decode(user.access_token, {complete: true});
+			if (decodedToken) {
+				var dateNow = new Date();
+				// console.log(decodedToken.payload.exp*1000);
+				// console.log(dateNow.getTime());
+				if(decodedToken.payload.exp*1000 > dateNow.getTime()) {
+					return user
+				} 
+			}
+		}
+		return userSubject.value 
+	}
 }

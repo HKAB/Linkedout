@@ -14,6 +14,7 @@
     "braft-extensions": "^0.1.0",
     "dayjs": "^1.8.31",
     "draft-js": "^0.11.6",
+    "jsonwebtoken": "^8.5.1",
     "rc-animate": "^3.1.0",
     "rc-queue-anim": "^1.8.5",
     "rc-scroll-anim": "^2.7.4",

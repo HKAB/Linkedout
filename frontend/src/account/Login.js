@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Row, Col, Card} from 'antd';
+import {Row, Col, Card, message} from 'antd';
 import { Tabs } from 'antd';
 import { Typography } from 'antd';
 import { Layout, Menu, Breadcrumb, Select } from 'antd';
@@ -22,7 +22,7 @@ function Login({ history }) {
 	console.log(accountServices.userValue);
 	useEffect( () => {
 		if (accountServices.userValue) {
-			alert("Ban da dang nhap roi, dang nhap lai lam gi???");
+			message.error('You are already log in!');
 			history.push("/");
 		}
 	})
@@ -30,7 +30,7 @@ function Login({ history }) {
 	const onLoginFinish = values => {
 		// console.log(values);
 		accountServices.login(values.login_username, values.login_password)
-		.then(() => {
+		.then((user) => {
 			history.push("/profile");
 		})
 		.catch(error => {
