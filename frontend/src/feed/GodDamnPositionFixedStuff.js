@@ -10,14 +10,16 @@ function GodDamnPositionFixedStuff(props) {
 
   return (
     <>
-      <Row justify="center" style={{ margin: 16 }}>
-        <Col span={4} textAlign="center">
-          <StudentProfile />
+      <Row style={{ margin: 16 }}>
+        <Col span={7} >
+          <Row justify="end" style={{ paddingRight: 24 }}>
+            <StudentProfile />
+          </Row>
         </Col>
-        <Col span={16} textAlign="center">
+        <Col span={10}>
           <FeedItSelf />
         </Col>
-        <Col span={4} textAlign="center">
+        <Col span={7}>
           <Row>
             <FeedFollowSuggestion />
           </Row>
