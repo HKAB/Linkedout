@@ -33,7 +33,7 @@ function FeedJobSuggestion() {
   ])
 
   return (
-    <Card style={{ width: 400, height: 400, margintop: 24, margin: 10 }}>
+    <Card className="card-info" style={{ width: 400, height: 400, margintop: 24, margin: 10 }}>
       <Meta title={<Text>Jobs you might interest</Text>} />
       <Divider style={{ marginTop: 16, marginBottom: 0 }} />
       <List

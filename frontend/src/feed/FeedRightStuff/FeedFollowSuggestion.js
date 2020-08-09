@@ -45,7 +45,7 @@ function FeedFollowSuggestion() {
   }
 
   return (
-    <Card style={{ width: 400, height: 350, margintop: 24, margin: 10 }}>
+    <Card className="card-info" style={{ width: 400, height: 350, margintop: 24, margin: 10 }}>
       <Meta title={<Text>Add to your feed</Text>} />
       <Divider style={{ marginTop: 16, marginBottom: 0 }} />
       <List
