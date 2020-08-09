@@ -49,7 +49,7 @@ class MyHeader extends Component {
       <Header className="site-layout-background">
         {/* <div className="logo"> */}
         <Space>
-          <Link to="/"><img src={logo} width="48" height="48"></img></Link>
+          <Link to="/feed"><img src={logo} width="48" height="48"></img></Link>
           <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
         </Space>
         {/* </div> */}

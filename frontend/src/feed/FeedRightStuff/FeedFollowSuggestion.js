@@ -4,7 +4,7 @@ import Meta from 'antd/lib/card/Meta';
 import { CheckOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 
-function FeedFollowSuggestion() {
+function FeedFollowSuggestion(props) {
   const [suggestions, setSuggestion] = React.useState([
     {
       id: 1,
@@ -16,7 +16,7 @@ function FeedFollowSuggestion() {
     {
       id: 2,
       avatar: "https://image.flaticon.com/icons/svg/2965/2965278.svg",
-      name: "Not Goole",
+      name: "Not Google",
       specialty: "Damn Search Engine That is not Google or Shodan",
       followed: false
     },
@@ -45,7 +45,7 @@ function FeedFollowSuggestion() {
   }
 
   return (
-    <Card style={{ width: 400, height: 350, margintop: 24, margin: 10 }}>
+    <Card style={{ width: 400, height: 350, marginLeft: 10, marginRight: 10, marginBottom: 0, marginTop: 0 }}>
       <Meta title={<Text>Add to your feed</Text>} />
       <Divider style={{ marginTop: 16, marginBottom: 0 }} />
       <List

@@ -4,7 +4,7 @@ import Meta from 'antd/lib/card/Meta';
 import { ExportOutlined, RightOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 
-function FeedJobSuggestion() {
+function FeedJobSuggestion(props) {
   const [suggestions, setSuggestion] = useState([
     {
       jobId: 1,
@@ -33,7 +33,7 @@ function FeedJobSuggestion() {
   ])
 
   return (
-    <Card style={{ width: 400, height: 400, margintop: 24, margin: 10 }}>
+    <Card style={{ width: 400, height: 410, margintop: 24, margin: 10 }}>
       <Meta title={<Text>Jobs you might interest</Text>} />
       <Divider style={{ marginTop: 16, marginBottom: 0 }} />
       <List

@@ -20,7 +20,7 @@ function GodDamnPositionFixedStuff(props) {
           <FeedItSelf />
         </Col>
         <Col span={7}>
-          <Row>
+          <Row style={{ paddingTop: 0 }}>
             <FeedFollowSuggestion />
           </Row>
           <Row>

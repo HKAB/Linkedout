@@ -4,7 +4,7 @@ import { Spin, Layout, Typography, Avatar, Descriptions, Card, Timeline, Row, Co
 
 import '../assets/css/profile.css';
 import Column from 'antd/lib/table/Column';
-import { MailOutlined, ScheduleOutlined, PhoneOutlined, DoubleRightOutlined } from '@ant-design/icons';
+import { MailOutlined, ScheduleOutlined, PhoneOutlined, DoubleRightOutlined, MailTwoTone, PhoneTwoTone, ScheduleTwoTone } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
 
 import { studentServices } from "@/services"
@@ -147,9 +147,9 @@ function ProfileContent() {
           </Col>
         </Row>
         <Row style={{ marginTop: 32 }}>
-          <Col style={{ textAlign: "center" }} span={8}><MailOutlined /> Email: {emailData[0]}</Col>
-          <Col style={{ textAlign: "center" }} span={8}><PhoneOutlined /> Phone: {phoneData[0]}</Col>
-          <Col style={{ textAlign: "center" }} span={8}><ScheduleOutlined /> DoB: {basicProfileData.dateofbirth}</Col>
+          <Col style={{ textAlign: "center" }} span={8}><MailTwoTone /> Email: {emailData[0]}</Col>
+          <Col style={{ textAlign: "center" }} span={8}><PhoneTwoTone /> Phone: {phoneData[0]}</Col>
+          <Col style={{ textAlign: "center" }} span={8}><ScheduleTwoTone /> DoB: {basicProfileData.dateofbirth}</Col>
         </Row>
       </Card>
 
