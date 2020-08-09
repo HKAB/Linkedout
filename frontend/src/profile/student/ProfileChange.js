@@ -181,6 +181,9 @@ function ProfileChange() {
   const showModal = () => {
     setVisible(true)
   };
+  const hideModal = () => {
+    setVisible(false)
+  };
 
   const onSaveExperience = (fieldsValue) => {
     console.log(fieldsValue);
@@ -345,6 +348,7 @@ function ProfileChange() {
             .then(values => {
               console.log(values);
               onEditExperience(values);
+              hideModal();
             })
             .catch(info => {
               console.log(info);
