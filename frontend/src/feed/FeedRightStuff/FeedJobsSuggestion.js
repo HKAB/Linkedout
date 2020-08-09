@@ -1,36 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Avatar, Typography, Row, Col, Tag, Divider, List, Button } from 'antd';
 import Meta from 'antd/lib/card/Meta';
-import { ExportOutlined, RightOutlined } from '@ant-design/icons';
+import { RightOutlined } from '@ant-design/icons';
+import { feedJobSuggestionService } from '../../services/feed/feedJobSuggestion.service';
 const { Title, Text } = Typography;
 
 function FeedJobSuggestion(props) {
-  const [suggestions, setSuggestion] = useState([
-    {
-      jobId: 1,
-      companyName: "FPT Software",
-      companyProfilePicture: "https://upload.wikimedia.org/wikipedia/vi/8/80/FPT_New_Logo.png",
-      jobTitle: "Senior Software Engineer",
-      recruitmentUrl: "",
-      cities: ["Hanoi", "Danang"]
-    },
-    {
-      jobId: 3,
-      companyName: "Viettel Network But Not In Danang",
-      companyProfilePicture: "https://upload.wikimedia.org/wikipedia/commons/b/b3/Viettel_Logo.jpg",
-      jobTitle: "Senior System Administrator",
-      recruitmentUrl: "",
-      cities: ["Hanoi", "Ho Chi Minh"]
-    },
-    {
-      jobId: 6,
-      companyName: "Vin Bigdata FTW",
-      companyProfilePicture: "https://brasol.vn/public/ckeditor/uploads/thiet-ke-logo-tin-tuc/logo-vingroup.jpg",
-      jobTitle: "Chief Executive Officer That Is Unable To Replace Pham Nhat Vuong",
-      recruitmentUrl: "",
-      cities: ["Danang", "Ho Chi minh"]
-    },
-  ])
+  const [suggestions, setSuggestions] = useState([]);
+
+  const fetchSuggesions = async () => {
+    let response = await feedJobSuggestionService.getSuggestions();
+    let result = response.map((item) => {
+      return {
+        jobId: item.id,
+        companyName: item.company_name,
+        companyProfilePicture: item.company_profile_picture,
+        jobTitle: item.title,
+        recruitmentUrl: item.recruitment_url,
+        cities: item.cities
+      }
+    })
+    setSuggestions(result);
+  }
+
+  useEffect(() => {
+    // fetchSuggesions();
+  }, [])
 
   return (
     <Card style={{ width: 400, height: 410, margintop: 24 }}>
@@ -46,7 +41,7 @@ function FeedJobSuggestion(props) {
             <Card bordered={false} style={{ padding: 0 }}>
               <Row justify="space-between">
                 <Col span={4}>
-                  <Avatar shape="square" size={32} src={item.companyProfilePicture} style={{ marginTop: 16, marginLeft: 0 }} />
+                  <Avatar shape="square" size={32} src={"https://127.0.0.1:8000" + item.companyProfilePicture} style={{ marginTop: 16, marginLeft: 0 }} />
                 </Col>
                 <Col span={14}>
                   <Row justify="left"><Text ellipsis>{item.jobTitle}</Text></Row>
@@ -55,8 +50,8 @@ function FeedJobSuggestion(props) {
                 </Col>
                 <Col span={6}>
                   <Button
-                    onClick={() => { }}
-                    type="primary"
+                    onClick={() => { window.open(item.recruitmentUrl, "_blank") }} // Open stuff in new tab
+                    type="default"
                     style={{ padding: 0, textAlign: "center", marginLeft: 8, marginRight: 4, marginTop: 4, width: 84 }}
                   >Visit <RightOutlined />
                   </Button>

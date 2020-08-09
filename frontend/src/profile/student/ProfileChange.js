@@ -26,7 +26,8 @@ import {
   Col,
   List,
   Avatar,
-  Checkbox
+  Checkbox,
+  message
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 import { studentServices, accountServices, getCompanyName, getSchoolName, getSkillName, getExperience } from "@/services";

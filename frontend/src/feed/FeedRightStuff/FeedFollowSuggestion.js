@@ -1,47 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Avatar, Typography, Row, Col, Tag, Divider, List, Button } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import { CheckOutlined } from '@ant-design/icons';
+import { followService } from '../../services/follow.service';
+import { feedFollowSuggestionService } from '../../services/feed/feedFollowSuggestion.service';
 const { Title, Text } = Typography;
 
+
 function FeedFollowSuggestion(props) {
-  const [suggestions, setSuggestion] = React.useState([
-    {
-      id: 1,
-      avatar: "https://image.flaticon.com/icons/svg/2965/2965278.svg",
-      name: "Google",
-      specialty: "Internet",
-      followed: false
-    },
-    {
-      id: 2,
-      avatar: "https://image.flaticon.com/icons/svg/2965/2965278.svg",
-      name: "Not Google",
-      specialty: "Damn Search Engine That is not Google or Shodan",
-      followed: false
-    },
-    {
-      id: 3,
-      avatar: "https://image.flaticon.com/icons/svg/2965/2965278.svg",
-      name: "Definitely not G00gl3",
-      specialty: "Damn Search Engine",
-      followed: false
-    },
-  ])
+  const [suggestions, setSuggestions] = React.useState([]);
+
+  const fetchSuggesions = async () => {
+    let response = await feedFollowSuggestionService.getSuggestions();
+    let result = response.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        avatar: item.profile_picture,
+        specialties: item.specialties,
+        followed: false
+      }
+    });
+    setSuggestions(result);
+  }
+
+  useEffect(() => {
+    // fetchSuggesions();
+  }, [])
+
+  const doFollow = async (id) => {
+    await followService.follow(id);
+  }
+
+  const doUnFollow = async (id) => {
+    await followService.unfollow(id);
+  }
 
   const handleClick = (e, item) => {
     // TODO: Change handle click event, send request blah blah
     // E=mc2 stuff, make change to only 1 object
-    setSuggestion([...suggestions].map(object => {
+    if (!item.followed) doFollow(item.id);
+    else doUnFollow(item.id);
+    setSuggestions([...suggestions].map(object => {
       if (object.id == item.id) {
         return {
           ...object,
-          followed: true
+          followed: !object.followed
         }
       } else {
         return object;
       }
-    }))
+    }));
   }
 
   return (
@@ -58,27 +67,26 @@ function FeedFollowSuggestion(props) {
             <Card bordered={false} style={{ padding: 0 }}>
               <Row justify="space-between">
                 <Col span={4}>
-                  <Avatar src={item.avatar} style={{ marginTop: 5, marginLeft: 0 }} />
+                  <Avatar src={"https://127.0.0.1:8000" + item.avatar} style={{ marginTop: 5, marginLeft: 0 }} />
                 </Col>
                 <Col span={14}>
                   <Row justify="left"><Text ellipsis>{item.name}</Text></Row>
-                  <Row justify="left"><Text ellipsis type="secondary">Company - {item.specialty}</Text></Row>
+                  <Row justify="left"><Text ellipsis type="secondary">Company - {item.specialties.join(", ")}</Text></Row>
                 </Col>
                 <Col span={6}>
                   {!item.followed ? (
                     <Button
                       onClick={((e) => { handleClick(e, item) })}
-                      type="primary"
+                      type="default"
                       style={{ padding: 0, textAlign: "center", marginLeft: 8, marginRight: 4, marginTop: 4, width: 84 }}
                     >
                       + Follow
                     </Button>
                   ) : (
                       <Button
-                        onClick={() => { }}
-                        type="primary"
+                        onClick={((e) => { handleClick(e, item) })}
+                        type="default"
                         style={{ padding: 0, textAlign: "center", marginLeft: 8, marginRight: 4, marginTop: 4, width: 84 }}
-                        disabled
                       >
                         <CheckOutlined style={{ width: 10 }} />Followed
                       </Button>
