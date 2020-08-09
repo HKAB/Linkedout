@@ -56,7 +56,7 @@ function ProfileEdit() {
   };
 
   useEffect(() => {
-    let user = companyServices.userValue;
+    let user = accountServices.userValue;
     console.log(user);
     if (user) {
       companyServices.getCompany(user.account.id);
