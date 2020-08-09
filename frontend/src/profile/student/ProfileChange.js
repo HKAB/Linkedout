@@ -26,11 +26,11 @@ import {
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
-import { List, Avatar } from "antd";
+import { List, Avatar, Checkbox, message,Col, Row } from "antd";
 
 import { studentServices } from "@/services";
 import { accountServices } from "@/services";
-import { getCompanyName, getSchoolName, getSkillName } from "@/services";
+import { getCompanyName, getSchoolName, getSkillName, getExperience} from "@/services";
 
 import dayjs from "dayjs";
 import moment from 'moment';
@@ -52,12 +52,13 @@ const onAddExperienceFinish = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "Experience created!" });
+      message.success({ title: "uWu", content: "Experience created!" });
+      
       // this.formExperienceRef.current.resetFields();
     })
     .catch((error) => {
       console.log(error);
-      Modal.error({ title: "uWu", content: error });
+      message.error({ title: "uWu", content: error });
     });
   })
 };
@@ -71,11 +72,11 @@ const onAddSkillFinish = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "Student skill created!" });
+      message.success({ title: "uWu", content: "Student skill created!" });
     })
     .catch((error) => {
       console.log(error);
-      Modal.error({ title: "uWu", content: error });
+      message.error({ title: "uWu", content: error });
     });
   })
 };
@@ -85,11 +86,11 @@ const onConfirmDeleteEducation = (id) => {
   studentServices.deleteStudentEducation(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "Education created!" });
+      message.success({ title: "uWu", content: "Education created!" });
     })
     .catch((error) => {
       console.log(error);
-      Modal.error({ title: "uWu", content: error });
+      message.error({ title: "uWu", content: error });
     });
 }
 
@@ -98,11 +99,12 @@ const onConfirmDeleteExperience = (id) => {
   studentServices.deleteStudentExperience(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "Experience deleted!" });
+      message.success({ title: "uWu", content: "Experience deleted!" });
+      
     })
     .catch((error) => {
       console.log(error);
-      Modal.error({ title: "uWu", content: error });
+      message.error({ title: "uWu", content: error });
     });
 }
 
@@ -118,11 +120,11 @@ const onAddEducationFinish = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "Done creating " +  education_info.schoolname});
+      message.success({ title: "uWu", content: "Done creating " +  education_info.schoolname});
     })
     .catch((error) => {
       console.log(error);
-      Modal.error({ title: "uWu", content: error });
+      message.error({ title: "uWu", content: error });
     });
   })
 };
@@ -139,11 +141,11 @@ const onEditExperience = (values) => {
     )
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "Experience updated!" });
+      message.success({ title: "uWu", content: "Experience updated!" });
     })
     .catch((error) => {
       console.log(error);
-      Modal.error({ title: "uWu", content: error });
+      message.error({ title: "uWu", content: error });
     });
 };
 
@@ -152,18 +154,18 @@ const onConfirmDeleteSkill = (skill) => {
   studentServices.deleteStudentSkill(skill)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      Modal.success({ title: "uWu", content: "Skill deleted!" });
+      message.success({ title: "uWu", content: "Skill deleted!" });
     })
     .catch((error) => {
       console.log(error);
-      Modal.error({ title: "uWu", content: error });
+      message.error({ title: "uWu", content: error });
     });
 }
 
 function ProfileChange() {
 
   const [experienceData, setExperienceData] = useState([]);
-  const [educationData, setEducationData] = useState([]);
+  const [educationData, setEducationData] = useState([]); 
   const [educationElement, setEducationElement] = useState([]);
   const [skillData, setSkillData] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -172,7 +174,7 @@ function ProfileChange() {
   const [autoCompleteCompany, setAutoCompleteCompany] = useState([]);
   const [autoCompleteSchool, setAutoCompleteSchool] = useState([]);
   const [autoCompleteSkill, setAutoCompleteSkill] = useState([]);
-
+  const [checkList, setCheckList] =useState([]);
 
 	// handle form
 	const [formEditExperience] = Form.useForm();
@@ -202,9 +204,8 @@ function ProfileChange() {
 		start_date: moment(item.start_date, dateFormat),
 		end_date: moment(item.end_date, dateFormat),
 		description: item.description,
-		id: item.id
+    id: item.id
 	  });
-
     setSelectedExperienceItem(item);
     showModal();
   };
@@ -270,16 +271,38 @@ function ProfileChange() {
 			setAutoCompleteSkill([]);
 		}
 	};
+const deleteElementSelected = ()=>
+{
+        let arraySelected =[];
+        checkList.forEach(d=>{
+          if(d.select){
+            arraySelected.push(d.id);
+            onConfirmDeleteExperience(d.id);
+          }
+        })
+        
+        console.log(arraySelected)
+}
 
-  useEffect(() =>  {
+ useEffect(() =>  {
     const subscription = studentServices.studentObject.subscribe((student) => {
-      if (student) {
+      if (student) 
+      {
         console.log("updateee");
         setExperienceData(student.experience);
         setEducationData(student.education);
         setSkillData(student.skill);
-
         var timeline_element = [];
+        let checkList = student.experience;
+        setCheckList(checkList.map(d=>{
+          return{
+            select: false,
+            id:  d.id,
+          }
+          
+        }))
+          setCheckList(odd=>[...odd,{select:false, id:-1}])
+
 
         student.education.forEach((item) => {
           timeline_element.push((
@@ -301,12 +324,14 @@ function ProfileChange() {
                 />
               </Popconfirm>
             </Timeline.Item>
-          ));
-		});
+          ));    
+    });
+    
 		console.log("timeline_element");
         console.log(timeline_element);
         setEducationElement(timeline_element);
       }
+     
 	});
 	
 	return () => {
@@ -315,9 +340,11 @@ function ProfileChange() {
   }, [])
 
     return (
+      
       <>
+      
         <Modal 
-          forceRender 
+          forceRender   
           title="Đổi thông tin" 
           visible={visible} 
           onCancel={handleCancel}
@@ -387,19 +414,52 @@ function ProfileChange() {
 
         <Card className="card-info" style={{ marginTop: 24 }}>
           <Meta title={<Title level={3}>Kinh nghiệm</Title>}></Meta>
+          <List >
+             <Checkbox
+              onChange={e=>{
+               let checked=e.target.checked;
+               setCheckList(checkList.map(data=>{
+                 data.select=checked;
+                return data;
+               }))
+              }}
+              checked={checkList.filter(e=>e.id===-1)[0]!==undefined ?  checkList.filter(e=>e.id===-1)[0].select: false }
+              disabled={checkList.length>1?false: true}
+              ></Checkbox>
+             <Button style={{float:'right', backgroundColor:'red',color:'white'}}  shape="round" onClick={deleteElementSelected} disabled={checkList.length>0?false: true} >Delete <DeleteOutlined /> </Button>
+          </List>
+          
+        
           <List
             style={{ marginTop: 24 }}
             itemLayout="horizontal"
             dataSource={experienceData}
             renderItem={(item) => (
-              <List.Item key={item.id}>
+              <List.Item key={item.id} >
+                <Checkbox style={{marginRight:12, position:'relative', top:-10}} 
+                    onChange={e=>{
+                    let checked= e.target.checked;
+                    console.log(checkList);
+                    setCheckList(
+                      checkList.map(data=>{
+                        if(item.id===data.id){
+                          data.select=checked;
+                        }
+                        return data;
+                      })
+                    );
+                  }}
+                  checked={checkList.filter(e=>e.id===item.id)[0]!==undefined ?  checkList.filter(e=>e.id===item.id)[0].select: false }
+                     ></Checkbox>
+
+              
                 <List.Item.Meta
                   avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
                   title={item.company_name}
                   description={item.description}
                 />
-
-                <Meta
+                  
+                <Meta 
                   title="Title"
                   description={item.title}
                   style={{ marginRight: 48, textAlign: "right" }}
@@ -418,7 +478,7 @@ function ProfileChange() {
                   icon={<EditOutlined />}
                 />
                 
-                <Popconfirm
+                {/* <Popconfirm
                   title="Bạn có muốn xóa cái này?"
                   onConfirm={() => onConfirmDeleteExperience(item.id)}
                   okText="Yes"
@@ -431,7 +491,7 @@ function ProfileChange() {
                       icon={<MinusCircleOutlined />}
                     />
                   </a>
-                </Popconfirm>
+                </Popconfirm> */}
 
               </List.Item>
             )}
@@ -533,6 +593,8 @@ function ProfileChange() {
               </Form.Item>
             </Form>
           </List>
+         
+          
         </Card>
 
         <Card className="card-info" style={{ marginTop: 24 }}>
