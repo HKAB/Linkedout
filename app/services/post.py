@@ -31,8 +31,8 @@ def create_post(*, account: Account, title: str, content: str, skills: list) -> 
         content=content,
         published_date=date.today()
     )
-    p.skills.add(*skills)
     p.save()
+    p.skills.add(*skills)
     return list_post(id=account.id)
 
 

@@ -6,14 +6,14 @@ import { fetchWrapper } from "@/helpers"
 // import { getExperience, deleleExperience, createExperience, updateExperience} from "./company/experience.service";
 import { getEmail, deleteEmail, createEmail, updateEmail } from "./email.service";
 import { getPhone, deletePhone, createPhone, updatePhone } from "./phone.service";
-import { listJob } from "./job.service";
+import { jobServices } from "./job.service";
 
 const companyObject = new BehaviorSubject(null);
 
 function getCompany (account_id) {
     let company_email = getEmail(account_id);
     let company_phone = getPhone(account_id);    
-    let list_job = listJob(account_id);
+    let list_job = jobServices.listJob(account_id);
     // TODO: Handle error here!
     let company_basic = fetchWrapper.get(`http://127.0.0.1:8000/api/company/get?id=${account_id}`);
     // {
