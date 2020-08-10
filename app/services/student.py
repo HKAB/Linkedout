@@ -20,7 +20,7 @@ def create_student(*, account: Account, firstname: str, lastname: str, dateofbir
         raise InvalidInputFormat(
             "Account {} already has a student.".format(account.id))
     s = Student(account=account, firstname=firstname, lastname=lastname,
-                dateofbirth=dateofbirth,gender=gender, **kwargs)
+                dateofbirth=dateofbirth, gender=gender, **kwargs)
     s.save()
     return s
 
@@ -29,8 +29,8 @@ def update_student(*, account: Account, firstname: str, lastname: str, dateofbir
     student_account_check(account)
     student_exist(account.id)
     s = Student.objects.filter(account=account)
-    s.update(account=account, firstname=firstname,
-             lastname=lastname, dateofbirth=dateofbirth,gender=gender, **kwargs)
+    s.update(account=account, firstname=firstname, lastname=lastname,
+             dateofbirth=dateofbirth, gender=gender, **kwargs)
     return s.first()
 
 

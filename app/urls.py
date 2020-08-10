@@ -8,7 +8,7 @@ from app.views.email import EmailListView, EmailCreateView, EmailUpdateView, Ema
 from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, PhoneDeleteView
 from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
 from app.views.experience import ExperienceListView, ExperienceCreateView, ExperienceUpdateView, ExperienceDeleteView
-from app.views.job import JobGetView, JobListView, JobCreateView, JobUpdateView, JobDeleteView,JobPictureView
+from app.views.job import JobGetView, JobListView, JobCreateView, JobUpdateView, JobDeleteView, JobPictureView
 from app.views.follow import FollowCheckView, FollowCreateView, FollowDeleteView, FollowCountView, CompanyFollowedView
 from app.views.post import PostGetView, PostListView, PostCreateView, PostUpdateView, PostDeleteView, PostPictureView
 from app.views.interest import InterestCheckView, InterestCreateView, InterestDeleteView, InterestCountView, AccountInterestedView, PostInterestedView
@@ -76,7 +76,7 @@ job_patterns = [
     path('create', JobCreateView.as_view()),
     path('update', JobUpdateView.as_view()),
     path('delete', JobDeleteView.as_view()),
-    path('upload', PostPictureView.as_view()),
+    path('upload', JobPictureView.as_view()),
 ]
 
 follow_patterns = [
@@ -93,7 +93,7 @@ post_patterns = [
     path('create', PostCreateView.as_view()),
     path('update', PostUpdateView.as_view()),
     path('delete', PostDeleteView.as_view()),
-    path('upload',PostPictureView.as_view()),
+    path('upload', PostPictureView.as_view()),
 ]
 
 interest_patterns = [
