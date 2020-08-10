@@ -24,12 +24,12 @@ function FeedJobSuggestion(props) {
   }
 
   useEffect(() => {
-    // fetchSuggesions();
+    fetchSuggesions();
   }, [])
 
   return (
     <Affix offsetTop={450}>
-      <Card className="feed-header" style={{ width: 400, height: 410, margintop: 24 }}>
+      <Card className="card-info" style={{ width: 400, height: 410, margintop: 24 }}>
         <Meta title={<Text>Jobs you might interest</Text>} />
         <Divider style={{ marginTop: 16, marginBottom: 0 }} />
         <List

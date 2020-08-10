@@ -41,7 +41,7 @@ class MyHeader extends Component {
   render() {
     return (
       <Affix offsetTop={0}>
-        <Header className="site-layout-background">
+        <Header className="site-layout-background" style={{ backgroundColor: "#ffffff" }}>
           {/* <div className="logo"> */}
           <Space>
             <Link to="/feed"><img src={logo} width="48" height="48"></img></Link>

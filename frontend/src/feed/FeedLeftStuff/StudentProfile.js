@@ -42,7 +42,7 @@ function StudentProfile(props) {
 
   return (
     <Affix offsetTop={80}>
-      <Card className="feed-header" style={{ width: 300, height: 600, margintop: 24 }}>
+      <Card className="card-info" style={{ width: 300, height: 600, margintop: 24 }}>
         <Row justify="center">
           <Col>
             <div style={{ textAlign: "center" }}>

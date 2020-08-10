@@ -25,7 +25,7 @@ function FeedFollowSuggestion(props) {
   }
 
   useEffect(() => {
-    // fetchSuggesions();
+    fetchSuggesions();
   }, [])
 
   const doFollow = async (id) => {
@@ -55,7 +55,7 @@ function FeedFollowSuggestion(props) {
 
   return (
     <Affix offsetTop={80}>
-      <Card className="feed-header" style={{ width: 400, height: 350 }}>
+      <Card className="card-info" style={{ width: 400, height: 350 }}>
         <Meta title={<Text>Add to your feed</Text>} />
         <Divider style={{ marginTop: 16, marginBottom: 0 }} />
         <List
