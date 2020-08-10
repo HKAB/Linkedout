@@ -7,7 +7,7 @@ function getPhone(id) {
 }
 
 function deletePhone(phone) {
-	return fetchWrapper._delete(`http://127.0.0.1:8000/api/phone/delete`, {phone})
+	return fetchWrapper.delete(`http://127.0.0.1:8000/api/phone/delete`, {phone})
 }
 
 function createPhone(phone) {

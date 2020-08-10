@@ -22,54 +22,12 @@ import React, { useEffect, useState } from "react";
 const { Title } = Typography;
 const dateFormat = 'YYYY-MM-DD';
 
-const onAddExperienceFinish = (values) => {
-
-  values.experience_info.forEach((experience_info) => {
-    studentServices
-      .createStudentExperience(
-        experience_info.company_name,
-        experience_info.start_date.format("YYYY-MM-DD"),
-        experience_info.end_date.format("YYYY-MM-DD"),
-        experience_info.title,
-        experience_info.description
-      )
-      .then(() => {
-        studentServices.getStudent(accountServices.userValue.account.id);
-        message.success({ title: "uWu", content: "Experience created!" });
-
-        // this.formExperienceRef.current.resetFields();
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error({ title: "uWu", content: error });
-      });
-  })
-};
-
-const onAddSkillFinish = (values) => {
-
-  values.skill_info.forEach((skill_info) => {
-    studentServices
-      .createStudentSkill(
-        skill_info.skill_name,
-      )
-      .then(() => {
-        studentServices.getStudent(accountServices.userValue.account.id);
-        message.success({ title: "uWu", content: "Student skill created!" });
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error({ title: "uWu", content: error });
-      });
-  })
-};
-
 const onConfirmDeleteEducation = (id) => {
   console.log(id);
   studentServices.deleteStudentEducation(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
-      message.success({ title: "uWu", content: "Education created!" });
+      message.success({ title: "uWu", content: "Education deleted!" });
     })
     .catch((error) => {
       console.log(error);
@@ -90,27 +48,6 @@ const onConfirmDeleteExperience = (id) => {
       message.error({ title: "uWu", content: error });
     });
 }
-
-const onAddEducationFinish = (values) => {
-  values.education_info.forEach((education_info) => {
-    studentServices
-      .createStudentEducation(
-        education_info.schoolname,
-        education_info.startdate.format("YYYY-MM-DD"),
-        education_info.enddate.format("YYYY-MM-DD"),
-        education_info.major,
-        education_info.degree
-      )
-      .then(() => {
-        studentServices.getStudent(accountServices.userValue.account.id);
-        message.success({ title: "uWu", content: "Done creating " + education_info.schoolname });
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error({ title: "uWu", content: error });
-      });
-  })
-};
 
 const onEditExperience = (values) => {
   studentServices
@@ -161,6 +98,74 @@ function ProfileChange() {
 
   // handle form
   const [formEditExperience] = Form.useForm();
+  const [formAddExperience] = Form.useForm();
+  const [formAddEducation] = Form.useForm();
+  const [formAddSkill] = Form.useForm();
+
+  const onAddExperienceFinish = (values) => {
+
+    values.experience_info.forEach((experience_info) => {
+      studentServices
+        .createStudentExperience(
+          experience_info.company_name,
+          experience_info.start_date.format("YYYY-MM-DD"),
+          experience_info.end_date.format("YYYY-MM-DD"),
+          experience_info.title,
+          experience_info.description
+        )
+        .then(() => {
+          studentServices.getStudent(accountServices.userValue.account.id);
+          message.success({ title: "uWu", content: "Experience created!" });
+          formAddExperience.resetFields();
+          // this.formExperienceRef.current.resetFields();
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error({ title: "uWu", content: error });
+        });
+    })
+  };
+  
+  const onAddEducationFinish = (values) => {
+    values.education_info.forEach((education_info) => {
+      studentServices
+        .createStudentEducation(
+          education_info.schoolname,
+          education_info.startdate.format("YYYY-MM-DD"),
+          education_info.enddate.format("YYYY-MM-DD"),
+          education_info.major,
+          education_info.degree
+        )
+        .then(() => {
+          studentServices.getStudent(accountServices.userValue.account.id);
+          message.success({ title: "uWu", content: "Done creating " + education_info.schoolname });
+          formAddEducation.resetFields();
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error({ title: "uWu", content: error });
+        });
+    })
+  };
+
+  const onAddSkillFinish = (values) => {
+  
+    values.skill_info.forEach((skill_info) => {
+      studentServices
+        .createStudentSkill(
+          skill_info.skill_name,
+        )
+        .then(() => {
+          studentServices.getStudent(accountServices.userValue.account.id);
+          message.success({ title: "uWu", content: "Student skill created!" });
+          formAddSkill.resetFields();
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error({ title: "uWu", content: error });
+        });
+    })
+  };
 
   // handle modal
   const showModal = () => {
@@ -481,6 +486,7 @@ function ProfileChange() {
             name="add-experience"
             autoComplete="off"
             onFinish={onAddExperienceFinish}
+            form={formAddExperience}
           // ref = {this.formExperienceRef}
           >
             <Form.List name="experience_info">
@@ -593,6 +599,7 @@ function ProfileChange() {
           name="add-education"
           autoComplete="off"
           onFinish={onAddEducationFinish}
+          form = {formAddEducation}
         >
           <Form.List name="education_info">
             {(fields, { add, remove }) => {
@@ -724,6 +731,7 @@ function ProfileChange() {
           name="add-skill"
           autoComplete="off"
           onFinish={onAddSkillFinish}
+          form={formAddSkill}
         >
           <Form.List name="skill_info">
             {(fields, { add, remove }) => {
