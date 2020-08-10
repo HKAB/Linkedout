@@ -17,6 +17,6 @@ class Job(models.Model):
     employment_type = models.CharField(max_length=16)  # full-time or part-time
     published_date = models.DateField()
     recruitment_url = models.CharField(max_length=1024, default='#')
-    job_picture=models.ImageField(upload_to=store_picture, default='job/default.jpg')
+    job_picture = models.ImageField(upload_to=store_picture, default='job/default.jpg')
     cities = models.ManyToManyField(City)
     skills = models.ManyToManyField(Skill)

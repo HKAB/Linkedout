@@ -10,7 +10,7 @@ from rest_framework.exceptions import ParseError
 
 from app.models.skill import Skill
 from app.models.post import Post
-from app.services.post import list_post, get_post, create_post, update_post, delete_post,set_post_picture
+from app.services.post import list_post, get_post, create_post, update_post, delete_post, set_post_picture
 
 
 class SkillRelatedField(serializers.RelatedField):
@@ -38,7 +38,7 @@ class PostListView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostListOut'
-            fields = ['id', 'title', 'content', 'published_date','post_picture', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -66,7 +66,7 @@ class PostGetView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostGetOut'
-            fields = ['id', 'title', 'content', 'published_date','post_picture', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -95,7 +95,7 @@ class PostCreateView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostCreateOut'
-            fields = ['id', 'title', 'content', 'published_date','post_picture', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [IsAuthenticated]
 
@@ -124,7 +124,7 @@ class PostUpdateView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostCreateOut'
-            fields = ['id', 'title', 'content', 'published_date','post_picture', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [IsAuthenticated]
 
@@ -151,7 +151,7 @@ class PostDeleteView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostCreateOut'
-            fields = ['id', 'title', 'content', 'published_date','post_picture', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [IsAuthenticated]
 

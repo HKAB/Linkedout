@@ -17,9 +17,9 @@ def list_job(*, id: int) -> list:
             'description': j.description,
             'seniority_level': j.seniority_level,
             'employment_type': j.employment_type,
-            'published_date': j.published_date,
             'recruitment_url': j.recruitment_url,
-            'job_picture':j.job_picture,
+            'published_date': j.published_date,
+            'job_picture': j.job_picture,
             'cities': j.cities,
             'skills': j.skills
         } for j in jobs
@@ -63,7 +63,9 @@ def update_job(*, account: Account, id: int, title: str, description: str, senio
         recruitment_url=recruitment_url,
         published_date=date.today()
     )
+    j.first().cities.clear()
     j.first().cities.add(*cities)
+    j.first().skills.clear()
     j.first().skills.add(*skills)
 
     return list_job(id=account.id)
