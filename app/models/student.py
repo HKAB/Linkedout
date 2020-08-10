@@ -19,3 +19,6 @@ class Student(models.Model):
     description = models.TextField(null=True)
 
     skills = models.ManyToManyField(Skill)
+
+    def __str__(self):
+        return self.account.id
