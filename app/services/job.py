@@ -2,6 +2,7 @@ from datetime import date
 
 from app.models.job import Job
 from app.models.account import Account
+from app.models.company import Company
 from app.exceptions import InvalidInputFormat
 
 
@@ -31,6 +32,7 @@ def create_job(*, account: Account, title: str, description: str, seniority_leve
     company_account_check(account)
     job_type_check(employment_type)
     j = Job(
+        company=get_company_account(account),
         title=title,
         description=description,
         seniority_level=seniority_level,
@@ -72,6 +74,12 @@ def delete_job(*, account: Account, id: int) -> list:
     j.delete()
     return list_job(id=account.id)
 
+
+def get_company_account(account: Account, raise_exception=True):
+    c = Company.objects.filter(account=account).first()
+    if c is None:
+        raise InvalidInputFormat("Company not found!")
+    return c
 
 def company_account_check(account: Account, raise_exception=True):
     if account.account_type != 'company':
