@@ -108,6 +108,7 @@ class PostCreateView(APIView):
 
 class PostUpdateView(APIView):
     class InputSerializer(serializers.ModelSerializer):
+        id = serializers.IntegerField(required=True)
         skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
         class Meta:

@@ -129,8 +129,9 @@ class JobCreateView(APIView):
 
 class JobUpdateView(APIView):
     class InputSerializer(serializers.ModelSerializer):
-        cities = CityRelatedField(queryset=City.objects.all(), many=True)
-        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
+        id = serializers.IntegerField(required=True)
+        cities = CityRelatedField(queryset=City.objects.all(), many=True, required=True)
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True, required=True)
 
         class Meta:
             model = Job
