@@ -1,26 +1,12 @@
-import React from "react";
-import { Component } from "react";
-import { Tooltip, Layout, Icon, Menu, Row, Col, Button, Space, Avatar } from "antd";
-import { Tabs } from "antd";
-
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UserOutlined,
-  InfoOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
-
+import ProfileChange from "@/profile/student/ProfileChange";
 import { ProfileContent } from "@/profile/student/ProfileContent";
 import { ProfileEdit } from "@/profile/student/ProfileEdit";
-import ProfileChange from "@/profile/student/ProfileChange";
-
-import QueueAnim from 'rc-queue-anim';
-import Animate from 'rc-animate';
+import { EditOutlined, InfoOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Col, Layout, Row, Space, Tabs, Tooltip } from "antd";
+import React, { Component } from "react";
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
-
 
 class ProfileTabStudent extends Component {
   state = {

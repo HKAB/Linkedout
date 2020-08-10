@@ -1,10 +1,10 @@
-import React from 'react';
-
 import { StudentProfile } from '@/feed/FeedLeftStuff/StudentProfile';
-import { Col, Row, Space } from 'antd';
-import { FeedFollowSuggestion } from './FeedRightStuff/FeedFollowSuggestion';
+import { Col, Row } from 'antd';
+import React from 'react';
 import { FeedItSelf } from './FeedMiddleStuff/FeedItSelf';
+import { FeedFollowSuggestion } from './FeedRightStuff/FeedFollowSuggestion';
 import { FeedJobSuggestion } from './FeedRightStuff/FeedJobsSuggestion';
+
 
 function GodDamnPositionFixedStuff(props) {
 

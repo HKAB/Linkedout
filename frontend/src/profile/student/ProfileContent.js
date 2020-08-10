@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { Component } from 'react';
-import { Spin, Layout, Typography, Avatar, Descriptions, Card, Timeline, Row, Col, List, AutoComplete, Modal, Button, Empty } from 'antd';
-
-import '../assets/css/profile.css';
-import Column from 'antd/lib/table/Column';
-import { MailOutlined, ScheduleOutlined, PhoneOutlined, DoubleRightOutlined, MailTwoTone, PhoneTwoTone, ScheduleTwoTone } from '@ant-design/icons';
+import { accountServices, studentServices } from "@/services";
+import { DoubleRightOutlined, MailTwoTone, PhoneTwoTone, ScheduleTwoTone } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Empty, List, Modal, Row, Spin, Timeline, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
-
-import { studentServices } from "@/services"
-import { accountServices } from "@/services"
-
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import '../assets/css/profile.css';
 
-const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 const followData = [
   {

@@ -1,5 +1,5 @@
 
-import { accountServices } from "@/services"
+import { accountServices } from "@/services";
 
 function get(url) {
   const requestOptions = {

@@ -1,40 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Component } from "react";
+import { accountServices, getCompanyName, getSchoolName, getSkillName, studentServices } from "@/services";
 import {
-  EditOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-  MinusCircleOutlined,
+  DeleteOutlined, EditOutlined,
+  MinusCircleOutlined, PlusOutlined
 } from "@ant-design/icons";
 import {
-  Skeleton,
-  Switch,
-  Badge,
-  Card,
-  Button,
-  Timeline,
-  Form,
-  Input,
-  Space,
-  DatePicker,
-  Modal,
-  Popconfirm,
-  Empty,
-  Typography,
   AutoComplete,
-  Row,
-  Col,
+  Avatar, Badge,
+  Button, Card,
+  Checkbox, Col, DatePicker, Form,
+  Input,
   List,
-  Avatar,
-  Checkbox,
-  message
+  message, Modal,
+  Popconfirm,
+  Row, Space, Timeline,
+  Typography
 } from "antd";
 import Meta from "antd/lib/card/Meta";
-import { studentServices, accountServices, getCompanyName, getSchoolName, getSkillName, getExperience } from "@/services";
 import moment from 'moment';
+import React, { useEffect, useState } from "react";
 
 const { Title } = Typography;
-
 const dateFormat = 'YYYY-MM-DD';
 
 const onAddExperienceFinish = (values) => {

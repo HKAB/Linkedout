@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Tabs, Menu, Form, Input, Button, Upload, Space, message, DatePicker, Modal, Card } from 'antd';
-import { Row, Col, Avatar, Switch } from 'antd';
-import { companyServices } from "@/services";
-import { accountServices } from "@/services";
+import { accountServices, companyServices } from "@/services";
+import { Avatar, Button, Card, Col, Form, Input, Menu, message, Modal, Row, Space, Switch, Tabs, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
 
 
 const { TabPane } = Tabs;

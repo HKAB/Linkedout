@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { Card, Avatar, Typography, Row, Col, Tag, Divider, List, Button } from 'antd';
-import Meta from 'antd/lib/card/Meta';
+import { feedFollowSuggestionService } from '@/services/feed/feedFollowSuggestion.service';
+import { followService } from '@/services/follow.service';
 import { CheckOutlined } from '@ant-design/icons';
-import { followService } from '../../services/follow.service';
-import { feedFollowSuggestionService } from '../../services/feed/feedFollowSuggestion.service';
+import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from 'antd';
+import Meta from 'antd/lib/card/Meta';
+import React, { useEffect } from 'react';
 const { Title, Text } = Typography;
 
 
@@ -54,50 +54,52 @@ function FeedFollowSuggestion(props) {
   }
 
   return (
-    <Card style={{ width: 400, height: 350 }}>
-      <Meta title={<Text>Add to your feed</Text>} />
-      <Divider style={{ marginTop: 16, marginBottom: 0 }} />
-      <List
-        style={{ margin: 0 }}
-        grid={{ gutter: 0, column: 1 }}
-        itemLayout="vertical"
-        dataSource={suggestions.slice(0, 3)}
-        renderItem={item => (
-          <List.Item style={{ margin: 0, padding: 0 }} key={item.id}>
-            <Card bordered={false} style={{ padding: 0 }}>
-              <Row justify="space-between">
-                <Col span={4}>
-                  <Avatar src={"https://127.0.0.1:8000" + item.avatar} style={{ marginTop: 5, marginLeft: 0 }} />
-                </Col>
-                <Col span={14}>
-                  <Row justify="left"><Text ellipsis>{item.name}</Text></Row>
-                  <Row justify="left"><Text ellipsis type="secondary">Company - {item.specialties.join(", ")}</Text></Row>
-                </Col>
-                <Col span={6}>
-                  {!item.followed ? (
-                    <Button
-                      onClick={((e) => { handleClick(e, item) })}
-                      type="default"
-                      style={{ padding: 0, textAlign: "center", marginLeft: 8, marginRight: 4, marginTop: 4, width: 84 }}
-                    >
-                      + Follow
-                    </Button>
-                  ) : (
+    <Affix offsetTop={80}>
+      <Card className="feed-header" style={{ width: 400, height: 350 }}>
+        <Meta title={<Text>Add to your feed</Text>} />
+        <Divider style={{ marginTop: 16, marginBottom: 0 }} />
+        <List
+          style={{ margin: 0 }}
+          grid={{ gutter: 0, column: 1 }}
+          itemLayout="vertical"
+          dataSource={suggestions.slice(0, 3)}
+          renderItem={item => (
+            <List.Item style={{ margin: 0, padding: 0 }} key={item.id}>
+              <Card bordered={false} style={{ padding: 0 }}>
+                <Row justify="space-between">
+                  <Col span={4}>
+                    <Avatar src={"https://127.0.0.1:8000" + item.avatar} style={{ marginTop: 5, marginLeft: 0 }} />
+                  </Col>
+                  <Col span={14}>
+                    <Row justify="left"><Text ellipsis>{item.name}</Text></Row>
+                    <Row justify="left"><Text ellipsis type="secondary">Company - {item.specialties.join(", ")}</Text></Row>
+                  </Col>
+                  <Col span={6}>
+                    {!item.followed ? (
                       <Button
                         onClick={((e) => { handleClick(e, item) })}
                         type="default"
                         style={{ padding: 0, textAlign: "center", marginLeft: 8, marginRight: 4, marginTop: 4, width: 84 }}
                       >
-                        <CheckOutlined style={{ width: 10 }} />Followed
+                        + Follow
                       </Button>
-                    )}
-                </Col>
-              </Row>
-            </Card>
-          </List.Item>
-        )}
-      />
-    </Card>
+                    ) : (
+                        <Button
+                          onClick={((e) => { handleClick(e, item) })}
+                          type="default"
+                          style={{ padding: 0, textAlign: "center", marginLeft: 8, marginRight: 4, marginTop: 4, width: 84 }}
+                        >
+                          <CheckOutlined style={{ width: 10 }} />Followed
+                        </Button>
+                      )}
+                  </Col>
+                </Row>
+              </Card>
+            </List.Item>
+          )}
+        />
+      </Card>
+    </Affix>
   )
 }
 
