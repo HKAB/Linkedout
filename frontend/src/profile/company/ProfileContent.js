@@ -206,7 +206,7 @@ function ProfileContent() {
                     title={item.title}
                     description={<div>
                       <div>Yêu cầu: {item.seniority_level}</div>
-                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => ({city})}></List></Space></div>                      
+                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => (city)}></List></Space></div>                      
                       <div>Công việc: {item.employment_type}</div>
                       <List dataSource={item.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
                     </div>}

@@ -36,7 +36,7 @@ function getCompany (account_id) {
                 company_email_data, 
                 company_phone_data,
                 company_listjob_data,
-                company_listspeciality_data]) => {
+                ]) => {
                     let company = {};
                     company.basic_data = company_basic_data;
                     company.email = company_email_data.emails;
