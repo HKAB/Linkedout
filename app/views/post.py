@@ -5,8 +5,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.parsers import MultiPartParser
+from rest_framework.exceptions import ParseError
 
-from app.services.post import list_post, create_post, update_post, delete_post
+from app.services.post import list_post, create_post, update_post, delete_post, set_post_picture
 from app.utils import inline_serializer
 
 '''
@@ -39,7 +41,7 @@ class PostListView(APIView):
 
         class Meta:
             ref_name = 'PostListOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            fields = ['id', 'content', 'published_date', 'post_picture','interested_students']
     permission_classes = [AllowAny]
     authentication_classes = []
 
@@ -57,6 +59,7 @@ class PostCreateView(APIView):
         content = serializers.CharField(required=True)
         published_date = serializers.DateField(required=True)
         interested_students = serializers.ListField()
+        post_picture=serializers.ImageField()
 
         class Meta:
             ref_name = 'PostCreateIn'
@@ -70,7 +73,7 @@ class PostCreateView(APIView):
 
         class Meta:
             ref_name = 'PostCreateOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            fields = ['id', 'content', 'published_date','post_picture', 'interested_students']
 
     permission_classes = [IsAuthenticated]
 
@@ -90,6 +93,7 @@ class PostUpdateView(APIView):
             'content': serializers.CharField(required=True),
             'published_date': serializers.DateField(required=True),
             'interested_students': serializers.ListField(required=True),
+            'post_picture':serializers.ImageField(required=True),
         })
 
         class Meta:
@@ -101,10 +105,11 @@ class PostUpdateView(APIView):
         content = serializers.CharField()
         published_date = serializers.DateField()
         interested_students = serializers.ListField()
+        post_picture=serializers.ImageField()
 
         class Meta:
             ref_name = 'PostUpdateOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            fields = ['id', 'content', 'published_date','post_picture', 'interested_students']
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer(many=True)})
@@ -132,7 +137,7 @@ class PostDeleteView(APIView):
 
         class Meta:
             ref_name = 'PostDeleteOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            fields = ['id', 'content', 'published_date','post_picture', 'interested_students']
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer(many=True)})
@@ -142,3 +147,14 @@ class PostDeleteView(APIView):
         serializer.is_valid(raise_exception=True)
         result = delete_post(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
+
+class PostPictureView(APIView):
+    parser_classes = (MultiPartParser,)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            set_post_picture(request.user, request.data['file'])
+        except KeyError:
+            raise ParseError("'file' field missing.")
+        return Response("Uploaded.", status=status.HTTP_201_CREATED)

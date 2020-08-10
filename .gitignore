@@ -171,3 +171,5 @@ app/migrations/0*
 !media
 media/
 !media/profile/default.jpg
+!media/job/default.jpg
+!media/post/default.jpg

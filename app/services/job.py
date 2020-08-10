@@ -1,3 +1,4 @@
+import os
 from datetime import date
 
 from app.models.job import Job
@@ -16,6 +17,7 @@ def list_job(*, id: int) -> list:
             'employment_type': j.employment_type,
             'published_date': j.published_date,
             'recruitment_url': j.recruitment_url,
+            'job_picture':j.job_picture,
             'cities': j.cities,
             'skills': j.skills
         } for j in jobs
@@ -71,6 +73,17 @@ def delete_job(*, account: Account, id: int) -> list:
         raise InvalidInputFormat("Job entry not found!")
     j.delete()
     return list_job(id=account.id)
+
+def set_job_picture(job: Job, file_instance):
+    if file_instance.name.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
+        raise InvalidInputFormat(
+            "File extension must be 'png', 'jpg' or 'jpeg'")
+    j=Job.objects.get(job__id=job.id)
+    if j.job_picture!=Job._meta.get_field('job_picture').get_default():
+        old_file_path=os.path.join(MEDIA_ROOT,j.job_picture.name)
+        if os.path.exists(old_file_path):
+            os.remove(old_file_path)
+    j.job_picture.save(file_instance.name, file_instance, save=True)
 
 
 def company_account_check(account: Account, raise_exception=True):

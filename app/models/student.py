@@ -17,5 +17,5 @@ class Student(models.Model):
     profile_picture = models.ImageField(
         upload_to=store_picture, default='profile/default.jpg')
     description = models.TextField(null=True)
-
+    gender =models.CharField(max_length=8)
     skills = models.ManyToManyField(Skill)
