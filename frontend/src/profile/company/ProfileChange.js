@@ -1,5 +1,5 @@
 //import Form from "antd/lib/form/Form";
-import { EditableTagGroup } from '@/components';
+import { EditableTagGroup, MyEditor } from '@/components';
 import { accountServices, companyServices, getCityName, jobServices } from "@/services";
 import {
   EditOutlined,
@@ -9,14 +9,13 @@ import {
   AutoComplete, Avatar,
   Badge, Button, Card,
   Form, Input, List, Modal,
-  Popconfirm, Select, Space, Tag, Typography, Upload
+  Popconfirm, Select, Space, Tag, Typography, Upload, message
 } from "antd";
 import Meta from "antd/lib/card/Meta";
-import BraftEditor from 'braft-editor';
-import 'braft-editor/dist/index.css';
-import Markdown from 'braft-extensions/dist/markdown';
 import React, { useEffect, useState } from "react";
 import '../assets/css/profile.css';
+
+// import {Editor, EditorState} from 'draft-js';
 
 
 const { Option } = Select;
@@ -56,7 +55,6 @@ const speciality_data = [
   { speciality: 'testing' },
   { speciality: 'dev' }
 ]
-BraftEditor.use(Markdown());
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -72,8 +70,8 @@ function ProfileChange() {
   const [visible, setVisible] = useState(false);
   const [createJob_visible, setCreateJob_visible] = useState(false);
   const [editJob_visible, setEditJob_visible] = useState(false);
-  const [editorState, setEditorState] = useState(null);
-  const [outputHTML, setOutputHTML] = useState(null);
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [outputHTML, setOutputHTML] = useState("");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -85,6 +83,7 @@ function ProfileChange() {
   const [companyBasicData, setCompanyBasicData] = useState([]);
   var editTags = useState(null);
   var createTags = useState(null);
+  var editorRef = useState(null);
 
   const [formEdit] = Form.useForm();
   const [formCreate] = Form.useForm();
@@ -100,7 +99,6 @@ function ProfileChange() {
             setCompanyBasicData(company.basic_data);
             setJobData(company.job);
             setSpecialityData(company.speciality);
-            console.log(companyBasicData);
           }
         });
       return () => {
@@ -113,13 +111,32 @@ function ProfileChange() {
   }, [])
 
   const handleEditorChange = (editorState) => {
-    setEditorState(editorState);
-    //outputHTML: editorState.toHTML()
-    //console.log(state.outputHTML);
+    // console.log(editorState);
+    // setEditorState(editorState);
+    // outputHTML: editorState.toHTML()
+    // setOutputHTML(editorState.toHTML());
+    // console.log(outputHTML);
   }
   const onEditorFinish = () => {
-    setOutputHTML(editorState.toHTML());
-    // console.log(state.outputHTML);
+    // setOutputHTML(editorState.toHTML());
+    console.log(editorRef.getHtml());
+    var descriptionHtml = editorRef.getHtml();
+    companyServices
+      .updateBasicCompany(
+        companyBasicData.name,
+        companyBasicData.website,
+        companyBasicData.specialties,
+        descriptionHtml
+      )
+      .then(() => {
+        companyServices.getCompany(accountServices.userValue.account.id);
+        message.success('Updated description!');
+      })
+      .catch((error) => {
+        console.log(error);
+        message.success(error);
+      });
+
   };
 
   const handleCancel = (e) => {
@@ -278,12 +295,8 @@ function ProfileChange() {
   return (
     <>
       <Card className="card-info" style={{ marginTop: 24 }} title={<Title level={3}>Mô tả</Title>}>
-        <BraftEditor
-          language="en"
-          value={editorState}
-          onChange={handleEditorChange}
-        />
-        <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Save</Button>
+        <MyEditor ref={ref => (editorRef = ref)}></MyEditor>
+        <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Lưu</Button>
       </Card>
 
       <Card

@@ -4,8 +4,7 @@ import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import logo from "../account/assets/logo.png";
-import '../components/assets/css/MyHeader.css';
-
+import "./assets/css/MyHeader.css"
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -41,7 +40,7 @@ class MyHeader extends Component {
   render() {
     return (
       <Affix offsetTop={0}>
-        <Header className="site-layout-background">
+        <Header className="my-custom-header" style={{backgroundColor: "#ffffff"}}>
           {/* <div className="logo"> */}
           <Space>
             <Link to="/feed"><img src={logo} width="48" height="48"></img></Link>

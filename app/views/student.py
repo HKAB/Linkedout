@@ -36,7 +36,7 @@ class StudentGetView(APIView):
         class Meta:
             model = Student
             ref_name = 'StudentGetOut'
-            fields = ['firstname', 'lastname', 'dateofbirth',
+            fields = ['firstname', 'lastname', 'dateofbirth','gender',
                       'profile_picture', 'description']
 
     permission_classes = [AllowAny]
@@ -56,13 +56,13 @@ class StudentCreateView(APIView):
         class Meta:
             model = Student
             ref_name = 'StudentCreateIn'
-            fields = ['firstname', 'lastname', 'dateofbirth', 'description']
+            fields = ['firstname', 'lastname', 'dateofbirth','gender', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         class Meta:
             model = Student
             ref_name = 'StudentCreateOut'
-            fields = ['firstname', 'lastname', 'dateofbirth',
+            fields = ['firstname', 'lastname', 'dateofbirth','gender',
                       'profile_picture', 'description']
 
     permission_classes = [IsAuthenticated]
@@ -82,13 +82,13 @@ class StudentUpdateView(APIView):
         class Meta:
             model = Student
             ref_name = 'StudentUpdateIn'
-            fields = ['firstname', 'lastname', 'dateofbirth', 'description']
+            fields = ['firstname', 'lastname', 'dateofbirth','gender', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         class Meta:
             model = Student
             ref_name = 'StudentUpdateOut'
-            fields = ['firstname', 'lastname', 'dateofbirth',
+            fields = ['firstname', 'lastname', 'dateofbirth','gender',
                       'profile_picture', 'description']
 
     permission_classes = [IsAuthenticated]

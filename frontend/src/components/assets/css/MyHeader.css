@@ -1,6 +1,5 @@
-.site-layout-background{
+.my-custom-header {
     display: flex;
-    background-color: #ffffff;
 }
 
 .left-menu {
