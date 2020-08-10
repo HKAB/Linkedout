@@ -1,6 +1,6 @@
 import { accountServices, companyServices } from "@/services";
 import { EditOutlined, LikeOutlined, MailOutlined, PhoneOutlined, SettingOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Carousel, Col, Divider, Layout, List, Progress, Row, Spin, Statistic, Tag, Typography } from 'antd';
+import { Avatar, Button, Card, Empty, Carousel, Col, Divider, Layout, List, Progress, Row, Spin, Statistic, Tag, Typography, Space } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import '../assets/css/profile.css';
@@ -66,6 +66,10 @@ const centerInRowStyle = {
 
 function ProfileContent() {
 
+  const [basicProfileData, setBasicProfileData] = useState([]);
+  const [phoneData, setPhoneData] = useState([]);
+  const [emailData, setEmailData] = useState([]);
+  const [listJobData, setListJobData] = useState([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -80,6 +84,10 @@ function ProfileContent() {
       const subscription = companyServices.companyObject.subscribe((company) => {
         if (company) {
           console.log(company);
+          setBasicProfileData(company.basic_data);
+          setEmailData(company.email);
+          setPhoneData(company.phone);
+          setListJobData(company.job);
         }
       });
 
@@ -111,12 +119,15 @@ function ProfileContent() {
             <Col style={rowStyle} span={4}>
               <Avatar src={data.profile_picture} style={centerInRowStyle} size={128}></Avatar>
             </Col>
-            <Col style={{ marginLeft: 24, marginTop: 64 }} span={17}>
-              <Title level={3}>{data.name}</Title>
+            <Col style={{ marginLeft: 24, marginTop: 16 }} span={17}>
+              <Title level={3}>{basicProfileData.name}</Title>
+              <Space><List dataSource={basicProfileData.specialties} renderItem={specialty => (specialty)}></List></Space>
+				      <div>Website:
+                 {basicProfileData.website}</div>
               <div>
-                <MailOutlined />{" Email: " + data.email}
+                <MailOutlined />{" Email: " + emailData[0]}
                 <Divider type="vertical" />
-                <PhoneOutlined />{" Phone: " + data.phone}
+                <PhoneOutlined />{" Phone: " + phoneData[0]}
               </div>
 
             </Col>
@@ -132,7 +143,7 @@ function ProfileContent() {
             marginTop: 24,
           }}>
           <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
-          <div style={{ marginTop: 16 }}>{data.description}</div>
+          <div style={{ marginTop: 16 }}>{basicProfileData.description}</div>
           {/* <span styles={{marginTop: 100}}>{data.description}</span> */}
         </Card>
 
@@ -179,10 +190,11 @@ function ProfileContent() {
           <Meta title={<Title level={3}>Việc làm</Title>}></Meta>
           <List
             grid={{ gutter: 24, column: 2 }}
-            dataSource={jobs}
+            dataSource={listJobData}
             renderItem={item => (
               <List.Item>
                 <Card
+					        key={item.id}
                   style={{ marginTop: 16 }}
                   actions={[
                     <SettingOutlined key="setting" />,
@@ -194,8 +206,8 @@ function ProfileContent() {
                     title={item.title}
                     description={<div>
                       <div>Yêu cầu: {item.seniority_level}</div>
-                      <div>Địa điểm: {item.seniority_level}</div>
-                      <div>Công việc: {item.seniority_level}</div>
+                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => ({city})}></List></Space></div>                      
+                      <div>Công việc: {item.employment_type}</div>
                       <List dataSource={item.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
                     </div>}
                   />
