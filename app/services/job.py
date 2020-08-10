@@ -33,7 +33,6 @@ def get_job(*, id: int) -> Job:
 def create_job(*, account: Account, title: str, description: str, seniority_level: str,
                employment_type: str, recruitment_url: str, cities: list, skills: list) -> list:
     company_account_check(account)
-    job_type_check(employment_type)
     j = Job(
         company=get_company_account(account),
         title=title,
@@ -53,7 +52,6 @@ def create_job(*, account: Account, title: str, description: str, seniority_leve
 def update_job(*, account: Account, id: int, title: str, description: str, seniority_level: str,
                employment_type: str, recruitment_url: str, cities: list, skills: list) -> list:
     company_account_check(account)
-    job_type_check(employment_type)
     j = Job.objects.filter(id=id)
     j.update(
         title=title,
@@ -94,13 +92,6 @@ def company_account_check(account: Account, raise_exception=True):
         return False
     return True
 
-
-def job_type_check(employment_type: str, raise_exception=True):
-    if employment_type not in ['Part-time', 'Full-time']:
-        if raise_exception:
-            raise InvalidInputFormat('Invalid employment type.')
-        return False
-    return True
 
 def set_job_picture(job: Job, file_instance):
     if file_instance.name.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
