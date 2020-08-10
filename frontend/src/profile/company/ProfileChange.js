@@ -4,6 +4,7 @@ import {
 	EditOutlined,
 	SettingOutlined,
 	PlusOutlined,
+	MinusCircleOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -16,6 +17,9 @@ import {
 	Form,
 	Upload,
 	AutoComplete,
+	Popconfirm,
+	Badge,
+	Space,
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 
@@ -69,6 +73,11 @@ const jobs = [
 	}
 ]
 
+const speciality_data = [
+	{speciality:'code'},
+	{speciality:'testing'},
+	{speciality:'dev'}
+]
 BraftEditor.use(Markdown());
 
 function getBase64(file) {
@@ -93,11 +102,37 @@ function ProfileChange() {
 	const [fileList, setfileList] = useState([]);
 	const [autoCompleteCity, setAutoCompleteCity] = useState([]);
 	const [autoCompleteEditCity, setAutoCompleteEditCity] = useState([]);
+	const [jobData, setJobData] = useState([]);
+	const [specialityData, setSpecialityData] = useState([]);
+	const [companyBasicData, setCompanyBasicData] = useState([]);
 	var editTags = useState(null);
 	var createTags = useState(null);
 
 	const [formEdit] = Form.useForm();
 	const [formCreate] = Form.useForm();
+
+	useEffect(() => {
+		let user = accountServices.userValue;
+		console.log(user);
+		if (user) {
+		  companyServices.getCompany(user.account.id);
+		  const subscription = companyServices.companyObject
+			.subscribe((company) => {
+			  if (company) {
+				setCompanyBasicData(company.basic_data);
+				setJobData(company.job);
+				setSpecialityData(company.speciality);
+				console.log(companyBasicData);
+			  }
+			});
+		  return () => {
+			subscription.unsubscribe();
+		  }
+		}
+		else {
+		  console.log("Oh no!");
+		}
+	  }, [])
 
 	const handleEditorChange = (editorState) => {
 		setEditorState(editorState);
@@ -184,6 +219,14 @@ function ProfileChange() {
 		editTags.setTags(item.skills);
 		showEditJobModal();
 	};
+
+	const onAddSpecialityFinish = (values) => {
+		
+	};
+
+	const onConfirmDeleteSpeciality = (values) => {
+	
+	}
 
 	const onChangeAutoCompleteCity = (text) => {
 		console.log(text);
@@ -485,6 +528,94 @@ function ProfileChange() {
 					</Form.Item>
 				</Form>
 			</Modal>
+
+			<Card style = {{marginTop:24}}>
+				<Meta title={<Title level={3}>Chuyên môn</Title>}></Meta>
+				<List
+					style={{ marginTop: 24 }}
+					grid={{ column: 2 }}
+					dataSource={specialityData}
+					renderItem={(item) => (
+						<List.Item>
+							<List.Item.Meta
+								avatar={
+									<Popconfirm
+										title="Bạn có muốn xóa cái này?"
+										onConfirm={() => onConfirmDeleteSpeciality(item)}
+										okText="Yes"
+										cancelText="No">
+										<a>
+											<Badge
+												style={{ color: "red" }}
+												count={<MinusCircleOutlined />}
+											>
+												<Avatar />
+											</Badge>
+										</a>
+									</Popconfirm>
+								}
+								title={item}
+							/>
+						</List.Item>
+					)}
+				/>
+				<Form
+					name="add-speciality"
+					autoComplete="off"
+					onFinish={onAddSpecialityFinish}
+				>
+					<Form.List name="speciality_info">
+						{(fields, { add, remove }) => {
+							return (
+								<div>
+									{fields.map((field) => (
+										<Space
+											key={field.key}
+											style={{
+												display:'flex',
+												marginBottom: 8,
+												marginTop: 8,
+											}}
+										>
+											<Form.Item
+												{...field}
+												name={[field.name, "speciality"]}
+												fieldKey={[field.fieldKey, "speciality"]}
+												rules={[{ required: true, message: "Missing speciality" },]}
+											>
+												<Input/>
+											</Form.Item>
+											<Form.Item>
+											<MinusCircleOutlined
+												style={{ color: "red"}}
+												onClick={() => {
+													remove(field.name);
+												}}
+											/>
+											</Form.Item>
+										</Space>
+									))}
+
+									<Form.Item>
+										<Button type="dashed" shape="circle"
+											onClick={() => {
+												add();
+											}}
+										>
+											<PlusOutlined />
+										</Button>
+									</Form.Item>
+								</div>
+							);
+						}}
+					</Form.List>
+
+					<Form.Item>
+						<Button type="primary" htmlType="submit"> Submit </Button>
+					</Form.Item>
+				</Form>
+			</Card>
+
 			<Card className="card-info" style={{ marginTop: 24 }}>
 				<Upload
 					//action ???

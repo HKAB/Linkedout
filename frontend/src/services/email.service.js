@@ -7,7 +7,7 @@ function getEmail(id) {
 }
 
 function deleteEmail(email) {
-	return fetchWrapper._delete(`http://127.0.0.1:8000/api/email/delete`, {email})
+	return fetchWrapper.delete(`http://127.0.0.1:8000/api/email/delete`, {email})
 }
 
 function createEmail(email) {

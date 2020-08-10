@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Tabs, Menu, Form, Input, Button, Upload, Space, message, DatePicker, Modal, Card } from 'antd';
-import { Row, Col, Avatar, Switch } from 'antd';
+import { Row, Col, Avatar, Switch, List, Popconfirm } from 'antd';
 import { companyServices } from "@/services";
 import { accountServices } from "@/services";
-
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const { TabPane } = Tabs;
 const color = (
@@ -37,6 +40,31 @@ function beforeUpload(file) {
   return isJpgOrPng && isLt2M;
 }
 
+const onConfirmDeletePhone = (values) => {
+  console.log(values);
+  companyServices.deleteCompanyPhone(values)
+    .then(() => {
+      companyServices.getCompany(accountServices.userValue.account.id);
+      message.success({ title: "uWu", content: "Phone deleted!" });
+    })
+    .catch((error) => {
+      console.log(error);
+      message.error({ title: "uWu", content: error });
+    });
+}
+
+const onConfirmDeleteEmail = (values) => {
+  console.log(values);
+  companyServices.deleteCompanyEmail(values)
+    .then(() => {
+      companyServices.getCompany(accountServices.userValue.account.id);
+      message.success({ title: "uWu", content: "Email deleted!" });
+    })
+    .catch((error) => {
+      console.log(error);
+      message.error({ title: "uWu", content: error });
+    });
+}
 
 function ProfileEdit() {
 
@@ -48,6 +76,41 @@ function ProfileEdit() {
   const [imageUrl, setImageUrl] = useState("");
 
   const [formEditBasicInfo] = Form.useForm();
+  const [formAddPhone] = Form.useForm();
+  const [formAddEmail] = Form.useForm();
+
+  const onAddPhoneFinish = (values) => {
+    values.phone_info.forEach((phone_info) => {
+    companyServices.createCompanyPhone(phone_info.phone)
+      .then(() => {
+        console.log(phone_info.phone);
+        companyServices.getCompany(accountServices.userValue.account.id);
+        Modal.success({ title: "uWu", content: "Phone created!" });
+        formAddPhone.resetFields();
+      })
+      .catch((error) => {
+        console.log(error);
+        Modal.error({ title: "uWu", content: error });
+      });
+    })
+  };
+
+  const onAddEmailFinish = (values) => {
+    console.log(values);
+    values.email_info.forEach((email_info) => {
+    companyServices.createCompanyEmail(email_info.email)
+      .then(() => {
+        console.log(email_info.email);
+        companyServices.getCompany(accountServices.userValue.account.id);
+        Modal.success({ title: "uWu", content: "Email created!" });
+        formAddEmail.resetFields();
+      })
+      .catch((error) => {
+        console.log(error);
+        Modal.error({ title: "uWu", content: error });
+      });
+    })
+  };
 
   const handleChangeAvatar = info => {
     getBase64(info.file.originFileObj, picture =>
@@ -266,7 +329,7 @@ function ProfileEdit() {
           </Row>
         </TabPane>
         <TabPane tab="Settings" key="2" style={{ marginTop: 20 }}>
-          <span style={{ fontWeight: "bold" }}>CHANGE PASSWORD</span>
+          <span style={{ fontWeight: "bold" }}>SETTINGS</span>
           <Row style={{ marginTop: 56 }}>
             <Col span={20} offset={4}>
               <span>Notification</span>
@@ -274,7 +337,205 @@ function ProfileEdit() {
             </Col>
           </Row>
         </TabPane>
+        <TabPane tab="Phone and Email" key="4" style={{ marginTop: 20 }}>
+          <span style={{ fontWeight: "bold" }}>PHONE AND EMAIL</span>
+          <Row gutter={12, 12}>
+            <Col span={12}>
+              <Card title="Phone">
+                <List
+                  //style={{ marginTop: 24 }}
+                  itemLayout="horizontal"
+                  dataSource={phoneData}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        title={item}
+                      />
 
+                      <Popconfirm
+                        title="Bạn có muốn xóa cái này?"
+                        onConfirm={() => onConfirmDeletePhone(item)}
+                        okText="Yes"
+                        cancelText="No">
+                        <a>
+                          <Button
+                            type="dashed"
+                            shape="circle"
+                            style={{ color: 'red', marginLeft: 5 }}
+                            icon={<MinusCircleOutlined />}
+                          />
+                        </a>
+                      </Popconfirm>
+
+                    </List.Item>
+                  )}
+                >
+                  <Form
+                    name="add-phone"
+                    autoComplete="off"
+                    onFinish={onAddPhoneFinish}
+                    form={formAddPhone}
+                  >
+                    <Form.List name="phone_info">
+                      {(fields, { add, remove }) => {
+                        return (
+                          <div>
+                            {fields.map((field) => (
+                              <Row gutter={12, 12}
+                                key={field.key}
+                                style={{
+                                  marginBottom: 8,
+                                  marginTop: 8,
+                                  width: '100%',
+                                }}
+                              >
+                                <Col span={20}>
+                                  <Form.Item
+                                    {...field}
+                                    name={[field.name, "phone"]}
+                                    fieldKey={[field.fieldKey, "phone"]}
+                                    rules={[{ required: true, message: "Missing phone", }]}
+                                  >
+                                    <Input />
+                                  </Form.Item>
+                                </Col>
+
+                                <Col span={1}>
+                                  <Button
+                                    type="dashed"
+                                    shape="circle"
+                                    style={{ color: 'red' }}
+                                    icon={<MinusCircleOutlined />}
+                                    onClick={() => {
+                                      remove(field.name);
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            ))}
+
+                            <Form.Item>
+                              <Button
+                                type="dashed"
+                                onClick={() => {
+                                  add();
+                                }}
+                                block
+                              >
+                                <PlusOutlined /> Add Phone
+                              </Button>
+                            </Form.Item>
+                          </div>
+                        );
+                      }}
+                    </Form.List>
+
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit"> Save </Button>
+                    </Form.Item>
+                  </Form>
+                </List>
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card title="Email">
+                <List
+                  //style={{ marginTop: 24 }}
+                  itemLayout="horizontal"
+                  dataSource={emailData}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        title={item}
+                      />
+
+                      <Popconfirm
+                        title="Bạn có muốn xóa cái này?"
+                        onConfirm={() => onConfirmDeleteEmail(item)}
+                        okText="Yes"
+                        cancelText="No">
+                        <a>
+                          <Button
+                            type="dashed"
+                            shape="circle"
+                            style={{ color: 'red', marginLeft: 5 }}
+                            icon={<MinusCircleOutlined />}
+                          />
+                        </a>
+                      </Popconfirm>
+
+                    </List.Item>
+                  )}
+                >
+                  <Form
+                    name="add-email"
+                    autoComplete="off"
+                    onFinish={onAddEmailFinish}
+                    form={formAddEmail}
+                  >
+                    <Form.List name="email_info">
+                      {(fields, { add, remove }) => {
+                        return (
+                          <div>
+                            {fields.map((field) => (
+                              <Row gutter={12, 12}
+                                key={field.key}
+                                style={{
+                                  marginBottom: 8,
+                                  marginTop: 8,
+                                  width: '100%',
+                                }}
+                              >
+                                <Col span={20}>
+                                  <Form.Item
+                                    {...field}
+                                    name={[field.name, "email"]}
+                                    fieldKey={[field.fieldKey, "email"]}
+                                    rules={[{ required: true, message: "Missing email", }]}
+                                  >
+                                    <Input />
+                                  </Form.Item>
+                                </Col>
+
+                                <Col span={1}>
+                                  <Button
+                                    type="dashed"
+                                    shape="circle"
+                                    style={{ color: 'red' }}
+                                    icon={<MinusCircleOutlined />}
+                                    onClick={() => {
+                                      remove(field.name);
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            ))}
+
+                            <Form.Item>
+                              <Button
+                                type="dashed"
+                                onClick={() => {
+                                  add();
+                                }}
+                                block
+                              >
+                                <PlusOutlined /> Add Email
+                              </Button>
+                            </Form.Item>
+                          </div>
+                        );
+                      }}
+                    </Form.List>
+
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit"> Save </Button>
+                    </Form.Item>
+                  </Form>
+                </List>
+              </Card>
+            </Col>
+          </Row>
+        </TabPane>
       </Tabs>
     </Card>
 
