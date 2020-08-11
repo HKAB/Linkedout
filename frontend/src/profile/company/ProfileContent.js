@@ -1,6 +1,6 @@
 import { accountServices, companyServices } from "@/services";
 import { EditOutlined, LikeOutlined, MailOutlined, PhoneOutlined, SettingOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Empty, Carousel, Col, Divider, Layout, List, Progress, Row, Spin, Statistic, Tag, Typography, Space } from 'antd';
+import { Avatar, Button, Card, Empty, Carousel, Col, Divider, Layout, List, Progress, Row, Spin, Statistic, Tag, Typography, Space, Modal } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import '../assets/css/profile.css';
@@ -71,6 +71,8 @@ function ProfileContent() {
   const [emailData, setEmailData] = useState([]);
   const [listJobData, setListJobData] = useState([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
   const [isLoading, setIsLoading] = useState(true);
+  const [jobDetail, setJobDetail] = useState([]);
+  const [jobDetailVisible, setJobDetailVisible] = useState(false);
 
   useEffect(() => {
     setIsLoading(false);
@@ -98,8 +100,21 @@ function ProfileContent() {
     else {
       console.log("Oh no!");
     }
-  }, [])
+  }, []);
 
+  const showJobDetailModal = () => {
+    setJobDetailVisible(true);
+  };
+
+  const handleJobDetailCancel = (e) => {
+    setJobDetailVisible(false);
+  };
+
+  const onShowJobDetail = (values) => {
+    console.log(values);
+    setJobDetail(values);
+    showJobDetailModal();
+  };
 
   if (isLoading) {
     return (
@@ -144,7 +159,7 @@ function ProfileContent() {
           }}>
           <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
           {/* <div style={{ marginTop: 16 }}>{basicProfileData.description}</div> */}
-          <div style={{ marginTop: 16 }} dangerouslySetInnerHTML={{__html: basicProfileData.description}}></div>
+          <div style={{ marginTop: 16, overflowWrap:'break-word', overflow:'hidden'}} dangerouslySetInnerHTML={{__html: basicProfileData.description}}></div>
           {/* <span styles={{marginTop: 100}}>{data.description}</span> */}
         </Card>
 
@@ -198,8 +213,7 @@ function ProfileContent() {
 					        key={item.id}
                   style={{ marginTop: 16 }}
                   actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
+                    <Button type = "primary" style = {{float:'right'}} onClick={()=> onShowJobDetail(item)}>Detail</Button>
                   ]}
                 >
                   <Meta
@@ -218,6 +232,32 @@ function ProfileContent() {
           </List>
         </Card>
 
+        <Modal
+          forceRender
+          title = "Việc làm"
+          visible = {jobDetailVisible}
+          onCancel = {handleJobDetailCancel}
+          footer = {null}
+        >
+          <List grid={{ gutter: 24, column: 2 }}>
+              <List.Item>
+                  <Meta
+                    avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+                    title={jobDetail.title}
+                    description={<div>
+                      <div>Yêu cầu: {jobDetail.seniority_level}</div>
+                      <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
+                      <div>Công việc: {jobDetail.employment_type}</div>
+                      <div>Mô tả: {jobDetail.description}</div>
+                      <div style = {{display:'flex'}}> 
+                        <div>Kỹ năng: </div>
+                        <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
+                      </div>
+                    </div>}
+                  />
+              </List.Item>
+          </List>
+        </Modal>
 
         <Card
           className="card-info"

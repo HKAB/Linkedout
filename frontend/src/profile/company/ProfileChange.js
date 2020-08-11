@@ -14,6 +14,7 @@ import {
 import Meta from "antd/lib/card/Meta";
 import React, { useEffect, useState } from "react";
 import '../assets/css/profile.css';
+import TextArea from 'antd/lib/input/TextArea';
 
 // import {Editor, EditorState} from 'draft-js';
 
@@ -82,6 +83,8 @@ function ProfileChange() {
   const [jobData, setJobData] = useState([]);
   const [companyBasicData, setCompanyBasicData] = useState([]);
   const [editorDescription, setEditorDescription] = useState([]);
+  const [jobDetail, setJobDetail] = useState([]);
+  const [jobDetailVisible, setJobDetailVisible] = useState(false);
   var editTags = useState(null);
   var createTags = useState(null);
   var editorRef = useState(null);
@@ -265,6 +268,20 @@ function ProfileChange() {
     //   });
   }
 
+  const showJobDetailModal = () => {
+    setJobDetailVisible(true);
+  };
+
+  const handleJobDetailCancel = (e) => {
+    setJobDetailVisible(false);
+  };
+
+  const onShowJobDetail = (values) => {
+    console.log(values);
+    setJobDetail(values);
+    showJobDetailModal();
+  };
+
   const onChangeAutoCompleteSpeciality = (data) => {
     if (data) {
 
@@ -371,8 +388,8 @@ function ProfileChange() {
               <Card
                 style={{ marginTop: 16 }}
                 actions={[
-                  <SettingOutlined key="setting" />,
                   <EditOutlined key="edit" onClick={() => onJobModify(item)} />,
+                  <Button type = "primary" onClick={()=> onShowJobDetail(item)}>Detail</Button>
                 ]}
               >
                 <Meta
@@ -391,6 +408,33 @@ function ProfileChange() {
         </List>
         <Button style={{ float: "right" }} size="large" type="primary" shape="circle" onClick={() => showCreateJobModal()}>+</Button>
       </Card>
+      
+      <Modal
+          forceRender
+          title = "Việc làm"
+          visible = {jobDetailVisible}
+          onCancel = {handleJobDetailCancel}
+          footer = {null}
+        >
+          <List grid={{ gutter: 24, column: 2 }}>
+              <List.Item>
+                  <Meta
+                    avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+                    title={jobDetail.title}
+                    description={<div>
+                      <div>Yêu cầu: {jobDetail.seniority_level}</div>
+                      <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
+                      <div>Công việc: {jobDetail.employment_type}</div>
+                      <div>Mô tả: {jobDetail.description}</div>
+                      <div style = {{display:'flex'}}> 
+                        <div>Kỹ năng: </div>
+                        <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
+                      </div>
+                    </div>}
+                  />
+              </List.Item>
+          </List>
+        </Modal>
 
       <Modal
         forceRender
@@ -427,7 +471,7 @@ function ProfileChange() {
             name="description"
             rules={[{ required: true, message: "Job description is required!" }]}
           >
-            <Input />
+            <TextArea />
           </Form.Item>
 
           <Form.Item
@@ -559,7 +603,7 @@ function ProfileChange() {
             name="description"
             rules={[{ required: true, message: "Description is required!" }]}
           >
-            <Input />
+            <TextArea />
           </Form.Item>
 
           <Form.Item
