@@ -1,11 +1,11 @@
-from datetime import date
 import os
-from app.models.job import Job
+from datetime import date
+
+from app.exceptions import InvalidInputFormat
 from app.models.account import Account
 from app.models.company import Company
-from app.exceptions import InvalidInputFormat
+from app.models.job import Job
 from backend.settings import MEDIA_ROOT
-
 
 
 def list_job(*, id: int) -> list:
@@ -81,8 +81,10 @@ def delete_job(*, account: Account, id: int) -> list:
 def get_company_account(account: Account, raise_exception=True):
     c = Company.objects.filter(account=account).first()
     if c is None:
-        raise InvalidInputFormat("Company not found!")
+        if raise_exception:
+            raise InvalidInputFormat("Company not found!")
     return c
+
 
 def company_account_check(account: Account, raise_exception=True):
     if account.account_type != 'company':
@@ -97,9 +99,9 @@ def set_job_picture(job: Job, file_instance):
     if file_instance.name.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
         raise InvalidInputFormat(
             "File extension must be 'png', 'jpg' or 'jpeg'")
-    j=Job.objects.get(job__id=job.id)
-    if j.job_picture!=Job._meta.get_field('job_picture').get_default():
-        old_file_path=os.path.join(MEDIA_ROOT,j.job_picture.name)
+    j = Job.objects.get(job__id=job.id)
+    if j.job_picture != Job._meta.get_field('job_picture').get_default():
+        old_file_path = os.path.join(MEDIA_ROOT, j.job_picture.name)
         if os.path.exists(old_file_path):
             os.remove(old_file_path)
     j.job_picture.save(file_instance.name, file_instance, save=True)

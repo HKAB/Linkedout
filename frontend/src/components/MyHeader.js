@@ -2,10 +2,10 @@ import { accountServices } from "@/services";
 import { BellOutlined, LogoutOutlined, QuestionCircleOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
 import React, { Component } from 'react';
-
+import { Link } from 'react-router-dom';
 import logo from "../account/assets/logo.png";
-import "./assets/css/MyHeader.css"
-import { Link} from 'react-router-dom';
+import "./assets/css/MyHeader.css";
+
 const { Title } = Typography;
 const { Header, Content } = Layout;
 
@@ -38,7 +38,7 @@ class MyHeader extends Component {
   render() {
     return (
       <Affix offsetTop={0}>
-        <Header className="my-custom-header" style={{backgroundColor: "#ffffff"}}>
+        <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
           {/* <div className="logo"> */}
           <Space>
             <Link to="/feed"><img src={logo} width="48" height="48"></img></Link>

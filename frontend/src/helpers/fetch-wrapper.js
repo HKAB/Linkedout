@@ -4,7 +4,7 @@ import { accountServices } from "@/services";
 function get(url) {
   const requestOptions = {
     method: "GET",
-    header: authHeader(url)
+    headers: authHeader(url)
   }
   return fetch(url, requestOptions).then(handleRequest)
 }
@@ -26,13 +26,16 @@ function post_multipartdata(url, data) {
 
   const formData = new FormData();
 
-  for (var key in data) {
-    formData.append(key, data[key]);
-  }
-  
+  // for (var key in data) {
+  //   formData.append(key, data[key]);
+  // }
+
+  formData.append('file', data.file);
+
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s', ...authHeader(url) },
+    // headers: { "Content-Type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s', ...authHeader(url) },
+    headers: authHeader(url),
     body: formData
   }
 

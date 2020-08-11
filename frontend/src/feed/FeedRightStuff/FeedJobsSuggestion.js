@@ -3,6 +3,7 @@ import { RightOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
+import { Config } from '../../config/consts';
 const { Title, Text } = Typography;
 
 function FeedJobSuggestion(props) {
@@ -24,12 +25,12 @@ function FeedJobSuggestion(props) {
   }
 
   useEffect(() => {
-    // fetchSuggesions();
+    fetchSuggesions();
   }, [])
 
   return (
     <Affix offsetTop={450}>
-      <Card className="feed-header" style={{ width: 400, height: 410, margintop: 24 }}>
+      <Card className="card-info" style={{ width: 400, height: 410, margintop: 24 }}>
         <Meta title={<Text>Jobs you might interest</Text>} />
         <Divider style={{ marginTop: 16, marginBottom: 0 }} />
         <List
@@ -42,7 +43,7 @@ function FeedJobSuggestion(props) {
               <Card bordered={false} style={{ padding: 0 }}>
                 <Row justify="space-between">
                   <Col span={4}>
-                    <Avatar shape="square" size={32} src={"https://127.0.0.1:8000" + item.companyProfilePicture} style={{ marginTop: 16, marginLeft: 0 }} />
+                    <Avatar shape="square" size={32} src={Config.backendUrl + item.companyProfilePicture} style={{ marginTop: 16, marginLeft: 0 }} />
                   </Col>
                   <Col span={14}>
                     <Row justify="left"><Text ellipsis>{item.jobTitle}</Text></Row>

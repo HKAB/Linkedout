@@ -1,13 +1,13 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from rest_framework.views import APIView
+from django.views.decorators.csrf import ensure_csrf_cookie
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import status, serializers
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 
+from app.services.tag import *
 from app.utils import inline_serializer
-from app.services.tag import get_skill_tag, get_title_tag, get_school_tag, get_company_tag, get_specialty_tag, get_location_tag
 
 
 class SkillTagView(APIView):
@@ -72,11 +72,10 @@ class SchoolTagView(APIView):
 
     class OutputSerializer(serializers.Serializer):
         name = serializers.CharField()
-        logo = serializers.ImageField()
 
         class Meta:
             ref_name = 'SchoolTagOut'
-            fields = ['name', 'logo']
+            fields = ['name']
 
     permission_classes = [AllowAny]
 

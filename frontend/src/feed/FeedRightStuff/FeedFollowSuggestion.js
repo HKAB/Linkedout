@@ -4,6 +4,7 @@ import { CheckOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect } from 'react';
+import { Config } from '../../config/consts';
 const { Title, Text } = Typography;
 
 
@@ -25,7 +26,7 @@ function FeedFollowSuggestion(props) {
   }
 
   useEffect(() => {
-    // fetchSuggesions();
+    fetchSuggesions();
   }, [])
 
   const doFollow = async (id) => {
@@ -55,7 +56,7 @@ function FeedFollowSuggestion(props) {
 
   return (
     <Affix offsetTop={80}>
-      <Card className="feed-header" style={{ width: 400, height: 350 }}>
+      <Card className="card-info" style={{ width: 400, height: 350 }}>
         <Meta title={<Text>Add to your feed</Text>} />
         <Divider style={{ marginTop: 16, marginBottom: 0 }} />
         <List
@@ -68,7 +69,7 @@ function FeedFollowSuggestion(props) {
               <Card bordered={false} style={{ padding: 0 }}>
                 <Row justify="space-between">
                   <Col span={4}>
-                    <Avatar src={"https://127.0.0.1:8000" + item.avatar} style={{ marginTop: 5, marginLeft: 0 }} />
+                    <Avatar src={Config.backendUrl + item.avatar} style={{ marginTop: 5, marginLeft: 0 }} />
                   </Col>
                   <Col span={14}>
                     <Row justify="left"><Text ellipsis>{item.name}</Text></Row>

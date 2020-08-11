@@ -3,6 +3,7 @@ import { studentServices } from '@/services/student.service';
 import { MailTwoTone, PhoneTwoTone, ScheduleTwoTone } from '@ant-design/icons';
 import { Affix, Avatar, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React from 'react';
+import { Config } from '../../config/consts';
 
 const { Title, Text } = Typography;
 
@@ -42,11 +43,11 @@ function StudentProfile(props) {
 
   return (
     <Affix offsetTop={80}>
-      <Card className="feed-header" style={{ width: 300, height: 600, margintop: 24 }}>
+      <Card className="card-info" style={{ width: 300, height: 600, margintop: 24 }}>
         <Row justify="center">
           <Col>
             <div style={{ textAlign: "center" }}>
-              <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + profileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
+              <Avatar style={{ marginBottom: 32 }} size={128} src={Config.backendUrl + profileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
               <Title level={3} className="user-fullname">{profileData.firstname + " " + profileData.lastname}</Title>
               <Text className="user-quotes">{profileData.description}</Text>
             </div>
