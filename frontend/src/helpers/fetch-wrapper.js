@@ -22,6 +22,23 @@ function post(url, body) {
   return fetch(url, requestOptions).then(handleRequest)
 }
 
+function post_multipartdata(url, data) {
+
+  const formData = new FormData();
+
+  for (var key in data) {
+    formData.append(key, data[key]);
+  }
+  
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s', ...authHeader(url) },
+    body: formData
+  }
+
+  return fetch(url, requestOptions).then(handleRequest)
+}
+
 function put(url, body) {
   const requestOptions = {
     method: "PUT",
@@ -80,6 +97,7 @@ function handleRequest(response) {
 export const fetchWrapper = {
   get,
   post,
+  post_multipartdata,
   put,
   delete: _delete
 }
