@@ -12,7 +12,6 @@ class ProfileTabStudent extends Component {
   state = {
     renderComponent: <ProfileContent />,
   };
-
   changeTabButton = (
     <Space direction="vertical" style={{ position: "fixed" }}>
       <Tooltip placement="right" title={"Profile nè"}>

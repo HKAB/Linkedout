@@ -78,6 +78,7 @@ function ProfileEdit() {
           setPhoneData(student.phone);
           // if (formRef.current) formRef.current.resetFields();
           console.log(basicProfileData)
+          console.log(student.basic_data.profile_picture);
           formEditBasicInfo.resetFields();
         }
       });
@@ -103,11 +104,11 @@ function ProfileEdit() {
     )
       .then(() => {
         studentServices.getStudent(accountServices.userValue.account.id);
-        Modal.success({ title: "uWu", content: "Basic information updated!" });
+        message.success({ title: "uWu", content: "Basic information updated!" });
       })
       .catch((error) => {
         console.log(error);
-        Modal.error({ title: "uWu", content: error });
+        message.error({ title: "uWu", content: error });
       });
 
     if (!phoneData[0]) {
@@ -116,11 +117,11 @@ function ProfileEdit() {
       )
         .then(() => {
           studentServices.getStudent(accountServices.userValue.account.id);
-          Modal.success({ title: "uWu", content: "Phone updated!" });
+          message.success({ title: "uWu", content: "Phone updated!" });
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "uWu", content: error });
+          message.error({ title: "uWu", content: error });
         });
     }
     else {
@@ -131,11 +132,11 @@ function ProfileEdit() {
         )
         .then(() => {
           studentServices.getStudent(accountServices.userValue.account.id);
-          Modal.success({ title: "uWu", content: "Phone updated!" });
+          message.success({ title: "uWu", content: "Phone updated!" });
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "uWu", content: error });
+          message.error({ title: "uWu", content: error });
         });
     }
 
@@ -145,11 +146,11 @@ function ProfileEdit() {
         values.email,
       )
       .then(() => {
-        Modal.success({ title: "\^o^/", content: "Success" });
+        message.success({ title: "\^o^/", content: "Success" });
       })
       .catch((error) => {
         console.log(error);
-        Modal.error({ title: "╯︿╰", content: error });
+        message.error({ title: "╯︿╰", content: error });
       });
 
 
@@ -243,8 +244,8 @@ function ProfileEdit() {
                   className="avatar-uploader"
                   showUploadList={false}
                   beforeUpload={beforeUpload}
-				  onChange={handleChangeAvatar}
-				  customRequest = {onUploadImage}
+				          onChange={handleChangeAvatar}
+				            customRequest = {onUploadImage}
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>

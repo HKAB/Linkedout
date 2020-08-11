@@ -2,8 +2,8 @@ import { Button, Layout, Menu, Space, Spin, Typography, Avatar } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import logo from "./assets/images/logo.svg";
-import { accountServices } from "@/services";
-import { studentServices } from '../services/student.service';
+import { accountServices, companyServices, studentServices } from "@/services";
+
 const { SubMenu } = Menu;
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -13,24 +13,41 @@ function HomeHeader() {
   var isLogin = (<Spin></Spin>);
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const [avatar, setAvatar]=useState("");
   useEffect(() => {
     setLoading(true);
-  }
-    , [])
-
+    if (user) {
+      if(user.account.account_type=="student")
+      {
+       studentServices.getStudent(user.account.id);
+       const subscription = studentServices.studentObject.subscribe((student) => {
+         if (student) {
+           setAvatar("http://127.0.0.1:8000" + student.basic_data.profile_picture);
+         }
+       });
+      }
+      else{
+       companyServices.getCompany(user.account.id);
+       const subscription = companyServices.companyObject.subscribe((company) => {
+         if (company) {
+            setAvatar("http://127.0.0.1:8000" + company.basic_data.profile_picture);
+         }
+       });
+      }
+    }
+  }, [])
   if (!loading) {
     return (<Spin></Spin>)
   }
-  if (user) {
-     
-     isLogin=<Link to="/profile"><Avatar style={{ float: "right", marginTop: 16}} size="large" className="avatar-picture" src={logo}></Avatar></Link>
-  }else   isLogin = <>
+  if(user)
+  {
+    isLogin=<Link to="/profile"><Avatar style={{ float: "right", marginTop: 16}} size="large" className="avatar-picture" src={avatar} alt=""></Avatar></Link>
+  }else
+    isLogin = <>
         <Button style={{ height: "100%", float: "right", marginTop: 16, fontFamily: "sans-serif", fontSize: 16 }} type="primary" onClick={() => history.push("/login")}>Sign up</Button>
         <Button style={{ float: "right", marginTop: 16, fontFamily: "sans-serif", fontSize: 16 }} type="text" onClick={() => history.push("/login")}>Sign in</Button>  
         </>
-  
-  
-    
+
   return (
     
     <Header style={{ backgroundColor: "white" }}>
