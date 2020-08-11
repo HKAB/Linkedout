@@ -1,10 +1,11 @@
 import { fetchWrapper } from "@/helpers"
+import { Config } from "../../config/consts"
 
 function getSkillName(query) {
-	return fetchWrapper.get(`http://127.0.0.1:8000/api/tag/skill?query=${query}`)
+  return fetchWrapper.get(Config.backendUrl + `/api/tag/skill?query=${query}`)
 }
 
 
 export {
-    getSkillName,
+  getSkillName,
 }

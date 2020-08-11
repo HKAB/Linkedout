@@ -2,6 +2,7 @@ import { accountServices, studentServices } from "@/services";
 import { Avatar, Button, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Space, Switch, Tabs, Upload } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { Config } from "../../config/consts";
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -50,20 +51,20 @@ function ProfileEdit() {
   const [formEditBasicInfo] = Form.useForm();
 
   const handleChangeAvatar = info => {
-	console.log("info");
-	console.log(info);
-	//   studentServices.uploadStudentProfile(info.file);
-	setImageFormData(info.file);
+    console.log("info");
+    console.log(info);
+    //   studentServices.uploadStudentProfile(info.file);
+    setImageFormData(info.file);
     getBase64(info.file.originFileObj, picture =>
       setImageUrl(picture)
     );
   };
 
   const onUploadImage = (data) => {
-		console.log("data");
-	  console.log(data);
+    console.log("data");
+    console.log(data);
 
-	    studentServices.uploadStudentProfile(data);
+    studentServices.uploadStudentProfile(data);
   }
 
   useEffect(() => {
@@ -72,7 +73,7 @@ function ProfileEdit() {
       studentServices.getStudent(user.account.id);
       const subscription = studentServices.studentObject.subscribe((student) => {
         if (student) {
-          student.basic_data.profile_picture = "http://127.0.0.1:8000" + student.basic_data.profile_picture;
+          student.basic_data.profile_picture = Config.backendUrl + student.basic_data.profile_picture;
           setBasicProfileData(student.basic_data);
           setEmailData(student.email);
           setPhoneData(student.phone);
@@ -176,7 +177,7 @@ function ProfileEdit() {
   // }
   // else 
   // {
-  //     imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + basicProfileData.profile_picture} ></Avatar>
+  //     imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={Config.backendUrl + basicProfileData.profile_picture} ></Avatar>
   // }
 
 
@@ -243,8 +244,8 @@ function ProfileEdit() {
                   className="avatar-uploader"
                   showUploadList={false}
                   beforeUpload={beforeUpload}
-				  onChange={handleChangeAvatar}
-				  customRequest = {onUploadImage}
+                  onChange={handleChangeAvatar}
+                  customRequest={onUploadImage}
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>
