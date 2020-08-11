@@ -18,8 +18,8 @@ function createJob(title, description, seniority_level, employment_type, recruit
   return fetchWrapper.post(`http://127.0.0.1:8000/api/job/create`, { title, description, seniority_level, employment_type, recruitment_url, cities, skills })
 }
 
-function updateJob(job_id, title, description, seniority_level, employment_type, recruitment_url, cities, skills) {
-  return fetchWrapper.put(`http://127.0.0.1:8000/api/job/update`, { job_id, title, description, seniority_level, employment_type, recruitment_url, cities, skills })
+function updateJob(id, title, description, seniority_level, employment_type, recruitment_url, cities, skills) {
+  return fetchWrapper.put(`http://127.0.0.1:8000/api/job/update`, { id, title, description, seniority_level, employment_type, recruitment_url, cities, skills })
 }
 
 export const jobServices = {

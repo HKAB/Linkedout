@@ -143,7 +143,8 @@ function ProfileContent() {
             marginTop: 24,
           }}>
           <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
-          <div style={{ marginTop: 16 }}>{basicProfileData.description}</div>
+          {/* <div style={{ marginTop: 16 }}>{basicProfileData.description}</div> */}
+          <div style={{ marginTop: 16 }} dangerouslySetInnerHTML={{__html: basicProfileData.description}}></div>
           {/* <span styles={{marginTop: 100}}>{data.description}</span> */}
         </Card>
 
@@ -206,7 +207,7 @@ function ProfileContent() {
                     title={item.title}
                     description={<div>
                       <div>Yêu cầu: {item.seniority_level}</div>
-                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => ({city})}></List></Space></div>                      
+                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => (city)}></List></Space></div>                      
                       <div>Công việc: {item.employment_type}</div>
                       <List dataSource={item.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
                     </div>}
