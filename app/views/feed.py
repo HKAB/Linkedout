@@ -72,7 +72,7 @@ class PostSerializer(serializers.ModelSerializer):
         return obj.student.lastname
 
     def get_student_profile_picture(self, obj):
-        return obj.student.profile_picture
+        return obj.student.profile_picture.url
 
     def get_type(self, obj):
         return 'post'
@@ -81,7 +81,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         ref_name = 'PostSerializer'
         fields = ['type', 'id', 'student_firstname', 'student_lastname', 'student_profile_picture',
-                  'title', 'content', 'published_date', 'interested_students', 'skills']
+                  'title', 'content', 'published_date', 'post_picture', 'interested_students', 'skills']
 
 class JobSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
@@ -94,7 +94,7 @@ class JobSerializer(serializers.ModelSerializer):
         return obj.company.name
 
     def get_company_profile_picture(self, obj):
-        return obj.company.profile_picture
+        return obj.company.profile_picture.url
 
     def get_type(self, obj):
         return 'job'
@@ -104,16 +104,9 @@ class JobSerializer(serializers.ModelSerializer):
         ref_name = 'JobSerializer'
         fields = ['id', 'company_name', 'company_profile_picture', 'title', 'description',
                   'seniority_level', 'employment_type', 'recruitment_url', 'published_date',
-                  'cities', 'skills']
+                  'job_picture', 'cities', 'skills']
 
 class FeedGetView(APIView):
-    class InputSerializer(serializers.Serializer):
-        page = serializers.IntegerField(required=True)
-
-        class Meta:
-            ref_name = 'FeedGetIn'
-            fields = ['p']
-
     class OutputSerializer(serializers.Serializer):
         @classmethod
         def get_serializer(cls, model):
@@ -128,12 +121,10 @@ class FeedGetView(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer(many=True)})
+    @swagger_auto_schema(responses={200: OutputSerializer(many=True)})
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
-        serializer = self.InputSerializer(data=request.query_params)
-        serializer.is_valid(raise_exception=True)
-        result = get_feed(account=request.user, **serializer.validated_data)
+        result = get_feed(account=request.user)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
 
 
@@ -148,7 +139,7 @@ class FeedSuggestJobView(APIView):
             return obj.company.name
 
         def get_company_profile_picture(self, obj):
-            return obj.company.profile_picture
+            return obj.company.profile_picture.url
 
         class Meta:
             model = Job
