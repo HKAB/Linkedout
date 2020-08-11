@@ -135,7 +135,7 @@ function deleteStudentSkill(skill) {
   return deleteSkill(skill);
 }
 
-function uploadStudentProfile(data) {
+function uploadStudentPictureProfile(data) {
   return fetchWrapper.post_multipartdata(Config.backendUrl + '/api/student/upload', data)
     .catch(error => {
       console.log("error");
@@ -170,7 +170,7 @@ export const studentServices = {
   createStudentSkill,
   deleteStudentSkill,
 
-  uploadStudentProfile,
+    uploadStudentPictureProfile,
 
   get studentValue() { return studentObject.value },
   studentObject

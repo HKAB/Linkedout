@@ -117,6 +117,13 @@ function ProfileEdit() {
     );
   };
 
+  const onUploadImage = (data) => {
+		companyServices.uploadCompanyPictureProfile(data)
+		.then(() => {
+			message.success("Upload avatar successful!");
+		});
+  }
+
   useEffect(() => {
     let user = accountServices.userValue;
     console.log(user);
@@ -303,7 +310,7 @@ function ProfileEdit() {
                   showUploadList={false}
                   beforeUpload={beforeUpload}
                   onChange={handleChangeAvatar}
-
+                  customRequest = {onUploadImage}
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>

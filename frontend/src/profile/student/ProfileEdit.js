@@ -1,9 +1,10 @@
 import { accountServices, studentServices } from "@/services";
-import { Avatar, Button, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Space, Switch, Tabs, Upload } from 'antd';
+import { Avatar, Button, Select, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Space, Switch, Tabs, Upload } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Config } from "../../config/consts";
 
+const { Option } = Select;
 const dateFormat = 'YYYY-MM-DD';
 
 const { TabPane } = Tabs;
@@ -51,20 +52,17 @@ function ProfileEdit() {
   const [formEditBasicInfo] = Form.useForm();
 
   const handleChangeAvatar = info => {
-    console.log("info");
-    console.log(info);
-    //   studentServices.uploadStudentProfile(info.file);
-    setImageFormData(info.file);
+	setImageFormData(info.file);
     getBase64(info.file.originFileObj, picture =>
       setImageUrl(picture)
     );
   };
 
   const onUploadImage = (data) => {
-    console.log("data");
-    console.log(data);
-
-    studentServices.uploadStudentProfile(data);
+		studentServices.uploadStudentPictureProfile(data)
+		.then(() => {
+			message.success("Upload avatar successful!");
+		});
   }
 
   useEffect(() => {
@@ -100,6 +98,7 @@ function ProfileEdit() {
       values.firstName,
       values.lastName,
       values.dateOfBirth.format("YYYY-MM-DD"),
+      values.gender,
       values.description
     )
       .then(() => {
@@ -211,6 +210,15 @@ function ProfileEdit() {
                 <span>Last Name</span>
                 <Form.Item name="lastName" >
                   <Input></Input>
+                </Form.Item>
+
+                <span>Giới tính </span>
+                <Form.Item name="gender" >
+                  <Select style={{ width: "100%" }}>
+                      <Option value="Male">Nam</Option>
+                      <Option value="Female">Nữ</Option>
+                      <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+                  </Select>
                 </Form.Item>
 
                 <span>Email</span>

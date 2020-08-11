@@ -1,6 +1,6 @@
 import { accountServices, companyServices, getSpecialty, studentServices } from "@/services";
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { AutoComplete, Button, Card, Col, DatePicker, Form, Input, Row, Select, Spin, Typography } from 'antd';
+import { AutoComplete, Button, Card, Col, DatePicker, Form, Input, Row, Select, Spin, Typography, message } from 'antd';
 import React, { useState } from 'react';
 import bg from './assets/createuser.svg';
 
@@ -14,9 +14,9 @@ function CreateProfile({ history }) {
     if (user) {
       if (user.account.account_type == "student") {
         console.log(values);
-        studentServices.createBasicStudent(values.firstname, values.lastname, values.dateofbirth.format("YYYY-MM-DD"), values.description, "ZZ").then() // quick fix
+        studentServices.createBasicStudent(values.firstname, values.lastname, values.dateofbirth.format("YYYY-MM-DD"), values.description, values.gender).then() // quick fix
           .then(() => {
-            alert("Create successfully");
+            message.success("Tạo tài khoản thành công!")
             history.push("/profile")
           })
           .catch(error => {
@@ -81,6 +81,14 @@ function CreateProfile({ history }) {
 
       <Form.Item name="dateofbirth" rules={[{ required: true, message: 'Đừng để trống' }]}>
         <DatePicker style={{ width: "100%" }} picker="date" size="large" placeholder="Sinh nhật bạn" />
+      </Form.Item>
+
+      <Form.Item name="gender" rules={[{ required: true, message: 'Đừng để trống' }]}>
+        <Select style={{ width: "100%" }}>
+            <Option value="Male">Nam</Option>
+            <Option value="Female">Nữ</Option>
+            <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+        </Select>
       </Form.Item>
 
       <Form.Item name="description" rules={[{ required: true, message: 'Đừng để trống' }]}>
