@@ -26,7 +26,7 @@
 *.inc             text
 *.ini             text
 *.js              text
-*.json            text
+*.json            text eol=lf
 *.jsx             text
 *.less            text
 *.ls              text
@@ -51,7 +51,7 @@
 *.xhtml           text diff=html
 
 # Docker
-Dockerfile        text
+Dockerfile        text eol=lf
 
 # Documentation
 *.ipynb           text
@@ -98,18 +98,18 @@ TODO              text
 
 # Configs
 *.cnf             text
-*.conf            text
+*.conf            text eol=lf
 *.config          text
 .editorconfig     text
 .env              text
-.gitattributes    text
+.gitattributes    text eol=lf
 .gitconfig        text
 .htaccess         text
 *.lock            text -diff
 package-lock.json text -diff
 *.toml            text
 *.yaml            text
-*.yml             text
+*.yml             text eol=lf
 browserslist      text
 Makefile          text
 makefile          text

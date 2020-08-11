@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  consul-server:
+    image: consul:latest
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+    volumes:
+      - ./consul-server/server.json:/consul/config/server.json
+    command: "consul agent -config-dir=/consul/config/ -node=consul-server"
+
+  gateway:
+    build: gateway/
+    volumes:
+      - ./gateway/consul:/consul/config
+    ports:
+      - "80:80"
+    depends_on:
+      - "consul-server"
+
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_DATABASE_HOST: "mysql"
+      DJANGO_DATABASE_NAME: "backend"
+      DJANGO_DATABASE_USER: "backend"
+      DJANGO_DATABASE_PASSWORD: "backend"
+      DJANGO_CONFIG_SECRETKEY: "ihateyou"
+    depends_on:
+      - "consul-server"
+      - "mysql"
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: "backend"
+      MYSQL_USER: "backend"
+      MYSQL_PASSWORD: "backend"
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
