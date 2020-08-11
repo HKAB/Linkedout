@@ -253,13 +253,8 @@ function ProfileEdit() {
                   className="avatar-uploader"
                   showUploadList={false}
                   beforeUpload={beforeUpload}
-<<<<<<< HEAD
-				          onChange={handleChangeAvatar}
-				            customRequest = {onUploadImage}
-=======
                   onChange={handleChangeAvatar}
                   customRequest={onUploadImage}
->>>>>>> 2f8275a068c34e108b2d99709f27222c0518733c
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>
