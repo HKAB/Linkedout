@@ -1,11 +1,11 @@
 from django.db.models import Q
 
-from app.models.skill import Skill
-from app.models.title import Title
-from app.models.school import School
-from app.models.company import Company
-from app.models.specialty import Specialty
 from app.models.city import City
+from app.models.company import Company
+from app.models.school import School
+from app.models.skill import Skill
+from app.models.specialty import Specialty
+from app.models.title import Title
 
 
 def get_skill_tag(*, query: str) -> dict:
@@ -34,10 +34,10 @@ def get_title_tag(*, query: str) -> dict:
 
 def get_school_tag(*, query: str) -> list:
     temp = School.objects.filter(name__istartswith=query)
-    tag_startwith_query = [{'name': t.name, 'logo': t.logo} for t in temp]
+    tag_startwith_query = [{'name': t.name} for t in temp]
     temp = School.objects.filter(
         Q(name__icontains=query) & ~Q(name__istartswith=query))
-    tag_contain_query = [{'name': t.name, 'logo': t.logo} for t in temp]
+    tag_contain_query = [{'name': t.name} for t in temp]
 
     return (tag_startwith_query + tag_contain_query)[:10]
 

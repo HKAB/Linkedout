@@ -4,7 +4,7 @@ import { accountServices } from "@/services";
 function get(url) {
   const requestOptions = {
     method: "GET",
-    header: authHeader(url)
+    headers: authHeader(url)
   }
   return fetch(url, requestOptions).then(handleRequest)
 }
