@@ -22,7 +22,7 @@ def create_interest (*, account: Account, id: int) -> bool:
         return { 'interested': False }
 
     student_account = get_student_account(account)
-    if p.interested_students.filter(account=student_account).exists():
+    if p.interested_students.filter(account=account).exists():
         raise InvalidInputFormat("User with id {} already interested post with id {}.".format(account.id, id))
     p.interested_students.add(student_account)
     return { 'interested': True }
@@ -35,7 +35,7 @@ def delete_interest (*, account: Account, id: int) -> bool:
         return { 'interested': False }
 
     student_account = get_student_account(account)
-    if not p.interested_students.filter(account=student_account).exists():
+    if not p.interested_students.filter(account=account).exists():
         raise InvalidInputFormat("User with id {} hasn't interested post with id {} yet.".format(account.id, id))
     p.interested_students.remove(student_account)
     return { 'interested': False }
@@ -84,4 +84,4 @@ def get_student_account(account: Account) -> Student:
     return e
 
 def get_student_with_id(id: int) -> Student:
-    return Student.objects.filter(account_id=id).first()
+    return Student.objects.filter(account__id=id).first()

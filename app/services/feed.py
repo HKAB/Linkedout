@@ -1,3 +1,4 @@
+from itertools import chain
 from random import randint
 
 from app.exceptions import InvalidInputFormat
@@ -9,8 +10,7 @@ from app.models.skill import Skill
 from app.models.student import Student
 
 
-def get_feed(*, account: Account, p: int) -> list:
-    NUMBER_OF_POSTS_PER_PAGE = 5
+def get_feed(*, account: Account) -> list:
     student = get_student_account(account)
 
     followed_companies = Company.objects.filter(followers=student)
@@ -18,20 +18,17 @@ def get_feed(*, account: Account, p: int) -> list:
         company__in=followed_companies).order_by('-published_date')
 
     already_have_skills = student.skills.all()
-    not_have_skills = (Skill.objects.all()).difference(already_have_skills)
+    sid = []
+    [sid.append(s.id) for s in already_have_skills]
+    not_have_skills = Skill.objects.exclude(id__in=sid)
     post_list = Post.objects.filter(
         skills__in=already_have_skills).order_by('-published_date')
     post_list = post_list.exclude(
         skills__in=not_have_skills).order_by('-published_date')
 
-    feed = job_list.union(post_list).order_by('-published_date')
-    number_of_posts = feed.count()
-    if (NUMBER_OF_POSTS_PER_PAGE * p) >= number_of_posts:
-        raise InvalidInputFormat("Page {} doesn't exist.".format(p))
-        return []
-    left_range = p * NUMBER_OF_POSTS_PER_PAGE
-    right_range = min(left_range, + NUMBER_OF_POSTS_PER_PAGE, number_of_posts)
-    return feed[left_range:right_range]
+    feed = sorted(chain(job_list, post_list),
+                  key=lambda instance: instance.published_date)
+    return feed
 
 
 def suggest_job(*, account: Account) -> list:
@@ -39,7 +36,9 @@ def suggest_job(*, account: Account) -> list:
     student = get_student_account(account)
 
     already_have_skills = student.skills.all()
-    not_have_skills = (Skill.objects.all()).difference(already_have_skills)
+    sid = []
+    [sid.append(s.id) for s in already_have_skills]
+    not_have_skills = Skill.objects.exclude(id__in=sid)
     job_list = Job.objects.filter(
         skills__in=already_have_skills).order_by('-published_date')
     job_list = job_list.exclude(
