@@ -46,16 +46,15 @@ def suggest_job (*, account: Account) -> list:
 
 
 def suggest_follow (*, account: Account) -> list:
-    job_list = suggest_job(account=account)
+    NUMBER_OF_SUGGESTION = 3
+    student = get_student_account(account)
 
-    follow_list = [j.company for j in job_list]
-    follow_list = list(dict.fromkeys(follow_list))
-    return follow_list
+    comps = Company.objects.exclude(followers=student)
+    if comps.count() < NUMBER_OF_SUGGESTION:
+        return comps
+    fst = randint(0, comps.count() - NUMBER_OF_SUGGESTION)
+    return comps[fst:fst + NUMBER_OF_SUGGESTION]
 
-
-def get_followed_company(account: Account) -> list:
-    companies = Company.objects.filter(followers=get_student_account(account))
-    return [c.id for c in companies]
 
 def get_student_account(account: Account) -> Student:
     e = Student.objects.filter(account=account).first()
