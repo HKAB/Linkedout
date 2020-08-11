@@ -5,7 +5,7 @@ from app.exceptions import InvalidInputFormat
 
 
 def check_follow(*, account: Account, id: int) -> bool:
-    c = Company.objects.filter(id=id).first()
+    c = Company.objects.filter(account__id=id).first()
     if not c:
         raise InvalidInputFormat("Company with id {} doesn't exist.".format(id))
         return { 'followed': False }
@@ -16,33 +16,33 @@ def check_follow(*, account: Account, id: int) -> bool:
 
 
 def create_follow (*, account: Account, id: int) -> bool:
-    c = Company.objects.filter(id=id).first()
+    c = Company.objects.filter(account__id=id).first()
     if not c:
         raise InvalidInputFormat("Company with id {} doesn't exist.".format(id))
         return { 'followed': False }
 
     student_account = get_student_account(account)
-    if c.followers.filter(account=student_account).exists():
+    if c.followers.filter(account=account).exists():
         raise InvalidInputFormat("User with id {} already followed comp. with id {}.".format(account.id, id))
     c.followers.add(student_account)
     return { 'followed': True }
 
 
 def delete_follow (*, account: Account, id: int) -> bool:
-    c = Company.objects.filter(id=id).first()
+    c = Company.objects.filter(account_id=id).first()
     if not c:
         raise InvalidInputFormat("Company with id {} doesn't exist.".format(id))
         return { 'followed': False }
 
     student_account = get_student_account(account)
-    if not c.followers.filter(account=student_account).exists():
+    if not c.followers.filter(account=account).exists():
         raise InvalidInputFormat("User with id {} hasn't followed comp. with id {} yet.".format(account.id, id))
     c.followers.remove(student_account)
     return { 'followed': False }
 
 
 def count_follow (*, account: Account, id: int) -> dict:
-    c = Company.objects.filter(id=id).first()
+    c = Company.objects.filter(account__id=id).first()
     if not c:
         raise InvalidInputFormat("Company with id {} doesn't exist.".format(id))
         return { 'count': 0 }
@@ -70,4 +70,4 @@ def get_student_account(account: Account) -> Student:
     return e
 
 def get_student_with_id(id: int) -> Student:
-    return Student.objects.filter(account_id=id).first()
+    return Student.objects.filter(account__id=id).first()

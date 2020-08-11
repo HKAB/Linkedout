@@ -9,7 +9,6 @@ from drf_yasg.utils import swagger_auto_schema
 from app.models.job import Job
 from app.models.post import Post
 from app.models.company import Company
-from app.models.student import Student
 from app.models.skill import Skill
 from app.models.city import City
 from app.models.specialty import Specialty
@@ -36,16 +35,6 @@ class CityRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         return City.objects.get(name=data)
 
-class StudentRelatedField(serializers.RelatedField):
-    def display_value(self, instance):
-        return instance
-
-    def to_representation(self, value):
-        return str(value)
-
-    def to_internal_value(self, data):
-        return Student.objects.get(account_id=data)
-
 class SpecialtyRelatedField(serializers.RelatedField):
     def display_value(self, instance):
         return instance
@@ -62,7 +51,6 @@ class PostSerializer(serializers.ModelSerializer):
     student_firstname = serializers.SerializerMethodField()
     student_lastname = serializers.SerializerMethodField()
     student_profile_picture = serializers.SerializerMethodField()
-    interested_students = StudentRelatedField(queryset=Student.objects.all(), many=True)
     skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
     def get_student_firstname(self, obj):
@@ -81,7 +69,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         ref_name = 'PostSerializer'
         fields = ['type', 'id', 'student_firstname', 'student_lastname', 'student_profile_picture',
-                  'title', 'content', 'published_date', 'post_picture', 'interested_students', 'skills']
+                  'title', 'content', 'published_date', 'post_picture', 'skills']
 
 class JobSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
@@ -102,7 +90,7 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         ref_name = 'JobSerializer'
-        fields = ['id', 'company_name', 'company_profile_picture', 'title', 'description',
+        fields = ['type', 'id', 'company_name', 'company_profile_picture', 'title', 'description',
                   'seniority_level', 'employment_type', 'recruitment_url', 'published_date',
                   'job_picture', 'cities', 'skills']
 
