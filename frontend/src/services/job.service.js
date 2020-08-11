@@ -22,10 +22,20 @@ function updateJob(id, title, description, seniority_level, employment_type, rec
   return fetchWrapper.put(Config.backendUrl + `/api/job/update`, { id, title, description, seniority_level, employment_type, recruitment_url, cities, skills })
 }
 
+function uploadJobPicture(data) {
+  return fetchWrapper.post_multipartdata(Config.backendUrl + '/api/job/upload', data)
+    .catch(error => {
+      console.log("error");
+      console.log(error);
+    });
+}
+
 export const jobServices = {
   getJob,
   listJob,
   deleteJob,
   createJob,
-  updateJob
+  updateJob,
+
+  uploadJobPicture
 }

@@ -1,11 +1,12 @@
 import { accountServices, studentServices } from "@/services";
 import { DoubleRightOutlined, MailTwoTone, PhoneTwoTone, ScheduleTwoTone } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Empty, List, Modal, Row, Spin, Timeline, Typography } from 'antd';
+import { Avatar, message, Button, Card, Col, Empty, List, Modal, Row, Spin, Timeline, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
+import { useHistory } from 'react-router-dom'
 
 const { Title, Text } = Typography;
 const followData = [
@@ -36,7 +37,8 @@ const followData = [
   },
 ];
 
-function ProfileContent() {
+function ProfileContent(props) {
+  let history = useHistory();
 
   const [basicProfileData, setBasicProfileData] = useState([]);
   const [experienceData, setExperienceData] = useState([]);
@@ -49,7 +51,7 @@ function ProfileContent() {
   const [experienceVisible, setExperienceVisible] = useState(false);
   const [educationVisible, setEducationVisible] = useState(false);
   const [skillVisible, setSkillVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const showExperienceModal = () => {
     setExperienceVisible(true);
@@ -77,11 +79,19 @@ function ProfileContent() {
 
   useEffect(() => {
 
-    // setState({isLoading: true});
-
+    setIsLoading(true);
     let user = accountServices.userValue;
     if (user) {
-      studentServices.getStudent(user.account.id);
+      let viewStudentId = user.account.id
+      if (props.id) {
+        viewStudentId = props.id;
+      }
+      studentServices.getStudent(viewStudentId).then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(true);
+      });
       const subscription = studentServices.studentObject.subscribe((student) => {
         if (student) {
           setBasicProfileData(student.basic_data);
@@ -101,7 +111,6 @@ function ProfileContent() {
           }
           // if (educationData.length == 0) setState({educationData : []});
           // else setState({educationElement: timeline_element});
-          setIsLoading(false);
           console.log(educationElement);
         }
 
@@ -109,10 +118,10 @@ function ProfileContent() {
           subscription.unsubscribe();
         }
       });
-      setIsLoading(false);
     }
     else {
-      console.log("Oh no!");
+      message.error("You need to login!");
+      history.push("/login");
     }
 
   }, []);
@@ -286,4 +295,4 @@ function ProfileContent() {
     </>
   )
 }
-export { ProfileContent };
+export default ProfileContent;

@@ -1,11 +1,12 @@
 import { accountServices, companyServices } from "@/services";
 import { EditOutlined, LikeOutlined, MailOutlined, PhoneOutlined, SettingOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Empty, Carousel, Col, Divider, Layout, List, Progress, Row, Spin, Statistic, Tag, Typography, Space, Modal } from 'antd';
+import { Avatar, Button, Card, Empty, Carousel, Col, Divider, Layout, List, Progress, Row, Spin, Statistic, Tag, Typography, Space, message, Modal } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg';
 import pic2 from '../assets/images/xyz.jpg';
+import { useHistory } from 'react-router-dom'
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -64,8 +65,8 @@ const centerInRowStyle = {
   margin: "auto"
 }
 
-function ProfileContent() {
-
+function ProfileContent(props) {
+  let history = useHistory();
   const [basicProfileData, setBasicProfileData] = useState([]);
   const [phoneData, setPhoneData] = useState([]);
   const [emailData, setEmailData] = useState([]);
@@ -75,14 +76,19 @@ function ProfileContent() {
   const [jobDetailVisible, setJobDetailVisible] = useState(false);
 
   useEffect(() => {
-    setIsLoading(false);
+    setIsLoading(true);
     let user = accountServices.userValue;
-    console.log(user);
     if (user) {
-      let company = companyServices.companyObject;
-      // console.log(company);
-      // console.log(user.account.id);
-      companyServices.getCompany(user.account.id);
+      var viewCompanyId = user.account.id;
+      if (props.id) {
+        viewCompanyId = props.id;
+      }
+      companyServices.getCompany(viewCompanyId).then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(true);
+      });
       const subscription = companyServices.companyObject.subscribe((company) => {
         if (company) {
           console.log(company);
@@ -98,7 +104,8 @@ function ProfileContent() {
       }
     }
     else {
-      console.log("Oh no!");
+      message.error("You need to login!");
+      history.push("/login");
     }
   }, []);
 
@@ -273,4 +280,4 @@ function ProfileContent() {
     )
   }
 }
-export { ProfileContent };
+export default ProfileContent;

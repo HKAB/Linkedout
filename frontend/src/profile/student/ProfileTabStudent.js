@@ -1,5 +1,5 @@
 import ProfileChange from "@/profile/student/ProfileChange";
-import { ProfileContent } from "@/profile/student/ProfileContent";
+import { default as ProfileContent } from "@/profile/student/ProfileContent";
 import { ProfileEdit } from "@/profile/student/ProfileEdit";
 import { EditOutlined, InfoOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Col, Layout, Row, Space, Tabs, Tooltip } from "antd";
@@ -10,7 +10,7 @@ const { Header, Sider, Content } = Layout;
 
 class ProfileTabStudent extends Component {
   state = {
-    renderComponent: <ProfileContent />,
+    renderComponent: this.props.defaultTab //<ProfileContent />,
   };
   changeTabButton = (
     <Space direction="vertical" style={{ position: "fixed" }}>

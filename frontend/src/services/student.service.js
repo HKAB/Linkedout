@@ -44,10 +44,6 @@ function getStudent(id) {
     studentObject.next(student);
     return student;
   })
-    .catch((error) => {
-      console.log(error);
-      return {};
-    });
 }
 
 // basic info of student

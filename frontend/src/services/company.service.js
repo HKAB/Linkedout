@@ -13,7 +13,7 @@ const companyObject = new BehaviorSubject(null);
 
 function getCompany(account_id) {
     let company_email = getEmail(account_id);
-    let company_phone = getPhone(account_id);    
+    let company_phone = getPhone(account_id);   
     let list_job = jobServices.listJob(account_id);
     // TODO: Handle error here!
     let company_basic = fetchWrapper.get(Config.backendUrl + `/api/company/get?id=${account_id}`);
@@ -44,11 +44,6 @@ function getCompany(account_id) {
                     company.job = company_listjob_data;
                     companyObject.next(company);
                     return company;
-    })
-    .catch((error) =>
-    {
-        console.log(error);
-        return {};
     });
 }
 
