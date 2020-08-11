@@ -45,14 +45,26 @@ function ProfileEdit() {
   const [phoneData, setPhoneData] = useState([]);
   const [loading, setLoading] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
+  const [imageFormData, setImageFormData] = useState([]);
 
   const [formEditBasicInfo] = Form.useForm();
 
   const handleChangeAvatar = info => {
+	console.log("info");
+	console.log(info);
+	//   studentServices.uploadStudentProfile(info.file);
+	setImageFormData(info.file);
     getBase64(info.file.originFileObj, picture =>
       setImageUrl(picture)
     );
   };
+
+  const onUploadImage = (data) => {
+		console.log("data");
+	  console.log(data);
+
+	    studentServices.uploadStudentProfile(data);
+  }
 
   useEffect(() => {
     let user = accountServices.userValue;
@@ -231,8 +243,8 @@ function ProfileEdit() {
                   className="avatar-uploader"
                   showUploadList={false}
                   beforeUpload={beforeUpload}
-                  onChange={handleChangeAvatar}
-
+				  onChange={handleChangeAvatar}
+				  customRequest = {onUploadImage}
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>

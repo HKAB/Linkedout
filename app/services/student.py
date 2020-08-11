@@ -14,23 +14,23 @@ def get_student(*, id: int) -> Student:
     return s
 
 
-def create_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, **kwargs) -> Student:
+def create_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str,gender: str, **kwargs) -> Student:
     student_account_check(account)
     if student_exist(account.id, raise_exception=False):
         raise InvalidInputFormat(
             "Account {} already has a student.".format(account.id))
     s = Student(account=account, firstname=firstname, lastname=lastname,
-                dateofbirth=dateofbirth, **kwargs)
+                dateofbirth=dateofbirth, gender=gender, **kwargs)
     s.save()
     return s
 
 
-def update_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, **kwargs) -> Student:
+def update_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str,gender:str, **kwargs) -> Student:
     student_account_check(account)
     student_exist(account.id)
     s = Student.objects.filter(account=account)
-    s.update(account=account, firstname=firstname,
-             lastname=lastname, dateofbirth=dateofbirth, **kwargs)
+    s.update(account=account, firstname=firstname, lastname=lastname,
+             dateofbirth=dateofbirth, gender=gender, **kwargs)
     return s.first()
 
 

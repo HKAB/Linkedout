@@ -15,7 +15,6 @@ function getCompany (account_id) {
     let company_email = getEmail(account_id);
     let company_phone = getPhone(account_id);    
     let list_job = jobServices.listJob(account_id);
-    let list_speciality = getSpecialityById(account_id);
     // TODO: Handle error here!
     let company_basic = fetchWrapper.get(`http://127.0.0.1:8000/api/company/get?id=${account_id}`);
     // {
@@ -33,18 +32,16 @@ function getCompany (account_id) {
         company_email, 
         company_phone,
         list_job,
-        list_speciality
     ]).then(([  company_basic_data, 
                 company_email_data, 
                 company_phone_data,
                 company_listjob_data,
-                company_listspeciality_data]) => {
+                ]) => {
                     let company = {};
                     company.basic_data = company_basic_data;
                     company.email = company_email_data.emails;
                     company.phone = company_phone_data.phones;
                     company.job = company_listjob_data;
-                    company.speciality = company_listspeciality_data;
                     companyObject.next(company);
                     return company;
     })

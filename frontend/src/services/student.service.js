@@ -51,8 +51,8 @@ function getStudent (id) {
 }
 
 // basic info of student
-function createBasicStudent (firstname, lastname, dateofbirth, description) {
-    return fetchWrapper.post(`http://127.0.0.1:8000/api/student/create`, {firstname, lastname, dateofbirth, description})
+function createBasicStudent (firstname, lastname, dateofbirth, description, gender) {
+    return fetchWrapper.post(`http://127.0.0.1:8000/api/student/create`, {firstname, lastname, dateofbirth, description, gender})
     .catch((error) =>
     {
         console.log(error);
@@ -136,6 +136,14 @@ function deleteStudentSkill(skill) {
     return deleteSkill(skill);
 }
 
+function uploadStudentProfile(data) {
+    return fetchWrapper.post_multipartdata('http://127.0.0.1:8000/api/student/upload', data)
+    .catch(error => {
+        console.log("error");
+        console.log(error);
+    });
+}
+
 //
 
 export const studentServices = {
@@ -162,6 +170,8 @@ export const studentServices = {
     getStudentSkill,
     createStudentSkill,
     deleteStudentSkill,
+
+    uploadStudentProfile,
 
     get studentValue () { return studentObject.value},
     studentObject

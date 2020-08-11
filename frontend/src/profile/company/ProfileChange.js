@@ -1,6 +1,6 @@
 //import Form from "antd/lib/form/Form";
-import { EditableTagGroup } from '@/components';
-import { accountServices, companyServices, getCityName, jobServices } from "@/services";
+import { EditableTagGroup, MyEditor } from '@/components';
+import { accountServices, companyServices, getCityName, jobServices, getSpecialty } from "@/services";
 import {
   EditOutlined,
   MinusCircleOutlined, PlusOutlined, SettingOutlined
@@ -9,14 +9,13 @@ import {
   AutoComplete, Avatar,
   Badge, Button, Card,
   Form, Input, List, Modal,
-  Popconfirm, Select, Space, Tag, Typography, Upload
+  Popconfirm, Select, Space, Tag, Typography, Upload, message, Row, Col
 } from "antd";
 import Meta from "antd/lib/card/Meta";
-import BraftEditor from 'braft-editor';
-import 'braft-editor/dist/index.css';
-import Markdown from 'braft-extensions/dist/markdown';
 import React, { useEffect, useState } from "react";
 import '../assets/css/profile.css';
+
+// import {Editor, EditorState} from 'draft-js';
 
 
 const { Option } = Select;
@@ -56,7 +55,6 @@ const speciality_data = [
   { speciality: 'testing' },
   { speciality: 'dev' }
 ]
-BraftEditor.use(Markdown());
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -72,19 +70,21 @@ function ProfileChange() {
   const [visible, setVisible] = useState(false);
   const [createJob_visible, setCreateJob_visible] = useState(false);
   const [editJob_visible, setEditJob_visible] = useState(false);
-  const [editorState, setEditorState] = useState(null);
-  const [outputHTML, setOutputHTML] = useState(null);
+  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [outputHTML, setOutputHTML] = useState("");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setfileList] = useState([]);
   const [autoCompleteCity, setAutoCompleteCity] = useState([]);
+  const [autoCompleteSpeciality, setAutoCompleteSpeciality] = useState([]);
   const [autoCompleteEditCity, setAutoCompleteEditCity] = useState([]);
   const [jobData, setJobData] = useState([]);
-  const [specialityData, setSpecialityData] = useState([]);
   const [companyBasicData, setCompanyBasicData] = useState([]);
+  const [editorDescription, setEditorDescription] = useState([]);
   var editTags = useState(null);
   var createTags = useState(null);
+  var editorRef = useState(null);
 
   const [formEdit] = Form.useForm();
   const [formCreate] = Form.useForm();
@@ -96,11 +96,12 @@ function ProfileChange() {
       companyServices.getCompany(user.account.id);
       const subscription = companyServices.companyObject
         .subscribe((company) => {
+          console.log(company);
           if (company) {
             setCompanyBasicData(company.basic_data);
             setJobData(company.job);
-            setSpecialityData(company.speciality);
-            console.log(companyBasicData);
+            setEditorDescription(company.basic_data.description);
+            console.log(editorDescription);
           }
         });
       return () => {
@@ -113,13 +114,33 @@ function ProfileChange() {
   }, [])
 
   const handleEditorChange = (editorState) => {
-    setEditorState(editorState);
-    //outputHTML: editorState.toHTML()
-    //console.log(state.outputHTML);
+    // console.log(editorState);
+    // setEditorState(editorState);
+    // outputHTML: editorState.toHTML()
+    // setOutputHTML(editorState.toHTML());
+    // console.log(outputHTML);
   }
   const onEditorFinish = () => {
-    setOutputHTML(editorState.toHTML());
-    // console.log(state.outputHTML);
+    // setOutputHTML(editorState.toHTML());
+    console.log(editorRef.getHtml());
+    var descriptionHtml = editorRef.getHtml();
+    companyServices
+      .updateBasicCompany(
+        companyBasicData.name,
+        companyBasicData.website,
+        companyBasicData.specialties,
+        descriptionHtml
+      )
+      .then(() => {
+        companyServices.getCompany(accountServices.userValue.account.id);
+        message.success('Updated description!');
+        setEditorDescription(descriptionHtml);
+      })
+      .catch((error) => {
+        console.log(error);
+        message.success(error);
+      });
+
   };
 
   const handleCancel = (e) => {
@@ -149,7 +170,7 @@ function ProfileChange() {
       values.seniority_level,
       values.employee_type,
       values.recruitment_url,
-      [values.cities],
+      [values.cities], // quick fix
       createTags.getTags(),
     )
       .then(() => {
@@ -163,6 +184,8 @@ function ProfileChange() {
   };
 
   const onEditJob = (values) => {
+    console.log("edit job");
+    console.log(values);
     jobServices.updateJob(
       values.id,
       values.title,
@@ -175,17 +198,18 @@ function ProfileChange() {
     )
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
-        Modal.success({ title: "uWu", content: "Việc làm đã được cập nhật!" });
+        message.success("Việc làm đã được cập nhật!");
       })
       .catch((error) => {
         console.log(error);
-        Modal.error({ title: "uWu", content: error });
+        message.success("Lỗi cập nhật việc làm");
       });
   };
 
   const onJobModify = (item) => {
     console.log(item);
     formEdit.setFieldsValue({
+      id: item.id,
       title: item.title,
       seniority_level: item.seniority_level,
       cities: item.cities,
@@ -199,11 +223,62 @@ function ProfileChange() {
   };
 
   const onAddSpecialityFinish = (values) => {
-
+    console.log(values.speciality_info[0].speciality);
+    var newSpeciality = companyBasicData.specialties;
+    newSpeciality.push(values.speciality_info[0].speciality);
+    console.log(newSpeciality);
+    companyServices
+      .updateBasicCompany(
+        companyBasicData.name,
+        companyBasicData.website,
+        newSpeciality,
+        companyBasicData.descriptionHtml
+      )
+      .then(() => {
+        companyServices.getCompany(accountServices.userValue.account.id);
+        message.success('Updated speciality!');
+      })
+      .catch((error) => {
+        console.log(error);
+        message.success(error);
+      });
   };
 
   const onConfirmDeleteSpeciality = (values) => {
+    console.log(values.speciality_info);
+    console.log(values.speciality_info + companyBasicData.specialties);
+    // var descriptionHtml = editorRef.getHtml();
+    // companyServices
+    //   .updateBasicCompany(
+    //     companyBasicData.name,
+    //     companyBasicData.website,
+    //     companyBasicData.specialties,
+    //     companyBasicData.descriptionHtml
+    //   )
+    //   .then(() => {
+    //     companyServices.getCompany(accountServices.userValue.account.id);
+    //     message.success('Updated description!');
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     message.success(error);
+    //   });
+  }
 
+  const onChangeAutoCompleteSpeciality = (data) => {
+    if (data) {
+
+      getSpecialty(data).then(data => {
+        console.log(data.tag.map(x => ({ value: x })));
+        setAutoCompleteSpeciality(data.tag.map(x => ({ value: x })));
+      })
+        .catch(error => {
+          alert(error);
+        })
+    }
+    else {
+      setAutoCompleteSpeciality([]);
+    }
   }
 
   const onChangeAutoCompleteCity = (text) => {
@@ -278,12 +353,8 @@ function ProfileChange() {
   return (
     <>
       <Card className="card-info" style={{ marginTop: 24 }} title={<Title level={3}>Mô tả</Title>}>
-        <BraftEditor
-          language="en"
-          value={editorState}
-          onChange={handleEditorChange}
-        />
-        <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Save</Button>
+        <MyEditor ref={ref => (editorRef = ref)} descriptionData = {editorDescription}></MyEditor>
+        <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Lưu</Button>
       </Card>
 
       <Card
@@ -294,7 +365,7 @@ function ProfileChange() {
         <Meta title={<Title level={3}>Việc làm</Title>}></Meta>
         <List
           grid={{ gutter: 24, column: 2 }}
-          dataSource={jobs}
+          dataSource={jobData}
           renderItem={item => (
             <List.Item>
               <Card
@@ -309,7 +380,7 @@ function ProfileChange() {
                   title={item.title}
                   description={<div>
                     <div>Yêu cầu: {item.seniority_level}</div>
-                    <div>Địa điểm: {item.cities}</div>
+                    <div>Địa điểm: {item.cities[0]}</div>
                     <div>Công việc: {item.employment_type}</div>
                     <List dataSource={item.skills} renderItem={skill => (<Tag>{skill}</Tag>)}></List>
                   </div>}
@@ -433,6 +504,11 @@ function ProfileChange() {
           form={formEdit}
         >
           <Form.Item
+            name="id"
+          >
+            <Input type="hidden" />
+          </Form.Item>
+          <Form.Item
             initialValue="title"
             label="Title"
             name="title"
@@ -507,12 +583,14 @@ function ProfileChange() {
         </Form>
       </Modal>
 
+        <Row gutter={16}>
+          <Col span={12}>
       <Card style={{ marginTop: 24 }}>
         <Meta title={<Title level={3}>Chuyên môn</Title>}></Meta>
         <List
           style={{ marginTop: 24 }}
           grid={{ column: 2 }}
-          dataSource={specialityData}
+          dataSource={companyBasicData.specialties}
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
@@ -547,22 +625,25 @@ function ProfileChange() {
               return (
                 <div>
                   {fields.map((field) => (
-                    <Space
+                      <Row gutter={12, 12}
                       key={field.key}
                       style={{
-                        display: 'flex',
                         marginBottom: 8,
                         marginTop: 8,
+                        width: '100%',
                       }}
                     >
+                      <Col span={16}>
                       <Form.Item
                         {...field}
                         name={[field.name, "speciality"]}
                         fieldKey={[field.fieldKey, "speciality"]}
                         rules={[{ required: true, message: "Missing speciality" },]}
                       >
-                        <Input />
+                        {/* <Input /> */}
+                        <AutoComplete options={autoCompleteSpeciality} onChange={onChangeAutoCompleteSpeciality} placeholder="Chuyên môn công ty" ></AutoComplete>
                       </Form.Item>
+                      </Col>
                       <Form.Item>
                         <MinusCircleOutlined
                           style={{ color: "red" }}
@@ -571,7 +652,7 @@ function ProfileChange() {
                           }}
                         />
                       </Form.Item>
-                    </Space>
+                    </Row>
                   ))}
 
                   <Form.Item>
@@ -593,27 +674,31 @@ function ProfileChange() {
           </Form.Item>
         </Form>
       </Card>
-
-      <Card className="card-info" style={{ marginTop: 24 }}>
-        <Upload
-          //action ???
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={handlePreview}
-          onChange={handleUploadChange}
-        >
-          {/* max number of image upload */}
-          {fileList.length >= 8 ? null : uploadButton}
-        </Upload>
-        <Modal
-          visible={previewVisible}
-          title={previewTitle}
-          footer={null}
-          onCancel={handlePreviewCancel}
-        >
-          <img alt="example" style={{ width: "100%" }} src={previewImage} />
-        </Modal>
-      </Card>
+        </Col>
+        <Col span={12}>
+         <Card className="card-info" style={{ marginTop: 24 }}>
+         <Meta title={<Title level={3}>Ảnh bìa</Title>}></Meta>
+          <Upload
+            //action ???
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleUploadChange}
+          >
+            {/* max number of image upload */}
+            {fileList.length >= 8 ? null : uploadButton}
+          </Upload>
+          <Modal
+            visible={previewVisible}
+            title={previewTitle}
+            footer={null}
+            onCancel={handlePreviewCancel}
+          >
+            <img alt="example" style={{ width: "100%" }} src={previewImage} />
+          </Modal>
+        </Card>
+        </Col>
+      </Row>
     </>
   );
 

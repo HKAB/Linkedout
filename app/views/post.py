@@ -5,10 +5,12 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.parsers import MultiPartParser
+from rest_framework.exceptions import ParseError
 
 from app.models.skill import Skill
 from app.models.post import Post
-from app.services.post import list_post, get_post, create_post, update_post, delete_post
+from app.services.post import list_post, get_post, create_post, update_post, delete_post, set_post_picture
 
 
 class SkillRelatedField(serializers.RelatedField):
@@ -36,7 +38,7 @@ class PostListView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostListOut'
-            fields = ['id', 'title', 'content', 'published_date', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -64,7 +66,7 @@ class PostGetView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostGetOut'
-            fields = ['id', 'title', 'content', 'published_date', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -93,7 +95,7 @@ class PostCreateView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostCreateOut'
-            fields = ['id', 'title', 'content', 'published_date', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [IsAuthenticated]
 
@@ -108,6 +110,7 @@ class PostCreateView(APIView):
 
 class PostUpdateView(APIView):
     class InputSerializer(serializers.ModelSerializer):
+        id = serializers.IntegerField(required=True)
         skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
         class Meta:
@@ -121,7 +124,7 @@ class PostUpdateView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostCreateOut'
-            fields = ['id', 'title', 'content', 'published_date', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [IsAuthenticated]
 
@@ -148,7 +151,7 @@ class PostDeleteView(APIView):
         class Meta:
             model = Post
             ref_name = 'PostCreateOut'
-            fields = ['id', 'title', 'content', 'published_date', 'skills']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [IsAuthenticated]
 
@@ -159,3 +162,14 @@ class PostDeleteView(APIView):
         serializer.is_valid(raise_exception=True)
         result = delete_post(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
+
+class PostPictureView(APIView):
+    parser_classes = (MultiPartParser,)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            set_post_picture(request.user, request.data['file'])
+        except KeyError:
+            raise ParseError("'file' field missing.")
+        return Response("Uploaded.", status=status.HTTP_201_CREATED)

@@ -191,9 +191,10 @@ function ProfileEdit() {
         });
     }
 
-    companyServices
-      .updateCompanyEmail(
-        emailData[0],
+
+    if (!emailData[0]) {
+      companyServices
+      .createCompanyEmail(
         values.email,
       )
       .then(() => {
@@ -203,6 +204,21 @@ function ProfileEdit() {
         console.log(error);
         Modal.error({ title: "╯︿╰", content: error });
       });
+    }
+    else {
+      companyServices
+        .updateCompanyEmail(
+          emailData[0],
+          values.email,
+        )
+        .then(() => {
+          Modal.success({ title: "\^o^/", content: "Success" });
+        })
+        .catch((error) => {
+          console.log(error);
+          Modal.error({ title: "╯︿╰", content: error });
+        });
+    }
 
 
   }

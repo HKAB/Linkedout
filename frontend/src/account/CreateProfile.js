@@ -14,7 +14,7 @@ function CreateProfile({ history }) {
     if (user) {
       if (user.account.account_type == "student") {
         console.log(values);
-        studentServices.createBasicStudent(values.firstname, values.lastname, values.dateofbirth.format("YYYY-MM-DD"), values.description).then()
+        studentServices.createBasicStudent(values.firstname, values.lastname, values.dateofbirth.format("YYYY-MM-DD"), values.description, "ZZ").then() // quick fix
           .then(() => {
             alert("Create successfully");
             history.push("/profile")
@@ -23,8 +23,6 @@ function CreateProfile({ history }) {
             alert(error);
           });
       }
-      else
-        console.log("chua lam company yet!");
       history.push("/profile")
     }
     else

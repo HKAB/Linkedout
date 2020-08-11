@@ -5,11 +5,13 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.parsers import MultiPartParser
+from rest_framework.exceptions import ParseError
 
 from app.models.job import Job
 from app.models.skill import Skill
 from app.models.city import City
-from app.services.job import get_job, list_job, create_job, update_job, delete_job
+from app.services.job import get_job, list_job, create_job, update_job, delete_job, set_job_picture
 
 
 class SkillRelatedField(serializers.RelatedField):
@@ -49,7 +51,7 @@ class JobListView(APIView):
             model = Job
             ref_name = 'JobListOut'
             fields = ['id', 'title', 'description', 'seniority_level', 'employment_type',
-                      'recruitment_url', 'published_date', 'cities', 'skills']
+                      'recruitment_url', 'published_date', 'job_picture', 'cities', 'skills']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -79,7 +81,7 @@ class JobGetView(APIView):
             model = Job
             ref_name = 'JobGetOut'
             fields = ['title', 'description', 'seniority_level', 'employment_type',
-                      'recruitment_url', 'published_date', 'cities', 'skills']
+                      'recruitment_url', 'published_date', 'job_picture', 'cities', 'skills']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -112,7 +114,7 @@ class JobCreateView(APIView):
             model = Job
             ref_name = 'JobCreateOut'
             fields = ['id', 'title', 'description', 'seniority_level', 'employment_type',
-                      'recruitment_url', 'published_date', 'cities', 'skills']
+                      'recruitment_url', 'published_date', 'job_picture', 'cities', 'skills']
 
     permission_classes = [IsAuthenticated]
     # permission_classes = [AllowAny]
@@ -129,8 +131,9 @@ class JobCreateView(APIView):
 
 class JobUpdateView(APIView):
     class InputSerializer(serializers.ModelSerializer):
-        cities = CityRelatedField(queryset=City.objects.all(), many=True)
-        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
+        id = serializers.IntegerField(required=True)
+        cities = CityRelatedField(queryset=City.objects.all(), many=True, required=True)
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True, required=True)
 
         class Meta:
             model = Job
@@ -146,7 +149,7 @@ class JobUpdateView(APIView):
             model = Job
             ref_name = 'JobUpdateOut'
             fields = ['id', 'title', 'description', 'seniority_level', 'employment_type',
-                      'recruitment_url', 'published_date', 'cities', 'skills']
+                      'recruitment_url', 'published_date', 'job_picture', 'cities', 'skills']
 
     permission_classes = [IsAuthenticated]
     # permission_classes = [AllowAny]
@@ -177,7 +180,7 @@ class JobDeleteView(APIView):
             model = Job
             ref_name = 'JobDeleteOut'
             fields = ['id', 'title', 'description', 'seniority_level', 'employment_type',
-                      'recruitment_url', 'published_date', 'cities', 'skills']
+                      'recruitment_url', 'published_date', 'job_picture', 'cities', 'skills']
 
     permission_classes = [IsAuthenticated]
     # permission_classes = [AllowAny]
@@ -190,3 +193,16 @@ class JobDeleteView(APIView):
         serializer.is_valid(raise_exception=True)
         result = delete_job(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
+
+
+
+class JobPictureView(APIView):
+    parser_classes = (MultiPartParser,)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            set_job_picture(request.user, request.data['file'])
+        except KeyError:
+            raise ParseError("'file' field missing.")
+        return Response("Uploaded.", status=status.HTTP_201_CREATED)
