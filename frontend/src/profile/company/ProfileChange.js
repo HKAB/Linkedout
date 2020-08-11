@@ -81,7 +81,7 @@ function ProfileChange() {
   const [autoCompleteEditCity, setAutoCompleteEditCity] = useState([]);
   const [jobData, setJobData] = useState([]);
   const [companyBasicData, setCompanyBasicData] = useState([]);
-
+  const [editorDescription, setEditorDescription] = useState([]);
   var editTags = useState(null);
   var createTags = useState(null);
   var editorRef = useState(null);
@@ -100,6 +100,8 @@ function ProfileChange() {
           if (company) {
             setCompanyBasicData(company.basic_data);
             setJobData(company.job);
+            setEditorDescription(company.basic_data.description);
+            console.log(editorDescription);
           }
         });
       return () => {
@@ -132,6 +134,7 @@ function ProfileChange() {
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success('Updated description!');
+        setEditorDescription(descriptionHtml);
       })
       .catch((error) => {
         console.log(error);
@@ -350,7 +353,7 @@ function ProfileChange() {
   return (
     <>
       <Card className="card-info" style={{ marginTop: 24 }} title={<Title level={3}>Mô tả</Title>}>
-        <MyEditor ref={ref => (editorRef = ref)}></MyEditor>
+        <MyEditor ref={ref => (editorRef = ref)} descriptionData = {editorDescription}></MyEditor>
         <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Lưu</Button>
       </Card>
 

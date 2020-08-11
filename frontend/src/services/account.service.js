@@ -2,6 +2,7 @@ import { fetchWrapper } from "@/helpers";
 import jwt from 'jsonwebtoken';
 import { BehaviorSubject } from 'rxjs';
 
+import { locale } from "dayjs";
 
 const userSubject = new BehaviorSubject(null);
 
@@ -22,9 +23,14 @@ function register(username, email, password, account_type) {
 function changePassword(current_password, new_password) {
   return fetchWrapper.post(`http://127.0.0.1:8000/api/account/changepassword`, { current_password, new_password })
 }
+function logout(){
+  userSubject.next(null);
+  localStorage.clear();
+}
 export const accountServices = {
   changePassword,
   login,
+  logout,
   register,
   get userValue() {
     var user = JSON.parse(localStorage.getItem('user'));
