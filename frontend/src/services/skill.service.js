@@ -1,19 +1,20 @@
 import { fetchWrapper } from "@/helpers"
+import { Config } from "../config/consts"
 
 function getSkill(id) {
-	return fetchWrapper.get(`http://127.0.0.1:8000/api/skill/list?id=${id}`)
+  return fetchWrapper.get(Config.backendUrl + `/api/skill/list?id=${id}`)
 }
 
 function deleteSkill(skill) {
-	return fetchWrapper.delete(`http://127.0.0.1:8000/api/skill/delete`, {skill})
+  return fetchWrapper.delete(Config.backendUrl + `/api/skill/delete`, { skill })
 }
 
 function createSkill(skill) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/skill/create`, {skill})
+  return fetchWrapper.post(Config.backendUrl + `/api/skill/create`, { skill })
 }
 
 export {
-    getSkill,
-    deleteSkill,
-    createSkill,
+  getSkill,
+  deleteSkill,
+  createSkill,
 }

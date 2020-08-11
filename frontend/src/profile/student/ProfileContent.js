@@ -4,6 +4,7 @@ import { Avatar, Button, Card, Col, Empty, List, Modal, Row, Spin, Timeline, Typ
 import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
 
 const { Title, Text } = Typography;
@@ -133,7 +134,7 @@ function ProfileContent() {
         <Row justify="center">
           <Col textAlign="center">
             <div style={{ textAlign: "center" }}>
-              <Avatar style={{ marginBottom: 32 }} size={128} src={"http://127.0.0.1:8000" + basicProfileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
+              <Avatar style={{ marginBottom: 32 }} size={128} src={Config.backendUrl + basicProfileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
               <Title level={2} className="user-fullname">{basicProfileData.firstname + " " + basicProfileData.lastname}</Title>
               <Text copyable className="user-quotes">{basicProfileData.description}</Text>
             </div>
@@ -186,7 +187,7 @@ function ProfileContent() {
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                    avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
                     title={item.company_name}
                     description={<div className="company-info" id={item.id}>
                       <div>{"Title: " + item.title}</div>
@@ -251,7 +252,7 @@ function ProfileContent() {
           renderItem={item => (
             <List.Item>
               <List.Item.Meta
-                avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
                 title={item.company_name}
                 description={<div className="company-info" id={item.id}>
                   <div>{"Title: " + item.title}</div>

@@ -1,14 +1,15 @@
 import { fetchWrapper } from "@/helpers"
+import { Config } from "../../config/consts"
 
 function getSpecialty(query) {
-	return fetchWrapper.get(`http://127.0.0.1:8000/api/tag/specialty?query=${query}`)
+  return fetchWrapper.get(Config.backendUrl + `/api/tag/specialty?query=${query}`)
 }
 
 function getSpecialityById(id) {
-	return fetchWrapper.get(`http://127.0.0.1:8000/api/tag/specialty/list?id=${id}`)
+  return fetchWrapper.get(Config.backendUrl + `/api/tag/specialty/list?id=${id}`)
 }
 
 export {
-    getSpecialty,
-    getSpecialityById
+  getSpecialty,
+  getSpecialityById
 }

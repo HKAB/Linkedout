@@ -18,6 +18,7 @@ import {
 import Meta from "antd/lib/card/Meta";
 import moment from 'moment';
 import React, { useEffect, useState } from "react";
+import { Config } from "../../config/consts";
 
 const { Title } = Typography;
 const dateFormat = 'YYYY-MM-DD';
@@ -125,7 +126,7 @@ function ProfileChange() {
         });
     })
   };
-  
+
   const onAddEducationFinish = (values) => {
     values.education_info.forEach((education_info) => {
       studentServices
@@ -149,7 +150,7 @@ function ProfileChange() {
   };
 
   const onAddSkillFinish = (values) => {
-  
+
     values.skill_info.forEach((skill_info) => {
       studentServices
         .createStudentSkill(
@@ -440,7 +441,7 @@ function ProfileChange() {
 
 
               <List.Item.Meta
-                avatar={<Avatar src={"http://127.0.0.1:8000" + item.profile_picture}></Avatar>}
+                avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
                 title={item.company_name}
                 description={item.description}
               />
@@ -599,7 +600,7 @@ function ProfileChange() {
           name="add-education"
           autoComplete="off"
           onFinish={onAddEducationFinish}
-          form = {formAddEducation}
+          form={formAddEducation}
         >
           <Form.List name="education_info">
             {(fields, { add, remove }) => {

@@ -1,10 +1,11 @@
 import { fetchWrapper } from "@/helpers"
+import { Config } from "../../config/consts"
 
 function getCityName(query) {
-	return fetchWrapper.get(`http://127.0.0.1:8000/api/tag/location?query=${query}`)
+  return fetchWrapper.get(Config.backendUrl + `/api/tag/location?query=${query}`)
 }
 
 
 export {
-    getCityName,
+  getCityName,
 }

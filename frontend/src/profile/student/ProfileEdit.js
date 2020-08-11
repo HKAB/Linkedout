@@ -1,8 +1,10 @@
 import { accountServices, studentServices } from "@/services";
-import { Avatar, Button, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Space, Switch, Tabs, Upload } from 'antd';
+import { Avatar, Button, Select, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Space, Switch, Tabs, Upload } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { Config } from "../../config/consts";
 
+const { Option } = Select;
 const dateFormat = 'YYYY-MM-DD';
 
 const { TabPane } = Tabs;
@@ -50,9 +52,6 @@ function ProfileEdit() {
   const [formEditBasicInfo] = Form.useForm();
 
   const handleChangeAvatar = info => {
-	console.log("info");
-	console.log(info);
-	//   studentServices.uploadStudentProfile(info.file);
 	setImageFormData(info.file);
     getBase64(info.file.originFileObj, picture =>
       setImageUrl(picture)
@@ -60,10 +59,10 @@ function ProfileEdit() {
   };
 
   const onUploadImage = (data) => {
-		console.log("data");
-	  console.log(data);
-
-	    studentServices.uploadStudentProfile(data);
+		studentServices.uploadStudentPictureProfile(data)
+		.then(() => {
+			message.success("Upload avatar successful!");
+		});
   }
 
   useEffect(() => {
@@ -72,7 +71,7 @@ function ProfileEdit() {
       studentServices.getStudent(user.account.id);
       const subscription = studentServices.studentObject.subscribe((student) => {
         if (student) {
-          student.basic_data.profile_picture = "http://127.0.0.1:8000" + student.basic_data.profile_picture;
+          student.basic_data.profile_picture = Config.backendUrl + student.basic_data.profile_picture;
           setBasicProfileData(student.basic_data);
           setEmailData(student.email);
           setPhoneData(student.phone);
@@ -100,6 +99,7 @@ function ProfileEdit() {
       values.firstName,
       values.lastName,
       values.dateOfBirth.format("YYYY-MM-DD"),
+      values.gender,
       values.description
     )
       .then(() => {
@@ -177,7 +177,7 @@ function ProfileEdit() {
   // }
   // else 
   // {
-  //     imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + basicProfileData.profile_picture} ></Avatar>
+  //     imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={Config.backendUrl + basicProfileData.profile_picture} ></Avatar>
   // }
 
 
@@ -213,6 +213,15 @@ function ProfileEdit() {
                   <Input></Input>
                 </Form.Item>
 
+                <span>Giới tính </span>
+                <Form.Item name="gender" >
+                  <Select style={{ width: "100%" }}>
+                      <Option value="Male">Nam</Option>
+                      <Option value="Female">Nữ</Option>
+                      <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+                  </Select>
+                </Form.Item>
+
                 <span>Email</span>
                 <Form.Item name="email" >
                   <Input ></Input>
@@ -244,8 +253,13 @@ function ProfileEdit() {
                   className="avatar-uploader"
                   showUploadList={false}
                   beforeUpload={beforeUpload}
+<<<<<<< HEAD
 				          onChange={handleChangeAvatar}
 				            customRequest = {onUploadImage}
+=======
+                  onChange={handleChangeAvatar}
+                  customRequest={onUploadImage}
+>>>>>>> 2f8275a068c34e108b2d99709f27222c0518733c
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>

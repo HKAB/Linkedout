@@ -1,13 +1,13 @@
 import { fetchWrapper } from "@/helpers";
 import jwt from 'jsonwebtoken';
 import { BehaviorSubject } from 'rxjs';
+import { Config } from "../config/consts";
 
-import { locale } from "dayjs";
 
 const userSubject = new BehaviorSubject(null);
 
 function login(username, password) {
-  return fetchWrapper.post(`http://127.0.0.1:8000/api/account/login`, { username, password })
+  return fetchWrapper.post(Config.backendUrl + `/api/account/login`, { username, password })
     .then(user => {
       userSubject.next(user);
       // start refresh token timer
@@ -18,12 +18,12 @@ function login(username, password) {
     })
 }
 function register(username, email, password, account_type) {
-  return fetchWrapper.post(`http://127.0.0.1:8000/api/account/register`, { username, password, email, account_type })
+  return fetchWrapper.post(Config.backendUrl + `/api/account/register`, { username, password, email, account_type })
 }
 function changePassword(current_password, new_password) {
-  return fetchWrapper.post(`http://127.0.0.1:8000/api/account/changepassword`, { current_password, new_password })
+  return fetchWrapper.post(Config.backendUrl + `/api/account/changepassword`, { current_password, new_password })
 }
-function logout(){
+function logout() {
   userSubject.next(null);
   localStorage.clear();
 }

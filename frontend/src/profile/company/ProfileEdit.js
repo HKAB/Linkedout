@@ -5,6 +5,7 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Card, Col, Form, Input, List, Menu, message, Modal, Popconfirm, Row, Space, Switch, Tabs, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Config } from "../../config/consts";
 
 const { TabPane } = Tabs;
 const color = (
@@ -116,6 +117,13 @@ function ProfileEdit() {
     );
   };
 
+  const onUploadImage = (data) => {
+		companyServices.uploadCompanyPictureProfile(data)
+		.then(() => {
+			message.success("Upload avatar successful!");
+		});
+  }
+
   useEffect(() => {
     let user = accountServices.userValue;
     console.log(user);
@@ -124,7 +132,7 @@ function ProfileEdit() {
       const subscription = companyServices.companyObject
         .subscribe((company) => {
           if (company) {
-            company.basic_data.profile_picture = "http://127.0.0.1:8000" + company.basic_data.profile_picture;
+            company.basic_data.profile_picture = Config.backendUrl + company.basic_data.profile_picture;
             setBasicProfileData(company.basic_data);
             setEmailData(company.email);
             setPhoneData(company.phone);
@@ -194,16 +202,16 @@ function ProfileEdit() {
 
     if (!emailData[0]) {
       companyServices
-      .createCompanyEmail(
-        values.email,
-      )
-      .then(() => {
-        Modal.success({ title: "\^o^/", content: "Success" });
-      })
-      .catch((error) => {
-        console.log(error);
-        Modal.error({ title: "╯︿╰", content: error });
-      });
+        .createCompanyEmail(
+          values.email,
+        )
+        .then(() => {
+          Modal.success({ title: "\^o^/", content: "Success" });
+        })
+        .catch((error) => {
+          console.log(error);
+          Modal.error({ title: "╯︿╰", content: error });
+        });
     }
     else {
       companyServices
@@ -302,7 +310,7 @@ function ProfileEdit() {
                   showUploadList={false}
                   beforeUpload={beforeUpload}
                   onChange={handleChangeAvatar}
-
+                  customRequest = {onUploadImage}
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>

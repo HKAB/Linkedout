@@ -1,7 +1,7 @@
 import { BehaviorSubject} from 'rxjs'
 
 import { fetchWrapper } from "@/helpers"
-
+import { Config } from '../config/consts';
 // import { getEducation, deleleEducation, createEducation, updateEducation} from "./company/education.service";
 // import { getExperience, deleleExperience, createExperience, updateExperience} from "./company/experience.service";
 import { getEmail, deleteEmail, createEmail, updateEmail } from "./email.service";
@@ -11,12 +11,12 @@ import { getSpecialityById } from './tag/speciality.service';
 
 const companyObject = new BehaviorSubject(null);
 
-function getCompany (account_id) {
+function getCompany(account_id) {
     let company_email = getEmail(account_id);
     let company_phone = getPhone(account_id);    
     let list_job = jobServices.listJob(account_id);
     // TODO: Handle error here!
-    let company_basic = fetchWrapper.get(`http://127.0.0.1:8000/api/company/get?id=${account_id}`);
+    let company_basic = fetchWrapper.get(Config.backendUrl + `/api/company/get?id=${account_id}`);
     // {
     //     "name": "Facebook",
     //     "website": "facebook.com",
@@ -54,7 +54,7 @@ function getCompany (account_id) {
 
 // basic info of company
 function createBasicCompany (name, website, specialties, description) {
-    return fetchWrapper.post(`http://127.0.0.1:8000/api/company/create`, {name, website, specialties, description})
+    return fetchWrapper.post(Config.backendUrl + `/api/company/create`, { name, website, specialties, description })
     .catch((error) =>
     {
         console.log(error);
@@ -63,7 +63,7 @@ function createBasicCompany (name, website, specialties, description) {
 }
 
 function updateBasicCompany (name, website, specialties, description) {
-	return fetchWrapper.put(`http://127.0.0.1:8000/api/company/update`, {name, website, specialties, description})
+	return fetchWrapper.put(Config.backendUrl + `/api/company/update`, { name, website, specialties, description })
 }
 //
 
@@ -94,6 +94,12 @@ function deleteCompanyPhone(phone) {
     return deletePhone(phone);
 }
 //
+function uploadCompanyPictureProfile(data) {
+    return fetchWrapper.post_multipartdata('http://127.0.0.1:8000/api/company/upload', data)
+    .catch(error => {
+        console.log(error);
+    });
+}
 
 export const companyServices = {
     getCompany,
@@ -107,6 +113,8 @@ export const companyServices = {
     createCompanyPhone,
     updateCompanyPhone,
     deleteCompanyPhone,
+
+    uploadCompanyPictureProfile,
 
     get companyValue () { return companyObject.value},
     companyObject
