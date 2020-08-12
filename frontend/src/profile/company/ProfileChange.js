@@ -1,7 +1,9 @@
 //import Form from "antd/lib/form/Form";
 import {
   EditOutlined,
-  MinusCircleOutlined, PlusOutlined
+  MinusCircleOutlined, 
+  PlusOutlined,
+  CloseOutlined
 } from "@ant-design/icons";
 import {
   AutoComplete, Avatar,
@@ -181,10 +183,12 @@ function ProfileChange() {
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
         Modal.success({ title: "uWu", content: "Việc làm đã được tạo thành công!" });
+        handleCreateJobCancel();
       })
       .catch((error) => {
         console.log(error);
         Modal.error({ title: "uWu", content: error });
+        handleCreateJobCancel();
       });
   };
 
@@ -204,12 +208,29 @@ function ProfileChange() {
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success("Việc làm đã được cập nhật!");
+        handleEditJobCancel();
       })
       .catch((error) => {
         console.log(error);
         message.success("Lỗi cập nhật việc làm");
+        handleEditJobCancel();
       });
+      
   };
+
+  const onConfirmDeleteJob = (id) => {
+    console.log(id);
+    jobServices.deleteJob(id)
+      .then(() => {
+        companyServices.getCompany(accountServices.userValue.account.id);
+        message.success({ title: "uWu", content: "Việc làm đã được xóa" });
+  
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error({ title: "uWu", content: error });
+      });
+  }
 
   const onJobModify = (item) => {
     console.log(item);
@@ -396,7 +417,20 @@ function ProfileChange() {
               >
                 <Meta
                   avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
-                  title={item.title}
+                  title={
+                    <span >
+                      <span>{item.title}</span>
+                      <span>
+                        <Popconfirm
+                          title="Bạn có muốn xóa cái này?"
+                          onConfirm={() => onConfirmDeleteJob(item.id)}
+                          okText="Yes"
+                          cancelText="No">
+                          <a><CloseOutlined style={{ color: 'red', fontSize: 20, float: 'right' }} /></a>
+                        </Popconfirm>
+                      </span>
+                    </span>
+                  }
                   description={<div>
                     <div>Yêu cầu: {item.seniority_level}</div>
                     <div>Địa điểm: {item.cities[0]}</div>
@@ -446,8 +480,8 @@ function ProfileChange() {
         onOk={() => {
           formCreate.validateFields()
             .then(values => {
-              //formCreate.resetFields();
               onAddJobFinish(values);
+              //formCreate.resetFields();
             })
             .catch(info => {
               console.log('Validate Failed:', info);

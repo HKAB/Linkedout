@@ -10,8 +10,8 @@ function listJob(account_id) {
   return fetchWrapper.get(Config.backendUrl + `/api/job/list?id=${account_id}`)
 }
 
-function deleteJob(job_id) {
-  return fetchWrapper._delete(Config.backendUrl + `/api/job/delete`, { job_id })
+function deleteJob(id) {
+  return fetchWrapper.delete(Config.backendUrl + `/api/job/delete`, { id })
 }
 
 function createJob(title, description, seniority_level, employment_type, recruitment_url, cities, skills) {
