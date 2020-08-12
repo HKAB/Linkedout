@@ -130,11 +130,11 @@ class CompanyFollowedView(APIView):
         id = serializers.IntegerField()
         name = serializers.CharField()
         description = serializers.CharField()
-        follow_count = serializers.IntegerField()
+        followed_count = serializers.IntegerField()
 
         class Meta:
             ref_name = 'CompanyFollowedOut'
-            fields = ['id', 'name', 'description', 'follow_count']
+            fields = ['id', 'name', 'description', 'followed_count']
 
     # permission_classes = [IsAuthenticated]
     permission_classes = [AllowAny]
