@@ -1,7 +1,9 @@
-#/bin/bash
+#!/bin/bash
 if [ -z ${NODE} ]; then
     NODE=frontend-${HOSTNAME}
 fi
+
+echo "Meh running"
 
 # setting up SIGTERM handler for consul agent
 CONSUL_PID=0
@@ -15,9 +17,9 @@ term_handler () {
 trap term_handler TERM
 
 # app
+nginx -t && nginx
 consul agent -config-dir /consul/config -node ${NODE} &
 CONSUL_PID="$!"
-nginx &
 sleep 5
-consul connect envoy -sidecar-for backend &
+consul connect envoy -sidecar-for frontend &
 wait "${CONSUL_PID}"

@@ -19,7 +19,11 @@
   "connect": {
     "enabled": true
   },
-  "start_join": [],
-  "retry_join": [],
+  "start_join": [
+    "consul-server"
+  ],
+  "retry_join": [
+    "consul-server"
+  ],
   "ui": true
 }

@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 if [ -z ${NODE} ]; then
     NODE=backend-${HOSTNAME}
 fi
