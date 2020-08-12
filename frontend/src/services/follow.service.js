@@ -1,4 +1,4 @@
-import { fetchWrapper } from '@/helpers';
+import { fetchWrapper } from 'helpers';
 
 export const followService = {
   check(id) {

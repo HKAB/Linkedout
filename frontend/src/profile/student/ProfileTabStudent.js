@@ -1,8 +1,8 @@
-import ProfileChange from "@/profile/student/ProfileChange";
-import { default as ProfileContent } from "@/profile/student/ProfileContent";
-import { ProfileEdit } from "@/profile/student/ProfileEdit";
 import { EditOutlined, InfoOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Col, Layout, Row, Space, Tabs, Tooltip } from "antd";
+import ProfileChange from "profile/student/ProfileChange";
+import { default as ProfileContent } from "profile/student/ProfileContent";
+import { ProfileEdit } from "profile/student/ProfileEdit";
 import React, { Component } from "react";
 
 const { TabPane } = Tabs;

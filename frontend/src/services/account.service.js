@@ -1,4 +1,4 @@
-import { fetchWrapper } from "@/helpers";
+import { fetchWrapper } from "helpers";
 import jwt from 'jsonwebtoken';
 import { BehaviorSubject } from 'rxjs';
 import { Config } from "../config/consts";

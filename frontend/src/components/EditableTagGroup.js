@@ -1,9 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'antd/dist/antd.css';
-import { Tag, Input, Tooltip, AutoComplete } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { getSkillName } from "@/services";
+import { AutoComplete, Tag, Tooltip } from 'antd';
+import 'antd/dist/antd.css';
+import React from 'react';
+import { getSkillName } from "services";
 
 class EditableTagGroup extends React.Component {
   constructor(props) {
@@ -15,19 +14,19 @@ class EditableTagGroup extends React.Component {
       editInputIndex: -1,
       editInputValue: '',
       //autocomplete
-      autoCompleteSkillTags:[],
-      autoCompleteEditSkillTags:[],
+      autoCompleteSkillTags: [],
+      autoCompleteEditSkillTags: [],
     };
     this.setTags = this.setTags.bind(this);
   }
-  
 
-   
-  setTags(skilltags){
-    this.setState({tags: skilltags})
+
+
+  setTags(skilltags) {
+    this.setState({ tags: skilltags })
   };
 
-  getTags(){
+  getTags() {
     return this.state.tags;
   }
 
@@ -104,7 +103,7 @@ class EditableTagGroup extends React.Component {
       this.setState({ autoCompleteSkillTags: [] });
     }
   };
-  
+
   onChangeAutocompleteEditSkillTag = (text) => {
     this.setState({ editInputValue: text });
     console.log(text);
@@ -114,7 +113,7 @@ class EditableTagGroup extends React.Component {
         if (data) {
           var data_tag = data.tag.map(x => ({ value: x }));
           this.setState({ autoCompleteEditSkillTags: data_tag });
-          
+
         }
       })
         .catch(error => {
@@ -168,10 +167,10 @@ class EditableTagGroup extends React.Component {
               <span
                 onDoubleClick={e => {
                   //if (index !== 0) {
-                    this.setState({ editInputIndex: index, editInputValue: tag }, () => {
-                      this.editInput.focus();
-                    });
-                    e.preventDefault();
+                  this.setState({ editInputIndex: index, editInputValue: tag }, () => {
+                    this.editInput.focus();
+                  });
+                  e.preventDefault();
                   //}
                 }}
               >
@@ -184,8 +183,8 @@ class EditableTagGroup extends React.Component {
               {tagElem}
             </Tooltip>
           ) : (
-            tagElem
-          );
+              tagElem
+            );
         })}
         {inputVisible && (
           // <Input
@@ -210,7 +209,7 @@ class EditableTagGroup extends React.Component {
           />
         )}
         {!inputVisible && (
-          <Tag className="site-tag-plus" onClick={this.showInput} style = {{marginTop:10}}>
+          <Tag className="site-tag-plus" onClick={this.showInput} style={{ marginTop: 10 }}>
             <PlusOutlined /> New Tag
           </Tag>
         )}
@@ -219,5 +218,5 @@ class EditableTagGroup extends React.Component {
   }
 }
 //const EditTag = new EditableTagGroup();
-export {EditableTagGroup};
+export { EditableTagGroup };
 // ReactDOM.render(<EditableTagGroup />, document.getElementById('container'));

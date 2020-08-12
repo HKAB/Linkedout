@@ -1,10 +1,10 @@
-import { accountServices, companyServices } from "@/services";
 import {
   MinusCircleOutlined,
   PlusOutlined
 } from "@ant-design/icons";
 import { Avatar, Button, Card, Col, Form, Input, List, Menu, message, Modal, Popconfirm, Row, Space, Switch, Tabs, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { accountServices, companyServices } from "services";
 import { Config } from "../../config/consts";
 
 const { TabPane } = Tabs;
@@ -118,10 +118,10 @@ function ProfileEdit() {
   };
 
   const onUploadImage = (data) => {
-		companyServices.uploadCompanyPictureProfile(data)
-		.then(() => {
-			message.success("Upload avatar successful!");
-		});
+    companyServices.uploadCompanyPictureProfile(data)
+      .then(() => {
+        message.success("Upload avatar successful!");
+      });
   }
 
   useEffect(() => {
@@ -310,7 +310,7 @@ function ProfileEdit() {
                   showUploadList={false}
                   beforeUpload={beforeUpload}
                   onChange={handleChangeAvatar}
-                  customRequest = {onUploadImage}
+                  customRequest={onUploadImage}
                 >
                   <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
                 </Upload>

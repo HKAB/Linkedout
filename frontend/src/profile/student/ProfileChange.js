@@ -1,4 +1,3 @@
-import { accountServices, getCompanyName, getSchoolName, getSkillName, studentServices } from "@/services";
 import {
   DeleteOutlined, EditOutlined,
   MinusCircleOutlined, PlusOutlined
@@ -18,6 +17,7 @@ import {
 import Meta from "antd/lib/card/Meta";
 import moment from 'moment';
 import React, { useEffect, useState } from "react";
+import { accountServices, getCompanyName, getSchoolName, getSkillName, studentServices } from "services";
 import { Config } from "../../config/consts";
 
 const { Title } = Typography;

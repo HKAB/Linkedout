@@ -1,7 +1,7 @@
-import { accountServices } from "@/services";
 import { EyeInvisibleOutlined, EyeTwoTone, LockOutlined, LoginOutlined, MailOutlined, ShopOutlined, SmileOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Checkbox, Col, Form, Input, message, Modal, Row, Select, Tabs, Typography } from 'antd';
 import React, { useEffect } from 'react';
+import { accountServices } from "services";
 import leftLoginPicture from "./assets/leftLogin.svg";
 import logo from "./assets/logo.png";
 

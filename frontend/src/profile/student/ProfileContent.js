@@ -1,12 +1,12 @@
-import { accountServices, studentServices } from "@/services";
 import { DoubleRightOutlined, MailTwoTone, PhoneTwoTone, ScheduleTwoTone } from '@ant-design/icons';
-import { Avatar, message, Button, Card, Col, Empty, List, Modal, Row, Spin, Timeline, Typography } from 'antd';
+import { Avatar, Button, Card, Col, Empty, List, message, Modal, Row, Spin, Timeline, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { accountServices, studentServices } from "services";
 import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
-import { useHistory } from 'react-router-dom'
 
 const { Title, Text } = Typography;
 const followData = [
@@ -89,9 +89,9 @@ function ProfileContent(props) {
       studentServices.getStudent(viewStudentId).then(() => {
         setIsLoading(false);
       })
-      .catch(() => {
-        setIsLoading(true);
-      });
+        .catch(() => {
+          setIsLoading(true);
+        });
       const subscription = studentServices.studentObject.subscribe((student) => {
         if (student) {
           setBasicProfileData(student.basic_data);

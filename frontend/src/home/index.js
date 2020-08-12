@@ -1,9 +1,9 @@
-import { accountServices } from "@/services";
 import { Avatar, Button, Card, Col, Input, Row, Space, Typography } from "antd";
 import { BarChart, DonutChart } from "bizcharts";
 import QueueAnim from "rc-queue-anim";
 import OverPack from "rc-scroll-anim/lib/ScrollOverPack";
 import React from "react";
+import { accountServices } from "services";
 import blacklivematter from "./assets/images/blacklivematter.svg";
 import communication from "./assets/images/communication.svg";
 import CV from "./assets/images/CV.svg";

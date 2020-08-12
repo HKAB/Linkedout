@@ -1,4 +1,4 @@
-import { fetchWrapper } from "@/helpers";
+import { fetchWrapper } from "helpers";
 import { BehaviorSubject } from 'rxjs';
 import { Config } from '../../config/consts';
 
@@ -32,3 +32,4 @@ export {
   createExperience,
   updateExperience,
 };
+

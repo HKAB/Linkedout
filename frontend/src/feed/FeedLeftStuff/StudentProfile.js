@@ -1,8 +1,8 @@
-import { accountServices } from '@/services/account.service';
-import { studentServices } from '@/services/student.service';
 import { MailTwoTone, PhoneTwoTone, ScheduleTwoTone } from '@ant-design/icons';
 import { Affix, Avatar, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import React from 'react';
+import { accountServices } from 'services/account.service';
+import { studentServices } from 'services/student.service';
 import { Config } from '../../config/consts';
 
 const { Title, Text } = Typography;

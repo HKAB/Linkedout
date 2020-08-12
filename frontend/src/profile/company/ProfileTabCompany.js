@@ -1,8 +1,8 @@
-import ProfileChange from "@/profile/company/ProfileChange";
-import { default as ProfileContent } from "@/profile/company/ProfileContent";
-import { ProfileEdit } from "@/profile/company/ProfileEdit";
 import { EditOutlined, InfoOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Col, Layout, Row, Space, Tooltip } from "antd";
+import ProfileChange from "profile/company/ProfileChange";
+import { default as ProfileContent } from "profile/company/ProfileContent";
+import { ProfileEdit } from "profile/company/ProfileEdit";
 import React, { Component } from "react";
 
 class ProfileTabCompany extends Component {

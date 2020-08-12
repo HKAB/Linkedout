@@ -1,12 +1,12 @@
-import { accountServices, companyServices } from "@/services";
-import { EditOutlined, LikeOutlined, MailOutlined, PhoneOutlined, SettingOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Empty, Carousel, Col, Divider, Layout, List, Progress, Row, Spin, Statistic, Tag, Typography, Space, message, Modal } from 'antd';
+import { LikeOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Carousel, Col, Divider, Empty, Layout, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { accountServices, companyServices } from "services";
 import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg';
 import pic2 from '../assets/images/xyz.jpg';
-import { useHistory } from 'react-router-dom'
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -86,9 +86,9 @@ function ProfileContent(props) {
       companyServices.getCompany(viewCompanyId).then(() => {
         setIsLoading(false);
       })
-      .catch(() => {
-        setIsLoading(true);
-      });
+        .catch(() => {
+          setIsLoading(true);
+        });
       const subscription = companyServices.companyObject.subscribe((company) => {
         if (company) {
           console.log(company);
@@ -144,7 +144,7 @@ function ProfileContent(props) {
             <Col style={{ marginLeft: 24, marginTop: 16 }} span={17}>
               <Title level={3}>{basicProfileData.name}</Title>
               <Space><List dataSource={basicProfileData.specialties} renderItem={specialty => (specialty)}></List></Space>
-				      <div>Website:
+              <div>Website:
                  {basicProfileData.website}</div>
               <div>
                 <MailOutlined />{" Email: " + emailData[0]}
@@ -166,7 +166,7 @@ function ProfileContent(props) {
           }}>
           <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
           {/* <div style={{ marginTop: 16 }}>{basicProfileData.description}</div> */}
-          <div style={{ marginTop: 16, overflowWrap:'break-word', overflow:'hidden'}} dangerouslySetInnerHTML={{__html: basicProfileData.description}}></div>
+          <div style={{ marginTop: 16, overflowWrap: 'break-word', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: basicProfileData.description }}></div>
           {/* <span styles={{marginTop: 100}}>{data.description}</span> */}
         </Card>
 
@@ -217,10 +217,10 @@ function ProfileContent(props) {
             renderItem={item => (
               <List.Item>
                 <Card
-					        key={item.id}
+                  key={item.id}
                   style={{ marginTop: 16 }}
                   actions={[
-                    <Button type = "primary" style = {{float:'right'}} onClick={()=> onShowJobDetail(item)}>Detail</Button>
+                    <Button type="primary" style={{ float: 'right' }} onClick={() => onShowJobDetail(item)}>Detail</Button>
                   ]}
                 >
                   <Meta
@@ -228,7 +228,7 @@ function ProfileContent(props) {
                     title={item.title}
                     description={<div>
                       <div>Yêu cầu: {item.seniority_level}</div>
-                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => (city)}></List></Space></div>                      
+                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => (city)}></List></Space></div>
                       <div>Công việc: {item.employment_type}</div>
                       <List dataSource={item.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
                     </div>}
@@ -241,28 +241,28 @@ function ProfileContent(props) {
 
         <Modal
           forceRender
-          title = "Việc làm"
-          visible = {jobDetailVisible}
-          onCancel = {handleJobDetailCancel}
-          footer = {null}
+          title="Việc làm"
+          visible={jobDetailVisible}
+          onCancel={handleJobDetailCancel}
+          footer={null}
         >
           <List grid={{ gutter: 24, column: 2 }}>
-              <List.Item>
-                  <Meta
-                    avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
-                    title={jobDetail.title}
-                    description={<div>
-                      <div>Yêu cầu: {jobDetail.seniority_level}</div>
-                      <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
-                      <div>Công việc: {jobDetail.employment_type}</div>
-                      <div>Mô tả: {jobDetail.description}</div>
-                      <div style = {{display:'flex'}}> 
-                        <div>Kỹ năng: </div>
-                        <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
-                      </div>
-                    </div>}
-                  />
-              </List.Item>
+            <List.Item>
+              <Meta
+                avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+                title={jobDetail.title}
+                description={<div>
+                  <div>Yêu cầu: {jobDetail.seniority_level}</div>
+                  <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
+                  <div>Công việc: {jobDetail.employment_type}</div>
+                  <div>Mô tả: {jobDetail.description}</div>
+                  <div style={{ display: 'flex' }}>
+                    <div>Kỹ năng: </div>
+                    <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
+                  </div>
+                </div>}
+              />
+            </List.Item>
           </List>
         </Modal>
 

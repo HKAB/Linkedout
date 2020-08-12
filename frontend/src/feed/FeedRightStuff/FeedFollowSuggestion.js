@@ -1,9 +1,9 @@
-import { feedFollowSuggestionService } from '@/services/feed/feedFollowSuggestion.service';
-import { followService } from '@/services/follow.service';
 import { CheckOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect } from 'react';
+import { feedFollowSuggestionService } from 'services/feed/feedFollowSuggestion.service';
+import { followService } from 'services/follow.service';
 import { Config } from '../../config/consts';
 const { Title, Text } = Typography;
 
@@ -105,3 +105,4 @@ function FeedFollowSuggestion(props) {
 }
 
 export { FeedFollowSuggestion };
+

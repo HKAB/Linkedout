@@ -1,9 +1,9 @@
-import { MyHeader } from "@/components";
-import { ProfileTabCompany } from "@/profile/company/ProfileTabCompany";
-import { ProfileTabStudent } from "@/profile/student/ProfileTabStudent";
-import { accountServices } from "@/services";
 import { Layout, Spin } from 'antd';
+import { MyHeader } from "components";
+import { ProfileTabCompany } from "profile/company/ProfileTabCompany";
+import { ProfileTabStudent } from "profile/student/ProfileTabStudent";
 import React from 'react';
+import { accountServices } from "services";
 import './assets/css/profile.css';
 
 function Profile() {

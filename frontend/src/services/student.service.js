@@ -1,4 +1,4 @@
-import { fetchWrapper } from "@/helpers";
+import { fetchWrapper } from "helpers";
 import { BehaviorSubject } from 'rxjs';
 import { Config } from '../config/consts';
 import { createEmail, deleteEmail, getEmail, updateEmail } from "./email.service";
@@ -166,7 +166,7 @@ export const studentServices = {
   createStudentSkill,
   deleteStudentSkill,
 
-    uploadStudentPictureProfile,
+  uploadStudentPictureProfile,
 
   get studentValue() { return studentObject.value },
   studentObject

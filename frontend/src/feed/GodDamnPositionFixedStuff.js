@@ -1,5 +1,5 @@
-import { StudentProfile } from '@/feed/FeedLeftStuff/StudentProfile';
 import { Col, Row } from 'antd';
+import { StudentProfile } from 'feed/FeedLeftStuff/StudentProfile';
 import React from 'react';
 import { FeedItSelf } from './FeedMiddleStuff/FeedItSelf';
 import { FeedFollowSuggestion } from './FeedRightStuff/FeedFollowSuggestion';

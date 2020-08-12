@@ -1,7 +1,7 @@
-import { accountServices, studentServices } from "@/services";
-import { Avatar, Button, Select, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Space, Switch, Tabs, Upload } from 'antd';
+import { Avatar, Button, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Select, Space, Switch, Tabs, Upload } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { accountServices, studentServices } from "services";
 import { Config } from "../../config/consts";
 
 const { Option } = Select;
@@ -52,17 +52,17 @@ function ProfileEdit() {
   const [formEditBasicInfo] = Form.useForm();
 
   const handleChangeAvatar = info => {
-	setImageFormData(info.file);
+    setImageFormData(info.file);
     getBase64(info.file.originFileObj, picture =>
       setImageUrl(picture)
     );
   };
 
   const onUploadImage = (data) => {
-		studentServices.uploadStudentPictureProfile(data)
-		.then(() => {
-			message.success("Upload avatar successful!");
-		});
+    studentServices.uploadStudentPictureProfile(data)
+      .then(() => {
+        message.success("Upload avatar successful!");
+      });
   }
 
   useEffect(() => {
@@ -216,9 +216,9 @@ function ProfileEdit() {
                 <span>Giới tính </span>
                 <Form.Item name="gender" >
                   <Select style={{ width: "100%" }}>
-                      <Option value="Male">Nam</Option>
-                      <Option value="Female">Nữ</Option>
-                      <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+                    <Option value="Male">Nam</Option>
+                    <Option value="Female">Nữ</Option>
+                    <Option value="Secret">Ơ đằng kia có gì kìa</Option>
                   </Select>
                 </Form.Item>
 

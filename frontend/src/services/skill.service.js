@@ -1,4 +1,4 @@
-import { fetchWrapper } from "@/helpers"
+import { fetchWrapper } from "helpers"
 import { Config } from "../config/consts"
 
 function getSkill(id) {
@@ -18,3 +18,4 @@ export {
   deleteSkill,
   createSkill,
 }
+

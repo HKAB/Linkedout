@@ -1,20 +1,22 @@
 //import Form from "antd/lib/form/Form";
-import { EditableTagGroup, MyEditor } from '@/components';
-import { accountServices, companyServices, getCityName, jobServices, getSpecialty } from "@/services";
 import {
   EditOutlined,
-  MinusCircleOutlined, PlusOutlined, SettingOutlined
+  MinusCircleOutlined, PlusOutlined
 } from "@ant-design/icons";
 import {
   AutoComplete, Avatar,
   Badge, Button, Card,
-  Form, Input, List, Modal,
-  Popconfirm, Select, Space, Tag, Typography, Upload, message, Row, Col
+
+  Col, Form, Input, List,
+  message, Modal,
+  Popconfirm, Row, Select, Space, Tag, Typography, Upload
 } from "antd";
 import Meta from "antd/lib/card/Meta";
-import React, { useEffect, useState } from "react";
-import '../assets/css/profile.css';
 import TextArea from 'antd/lib/input/TextArea';
+import { EditableTagGroup, MyEditor } from 'components';
+import React, { useEffect, useState } from "react";
+import { accountServices, companyServices, getCityName, getSpecialty, jobServices } from "services";
+import '../assets/css/profile.css';
 
 // import {Editor, EditorState} from 'draft-js';
 
@@ -370,7 +372,7 @@ function ProfileChange() {
   return (
     <>
       <Card className="card-info" style={{ marginTop: 24 }} title={<Title level={3}>Mô tả</Title>}>
-        <MyEditor ref={ref => (editorRef = ref)} descriptionData = {editorDescription}></MyEditor>
+        <MyEditor ref={ref => (editorRef = ref)} descriptionData={editorDescription}></MyEditor>
         <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Lưu</Button>
       </Card>
 
@@ -389,7 +391,7 @@ function ProfileChange() {
                 style={{ marginTop: 16 }}
                 actions={[
                   <EditOutlined key="edit" onClick={() => onJobModify(item)} />,
-                  <Button type = "primary" onClick={()=> onShowJobDetail(item)}>Detail</Button>
+                  <Button type="primary" onClick={() => onShowJobDetail(item)}>Detail</Button>
                 ]}
               >
                 <Meta
@@ -408,33 +410,33 @@ function ProfileChange() {
         </List>
         <Button style={{ float: "right" }} size="large" type="primary" shape="circle" onClick={() => showCreateJobModal()}>+</Button>
       </Card>
-      
+
       <Modal
-          forceRender
-          title = "Việc làm"
-          visible = {jobDetailVisible}
-          onCancel = {handleJobDetailCancel}
-          footer = {null}
-        >
-          <List grid={{ gutter: 24, column: 2 }}>
-              <List.Item>
-                  <Meta
-                    avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
-                    title={jobDetail.title}
-                    description={<div>
-                      <div>Yêu cầu: {jobDetail.seniority_level}</div>
-                      <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
-                      <div>Công việc: {jobDetail.employment_type}</div>
-                      <div>Mô tả: {jobDetail.description}</div>
-                      <div style = {{display:'flex'}}> 
-                        <div>Kỹ năng: </div>
-                        <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
-                      </div>
-                    </div>}
-                  />
-              </List.Item>
-          </List>
-        </Modal>
+        forceRender
+        title="Việc làm"
+        visible={jobDetailVisible}
+        onCancel={handleJobDetailCancel}
+        footer={null}
+      >
+        <List grid={{ gutter: 24, column: 2 }}>
+          <List.Item>
+            <Meta
+              avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+              title={jobDetail.title}
+              description={<div>
+                <div>Yêu cầu: {jobDetail.seniority_level}</div>
+                <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
+                <div>Công việc: {jobDetail.employment_type}</div>
+                <div>Mô tả: {jobDetail.description}</div>
+                <div style={{ display: 'flex' }}>
+                  <div>Kỹ năng: </div>
+                  <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
+                </div>
+              </div>}
+            />
+          </List.Item>
+        </List>
+      </Modal>
 
       <Modal
         forceRender
@@ -627,120 +629,120 @@ function ProfileChange() {
         </Form>
       </Modal>
 
-        <Row gutter={16}>
-          <Col span={12}>
-      <Card style={{ marginTop: 24 }}>
-        <Meta title={<Title level={3}>Chuyên môn</Title>}></Meta>
-        <List
-          style={{ marginTop: 24 }}
-          grid={{ column: 2 }}
-          dataSource={companyBasicData.specialties}
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                avatar={
-                  <Popconfirm
-                    title="Bạn có muốn xóa cái này?"
-                    onConfirm={() => onConfirmDeleteSpeciality(item)}
-                    okText="Yes"
-                    cancelText="No">
-                    <a>
-                      <Badge
-                        style={{ color: "red" }}
-                        count={<MinusCircleOutlined />}
-                      >
-                        <Avatar />
-                      </Badge>
-                    </a>
-                  </Popconfirm>
-                }
-                title={item}
-              />
-            </List.Item>
-          )}
-        />
-        <Form
-          name="add-speciality"
-          autoComplete="off"
-          onFinish={onAddSpecialityFinish}
-        >
-          <Form.List name="speciality_info">
-            {(fields, { add, remove }) => {
-              return (
-                <div>
-                  {fields.map((field) => (
-                      <Row gutter={12, 12}
-                      key={field.key}
-                      style={{
-                        marginBottom: 8,
-                        marginTop: 8,
-                        width: '100%',
-                      }}
-                    >
-                      <Col span={16}>
-                      <Form.Item
-                        {...field}
-                        name={[field.name, "speciality"]}
-                        fieldKey={[field.fieldKey, "speciality"]}
-                        rules={[{ required: true, message: "Missing speciality" },]}
-                      >
-                        {/* <Input /> */}
-                        <AutoComplete options={autoCompleteSpeciality} onChange={onChangeAutoCompleteSpeciality} placeholder="Chuyên môn công ty" ></AutoComplete>
-                      </Form.Item>
-                      </Col>
-                      <Form.Item>
-                        <MinusCircleOutlined
-                          style={{ color: "red" }}
-                          onClick={() => {
-                            remove(field.name);
+      <Row gutter={16}>
+        <Col span={12}>
+          <Card style={{ marginTop: 24 }}>
+            <Meta title={<Title level={3}>Chuyên môn</Title>}></Meta>
+            <List
+              style={{ marginTop: 24 }}
+              grid={{ column: 2 }}
+              dataSource={companyBasicData.specialties}
+              renderItem={(item) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <Popconfirm
+                        title="Bạn có muốn xóa cái này?"
+                        onConfirm={() => onConfirmDeleteSpeciality(item)}
+                        okText="Yes"
+                        cancelText="No">
+                        <a>
+                          <Badge
+                            style={{ color: "red" }}
+                            count={<MinusCircleOutlined />}
+                          >
+                            <Avatar />
+                          </Badge>
+                        </a>
+                      </Popconfirm>
+                    }
+                    title={item}
+                  />
+                </List.Item>
+              )}
+            />
+            <Form
+              name="add-speciality"
+              autoComplete="off"
+              onFinish={onAddSpecialityFinish}
+            >
+              <Form.List name="speciality_info">
+                {(fields, { add, remove }) => {
+                  return (
+                    <div>
+                      {fields.map((field) => (
+                        <Row gutter={12, 12}
+                          key={field.key}
+                          style={{
+                            marginBottom: 8,
+                            marginTop: 8,
+                            width: '100%',
                           }}
-                        />
+                        >
+                          <Col span={16}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, "speciality"]}
+                              fieldKey={[field.fieldKey, "speciality"]}
+                              rules={[{ required: true, message: "Missing speciality" },]}
+                            >
+                              {/* <Input /> */}
+                              <AutoComplete options={autoCompleteSpeciality} onChange={onChangeAutoCompleteSpeciality} placeholder="Chuyên môn công ty" ></AutoComplete>
+                            </Form.Item>
+                          </Col>
+                          <Form.Item>
+                            <MinusCircleOutlined
+                              style={{ color: "red" }}
+                              onClick={() => {
+                                remove(field.name);
+                              }}
+                            />
+                          </Form.Item>
+                        </Row>
+                      ))}
+
+                      <Form.Item>
+                        <Button type="dashed" shape="circle"
+                          onClick={() => {
+                            add();
+                          }}
+                        >
+                          <PlusOutlined />
+                        </Button>
                       </Form.Item>
-                    </Row>
-                  ))}
+                    </div>
+                  );
+                }}
+              </Form.List>
 
-                  <Form.Item>
-                    <Button type="dashed" shape="circle"
-                      onClick={() => {
-                        add();
-                      }}
-                    >
-                      <PlusOutlined />
-                    </Button>
-                  </Form.Item>
-                </div>
-              );
-            }}
-          </Form.List>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit"> Submit </Button>
-          </Form.Item>
-        </Form>
-      </Card>
+              <Form.Item>
+                <Button type="primary" htmlType="submit"> Submit </Button>
+              </Form.Item>
+            </Form>
+          </Card>
         </Col>
         <Col span={12}>
-         <Card className="card-info" style={{ marginTop: 24 }}>
-         <Meta title={<Title level={3}>Ảnh bìa</Title>}></Meta>
-          <Upload
-            //action ???
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleUploadChange}
-          >
-            {/* max number of image upload */}
-            {fileList.length >= 8 ? null : uploadButton}
-          </Upload>
-          <Modal
-            visible={previewVisible}
-            title={previewTitle}
-            footer={null}
-            onCancel={handlePreviewCancel}
-          >
-            <img alt="example" style={{ width: "100%" }} src={previewImage} />
-          </Modal>
-        </Card>
+          <Card className="card-info" style={{ marginTop: 24 }}>
+            <Meta title={<Title level={3}>Ảnh bìa</Title>}></Meta>
+            <Upload
+              //action ???
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleUploadChange}
+            >
+              {/* max number of image upload */}
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+            <Modal
+              visible={previewVisible}
+              title={previewTitle}
+              footer={null}
+              onCancel={handlePreviewCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
+          </Card>
         </Col>
       </Row>
     </>

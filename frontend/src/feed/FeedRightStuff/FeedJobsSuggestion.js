@@ -1,8 +1,8 @@
-import { feedJobSuggestionService } from '@/services/feed/feedJobSuggestion.service';
 import { RightOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
+import { feedJobSuggestionService } from 'services/feed/feedJobSuggestion.service';
 import { Config } from '../../config/consts';
 const { Title, Text } = Typography;
 

@@ -1,4 +1,4 @@
-import { fetchWrapper } from "@/helpers"
+import { fetchWrapper } from "helpers"
 import { Config } from "../../config/consts"
 
 function getSchoolName(query) {
@@ -9,3 +9,4 @@ function getSchoolName(query) {
 export {
   getSchoolName,
 }
+

@@ -1,7 +1,7 @@
-import { accountServices, companyServices, getSpecialty, studentServices } from "@/services";
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { AutoComplete, Button, Card, Col, DatePicker, Form, Input, Row, Select, Spin, Typography, message } from 'antd';
+import { AutoComplete, Button, Card, Col, DatePicker, Form, Input, message, Row, Select, Spin, Typography } from 'antd';
 import React, { useState } from 'react';
+import { accountServices, companyServices, getSpecialty, studentServices } from "services";
 import bg from './assets/createuser.svg';
 
 const { Title, Paragraph, Text } = Typography;
@@ -85,9 +85,9 @@ function CreateProfile({ history }) {
 
       <Form.Item name="gender" rules={[{ required: true, message: 'Đừng để trống' }]}>
         <Select style={{ width: "100%" }}>
-            <Option value="Male">Nam</Option>
-            <Option value="Female">Nữ</Option>
-            <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+          <Option value="Male">Nam</Option>
+          <Option value="Female">Nữ</Option>
+          <Option value="Secret">Ơ đằng kia có gì kìa</Option>
         </Select>
       </Form.Item>
 
