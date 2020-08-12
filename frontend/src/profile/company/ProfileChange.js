@@ -1,9 +1,20 @@
 //import Form from "antd/lib/form/Form";
 import {
+  CloseOutlined,
+
+
+
+
+
+
+
+
+
   EditOutlined,
-  MinusCircleOutlined, 
-  PlusOutlined,
-  CloseOutlined
+
+
+  EllipsisOutlined, MinusCircleOutlined,
+  PlusOutlined
 } from "@ant-design/icons";
 import {
   AutoComplete, Avatar,
@@ -215,7 +226,7 @@ function ProfileChange() {
         message.success("Lỗi cập nhật việc làm");
         handleEditJobCancel();
       });
-      
+
   };
 
   const onConfirmDeleteJob = (id) => {
@@ -224,7 +235,7 @@ function ProfileChange() {
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success({ title: "uWu", content: "Việc làm đã được xóa" });
-  
+
       })
       .catch((error) => {
         console.log(error);
@@ -412,7 +423,7 @@ function ProfileChange() {
                 style={{ marginTop: 16 }}
                 actions={[
                   <EditOutlined key="edit" onClick={() => onJobModify(item)} />,
-                  <Button type="primary" onClick={() => onShowJobDetail(item)}>Detail</Button>
+                  <EllipsisOutlined key="info" onClick={() => onShowJobDetail(item)} />
                 ]}
               >
                 <Meta
@@ -431,18 +442,18 @@ function ProfileChange() {
                       </span>
                     </span>
                   }
-                  description={<div>
+                  description={<Space direction="vertical" size={3}>
                     <div>Yêu cầu: {item.seniority_level}</div>
                     <div>Địa điểm: {item.cities[0]}</div>
                     <div>Công việc: {item.employment_type}</div>
-                    <List dataSource={item.skills} renderItem={skill => (<Tag>{skill}</Tag>)}></List>
-                  </div>}
+                    <List dataSource={item.skills} renderItem={skill => (<Tag style={{ margin: 3 }}>{skill}</Tag>)}></List>
+                  </Space>}
                 />
               </Card>
             </List.Item>
           )}>
         </List>
-        <Button style={{ float: "right" }} size="large" type="primary" shape="circle" onClick={() => showCreateJobModal()}>+</Button>
+        <Button style={{ float: "right" }} size="large" type="primary" shape="circle" onClick={() => showCreateJobModal()}><PlusOutlined /></Button>
       </Card>
 
       <Modal
@@ -457,16 +468,16 @@ function ProfileChange() {
             <Meta
               avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
               title={jobDetail.title}
-              description={<div>
+              description={<Space direction="vertical" size={3}>
                 <div>Yêu cầu: {jobDetail.seniority_level}</div>
                 <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
                 <div>Công việc: {jobDetail.employment_type}</div>
                 <div>Mô tả: {jobDetail.description}</div>
                 <div style={{ display: 'flex' }}>
                   <div>Kỹ năng: </div>
-                  <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
+                  <List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
                 </div>
-              </div>}
+              </Space>}
             />
           </List.Item>
         </List>

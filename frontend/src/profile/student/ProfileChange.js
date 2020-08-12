@@ -15,6 +15,7 @@ import {
   Typography
 } from "antd";
 import Meta from "antd/lib/card/Meta";
+import TextArea from "antd/lib/input/TextArea";
 import moment from 'moment';
 import React, { useEffect, useState } from "react";
 import { accountServices, getCompanyName, getSchoolName, getSkillName, studentServices } from "services";
@@ -390,7 +391,7 @@ function ProfileChange() {
           </Form.Item>
 
           <Form.Item label="Description" name="description" initialValue="des">
-            <Input />
+            <TextArea />
           </Form.Item>
 
           <Form.Item hidden="true" name="id">
@@ -516,16 +517,6 @@ function ProfileChange() {
                         <Col span={5}>
                           <Form.Item
                             {...field}
-                            name={[field.name, "description"]}
-                            fieldKey={[field.fieldKey, "description"]}
-                            rules={[{ required: true, message: "Missing Description", },]}
-                          >
-                            <Input placeholder="Description" style={{ width: '100%' }} />
-                          </Form.Item>
-                        </Col>
-                        <Col span={5}>
-                          <Form.Item
-                            {...field}
                             name={[field.name, "title"]}
                             fieldKey={[field.fieldKey, "title"]}
                             rules={[{ required: true, message: "Missing title" },]}
@@ -551,6 +542,16 @@ function ProfileChange() {
                             rules={[{ required: false }]}
                           >
                             <DatePicker placeholder="End date" style={{ width: '100%' }} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={5}>
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "description"]}
+                            fieldKey={[field.fieldKey, "description"]}
+                            rules={[{ required: true, message: "Missing Description", },]}
+                          >
+                            <Input placeholder="Description" style={{ width: '100%' }} />
                           </Form.Item>
                         </Col>
                         <Col span={1}>

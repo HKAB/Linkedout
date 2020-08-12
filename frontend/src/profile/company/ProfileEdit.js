@@ -168,68 +168,68 @@ function ProfileEdit() {
         console.log(error);
         message.error({ title: "\^o^/", content: error });
       });
-    
-    if (phoneData[0] != values.phoneNumber) {
-    if (!phoneData[0]) {
-      companyServices
-        .createCompanyPhone(
-          values.phoneNumber
-        )
-        .then(() => {
-          companyServices.getCompany(accountServices.userValue.account.id);
-          message.success({ title: "\^o^/", content: "Thêm số điện thoại!" });
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error({ title: "\^o^/", content: error });
-        });
-    }
-    else {
-      companyServices
-        .updateCompanyPhone(
-          phoneData[0],
-          values.phoneNumber,
-        )
-        .then(() => {
-          companyServices.getCompany(accountServices.userValue.account.id);
-          message.success({ title: "\^o^/", content: "Cập nhật số điện thoại!" });
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error({ title: "\^o^/", content: error });
-        });
-    }
-  }
 
-  if (emailData[0] != values.email) {
-    if (!emailData[0]) {
-      companyServices
-        .createCompanyEmail(
-          values.email,
-        )
-        .then(() => {
-          message.success({ title: "\^o^/", content: "Thêm email!" });
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error({ title: "╯︿╰", content: error });
-        });
+    if (phoneData[0] != values.phoneNumber) {
+      if (!phoneData[0]) {
+        companyServices
+          .createCompanyPhone(
+            values.phoneNumber
+          )
+          .then(() => {
+            companyServices.getCompany(accountServices.userValue.account.id);
+            message.success({ title: "\^o^/", content: "Thêm số điện thoại!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "\^o^/", content: error });
+          });
+      }
+      else {
+        companyServices
+          .updateCompanyPhone(
+            phoneData[0],
+            values.phoneNumber,
+          )
+          .then(() => {
+            companyServices.getCompany(accountServices.userValue.account.id);
+            message.success({ title: "\^o^/", content: "Cập nhật số điện thoại!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "\^o^/", content: error });
+          });
+      }
     }
-    else {
-      companyServices
-        .updateCompanyEmail(
-          emailData[0],
-          values.email,
-        )
-        .then(() => {
-          message.success({ title: "\^o^/", content: "Cập nhật email!" });
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error({ title: "╯︿╰", content: error });
-        });
+
+    if (emailData[0] != values.email) {
+      if (!emailData[0]) {
+        companyServices
+          .createCompanyEmail(
+            values.email,
+          )
+          .then(() => {
+            message.success({ title: "\^o^/", content: "Thêm email!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "╯︿╰", content: error });
+          });
+      }
+      else {
+        companyServices
+          .updateCompanyEmail(
+            emailData[0],
+            values.email,
+          )
+          .then(() => {
+            message.success({ title: "\^o^/", content: "Cập nhật email!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "╯︿╰", content: error });
+          });
+      }
     }
-  }
 
 
   }
@@ -366,7 +366,7 @@ function ProfileEdit() {
                   itemLayout="horizontal"
                   dataSource={phoneData}
                   renderItem={(item) => (
-                    <List.Item>
+                    <List.Item style={{ paddingRight: 6 }}>
                       <List.Item.Meta
                         title={item}
                       />
@@ -398,13 +398,14 @@ function ProfileEdit() {
                     <Form.List name="phone_info">
                       {(fields, { add, remove }) => {
                         return (
-                          <div>
+                          <div style={{ paddingRight: 0 }}>
                             {fields.map((field) => (
                               <Row gutter={12, 12}
                                 key={field.key}
                                 style={{
                                   marginBottom: 8,
                                   marginTop: 8,
+                                  paddingRight: 0,
                                   width: '100%',
                                 }}
                               >
@@ -419,11 +420,11 @@ function ProfileEdit() {
                                   </Form.Item>
                                 </Col>
 
-                                <Col span={1}>
+                                <Col span={4} style={{ paddingRight: 0 }}>
                                   <Button
                                     type="dashed"
                                     shape="circle"
-                                    style={{ color: 'red' }}
+                                    style={{ color: 'red', float: "right" }}
                                     icon={<MinusCircleOutlined />}
                                     onClick={() => {
                                       remove(field.name);
@@ -463,7 +464,7 @@ function ProfileEdit() {
                   itemLayout="horizontal"
                   dataSource={emailData}
                   renderItem={(item) => (
-                    <List.Item>
+                    <List.Item style={{ paddingRight: 6 }}>
                       <List.Item.Meta
                         title={item}
                       />
@@ -502,6 +503,7 @@ function ProfileEdit() {
                                 style={{
                                   marginBottom: 8,
                                   marginTop: 8,
+                                  paddingRight: 0,
                                   width: '100%',
                                 }}
                               >
@@ -516,11 +518,11 @@ function ProfileEdit() {
                                   </Form.Item>
                                 </Col>
 
-                                <Col span={1}>
+                                <Col span={4} style={{ paddingRight: 0 }}>
                                   <Button
                                     type="dashed"
                                     shape="circle"
-                                    style={{ color: 'red' }}
+                                    style={{ color: 'red', float: "right" }}
                                     icon={<MinusCircleOutlined />}
                                     onClick={() => {
                                       remove(field.name);
@@ -563,3 +565,4 @@ function ProfileEdit() {
 }
 
 export { ProfileEdit };
+
