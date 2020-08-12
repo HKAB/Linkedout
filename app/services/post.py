@@ -65,14 +65,14 @@ def delete_post(*, account: Account, id: int) -> list:
     return list_post(id=account.id)
 
 
-def set_post_picture(account: Account, id: int, post: Post, file_instance):
+def set_post_picture(account: Account, id: int, file_instance):
     student_account_check(account)
     post_exist(id)
     author_check(account, id)
     if file_instance.name.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
         raise InvalidInputFormat(
             "File extension must be 'png', 'jpg' or 'jpeg'")
-    p = Post.objects.get(id=post.id)
+    p = Post.objects.get(id=id)
     if p.post_picture != Post._meta.get_field('post_picture').get_default():
         old_file_path = os.path.join(MEDIA_ROOT, p.post_picture.name)
         if os.path.exists(old_file_path):
