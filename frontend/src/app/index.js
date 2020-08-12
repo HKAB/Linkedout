@@ -2,6 +2,7 @@ import { CreateProfile, Login } from 'account';
 import { Feed } from 'feed';
 import { Home } from 'home';
 import { Profile } from 'profile';
+import { Search } from 'search'
 import { ViewProfile } from 'profile/ViewProfile';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -20,6 +21,7 @@ function App() {
           <Route exact path='/profile/student/:id' render={(props) => (<ViewProfile {...props} accountType="student" />)} />
           <Route exact path='/create-profile' component={CreateProfile} />
           <Route exact path='/feed' component={Feed} />
+          <Route exact path='/search' component={Search} />
         </Switch>
       </BrowserRouter>
     </div>

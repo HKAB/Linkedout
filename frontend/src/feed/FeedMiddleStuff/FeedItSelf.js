@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	Card,
 	Avatar,
@@ -10,6 +10,8 @@ import {
 	Row,
 	Tag,
 	Button,
+	message,
+	Tooltip
 } from 'antd';
 import moment from 'moment';
 import {
@@ -19,10 +21,15 @@ import {
 	FileTextOutlined,
 	EyeOutlined,
 	SmileOutlined,
+	HeartFilled
 } from '@ant-design/icons';
+import { studentServices } from "services";
+import { Config } from "../../config/consts"
+import { useHistory } from 'react-router-dom'
 
 const { Meta } = Card;
 const { Title } = Typography;
+
 
 const jobs = [
 	{
@@ -76,6 +83,46 @@ const history_data = {
 };
 
 function FeedItSelf() {
+
+	let history = useHistory();
+	const addInterestedPost = (item) => {
+		studentServices.createPostInterested(item.id)
+		.then(() => {
+			message.success("Thêm vào interested post!");
+		})
+		.catch(error => {
+			message.error("Lỗi gì đó, hay bạn đã interest rồi 🤨");
+		});
+	}
+
+	// {
+    //     "type": "job",
+    //     "id": 2,
+    //     "company_name": "Facebook",
+    //     "company_profile_picture": "/media/profile/company_congty123.jpg",
+    //     "title": "18021335.html",
+    //     "description": "AAAA",
+    //     "seniority_level": "MidLevel",
+    //     "employment_type": "Part-time",
+    //     "recruitment_url": "AA.com",
+    //     "published_date": "2020-08-10",
+    //     "job_picture": "/media/job/default.jpg",
+    //     "cities": [
+    //         "Hai Phong"
+    //     ],
+    //     "skills": [
+    //         "Ôi bạn ơi tại bạn chưa chơi đồ đấy"
+    //     ]
+    // },
+
+	const [posts, setPosts] = React.useState([]);
+	
+	useEffect(() => {
+	studentServices.getStudentFeedPost().then((posts) => {
+		setPosts(posts);
+	});
+	}, [])
+
 	return (
 		<>
 			<Card>
@@ -99,27 +146,29 @@ function FeedItSelf() {
 			<List
 				itemLayout="vertical"
 				size="large"
-				dataSource={jobs}
-				renderItem={(item) => (
+				dataSource={posts}
+				renderItem={(item) => {
+					if (item.type == "job")
+					return (
 					<>
 						<Card
 							className="card-info"
 							key={item.id}
 							style={{ marginTop: 24 }}
-							cover={<img src={item.cover} height={200}></img>}
+							cover={<img src={item.job_picture} height={200}></img>}
 						>
 							<Meta
 								avatar={
-									<Avatar src="https://image.flaticon.com/icons/svg/2965/2965278.svg"></Avatar>
+									<Tooltip placement="bottom" title={item.company_name}><Avatar src={Config.backendUrl + item.company_profile_picture}></Avatar></Tooltip>
 								}
 								title={
 									<>
-										<Title level={4} href={item.recruiment_url}>
+										<Title level={4} href={item.recruitment_url}>
 											{item.title}
 										</Title>
 										<u>
 											<i>
-												{moment(item.published_date, 'YYYY/MM/DD').format(
+												{moment(item.published_date, 'YYYY-MM-DD').format(
 													'MMMM Do YYYY'
 												)}
 											</i>
@@ -166,9 +215,9 @@ function FeedItSelf() {
 											</Col>
 											<Col span={5}>
 												<Button
-													href={item.recruiment_url}
 													style={{ float: 'right' }}
 													type="primary"
+													onClick={() => window.open(item.recruitment_url)}
 												>
 													Apply
 												</Button>
@@ -179,7 +228,69 @@ function FeedItSelf() {
 							></Meta>
 						</Card>
 					</>
-				)}
+					)
+					else
+					return (
+						<>
+						<Card
+							className="card-info"
+							key={item.id}
+							style={{ marginTop: 24 }}
+							cover={<img src={item.post_picture} height={200}></img>}
+						>
+							<Meta
+								avatar={
+									<Tooltip placement="bottom" title={item.student_firstname + " " + item.student_lastname}><Avatar src={Config.backendUrl + item.student_profile_picture}></Avatar></Tooltip>
+								}
+								title={
+									<>
+										<Title level={4}>
+											{item.title}
+										</Title>
+										<u>
+											<i>
+												{moment(item.published_date, 'YYYY-MM-DD').format(
+													'MMMM Do YYYY'
+												)}
+											</i>
+										</u>
+									</>
+								}
+								description={
+									<>
+										<Row>
+											<Col span={19}>
+												<div style={{ fontSize: 14 }}>{item.content}</div>
+											</Col>
+										</Row>
+										<Row style={{ marginTop: 16 }}>
+											<Col span={19}>
+												<Space>
+													<List
+														dataSource={item.skills}
+														renderItem={(skill) => <Tag>{skill}</Tag>}
+													></List>
+												</Space>
+											</Col>
+											<Col span={5}>
+												<Button
+													style={{ float: 'right' }}
+													type="primary"
+													shape="circle"
+													onClick={() => addInterestedPost(item)}
+												>
+													<HeartFilled />
+												</Button>
+											</Col>
+										</Row>
+									</>
+								}
+							></Meta>
+						</Card>
+					</>
+					)
+				}
+			}
 			/>
 		</>
 	);

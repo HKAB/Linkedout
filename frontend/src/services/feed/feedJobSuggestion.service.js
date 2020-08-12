@@ -1,7 +1,10 @@
 import { fetchWrapper } from 'helpers';
+import { Config } from '../../config/consts'
 
-export const feedJobSuggestionService = {
-  getSuggestions() {
-    return fetchWrapper.get('http://localhost:8000/api/feed/suggest-job');
-  },
+function getJobSuggestions() {
+  return fetchWrapper.get(Config.backendUrl + '/api/feed/suggest-job');
+}
+
+export {
+  getJobSuggestions,
 }

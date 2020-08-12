@@ -2,7 +2,8 @@ import { RightOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
-import { feedJobSuggestionService } from 'services/feed/feedJobSuggestion.service';
+// import { feedJobSuggestionService } from 'services/feed/feedJobSuggestion.service';
+import { accountServices, studentServices } from "services";
 import { Config } from '../../config/consts';
 const { Title, Text } = Typography;
 
@@ -10,7 +11,7 @@ function FeedJobSuggestion(props) {
   const [suggestions, setSuggestions] = useState([]);
 
   const fetchSuggesions = async () => {
-    let response = await feedJobSuggestionService.getSuggestions();
+    let response = await studentServices.getStudentJobSuggestion();
     let result = response.map((item) => {
       return {
         jobId: item.id,

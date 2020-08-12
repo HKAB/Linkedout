@@ -1,7 +1,10 @@
 import { fetchWrapper } from 'helpers';
+import { Config } from '../../config/consts'
 
-export const feedFollowSuggestionService = {
-  getSuggestions() {
-    return fetchWrapper.get(`http://localhost:8000/api/feed/suggest-follow`);
-  },
+function getFollowSuggestions() {
+  return fetchWrapper.get(Config.backendUrl + '/api/feed/suggest-follow');
+}
+
+export {
+  getFollowSuggestions
 }

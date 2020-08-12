@@ -6,8 +6,10 @@ import { createPhone, deletePhone, getPhone, updatePhone } from "./phone.service
 import { createSkill, deleteSkill, getSkill } from "./skill.service";
 import { createEducation, deleleEducation, getEducation, updateEducation } from "./student/education.service";
 import { createExperience, deleleExperience, getExperience, updateExperience } from "./student/experience.service";
-
-
+import { getJobSuggestions } from './feed/feedJobSuggestion.service';
+import { getFollowSuggestions } from './feed/feedFollowSuggestion.service';
+import { getFeedPost } from './feed/feedPost.service';
+import { createPostInterested } from './student/interest.service'
 
 const studentObject = new BehaviorSubject(null);
 
@@ -141,6 +143,19 @@ function uploadStudentPictureProfile(data) {
 
 //
 
+function getStudentJobSuggestion() {
+  return getJobSuggestions();
+}
+
+function getStudentFollowSuggestion() {
+  return getFollowSuggestions();
+}
+//
+
+function getStudentFeedPost() {
+  return getFeedPost();
+}
+
 export const studentServices = {
   getStudent,
   createBasicStudent,
@@ -168,6 +183,12 @@ export const studentServices = {
 
   uploadStudentPictureProfile,
 
+  getStudentJobSuggestion,
+  getStudentFollowSuggestion,
+  getStudentFeedPost,
+
+  createPostInterested,
+  
   get studentValue() { return studentObject.value },
   studentObject
 }
