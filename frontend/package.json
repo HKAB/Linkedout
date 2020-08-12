@@ -10,6 +10,7 @@
     "antd": "^4.4.2",
     "babel-polyfill": "^6.26.0",
     "bizcharts": "^4.0.12",
+    "braft-editor": "^2.3.9",
     "braft-extensions": "^0.1.0",
     "dayjs": "^1.8.31",
     "draft-js": "^0.10.5",
