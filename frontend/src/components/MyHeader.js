@@ -10,9 +10,9 @@ const { Title } = Typography;
 const { Header, Content } = Layout;
 const menu = (
   <Menu>
-    <Menu.Item key='4' icon={<UserOutlined />}>Account</Menu.Item>
-    <Menu.Item key='5' icon={<SettingOutlined />}>Settings</Menu.Item>
-    <Menu.Item key='6' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />} onClick={accountServices.logout}><Link to="/">Sing out</Link> </Menu.Item>
+    <Menu.Item key='1' icon={<UserOutlined />}><Link to={{pathname: '/profile'}}>Account</Link></Menu.Item>
+    {/* <Menu.Item key='5' icon={<SettingOutlined />}><Link to={{pathname: '/profile'}}>Settings</Link></Menu.Item> */}
+    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />} onClick={accountServices.logout}><Link to="/">Sing out</Link> </Menu.Item>
   </Menu>
 )
 
@@ -65,14 +65,14 @@ class MyHeader extends Component {
         <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
           {/* <div className="logo"> */}
           <Space>
-            <Link to="/feed"><img src={logo} width="48" height="48"></img></Link>
+            <Link to="/"><img src={logo} width="48" height="48"></img></Link>
             <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
           </Space>
           {/* </div> */}
           <span className="left-menu">
             <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>
             {hasFeed}
-            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/profile'><UserOutlined /></Link></Button>
+            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{pathname: '/profile', defaultTab: "Content"}}><UserOutlined /></Link></Button>
             <Dropdown overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
               <Button type="text" style={{ height: 64 }}>
                 {/* <Avatar size="large" className="avatar-picture" />

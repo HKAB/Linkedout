@@ -10,7 +10,7 @@ const { Header, Sider, Content } = Layout;
 
 class ProfileTabStudent extends Component {
   state = {
-    renderComponent: this.props.defaultTab //<ProfileContent />,
+    renderComponent: <ProfileContent />,
   };
   changeTabButton = (
     <Space direction="vertical" style={{ position: "fixed" }}>

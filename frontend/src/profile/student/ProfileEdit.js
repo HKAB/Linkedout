@@ -94,7 +94,6 @@ function ProfileEdit() {
     setDisabled(!disabled);
   }
   const editProfileStudent = values => {
-    console.log(values);
     studentServices.updateBasicStudent(
       values.firstName,
       values.lastName,
@@ -104,54 +103,58 @@ function ProfileEdit() {
     )
       .then(() => {
         studentServices.getStudent(accountServices.userValue.account.id);
-        message.success({ title: "uWu", content: "Basic information updated!" });
+        message.success({ title: "uWu", content: "Cập nhật thông tin cơ bản!" });
       })
       .catch((error) => {
         console.log(error);
         message.error({ title: "uWu", content: error });
       });
-
+    
+    if (phoneData[0] != values.phoneNumber) {
     if (!phoneData[0]) {
-      studentServices.createStudentPhone(
-        values.phoneNumber
-      )
-        .then(() => {
-          studentServices.getStudent(accountServices.userValue.account.id);
-          message.success({ title: "uWu", content: "Phone updated!" });
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error({ title: "uWu", content: error });
-        });
-    }
-    else {
-      studentServices
-        .updateStudentPhone(
-          phoneData[0],
-          values.phoneNumber,
+        studentServices.createStudentPhone(
+          values.phoneNumber
         )
-        .then(() => {
-          studentServices.getStudent(accountServices.userValue.account.id);
-          message.success({ title: "uWu", content: "Phone updated!" });
-        })
-        .catch((error) => {
-          console.log(error);
-          message.error({ title: "uWu", content: error });
-        });
+          .then(() => {
+            studentServices.getStudent(accountServices.userValue.account.id);
+            message.success({ title: "uWu", content: "Cập nhật số điện thoại!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "uWu", content: error });
+          });
+      }
+      else {
+        studentServices
+          .updateStudentPhone(
+            phoneData[0],
+            values.phoneNumber,
+          )
+          .then(() => {
+            studentServices.getStudent(accountServices.userValue.account.id);
+            message.success({ title: "uWu", content: "Thêm số điện thoại!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "uWu", content: error });
+          });
+      }
     }
 
+    if (emailData[0] != values.email) {
     studentServices
       .updateStudentEmail(
         emailData[0],
         values.email,
       )
       .then(() => {
-        message.success({ title: "\^o^/", content: "Success" });
+        message.success({ title: "\^o^/", content: "Cập nhật email!" });
       })
       .catch((error) => {
         console.log(error);
         message.error({ title: "╯︿╰", content: error });
       });
+    }
 
 
   }
@@ -197,6 +200,7 @@ function ProfileEdit() {
                 initialValues={{
                   firstName: basicProfileData.firstname,
                   lastName: basicProfileData.lastname,
+                  gender: basicProfileData.gender,
                   email: emailData[0],
                   dateOfBirth: moment(basicProfileData.dateofbirth, dateFormat),
                   phoneNumber: phoneData[0],

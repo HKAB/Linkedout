@@ -55,8 +55,8 @@ function createBasicStudent(firstname, lastname, dateofbirth, description, gende
     });
 }
 
-function updateBasicStudent(firstname, lastname, dateofbirth, description) {
-  return fetchWrapper.put(Config.backendUrl + `/api/student/update`, { firstname, lastname, dateofbirth, description })
+function updateBasicStudent(firstname, lastname, dateofbirth, gender, description) {
+  return fetchWrapper.put(Config.backendUrl + `/api/student/update`, { firstname, lastname, dateofbirth, gender, description })
 }
 //
 

@@ -6,10 +6,10 @@ import { ProfileEdit } from "profile/company/ProfileEdit";
 import React, { Component } from "react";
 
 class ProfileTabCompany extends Component {
-  state = {
-    renderComponent: <ProfileContent />,
-  };
 
+  state = {
+    renderComponent: <ProfileContent/>
+  }
   changeTabButton = (
     <Space direction="vertical" style={{ position: "fixed" }}>
       <Tooltip placement="right" title={"Profile nè"}>
@@ -19,7 +19,7 @@ class ProfileTabCompany extends Component {
           icon={<UserOutlined style={{ fontSize: '24px' }}></UserOutlined>}
           // size="large"
           onClick={() => {
-            this.setState({ renderComponent: <ProfileContent /> });
+            this.setState({renderComponent: <ProfileContent/>});
           }}
         />
       </Tooltip>
@@ -30,7 +30,7 @@ class ProfileTabCompany extends Component {
           icon={<InfoOutlined style={{ fontSize: '24px' }} />}
           size="large"
           onClick={() => {
-            this.setState({ renderComponent: <ProfileEdit /> })
+            this.setState({renderComponent: <ProfileEdit />})
           }}
         />
       </Tooltip>
@@ -41,7 +41,7 @@ class ProfileTabCompany extends Component {
           icon={<EditOutlined style={{ fontSize: '24px' }} />}
           size="large"
           onClick={() => {
-            this.setState({ renderComponent: <ProfileChange /> })
+            this.setState({renderComponent: <ProfileChange />})
           }}
         />
       </Tooltip>

@@ -158,17 +158,18 @@ function ProfileEdit() {
         values.name,
         values.website,
         values.specialties,
-        values.description
+        basicProfileData.description
       )
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
-        Modal.success({ title: "uWu", content: "Basic information updated!" });
+        message.success({ title: "\^o^/", content: "Cập nhật thông tin cơ bản!" });
       })
       .catch((error) => {
         console.log(error);
-        Modal.error({ title: "uWu", content: error });
+        message.error({ title: "\^o^/", content: error });
       });
-
+    
+    if (phoneData[0] != values.phoneNumber) {
     if (!phoneData[0]) {
       companyServices
         .createCompanyPhone(
@@ -176,11 +177,11 @@ function ProfileEdit() {
         )
         .then(() => {
           companyServices.getCompany(accountServices.userValue.account.id);
-          Modal.success({ title: "uWu", content: "Phone updated!" });
+          message.success({ title: "\^o^/", content: "Thêm số điện thoại!" });
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "uWu", content: error });
+          message.error({ title: "\^o^/", content: error });
         });
     }
     else {
@@ -191,26 +192,27 @@ function ProfileEdit() {
         )
         .then(() => {
           companyServices.getCompany(accountServices.userValue.account.id);
-          Modal.success({ title: "uWu", content: "Phone updated!" });
+          message.success({ title: "\^o^/", content: "Cập nhật số điện thoại!" });
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "uWu", content: error });
+          message.error({ title: "\^o^/", content: error });
         });
     }
+  }
 
-
+  if (emailData[0] != values.email) {
     if (!emailData[0]) {
       companyServices
         .createCompanyEmail(
           values.email,
         )
         .then(() => {
-          Modal.success({ title: "\^o^/", content: "Success" });
+          message.success({ title: "\^o^/", content: "Thêm email!" });
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "╯︿╰", content: error });
+          message.error({ title: "╯︿╰", content: error });
         });
     }
     else {
@@ -220,13 +222,14 @@ function ProfileEdit() {
           values.email,
         )
         .then(() => {
-          Modal.success({ title: "\^o^/", content: "Success" });
+          message.success({ title: "\^o^/", content: "Cập nhật email!" });
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "╯︿╰", content: error });
+          message.error({ title: "╯︿╰", content: error });
         });
     }
+  }
 
 
   }
@@ -264,7 +267,6 @@ function ProfileEdit() {
                   email: emailData[0],
                   specialties: basicProfileData.specialties,
                   phoneNumber: phoneData[0],
-                  description: basicProfileData.description
                 }}
               >
 
@@ -290,11 +292,6 @@ function ProfileEdit() {
                 </Form.Item>
                 <span>Specialties</span>
                 <Form.Item name="specialties"  >
-                  <Input />
-                </Form.Item>
-
-                <span>Description</span>
-                <Form.Item name="description" >
                   <Input />
                 </Form.Item>
 
