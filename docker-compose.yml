@@ -39,6 +39,7 @@ services:
       - "3000:80"
     volumes:
       - "./frontend/consul:/consul/config"
+      - "./frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf"
     depends_on:
       - "consul-server"
 

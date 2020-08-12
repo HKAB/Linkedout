@@ -5,6 +5,7 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 RUN npm install react-scripts -g
 COPY . ./
+RUN sed -i "s,http://localhost:8000,,g" /app/src/config/consts.js
 RUN npm ci
 RUN npm run build
 

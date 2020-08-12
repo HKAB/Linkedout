@@ -13,6 +13,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path='/' component={Home} />
+          <Route exact path='/index.html' component={Home} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/profile' component={Profile} />
           <Route exact path='/profile/company/:id' render={(props) => (<ViewProfile {...props} accountType="company" />)} />
@@ -26,3 +27,4 @@ function App() {
 }
 
 export { App };
+
