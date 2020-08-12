@@ -195,14 +195,13 @@ class JobDeleteView(APIView):
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
 
 
-
 class JobPictureView(APIView):
     parser_classes = (MultiPartParser,)
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
-            set_job_picture(request.user, request.data['file'])
+            set_job_picture(request.user, request.data['id'], request.data['file'])
         except KeyError:
-            raise ParseError("'file' field missing.")
+            raise ParseError("'file' and/or 'id' field missing.")
         return Response("Uploaded.", status=status.HTTP_201_CREATED)

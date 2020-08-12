@@ -19,7 +19,7 @@ def list_post(*, id: int) -> list:
             'published_date': p.published_date,
             'post_picture': p.post_picture,
             'skills': p.skills,
-            
+
         } for p in posts
     ]
 
@@ -43,6 +43,7 @@ def create_post(*, account: Account, title: str, content: str, skills: list) -> 
 
 def update_post(*, account: Account, id: int, title: str, content: str, skills: list) -> list:
     student_account_check(account)
+    author_check(account, id)
     p = Post.objects.filter(id=id)
     p.update(
         title=title,
@@ -56,11 +57,27 @@ def update_post(*, account: Account, id: int, title: str, content: str, skills: 
 
 def delete_post(*, account: Account, id: int) -> list:
     student_account_check(account)
+    author_check(account, id)
     p = Post.objects.filter(id=id).first()
     if p is None:
         raise InvalidInputFormat("Post with id {} not found".format(id))
     p.delete()
     return list_post(id=account.id)
+
+
+def set_post_picture(account: Account, id: int, post: Post, file_instance):
+    student_account_check(account)
+    post_exist(id)
+    author_check(account, id)
+    if file_instance.name.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
+        raise InvalidInputFormat(
+            "File extension must be 'png', 'jpg' or 'jpeg'")
+    p = Post.objects.get(id=post.id)
+    if p.post_picture != Post._meta.get_field('post_picture').get_default():
+        old_file_path = os.path.join(MEDIA_ROOT, p.post_picture.name)
+        if os.path.exists(old_file_path):
+            os.remove(old_file_path)
+    p.post_picture.save(file_instance.name, file_instance, save=True)
 
 
 def student_account_check(account: Account, raise_exception=True):
@@ -70,20 +87,23 @@ def student_account_check(account: Account, raise_exception=True):
         return False
     return True
 
-
 def get_student_account(account: Account) -> Student:
     p = Student.objects.filter(account=account).first()
     if p is None:
         raise InvalidInputFormat("Student not found!")
     return p
 
-def set_post_picture(post: Post, file_instance):
-    if file_instance.name.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
-        raise InvalidInputFormat(
-            "File extension must be 'png', 'jpg' or 'jpeg'")
-    p=Post.objects.get(post__id=post.id)
-    if p.post_picture!=Post._meta.get_field('post_picture').get_default():
-        old_file_path=os.path.join(MEDIA_ROOT,p.post_picture.name)
-        if os.path.exists(old_file_path):
-            os.remove(old_file_path)
-    p.post_picture.save(file_instance.name, file_instance, save=True)
+def author_check(account: Account, id: int) -> bool:
+    p = Post.objects.filter(id=id).first()
+    if p.student != get_student_account(account):
+        raise InvalidInputFormat('Account with id {} isn\'t author of post with id {}'.format(account.id, id))
+        return False
+    return True
+
+def post_exist(id: int, raise_exception=True) -> bool:
+    p = Post.objects.filter(id=id).first()
+    if p is None:
+        if raise_exception:
+            raise InvalidInputFormat("Post with id {} not found.".format(id))
+        return False
+    return True

@@ -6,7 +6,7 @@ from .skill import Skill
 
 def store_picture(instance, filename: str) -> str:
     extension = filename.split('.')[-1]
-    return "job/job_" + "{}.{}".format(instance.job.id, extension)
+    return "job/job_" + "{}.{}".format(instance.id, extension)
 
 
 class Job(models.Model):

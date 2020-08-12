@@ -169,7 +169,7 @@ class PostPictureView(APIView):
 
     def post(self, request):
         try:
-            set_post_picture(request.user, request.data['file'])
+            set_post_picture(request.user, request.data['id'], request.data['file'])
         except KeyError:
-            raise ParseError("'file' field missing.")
+            raise ParseError("'file' and/or 'id' field missing.")
         return Response("Uploaded.", status=status.HTTP_201_CREATED)
