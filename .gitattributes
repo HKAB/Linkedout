@@ -52,6 +52,7 @@
 
 # Docker
 Dockerfile        text eol=lf
+.dockerignore     text eol=lf
 
 # Documentation
 *.ipynb           text
@@ -108,7 +109,7 @@ TODO              text
 *.lock            text -diff
 package-lock.json text -diff
 *.toml            text
-*.yaml            text
+*.yaml            text eol=lf
 *.yml             text eol=lf
 browserslist      text
 Makefile          text

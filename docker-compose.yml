@@ -7,17 +7,33 @@ services:
       - "8500:8500"
       - "8600:8600"
     volumes:
-      - ./consul-server/server.json:/consul/config/server.json
-    command: "consul agent -config-dir=/consul/config/ -node=consul-server"
+      - ./deployment/consul-server/server.json:/consul/config/server.json
+    command:
+      ["consul", "agent", "-config-dir=/consul/config/", "-node=consul-server"]
+
+  prometheus:
+    build: deployment/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./deployment/prometheus/config.yaml:/etc/prometheus/prometheus.yml"
+      - "./deployment/prometheus/consul:/consul/config"
 
   gateway:
-    build: gateway/
+    build: deployment/gateway/
     volumes:
-      - ./gateway/consul:/consul/config
+      - ./deployment/gateway/consul:/consul/config
     ports:
       - "80:80"
     depends_on:
       - "consul-server"
+
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:80"
+  #   depends_on:
+  #     - "consul-server"
 
   backend:
     build: .
