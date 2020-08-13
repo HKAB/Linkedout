@@ -1,55 +1,16 @@
-import { LikeOutlined, MailTwoTone, PhoneTwoTone, ProfileTwoTone } from '@ant-design/icons';
+import { CheckOutlined, MailTwoTone, PhoneTwoTone, PlusOutlined, ProfileTwoTone } from '@ant-design/icons';
 import { Avatar, Button, Card, Carousel, Col, Divider, Empty, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { accountServices, companyServices } from "services";
 import { Config } from "../../config/consts";
+import { followService } from '../../services/follow.service';
 import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg';
 import pic2 from '../assets/images/xyz.jpg';
 
 const { Title, Text } = Typography;
-
-const data = {
-  name: "Facebook",
-  // cities: "Hà Nội, thủ đô của nước Cộng hòa Xã hội chủ nghĩa Việt Nam",
-  website: "lotus.vn",
-  profile_picture: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-  // company_size: "4000+",
-  specialties: ["Ban buon ban le :)"],
-  email: "omegalul@gmail.com",
-  phone: "0981285376",
-  description: (<b>Founded in 2004, Facebook’s mission is to give people the power to build community and bring the world closer together. Over 2 billion people use Facebook, Insskillsram, WhatsApp, or Messenger every month to stay connected with friends and family, to discover what’s going on in the world, and to share and express what matters to them.
-                  Facebook is defined by our unique culture – one that rewards impact. We encourage people to be bold and solve the problems they care most about. We work in small teams and move fast to develop new products, constantly iterating. The phrase “this journey is 1% finished” reminds us that we’ve only begun to fulfill our mission.</b>)
-}
-
-const jobs = [
-  {
-    title: "Tuyển Dev tại facebook.wap.sh",
-    seniority_level: "Junior",
-    employment_type: "Full time",
-    cities: "Hà Nội",
-    skills: ["Python", "C++", "C#", "Java", "Coffee"],
-    description: ""
-  },
-  {
-    title: "Tuyển Dev tại facebook.wap.sh",
-    seniority_level: "Mid level",
-    employment_type: "Part time",
-    cities: "Hà Nội",
-    skills: ["Python", "C++", "C#", "Java", "Coffee"],
-    description: ""
-  },
-  {
-    title: "Tuyển Dev tại facebook.wap.sh",
-    seniority_level: "Fresher",
-    employment_type: "Remote",
-    cities: "Hà Nội",
-    skills: ["Python", "C++", "C#", "Java", "Coffee"],
-    description: ""
-  }
-]
 
 const rowStyle = {
   position: "relative",
@@ -71,17 +32,69 @@ function ProfileContent(props) {
   const [phoneData, setPhoneData] = useState([]);
   const [emailData, setEmailData] = useState([]);
   const [listJobData, setListJobData] = useState([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
+  const [followed, setFollowed] = useState(false);
+  const [followButtonVisible, setFollowButtonVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [jobDetail, setJobDetail] = useState([]);
   const [jobDetailVisible, setJobDetailVisible] = useState(false);
+  const [followCount, setFollowCount] = useState(0);
+  const [middleChartData, setMiddleChartData] = useState([0, 0, 0]);
+  const [leftChartData, setLeftChartData] = useState({ name: "", percent: 0 });
+
+  const fetchFollowCount = async (id) => {
+    let response = await followService.count(id);
+    setFollowCount(response.count);
+  }
+
+  const updateFollow = async () => {
+    const result = await followService.check(props.id);
+    setFollowed(result.followed);
+  }
+
+  const doFollow = async () => {
+    await followService.follow(props.id);
+  }
+
+  const doUnFollow = async () => {
+    await followService.unfollow(props.id);
+  }
+
+  useEffect(() => {
+    let data = { name: "", percent: 0 };
+    let skillCount = { "": 0 };
+    let maxSkill = "";
+    listJobData.forEach((item) => {
+      if (item.skills) {
+        item.skills.forEach((s) => {
+          skillCount[s] = (skillCount[s] || 0) + 1
+          if (skillCount[s] > skillCount[maxSkill]) maxSkill = s;
+        });
+      }
+    });
+    data = { name: maxSkill, percent: (skillCount[maxSkill] * 100 / listJobData.length) | 0 }
+    setLeftChartData(data); // some magik stuff to convert float to int
+  }, [listJobData])
+
+  useEffect(() => {
+    let data = [0, 0, 0];
+    listJobData.forEach((item) => {
+      console.log(item);
+      if (item.seniority_level === "Junior") data[0]++;
+      else if (item.seniority_level === "MidLevel") data[1]++;
+      else if (item.seniority_level === "Senior") data[2]++;
+      setMiddleChartData(data);
+    });
+  }, [listJobData]);
 
   useEffect(() => {
     setIsLoading(true);
     let user = accountServices.userValue;
     if (user) {
       var viewCompanyId = user.account.id;
-      if (props.id) {
+      if (props.id) { // student viewing company
         viewCompanyId = props.id;
+        setFollowButtonVisible(true);
+        updateFollow();
       }
       companyServices.getCompany(viewCompanyId).then(() => {
         setIsLoading(false);
@@ -99,6 +112,8 @@ function ProfileContent(props) {
         }
       });
 
+      fetchFollowCount(viewCompanyId);
+
       return () => {
         subscription.unsubscribe();
       }
@@ -108,6 +123,12 @@ function ProfileContent(props) {
       history.push("/login");
     }
   }, []);
+
+  const handleFollow = () => {
+    if (followed) doUnFollow();
+    else doFollow();
+    setFollowed(!followed);
+  }
 
   const showJobDetailModal = () => {
     setJobDetailVisible(true);
@@ -137,11 +158,11 @@ function ProfileContent(props) {
           }}
           className="card-info"
         >
-          <Row>
+          <Row type="flex" align="middle">
             <Col style={rowStyle} span={4}>
               <Avatar src={Config.backendUrl + basicProfileData.profile_picture} style={centerInRowStyle} size={128}></Avatar>
             </Col>
-            <Col style={{ marginLeft: 24, marginTop: 16 }} span={17}>
+            <Col style={{ marginLeft: 24, marginTop: 16 }} span={16}>
               <Title level={3}>{basicProfileData.name}</Title>
               <Space><Text strong>{basicProfileData.specialties.slice(0, 3).join(', ')}</Text></Space>
               <div><ProfileTwoTone /> Website: <a href={basicProfileData.website}>{basicProfileData.website}</a> </div>
@@ -152,8 +173,16 @@ function ProfileContent(props) {
               </div>
 
             </Col>
-            <Col style={{ position: "relative" }}>
-              <Button style={{ position: "absolute", bottom: 0 }} type="primary">Follow+</Button>
+            <Col style={{ verticalAlign: "middle", justifyContent: "center" }}>
+              <div style={{ display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
+                {followButtonVisible &&
+                  <Button
+                    type={!followed ? "primary" : "default"}
+                    style={{ padding: 0, textAlign: "center", width: 100, display: 'inline-block', verticalAlign: 'middle' }}
+                    onClick={handleFollow}>{!followed ? <div><PlusOutlined /> Follow</div> : <div><CheckOutlined /> Followed</div>}
+                  </Button>
+                }
+              </div>
             </Col>
           </Row>
         </Card>
@@ -175,30 +204,28 @@ function ProfileContent(props) {
             marginTop: 24,
           }}>
           <Row>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Sử dụng NodeJS</Title></Col>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Tỉ lệ apply thành công</Title></Col>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Đánh giá của chúng tôi</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Yêu cầu {leftChartData.name}</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Mức độ tuyển dụng</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Đang theo dõi</Title></Col>
           </Row>
           <Row justify="center" align="middle">
             <Col span={8} style={{ textAlign: "center" }}>
-              <Progress type="circle" percent={75} />
+              <Progress type="circle" percent={leftChartData.percent} />
             </Col>
             {/* <Divider type="vertical"/> */}
             <Col span={8}>
-              <Progress percent={30} status="exception" />
-              <Progress percent={50} status="active" />
-              <Progress percent={100} status="success" />
+              Junior<Progress percent={middleChartData[0] * 100 / listJobData.length} status="success" showInfo={false} />
+              Mid Level<Progress percent={middleChartData[1] * 100 / listJobData.length} status="active" showInfo={false} />
+              Senior<Progress percent={middleChartData[2] * 100 / listJobData.length} status="exception" showInfo={false} />
             </Col>
             {/* <Divider type="vertical"/> */}
             <Col span={8}>
               <Statistic
-                title="Active"
-                value={11.28}
-                precision={2}
+                title="followers"
+                value={followCount}
+                precision={0}
                 valueStyle={{ color: '#3f8600' }}
-                prefix={<LikeOutlined />}
-                suffix="%"
-                style={{ textAlign: "center" }}
+                style={{ textAlign: "center", fontSize: 24 }}
               />
             </Col>
           </Row>
