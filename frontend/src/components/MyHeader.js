@@ -1,4 +1,4 @@
-import { HomeOutlined, LogoutOutlined, ProfileOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, LogoutOutlined, ProfileOutlined, UserOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
@@ -10,9 +10,9 @@ const { Title } = Typography;
 const { Header, Content } = Layout;
 const menu = (
   <Menu>
-    <Menu.Item key='1' icon={<UserOutlined />}><Link to={{pathname: '/profile'}}>Account</Link></Menu.Item>
+    <Menu.Item key='1' icon={<UserOutlined />}><Link to={{ pathname: '/profile' }}>Account</Link></Menu.Item>
     {/* <Menu.Item key='5' icon={<SettingOutlined />}><Link to={{pathname: '/profile'}}>Settings</Link></Menu.Item> */}
-    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />} onClick={accountServices.logout}><Link to="/">Sing out</Link> </Menu.Item>
+    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />} onClick={accountServices.logout}><Link to="/">Sign out</Link> </Menu.Item>
   </Menu>
 )
 
@@ -72,7 +72,7 @@ class MyHeader extends Component {
           <span className="left-menu">
             <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>
             {hasFeed}
-            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{pathname: '/profile', defaultTab: "Content"}}><UserOutlined /></Link></Button>
+            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{ pathname: '/profile', defaultTab: "Content" }}><UserOutlined /></Link></Button>
             <Dropdown overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
               <Button type="text" style={{ height: 64 }}>
                 {/* <Avatar size="large" className="avatar-picture" />
@@ -88,3 +88,4 @@ class MyHeader extends Component {
 }
 
 export { MyHeader };
+
