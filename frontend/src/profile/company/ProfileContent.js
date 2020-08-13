@@ -1,14 +1,14 @@
 import { LikeOutlined, MailTwoTone, PhoneTwoTone, ProfileTwoTone } from '@ant-design/icons';
-import { Avatar, Button, Card, Carousel, Col, Divider, Empty, Layout, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
+import { Avatar, Button, Card, Carousel, Col, Divider, Empty, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { accountServices, companyServices } from "services";
+import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg';
 import pic2 from '../assets/images/xyz.jpg';
 
-const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 
 const data = {
@@ -139,7 +139,7 @@ function ProfileContent(props) {
         >
           <Row>
             <Col style={rowStyle} span={4}>
-              <Avatar src={data.profile_picture} style={centerInRowStyle} size={128}></Avatar>
+              <Avatar src={Config.backendUrl + basicProfileData.profile_picture} style={centerInRowStyle} size={128}></Avatar>
             </Col>
             <Col style={{ marginLeft: 24, marginTop: 16 }} span={17}>
               <Title level={3}>{basicProfileData.name}</Title>

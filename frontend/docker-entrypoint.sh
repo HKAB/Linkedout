@@ -22,4 +22,5 @@ consul agent -config-dir /consul/config -node ${NODE} &
 CONSUL_PID="$!"
 sleep 5
 consul connect envoy -sidecar-for frontend &
+prometheus-node-exporter &
 wait "${CONSUL_PID}"

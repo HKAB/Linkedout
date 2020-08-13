@@ -10,6 +10,4 @@ COPY config/default.conf /etc/nginx/conf.d/default.conf
 RUN apt update && \
     apt install -y prometheus-node-exporter
 
-COPY ["docker-entrypoint.sh", "/"]
-RUN ["chmod", "+x", "/docker-entrypoint.sh"]
-CMD ["/bin/bash", "/docker-entrypoint.sh"]
+COPY ["./docker-entrypoint.sh", "/docker-entrypoint.sh"]

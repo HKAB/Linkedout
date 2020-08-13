@@ -47,6 +47,8 @@ services:
     build: .
     ports:
       - "8000:8000"
+    volumes:
+      - "./media:/app/media"
     environment:
       DJANGO_DATABASE_HOST: "mysql"
       DJANGO_DATABASE_NAME: "backend"
@@ -59,10 +61,16 @@ services:
 
   mysql:
     image: mysql:5.7
-    # ports:
-    #   - "3307:3306"
+    ports:
+      - "3307:3306"
     environment:
       MYSQL_DATABASE: "backend"
       MYSQL_USER: "backend"
       MYSQL_PASSWORD: "backend"
       MYSQL_RANDOM_ROOT_PASSWORD: 1
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]
