@@ -23,23 +23,21 @@ function beforeUpload(file) {
 class UploadableAvatar extends React.Component {
   state = {
     loading: false,
+    imageUrl: "",
   };
 
   handleChange = info => {
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
       getBase64(info.file.originFileObj, imageUrl =>
         this.setState({
           imageUrl,
           loading: false,
         }),
       );
-    }
   };
+
+  setImageUrl = image => {
+    this.setState({imageUrl: image});
+  }
 
   render() {
     const uploadButton = (

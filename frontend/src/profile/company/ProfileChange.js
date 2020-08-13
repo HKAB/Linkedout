@@ -19,6 +19,7 @@ import React, { useEffect, useState } from "react";
 import { accountServices, companyServices, getCityName, getSpecialty, jobServices } from "services";
 import '../assets/css/profile.css';
 import UploadableAvatar from "components/UploadableAvatar"
+import { Config } from "../../config/consts";
 // import {Editor, EditorState} from 'draft-js';
 
 
@@ -90,7 +91,11 @@ function ProfileChange() {
   const [editorDescription, setEditorDescription] = useState([]);
   const [jobDetail, setJobDetail] = useState([]);
   const [jobDetailVisible, setJobDetailVisible] = useState(false);
+
+  const [selectedNewJobPicture, setSelectedNewJobPicture] = useState();
+
   var editTags = useState(null);
+  var uploadableAvatarRef = useState(null);
   var createTags = useState(null);
   var editorRef = useState(null);
 
@@ -109,7 +114,6 @@ function ProfileChange() {
             setCompanyBasicData(company.basic_data);
             setJobData(company.job);
             setEditorDescription(company.basic_data.description);
-            console.log(editorDescription);
           }
         });
       return () => {
@@ -122,7 +126,7 @@ function ProfileChange() {
   }, [])
 
   const onUploadJobPicture = (data) => {
-    // let multipart_formdata = {"file": data.file}
+    setSelectedNewJobPicture(data)
     // studentServices.uploadStudentPictureProfile(multipart_formdata)
     //   .then(() => {
     //     message.success("Upload avatar successful!");
@@ -189,14 +193,26 @@ function ProfileChange() {
       [values.cities], // quick fix
       createTags.getTags(),
     )
-      .then(() => {
+      .then((listjob) => {
+        console.log(listjob);
+        if (selectedNewJobPicture)
+        {
+          var id_new_job = listjob[listjob.length - 1].id;
+          let multipart_formdata = {'file': selectedNewJobPicture.file, 'id': id_new_job};
+          jobServices.uploadJobPicture(multipart_formdata)
+          .then(() => {
+            message.success("Tải ảnh bìa cho job thành công!");
+          })
+          .catch(error => {
+            message.error(error);
+          });
+        }
         companyServices.getCompany(accountServices.userValue.account.id);
-        Modal.success({ title: "uWu", content: "Việc làm đã được tạo thành công!" });
+        message.success("Tạo việc làm thành công!");
         handleCreateJobCancel();
       })
       .catch((error) => {
-        console.log(error);
-        Modal.error({ title: "uWu", content: error });
+        message.error(error);
         handleCreateJobCancel();
       });
   };
@@ -254,6 +270,7 @@ function ProfileChange() {
     });
     //EditTag.setState({tags: item.skills});
     editTags.setTags(item.skills);
+    uploadableAvatarRef.setImageUrl(Config.backendUrl + item.job_picture);
     showEditJobModal();
   };
 
@@ -567,8 +584,11 @@ function ProfileChange() {
           >
             <EditableTagGroup ref={ref => (createTags = ref)} />
           </Form.Item>
+
+          <Form.Item label="Ảnh bìa">
+          <UploadableAvatar onUploadImage={onUploadJobPicture}></UploadableAvatar>
+        </Form.Item>
         </Form>
-        <UploadableAvatar ></UploadableAvatar>
       </Modal>
 
       <Modal
@@ -669,6 +689,10 @@ function ProfileChange() {
           >
             {/* <EditTag/> */}
             <EditableTagGroup ref={ref => (editTags = ref)} />
+          </Form.Item>
+
+          <Form.Item label="Ảnh bìa">
+            <UploadableAvatar ref={ref => (uploadableAvatarRef = ref)} onUploadImage={onUploadJobPicture}></UploadableAvatar>
           </Form.Item>
         </Form>
       </Modal>
