@@ -18,7 +18,7 @@ import { EditableTagGroup, MyEditor } from 'components';
 import React, { useEffect, useState } from "react";
 import { accountServices, companyServices, getCityName, getSpecialty, jobServices } from "services";
 import '../assets/css/profile.css';
-
+import UploadableAvatar from "components/UploadableAvatar"
 // import {Editor, EditorState} from 'draft-js';
 
 
@@ -69,6 +69,8 @@ function getBase64(file) {
   });
 }
 
+
+
 function ProfileChange() {
 
   const [visible, setVisible] = useState(false);
@@ -118,6 +120,14 @@ function ProfileChange() {
       console.log("Oh no!");
     }
   }, [])
+
+  const onUploadJobPicture = (data) => {
+    // let multipart_formdata = {"file": data.file}
+    // studentServices.uploadStudentPictureProfile(multipart_formdata)
+    //   .then(() => {
+    //     message.success("Upload avatar successful!");
+    //   });
+  }
 
   const handleEditorChange = (editorState) => {
     // console.log(editorState);
@@ -558,6 +568,7 @@ function ProfileChange() {
             <EditableTagGroup ref={ref => (createTags = ref)} />
           </Form.Item>
         </Form>
+        <UploadableAvatar ></UploadableAvatar>
       </Modal>
 
       <Modal

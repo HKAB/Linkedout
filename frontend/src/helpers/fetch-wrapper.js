@@ -26,11 +26,11 @@ function post_multipartdata(url, data) {
 
   const formData = new FormData();
 
-  // for (var key in data) {
-  //   formData.append(key, data[key]);
-  // }
+  for (const key in data) {
+    formData.append(key, data[key]);
+  }
 
-  formData.append('file', data.file);
+  // formData.append('file', data.file);
 
   const requestOptions = {
     method: "POST",
