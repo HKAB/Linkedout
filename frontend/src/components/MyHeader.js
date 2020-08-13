@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
 import logo from "../account/assets/logo.png";
+import { Config } from '../config/consts';
 import "./assets/css/MyHeader.css";
 
 const { Title } = Typography;
@@ -34,7 +35,7 @@ class MyHeader extends Component {
         studentServices.getStudent(user.account.id);
         const subscription = studentServices.studentObject.subscribe((student) => {
           if (student) {
-            this.setState({ avatar: "http://127.0.0.1:8000" + student.basic_data.profile_picture });
+            this.setState({ avatar: Config.backendUrl + student.basic_data.profile_picture });
           }
         });
         console.log(user);
@@ -47,7 +48,7 @@ class MyHeader extends Component {
         companyServices.getCompany(user.account.id);
         const subscription = companyServices.companyObject.subscribe((company) => {
           if (company) {
-            this.setState({ avatar: "http://127.0.0.1:8000" + company.basic_data.profile_picture });
+            this.setState({ avatar: Config.backendUrl + company.basic_data.profile_picture });
           }
         });
         hasFeed = <></>

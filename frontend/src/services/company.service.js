@@ -88,7 +88,7 @@ function deleteCompanyPhone(phone) {
 }
 //
 function uploadCompanyPictureProfile(data) {
-  return fetchWrapper.post_multipartdata('http://127.0.0.1:8000/api/company/upload', data)
+  return fetchWrapper.post_multipartdata(Config.backendUrl + '/api/company/upload', data)
     .catch(error => {
       console.log(error);
     });

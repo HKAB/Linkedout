@@ -1,4 +1,5 @@
 from django.db import models
+from django_prometheus.models import ExportModelOperationsMixin
 
 from .account import Account
 from .skill import Skill
@@ -9,7 +10,7 @@ def store_picture(instance, filename: str) -> str:
     return "profile/student_" + "{}.{}".format(instance.account.username, extension)
 
 
-class Student(models.Model):
+class Student(ExportModelOperationsMixin('student'), models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=127)
     lastname = models.CharField(max_length=127)

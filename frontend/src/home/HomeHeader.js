@@ -3,6 +3,7 @@ import { Avatar, Button, Dropdown, Layout, Menu, Space, Spin, Typography } from 
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
+import { Config } from '../config/consts';
 import logo from "./assets/images/logo.svg";
 
 const { SubMenu } = Menu;
@@ -30,7 +31,7 @@ function HomeHeader() {
         studentServices.getStudent(user.account.id);
         const subscription = studentServices.studentObject.subscribe((student) => {
           if (student) {
-            setAvatar("http://127.0.0.1:8000" + student.basic_data.profile_picture);
+            setAvatar(Config.backendUrl + student.basic_data.profile_picture);
           }
         });
       }
@@ -38,7 +39,7 @@ function HomeHeader() {
         companyServices.getCompany(user.account.id);
         const subscription = companyServices.companyObject.subscribe((company) => {
           if (company) {
-            setAvatar("http://127.0.0.1:8000" + company.basic_data.profile_picture);
+            setAvatar(Config.backendUrl + company.basic_data.profile_picture);
           }
         });
       }
