@@ -14,12 +14,12 @@ import {
   Row, Space, Timeline,
   Typography
 } from "antd";
+import { MyEditor } from 'components';
 import Meta from "antd/lib/card/Meta";
 import moment from 'moment';
 import React, { useEffect, useState } from "react";
 import { accountServices, getCompanyName, getSchoolName, getSkillName, studentServices } from "services";
 import { Config } from "../../config/consts";
-
 const { Title } = Typography;
 const dateFormat = 'YYYY-MM-DD';
 
@@ -787,6 +787,11 @@ function ProfileChange() {
           </Form.Item>
         </Form>
       </Card>
+      <Card className="card-editor" style={{ marginTop: 24 }}>
+      <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
+            <MyEditor></MyEditor>
+      </Card>
+     
     </>
   );
 }

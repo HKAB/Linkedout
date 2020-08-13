@@ -55,13 +55,13 @@ class ProfileTabCompany extends Component {
         <Col span={24}>
           <Layout style={{ padding: "0 24px 24px" }}>
             <Row>
-              <Col span={5} style={{ paddingLeft: "5vw", marginTop: "20vh" }}>
+              <Col span={6} style={{ paddingLeft: "5vw", marginTop: "20vh" }}>
                 {this.changeTabButton}
               </Col>
               <Col span={14}>
                 {this.state.renderComponent}
               </Col>
-              <Col span={5}></Col>
+              <Col span={6}></Col>
             </Row>
           </Layout>
         </Col>

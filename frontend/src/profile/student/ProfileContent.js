@@ -4,7 +4,7 @@ import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { accountServices, studentServices } from "services";
+import { accountServices, studentServices, followService } from "services";
 import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
 
@@ -52,7 +52,7 @@ function ProfileContent(props) {
   const [educationVisible, setEducationVisible] = useState(false);
   const [skillVisible, setSkillVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [followVisible, setFollowVisible]=useState(false);
   const showExperienceModal = () => {
     setExperienceVisible(true);
   };
@@ -64,7 +64,9 @@ function ProfileContent(props) {
   const showSkillModal = () => {
     setSkillVisible(true);
   };
-
+  const showFollowModal = () =>{
+    setFollowVisible(true);
+  }
   const handleExperienceCancel = (e) => {
     setExperienceVisible(false);
   };
@@ -76,7 +78,9 @@ function ProfileContent(props) {
   const handleSkillCancel = (e) => {
     setSkillVisible(false);
   };
-
+  const handleFollowCancel = (e) => {
+    setFollowVisible(false);
+  };
   useEffect(() => {
 
     setIsLoading(true);
@@ -92,6 +96,7 @@ function ProfileContent(props) {
         .catch(() => {
           setIsLoading(true);
         });
+      
       const subscription = studentServices.studentObject.subscribe((student) => {
         if (student) {
           setBasicProfileData(student.basic_data);
@@ -111,7 +116,19 @@ function ProfileContent(props) {
           }
           // if (educationData.length == 0) setState({educationData : []});
           // else setState({educationElement: timeline_element});
-          console.log(educationElement);
+            console.log(educationElement);
+            followService.getCompaniesFollowed(viewStudentId)
+            .then((values)=>
+            {
+             setFollowData(values);
+             setIsLoading(false);
+            })
+            .catch(()=>{
+              setIsLoading(true);
+            });
+            
+            
+
         }
 
         return () => {
@@ -172,17 +189,28 @@ function ProfileContent(props) {
 
           <Card className="card-info" style={{ marginTop: 24 }}>
             <Meta title={<Title level={3}>Theo dõi</Title>}></Meta>
-            <List style={{ marginTop: 24 }} grid={{ column: 2 }}
-              dataSource={followData}
-              renderItem={item => (
+            <List 
+            itemLayout="vertical"
+            style={{ marginTop: 24 }} grid={{ column: 2 }}
+              dataSource={followData.slice(0,6)}
+              renderItem={item=> (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar src={item.avatar} />}
-                    title={<a href={item.title_href}>{item.title}</a>}
+                   avatar={<Avatar src={item.avatar}/>}
+                  title={item.name}
+                  description={<div style={{position:'relative', marginTop:-12}}className="company-info" id={item.id}>
+                  <div>{item.description}</div>  
+                </div>}
                   />
                 </List.Item>
               )}
+              
             />
+            <Button
+              type="link"
+              style={{ float: 'right' }}
+              onClick={() => showFollowModal()}> Show all <DoubleRightOutlined />
+            </Button>
           </Card>
         </Col>
 
@@ -206,6 +234,7 @@ function ProfileContent(props) {
                 </List.Item>
               )}
             />
+
             <Button
               type="link"
               style={{ float: 'right' }}
@@ -289,6 +318,28 @@ function ProfileContent(props) {
                 title={item}
               />
             </List.Item>
+          )}
+        />
+      </Modal>
+      <Modal
+        forceRender
+        title="Follow"
+        footer={null}
+        visible={followVisible}
+        onCancel={handleFollowCancel}
+      >
+        <List style={{ marginTop: 24 }}
+          dataSource={followData}
+          renderItem={item => (
+            <List.Item>
+                  <List.Item.Meta
+                   avatar={<Avatar src={item.avatar}/>}
+                  title={item.name}
+                  description={<div className="company-info" id={item.id}>
+                  <div>{item.description}</div>  
+                </div>}
+                  />
+                </List.Item>
           )}
         />
       </Modal>

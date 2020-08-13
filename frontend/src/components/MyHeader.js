@@ -1,5 +1,5 @@
 import { HomeOutlined, LogoutOutlined, ProfileOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
+import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography, Input } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
@@ -8,11 +8,12 @@ import "./assets/css/MyHeader.css";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
+const {Search} = Input;
 const menu = (
   <Menu>
     <Menu.Item key='1' icon={<UserOutlined />}><Link to={{pathname: '/profile'}}>Account</Link></Menu.Item>
     {/* <Menu.Item key='5' icon={<SettingOutlined />}><Link to={{pathname: '/profile'}}>Settings</Link></Menu.Item> */}
-    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />} onClick={accountServices.logout}><Link to="/">Sing out</Link> </Menu.Item>
+    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />}><Link to="/" onClick={accountServices.logout}>Sign out</Link> </Menu.Item>
   </Menu>
 )
 
@@ -30,7 +31,7 @@ class MyHeader extends Component {
     let user = accountServices.userValue;
     if (user) {
       this.setState({ account_data: user.account })
-      if (user.account.account_type === "student") {
+      if (user.account.account_type == "student") {
         studentServices.getStudent(user.account.id);
         const subscription = studentServices.studentObject.subscribe((student) => {
           if (student) {
@@ -67,6 +68,14 @@ class MyHeader extends Component {
           <Space>
             <Link to="/"><img src={logo} width="48" height="48"></img></Link>
             <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
+          </Space>
+          <Space>
+            <Search
+            placeholder="Input Search"
+            style={{ width: 300, marginTop: 15, marginLeft: 30 }}
+            onSearch={value => console.log(value)}
+            enterButton
+            />
           </Space>
           {/* </div> */}
           <span className="left-menu">

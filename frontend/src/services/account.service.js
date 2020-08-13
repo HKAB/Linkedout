@@ -3,8 +3,9 @@ import jwt from 'jsonwebtoken';
 import { BehaviorSubject } from 'rxjs';
 import { Config } from "../config/consts";
 
-
 const userSubject = new BehaviorSubject(null);
+
+
 
 function login(username, password) {
   return fetchWrapper.post(Config.backendUrl + `/api/account/login`, { username, password })

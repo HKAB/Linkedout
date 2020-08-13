@@ -1,9 +1,11 @@
-import { EditOutlined, InfoOutlined, UserOutlined } from "@ant-design/icons";
+import { EditOutlined, InfoOutlined, UserOutlined, FileTextOutlined } from "@ant-design/icons";
 import { Button, Col, Layout, Row, Space, Tabs, Tooltip } from "antd";
 import ProfileChange from "profile/student/ProfileChange";
 import { default as ProfileContent } from "profile/student/ProfileContent";
 import { ProfileEdit } from "profile/student/ProfileEdit";
+import { ProfileEditor } from "profile/student/ProfileEditor";
 import React, { Component } from "react";
+
 
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
@@ -46,6 +48,18 @@ class ProfileTabStudent extends Component {
             this.setState({ renderComponent: <ProfileChange /> })
           }}
         />
+      </Tooltip>
+      <Tooltip placement="right" title={"ở đây có Editor"}>
+          <Button
+          style={{ boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56 }}
+          shape="circle-outline"
+          icon={<FileTextOutlined  style={{ fontSize: '24px' }} />}
+          size="large"
+          onClick={() => {
+            this.setState({ renderComponent: <ProfileEditor/> })
+          }}>
+
+          </Button>
       </Tooltip>
     </Space>
   )

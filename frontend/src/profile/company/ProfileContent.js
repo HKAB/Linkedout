@@ -1,5 +1,5 @@
-import { LikeOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Carousel, Col, Divider, Empty, Layout, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
+import { LikeOutlined, MailOutlined, PhoneOutlined, LineOutlined} from '@ant-design/icons';
+import { Avatar, Button, Card, Carousel, Col, Divider, Empty, Layout, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography, Descriptions } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { accountServices, companyServices } from "services";
 import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg';
 import pic2 from '../assets/images/xyz.jpg';
+import { Config } from "../../config/consts";
+
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -96,6 +98,7 @@ function ProfileContent(props) {
           setEmailData(company.email);
           setPhoneData(company.phone);
           setListJobData(company.job);
+          console.log(company.basic_data)
         }
       });
 
@@ -138,23 +141,39 @@ function ProfileContent(props) {
           className="card-info"
         >
           <Row>
-            <Col style={rowStyle} span={4}>
-              <Avatar src={data.profile_picture} style={centerInRowStyle} size={128}></Avatar>
-            </Col>
-            <Col style={{ marginLeft: 24, marginTop: 16 }} span={17}>
-              <Title level={3}>{basicProfileData.name}</Title>
-              <Space><List dataSource={basicProfileData.specialties} renderItem={specialty => (specialty)}></List></Space>
-              <div>Website:
-                 {basicProfileData.website}</div>
-              <div>
-                <MailOutlined />{" Email: " + emailData[0]}
-                <Divider type="vertical" />
-                <PhoneOutlined />{" Phone: " + phoneData[0]}
-              </div>
 
+            <Col style={rowStyle} span={4}>
+              <Avatar src={Config.backendUrl+basicProfileData.profile_picture} style={centerInRowStyle} size={128}></Avatar>
+            </Col>
+
+            <Col style={{ marginLeft: 24, marginTop: 16}} span={16} >
+              <Title level={3}>{basicProfileData.name}</Title>
+                <List 
+                dataSource={basicProfileData.specialties}
+                style={{marginBottom: 16}}
+                 renderItem={item=>(<List.Item.Meta  description={item} />)}
+                   >
+                 </List>
             </Col>
             <Col style={{ position: "relative" }}>
-              <Button style={{ position: "absolute", bottom: 0 }} type="primary">Follow+</Button>
+              <Button style={{ position: "absolute",  top:16 }} type="primary">Follow+</Button>
+            </Col>
+          </Row>
+          <Row style={{paddingBottom:0}}>
+            <Col span={4} style={{marginRight:24}}>
+            </Col>
+             <Col >
+             <div style={{display:"flex"}} class="company-in4">
+               <div style={{marginRight:40}}>Website: 
+                 {basicProfileData.website}</div>
+                <div style={{marginRight:40}}>
+               <MailOutlined />{" Email: " + emailData[0]}
+               </div>
+               <div style={{marginRight:40}}>
+                  <PhoneOutlined />{" Phone: " + phoneData[0]}
+               </div>
+
+             </div>
             </Col>
           </Row>
         </Card>

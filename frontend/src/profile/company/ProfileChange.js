@@ -3,11 +3,12 @@ import {
   EditOutlined,
   MinusCircleOutlined, 
   PlusOutlined,
-  CloseOutlined
+  CloseOutlined,
+  FireOutlined
 } from "@ant-design/icons";
 import {
   AutoComplete, Avatar,
-  Badge, Button, Card,
+  Badge, Button, Card,Divider ,
 
   Col, Form, Input, List,
   message, Modal,
@@ -109,6 +110,7 @@ function ProfileChange() {
             setJobData(company.job);
             setEditorDescription(company.basic_data.description);
             console.log(editorDescription);
+            console.log(companyBasicData)
           }
         });
       return () => {
@@ -669,11 +671,11 @@ function ProfileChange() {
             <Meta title={<Title level={3}>Chuyên môn</Title>}></Meta>
             <List
               style={{ marginTop: 24 }}
-              grid={{ column: 2 }}
+              grid={{ column: 1 }}
               dataSource={companyBasicData.specialties}
               renderItem={(item) => (
-                <List.Item>
-                  <List.Item.Meta
+                <List.Item.Meta
+                
                     avatar={
                       <Popconfirm
                         title="Bạn có muốn xóa cái này?"
@@ -682,17 +684,19 @@ function ProfileChange() {
                         cancelText="No">
                         <a>
                           <Badge
-                            style={{ color: "red" }}
-                            count={<MinusCircleOutlined />}
+                            style={{ color: "red"}}
+                            count={<FireOutlined />}
                           >
-                            <Avatar />
+                            {/* <Avatar></Avatar> */}
                           </Badge>
                         </a>
                       </Popconfirm>
                     }
-                    title={item}
+                     
+                     title={item}
                   />
-                </List.Item>
+                 
+                
               )}
             />
             <Form
