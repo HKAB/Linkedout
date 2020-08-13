@@ -14,6 +14,7 @@ from app.views.post import PostGetView, PostListView, PostCreateView, PostUpdate
 from app.views.interest import InterestCheckView, InterestCreateView, InterestDeleteView, InterestCountView, AccountInterestedView, PostInterestedView
 from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView, SpecialtyTagView, LocationTagView
 from app.views.feed import FeedGetView, FeedSuggestJobView, FeedSuggestFollowView
+from app.views.search import SearchView
 
 
 account_patterns = [
@@ -135,4 +136,5 @@ urlpatterns = [
     path('interest/', include((interest_patterns, 'interest'))),
     path('tag/', include((tag_patterns, 'tag'))),
     path('feed/', include((feed_patterns, 'feed'))),
+    path('search', SearchView.as_view())
 ]

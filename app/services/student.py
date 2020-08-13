@@ -14,7 +14,7 @@ def get_student(*, id: int) -> Student:
     return s
 
 
-def create_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str,gender: str, **kwargs) -> Student:
+def create_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, gender: str, **kwargs) -> Student:
     student_account_check(account)
     if student_exist(account.id, raise_exception=False):
         raise InvalidInputFormat(
