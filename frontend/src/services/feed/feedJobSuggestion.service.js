@@ -1,5 +1,5 @@
 import { fetchWrapper } from 'helpers';
-import { Config } from '../../config/consts'
+import { Config } from '../../config/consts';
 
 function getJobSuggestions() {
   return fetchWrapper.get(Config.backendUrl + '/api/feed/suggest-job');
@@ -7,4 +7,4 @@ function getJobSuggestions() {
 
 export {
   getJobSuggestions,
-}
+};

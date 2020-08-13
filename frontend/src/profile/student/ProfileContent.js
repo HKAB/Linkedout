@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { accountServices, studentServices } from "services";
 import { Config } from "../../config/consts";
+import { dateHelper } from '../../helpers/date';
 import '../assets/css/profile.css';
 
 const { Title, Text } = Typography;
@@ -199,8 +200,8 @@ function ProfileContent(props) {
                     avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
                     title={item.company_name}
                     description={<div className="company-info" id={item.id}>
-                      <div>{"Title: " + item.title}</div>
-                      <div>{"Time: " + item.start_date + " " + item.end_date}</div>
+                      <Text strong>{item.title}</Text><br />
+                      <Text>{dateHelper.toText(item.start_date) + " - " + dateHelper.toText(item.end_date)}</Text>
                     </div>}
                   />
                 </List.Item>
@@ -256,7 +257,7 @@ function ProfileContent(props) {
       >
         <List
           itemLayout="vertical"
-          style={{ marginTop: 24 }}
+          style={{ marginTop: 0 }}
           dataSource={experienceData}
           renderItem={item => (
             <List.Item>
@@ -264,8 +265,9 @@ function ProfileContent(props) {
                 avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
                 title={item.company_name}
                 description={<div className="company-info" id={item.id}>
-                  <div>{"Title: " + item.title}</div>
-                  <div>{"Time: " + item.start_date + " " + item.end_date}</div>
+                  <Text strong>{item.title}</Text><br />
+                  <Text>{dateHelper.toText(item.start_date) + " - " + dateHelper.toText(item.end_date)}</Text>
+                  <div>{item.description}</div>
                 </div>}
               />
             </List.Item>
