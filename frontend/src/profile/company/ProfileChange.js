@@ -1,25 +1,13 @@
 //import Form from "antd/lib/form/Form";
 import {
   CloseOutlined,
-
-
-
-
-
-
-
-
-
   EditOutlined,
-
-
   EllipsisOutlined, MinusCircleOutlined,
   PlusOutlined
 } from "@ant-design/icons";
 import {
   AutoComplete, Avatar,
   Badge, Button, Card,
-
   Col, Form, Input, List,
   message, Modal,
   Popconfirm, Row, Select, Space, Tag, Typography, Upload
