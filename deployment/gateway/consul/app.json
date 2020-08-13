@@ -4,7 +4,7 @@
     "tags": [
       "gateway",
       "nginx",
-      "production"
+      "prod"
     ],
     "port": 80,
     "connect": {

@@ -8,13 +8,21 @@ global:
 
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
+# scrape_configs:
+# - job_name: "consul"
+
+#   scrape_interval: 5s
+
+#   consul_sd_configs:
+#     - server: "consul-server:8500"
+#     - datacenter: "dc1"
 scrape_configs:
-  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: "consul"
-
-    # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 5s
-
+  - job_name: monitor
     consul_sd_configs:
       - server: "consul-server:8500"
-      - datacenter: "dc1"
+    relabel_configs:
+      - source_labels: [__meta_consul_tags]
+        regex: .*,prod,.*
+        action: keep
+      - source_labels: [__meta_consul_service]
+        target_label: job
