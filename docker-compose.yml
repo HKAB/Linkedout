@@ -20,7 +20,7 @@ services:
       - "./deployment/prometheus/consul:/consul/config"
 
   grafana:
-    image: grafana/grafana:latest
+    build: "./deployment/grafana"
     ports:
       - "8002:3000"
 
