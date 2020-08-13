@@ -16,7 +16,7 @@ class Company(models.Model):
     website = models.TextField(null=True)
     description = models.TextField(null=True)
     profile_picture = models.ImageField(
-        upload_to=store_picture, default='profile/default.jpg')
+        upload_to=store_picture, default='profile/company_default.jpg')
 
     followers = models.ManyToManyField(
         Student, related_name='company_followed')
