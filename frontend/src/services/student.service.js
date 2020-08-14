@@ -10,7 +10,7 @@ import { getJobSuggestions } from './feed/feedJobSuggestion.service';
 import { getFollowSuggestions } from './feed/feedFollowSuggestion.service';
 import { getFeedPost } from './feed/feedPost.service';
 import { createPostInterested } from './student/interest.service'
-
+import { postService} from  './post.service'
 const studentObject = new BehaviorSubject(null);
 
 function getStudent(id) {
@@ -19,7 +19,7 @@ function getStudent(id) {
   let student_email = getEmail(id);
   let student_phone = getPhone(id);
   let student_skill = getSkill(id);
-
+  let student_post = postService.listPost(id);
   // TODO: Handle error here!
   let student_basic = fetchWrapper.get(Config.backendUrl + `/api/student/get?id=${id}`);
 
@@ -29,13 +29,15 @@ function getStudent(id) {
     student_experience,
     student_email,
     student_phone,
-    student_skill
+    student_skill,
+    student_post
   ]).then(([student_basic_data,
     student_education_data,
     student_experience_data,
     student_email_data,
     student_phone_data,
-    student_skill_data]) => {
+    student_skill_data,
+    student_listpost_data]) => {
     let student = {};
     student.basic_data = student_basic_data
     student.education = student_education_data;
@@ -43,6 +45,7 @@ function getStudent(id) {
     student.email = student_email_data.emails;
     student.phone = student_phone_data.phones;
     student.skill = student_skill_data.skills;
+    student.post = student_listpost_data;
     studentObject.next(student);
     return student;
   })
@@ -132,6 +135,8 @@ function createStudentSkill(skill) {
 function deleteStudentSkill(skill) {
   return deleteSkill(skill);
 }
+// student post
+
 
 function uploadStudentPictureProfile(data) {
   return fetchWrapper.post_multipartdata(Config.backendUrl + '/api/student/upload', data)

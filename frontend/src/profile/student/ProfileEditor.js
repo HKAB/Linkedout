@@ -1,14 +1,19 @@
 import { MyEditor ,EditableTagGroup} from "../../components";
 import "../assets/css/profileEditor.css";
 import{Card, Typography, Button, Col, Upload, message, Row, List, Avatar,Popconfirm, Tag , Modal, Form,
-  Input,DatePicker
+  Input,DatePicker, Spin
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Meta from "antd/lib/card/Meta";
 import React, {useState, useEffect} from 'react'
 import {LoadingOutlined,ArrowUpOutlined , EditOutlined, CloseOutlined} from  "@ant-design/icons";
+import {postService,accountServices} from 'services'
+import { studentServices } from "services";
+import { Config } from "../../config/consts";
+
 const dateFormat = 'YYYY-MM-DD';
 const { Title } = Typography;
+
 
 
 function beforeUpload(file) {
@@ -37,18 +42,77 @@ function ProfileEditor() {
     const [postDetail, setPostDetail] = useState([]);
     const [createPostvisible, setCreatePostVisible] = useState(false);
     const [editPostvisible, setEditPostVisible] = useState(false);
-
+    const [isLoading, setisLoading] = useState(false)
     var editTags = useState(null);
     var createTags = useState(null);
 
 
     const [formEdit] = Form.useForm();
     const [formCreate] = Form.useForm();
-    const onEditPost = ()=>{
-      console.log('on Edit Post')
+
+    
+    useEffect(()=>{
+        setisLoading(true);
+         let user = accountServices.userValue;
+         if(user)
+         {
+           studentServices.getStudent(user.account.id)
+           .then(()=>{
+              setisLoading(false);
+           })
+           .catch(()=>{
+            setisLoading(true);
+           })
+           const subscription = studentServices.studentObject
+           .subscribe((student)=>{
+             if(student){
+               
+               setPostData(student.post);
+               setisLoading(false);
+             }
+           });
+           return () =>{
+             subscription.unsubscribe();
+           }
+         }
+         else 
+         {
+           console.log('OHHHH');
+         }
+    },[])
+
+
+    const onEditPost = (values)=>{
+      postService.updatePost(
+        values.id,
+        values.title,
+        values.content,
+        editTags.getTags(),
+      )
+      .then(()=>{
+        message.success({title:"uWu", content:"Post đã được cập nhật !!"});
+        handleEditPostCancel();
+      })
+      .catch((err)=>{
+        message.error({title:'uWu',  content:err});
+        handleEditPostCancel();
+      })
     }
-    const onAddPostFinish = ()=>{
-      console.log('on Add Post Finish');
+
+    const onAddPostFinish = (values)=>{
+      postService.createPost(
+        values.title,
+        values.content,
+        createTags.getTags(),
+      )
+      .then(()=>{
+        message.success({title:'uWu', content:'Create Post Success!!'});
+        handleCreatePostCancel();
+      })
+      .catch((er)=>{
+        message.error({title:'uWu', content:er});
+        handleCreatePostCancel();
+      })
     }
     const handleChangePicture = info => {
         setLoading(true);
@@ -58,12 +122,12 @@ function ProfileEditor() {
       };
 
       const handleEditPostCancel = () =>{
-        console.log('handle edit  Post Cancel');
+        setEditPostVisible(false);
       }
       const handleCreatePostCancel=()=>{
-        console.log('handle Create Post cancel');
+        setCreatePostVisible(false);
       }
-      const onUploadImage = (data) => {
+      const onUploadImage = () => {
         message.success('Upload image success');
       }
       const uploadButton = (
@@ -72,44 +136,57 @@ function ProfileEditor() {
           <div className="ant-upload-text">Upload</div>
         </div>
       );
-      const onPostModify = item=>{
-          console.log(item);
+      const onPostModify = (item)=>{
+         formEdit.setFieldsValue({
+          id: item.id,
+          title: item.title,
+          content: item.content,
+         });
+         
+         editTags.setTags(item.skills);
+         showEditPostModal();
+
       }
+      const showEditPostModal = () => {
+        setEditPostVisible(true);
+      };
+    
       const onShowPostDetail = item =>{
-        console.log(item);
+        setPostDetail(item);
+        showPostDetailModal();
       }
+      const showPostDetailModal = () => {
+        setPostDetailVisible(true);
+      };
       const onConfirmDeletePost= id =>{
         console.log(id);
+        postService.deletePost(id)
+        .then(()=>{
+          studentServices.getStudent(accountServices.userValue.account.id);
+          message.success({title:"uWu", content:'Đã xóa thành công bài Post của bạn!!'})
+        })
+        .catch((er)=>{
+          console.log(er);
+          message.error({title:'uWu', content:er})
+        })
       }
       const showCreatePostModal = ()=>{
-        console.log('show all');
+        setCreatePostVisible(true);
       }
       const handlePostDetailCancel=()=>{
-        console.log('handlePostDetailCancel');
+        setPostDetailVisible(false);
       }
-  return (
-    <>
+      if(isLoading) return (<Spin></Spin>)
+      else 
+      return (
+    
+    <Row>
+      <Col span={21}>
     <Card className="card-editor" style={{ marginTop: 24 }}>
         <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
-        <Row>
-        <Col  span={5}style={{marginTop:24}}>
-                <Upload
-                 
-                  showUploadList={false}
-                  beforeUpload={beforeUpload}
-                  onChange={handleChangePicture}
-                  customRequest={onUploadImage}
-                  className='picture-upload'
-                  listType='picture-card'
-                >
-                   {imageUrl ? <img src={imageUrl} alt="picture" style={{width:'100%'}}/> : uploadButton}
-                </Upload>
-        </Col>
-        <Col span={18} offset={1}>    
-          <MyEditor></MyEditor>
-        </Col>
-        </Row>
-        <Button type="primary" htmlType="submit" style={{position:'absolute', right:24, bottom:  24 }}>Submit</Button>
+        <MyEditor></MyEditor>
+        
+        <Button type="primary" htmlType="submit" style={{position:'absolute', left:24, bottom:  24 }} onClick={{}}>Save</Button>
     </Card>
 
 
@@ -134,7 +211,7 @@ function ProfileEditor() {
               >
                 <Meta
                 // tí có post picture thì gắn thêm vào
-                  avatar={<Avatar></Avatar>}
+                  avatar={<Avatar src={Config.backendUrl+item.post_picture}></Avatar>}
                   title={
                     <span >
                       <span>{item.title}</span>
@@ -178,8 +255,9 @@ function ProfileEditor() {
               title={postDetail.title}
               description={<div>
                 <div>Nội dung: {postDetail.content}</div>
-                <div style={{ display: 'flex' }}>
+                
                   <div>Ngày đăng: {postDetail.published_date}</div>
+                  <div style={{ display: 'flex' }}>
                   <div>Kỹ năng: </div>
                   <List dataSource={postDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
                 </div>
@@ -244,7 +322,7 @@ function ProfileEditor() {
         </Form>
       </Modal>
 
-      <Modal
+      {/* <Modal
         forceRender
         title="Chỉnh sửa bài đăng"
         visible={editPostvisible}
@@ -308,8 +386,21 @@ function ProfileEditor() {
             <EditableTagGroup ref={ref => (editTags = ref)} />
           </Form.Item>
         </Form>
-      </Modal>
-    </>
+      </Modal> */}
+      </Col>
+      <Col span={2}style={{marginTop:24, marginLeft:16}}>
+                <Upload
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                  onChange={handleChangePicture}
+                  customRequest={onUploadImage}
+                  className='picture-upload'
+                  listType='picture-card'
+                >
+                   {imageUrl ? <img src={imageUrl} alt="picture" style={{width:'100%'}}/> : uploadButton}
+                </Upload>
+        </Col>
+    </Row>
   );
 }
 

@@ -1,5 +1,5 @@
-import { LikeOutlined, MailOutlined, PhoneOutlined, LineOutlined} from '@ant-design/icons';
-import { Avatar, Button, Card, Carousel, Col, Divider, Empty, Layout, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography, Descriptions } from 'antd';
+import { LikeOutlined, MailTwoTone, PhoneTwoTone, ProfileTwoTone } from '@ant-design/icons';
+import { Avatar, Button, Card, Carousel, Col, Divider, Empty, Layout, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -7,12 +7,10 @@ import { accountServices, companyServices } from "services";
 import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg';
 import pic2 from '../assets/images/xyz.jpg';
-import { Config } from "../../config/consts";
-
-
+import {Config} from '../../config/consts.js'
 const { Header, Sider, Content } = Layout;
-const { Title } = Typography;
-
+const { Title, Text } = Typography;
+const backendUrl = Config.backendUrl;
 const data = {
   name: "Facebook",
   // cities: "Hà Nội, thủ đô của nước Cộng hòa Xã hội chủ nghĩa Việt Nam",
@@ -98,7 +96,6 @@ function ProfileContent(props) {
           setEmailData(company.email);
           setPhoneData(company.phone);
           setListJobData(company.job);
-          console.log(company.basic_data)
         }
       });
 
@@ -141,39 +138,22 @@ function ProfileContent(props) {
           className="card-info"
         >
           <Row>
-
             <Col style={rowStyle} span={4}>
-              <Avatar src={Config.backendUrl+basicProfileData.profile_picture} style={centerInRowStyle} size={128}></Avatar>
+              <Avatar src={backendUrl+basicProfileData.profile_picture} style={centerInRowStyle} size={128}></Avatar>
             </Col>
-
-            <Col style={{ marginLeft: 24, marginTop: 16}} span={16} >
+            <Col style={{ marginLeft: 24, marginTop: 16 }} span={17}>
               <Title level={3}>{basicProfileData.name}</Title>
-                <List 
-                dataSource={basicProfileData.specialties}
-                style={{marginBottom: 16}}
-                 renderItem={item=>(<List.Item.Meta  description={item} />)}
-                   >
-                 </List>
+              <Space><Text strong>{basicProfileData.specialties.slice(0, 3).join(', ')}</Text></Space>
+              <div><ProfileTwoTone /> Website: <a href={basicProfileData.website}>{basicProfileData.website}</a> </div>
+              <div>
+                <MailTwoTone />{" Email: " + (emailData.length > 0 ? emailData[0] : "")}
+                <Divider type="vertical" />
+                <PhoneTwoTone />{" Phone: " + (phoneData.length > 0 ? phoneData[0] : "")}
+              </div>
+
             </Col>
             <Col style={{ position: "relative" }}>
-              <Button style={{ position: "absolute",  top:16 }} type="primary">Follow+</Button>
-            </Col>
-          </Row>
-          <Row style={{paddingBottom:0}}>
-            <Col span={4} style={{marginRight:24}}>
-            </Col>
-             <Col >
-             <div style={{display:"flex"}} class="company-in4">
-               <div style={{marginRight:40}}>Website: 
-                 {basicProfileData.website}</div>
-                <div style={{marginRight:40}}>
-               <MailOutlined />{" Email: " + emailData[0]}
-               </div>
-               <div style={{marginRight:40}}>
-                  <PhoneOutlined />{" Phone: " + phoneData[0]}
-               </div>
-
-             </div>
+              <Button style={{ position: "absolute", bottom: 0 }} type="primary">Follow+</Button>
             </Col>
           </Row>
         </Card>
@@ -228,6 +208,7 @@ function ProfileContent(props) {
           className="card-info"
           style={{
             marginTop: 24,
+            padding: 24
           }}>
           <Meta title={<Title level={3}>Việc làm</Title>}></Meta>
           <List
@@ -236,21 +217,20 @@ function ProfileContent(props) {
             renderItem={item => (
               <List.Item>
                 <Card
+                  hoverable
                   key={item.id}
                   style={{ marginTop: 16 }}
-                  actions={[
-                    <Button type="primary" style={{ float: 'right' }} onClick={() => onShowJobDetail(item)}>Detail</Button>
-                  ]}
+                  onClick={() => onShowJobDetail(item)}
                 >
                   <Meta
                     avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
                     title={item.title}
-                    description={<div>
-                      <div>Yêu cầu: {item.seniority_level}</div>
-                      <div>Địa điểm: <Space><List dataSource={item.cities} renderItem={city => (city)}></List></Space></div>
+                    description={<Space direction="vertical" size={3}>
+                      <div>Mức độ: {item.seniority_level}</div>
+                      <div>Địa điểm: {item.cities.join(', ')}</div>
                       <div>Công việc: {item.employment_type}</div>
-                      <List dataSource={item.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
-                    </div>}
+                      <List dataSource={item.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
+                    </Space>}
                   />
                 </Card>
               </List.Item>
@@ -270,16 +250,16 @@ function ProfileContent(props) {
               <Meta
                 avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
                 title={jobDetail.title}
-                description={<div>
+                description={<Space direction="vertical" size={3}>
                   <div>Yêu cầu: {jobDetail.seniority_level}</div>
                   <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
                   <div>Công việc: {jobDetail.employment_type}</div>
                   <div>Mô tả: {jobDetail.description}</div>
                   <div style={{ display: 'flex' }}>
                     <div>Kỹ năng: </div>
-                    <List dataSource={jobDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
+                    <List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
                   </div>
-                </div>}
+                </Space>}
               />
             </List.Item>
           </List>

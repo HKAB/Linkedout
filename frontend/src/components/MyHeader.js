@@ -1,5 +1,5 @@
 import { HomeOutlined, LogoutOutlined, ProfileOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography, Input } from 'antd';
+import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography, Input, AutoComplete   } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
@@ -69,14 +69,14 @@ class MyHeader extends Component {
             <Link to="/"><img src={logo} width="48" height="48"></img></Link>
             <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
           </Space>
-          <Space>
+          {/* <Space>
+           
             <Search
-            placeholder="Input Search"
-            style={{ width: 300, marginTop: 15, marginLeft: 30 }}
+            placeholder="Search St"
             onSearch={value => console.log(value)}
-            enterButton
+            style={{ width: 300, marginTop: 15, marginLeft: 30 }}
             />
-          </Space>
+          </Space> */}
           {/* </div> */}
           <span className="left-menu">
             <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>

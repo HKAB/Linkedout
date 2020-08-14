@@ -77,7 +77,6 @@ class ProfileTabStudent extends Component {
               <Col span={16}>
                 {this.state.renderComponent}
               </Col>
-              <Col span={4}></Col>
             </Row>
           </Layout>
         </Col>

@@ -87,7 +87,7 @@ def set_job_picture(account: Account, id: int, file_instance):
     if file_instance.name.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
         raise InvalidInputFormat(
             "File extension must be 'png', 'jpg' or 'jpeg'")
-    j = Job.objects.get(job__id=id)
+    j = Job.objects.get(id=id)
     if j.job_picture != Job._meta.get_field('job_picture').get_default():
         old_file_path = os.path.join(MEDIA_ROOT, j.job_picture.name)
         if os.path.exists(old_file_path):
