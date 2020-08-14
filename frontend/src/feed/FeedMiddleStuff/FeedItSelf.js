@@ -2,7 +2,6 @@ import {
   ClockCircleOutlined,
   HeartFilled, HomeOutlined, SafetyCertificateOutlined
 } from '@ant-design/icons';
-
 import {
   Avatar,
   Button, Card,
@@ -13,9 +12,10 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React, { useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { studentServices } from "services";
 import { Config } from "../../config/consts";
+
 
 const { Meta } = Card;
 const { Title } = Typography;
@@ -34,7 +34,7 @@ function FeedItSelf() {
   }
 
   const [posts, setPosts] = React.useState([]);
-  const [count, setCount] = React.useState({n_job: 0, n_post: 0});
+  const [count, setCount] = React.useState({ n_job: 0, n_post: 0 });
 
   useEffect(() => {
     studentServices.getStudentFeedPost().then((posts) => {
@@ -48,9 +48,7 @@ function FeedItSelf() {
         else
           n_post++
       });
-      console.log(n_job)
-      console.log(n_post)
-      setCount({n_job: n_job, n_post: n_post});
+      setCount({ n_job: n_job, n_post: n_post });
     });
   }, [])
 
@@ -165,7 +163,7 @@ function FeedItSelf() {
                   className="card-info"
                   key={item.id}
                   style={{ marginTop: 24 }}
-                  cover={<img src={ Config.backendUrl + item.post_picture} height={200}></img>}
+                  cover={<img src={Config.backendUrl + item.post_picture} height={200}></img>}
                 >
                   <Meta
                     avatar={

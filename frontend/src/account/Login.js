@@ -10,8 +10,6 @@ const { Title } = Typography;
 const { TabPane } = Tabs
 
 function Login({ history }) {
-
-  console.log(accountServices.userValue);
   useEffect(() => {
     if (accountServices.userValue) {
       message.error('You are already log in!');
@@ -20,7 +18,6 @@ function Login({ history }) {
   })
 
   const onLoginFinish = values => {
-    // console.log(values);
     accountServices.login(values.login_username, values.login_password)
       .then((user) => {
         history.push("/profile");
@@ -31,7 +28,6 @@ function Login({ history }) {
   }
 
   const onRegisterFinish = values => {
-    console.log(values);
     if (values.register_password !== values.register_repassword) {
       Modal.error({ title: "uWu", content: "Password not match!" });
     }
@@ -49,8 +45,6 @@ function Login({ history }) {
             .catch(error => {
               Modal.error({ title: "uWu", content: "Register unsuccessfully!! Plz try again later" });
             })
-          //history.go();
-          // history.push("/create-profile");
         })
         .catch(error => {
           alert(error);
@@ -137,3 +131,4 @@ function Login({ history }) {
 };
 
 export { Login };
+

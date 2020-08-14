@@ -13,8 +13,6 @@ function login(username, password) {
       userSubject.next(user);
       // start refresh token timer
       localStorage.setItem('user', JSON.stringify(user));
-      console.log("login success");
-      // console.log(sessionStorage.getItem('user').account);
       return user;
     })
 }
@@ -40,8 +38,6 @@ export const accountServices = {
       var decodedToken = jwt.decode(user.access_token, { complete: true });
       if (decodedToken) {
         var dateNow = new Date();
-        // console.log(decodedToken.payload.exp*1000);
-        // console.log(dateNow.getTime());
         if (decodedToken.payload.exp * 1000 > dateNow.getTime()) {
           return user
         }

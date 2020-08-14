@@ -18,7 +18,6 @@ function deleleExperience(id) {
 }
 
 function createExperience(company_name, start_date, end_date, title, description) {
-  console.log(company_name);
   return fetchWrapper.post(Config.backendUrl + `/api/experience/create`, { company_name, start_date, end_date, title, description })
 }
 

@@ -59,7 +59,7 @@ function ProfileEdit() {
   };
 
   const onUploadImage = (data) => {
-    let multipart_formdata = {"file": data.file}
+    let multipart_formdata = { "file": data.file }
     studentServices.uploadStudentPictureProfile(multipart_formdata)
       .then(() => {
         message.success("Upload avatar successful!");
@@ -110,9 +110,9 @@ function ProfileEdit() {
         console.log(error);
         message.error({ title: "uWu", content: error });
       });
-    
+
     if (phoneData[0] != values.phoneNumber) {
-    if (!phoneData[0]) {
+      if (!phoneData[0]) {
         studentServices.createStudentPhone(
           values.phoneNumber
         )
@@ -143,24 +143,23 @@ function ProfileEdit() {
     }
 
     if (emailData[0] != values.email) {
-    studentServices
-      .updateStudentEmail(
-        emailData[0],
-        values.email,
-      )
-      .then(() => {
-        message.success({ title: "\^o^/", content: "Cập nhật email!" });
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error({ title: "╯︿╰", content: error });
-      });
+      studentServices
+        .updateStudentEmail(
+          emailData[0],
+          values.email,
+        )
+        .then(() => {
+          message.success({ title: "\^o^/", content: "Cập nhật email!" });
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error({ title: "╯︿╰", content: error });
+        });
     }
 
 
   }
   const onFinishChangePass = values => {
-    console.log(values.newPass, values.oldPass);
     if (values.newPass !== values.confPass) {
       Modal.error({ title: "╯︿╰", content: 'Password not match!' });
     } else {

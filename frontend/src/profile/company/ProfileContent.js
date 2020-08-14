@@ -78,7 +78,6 @@ function ProfileContent(props) {
   useEffect(() => {
     let data = [0, 0, 0];
     listJobData.forEach((item) => {
-      console.log(item);
       if (item.seniority_level === "Junior") data[0]++;
       else if (item.seniority_level === "MidLevel") data[1]++;
       else if (item.seniority_level === "Senior") data[2]++;
@@ -104,7 +103,6 @@ function ProfileContent(props) {
         });
       const subscription = companyServices.companyObject.subscribe((company) => {
         if (company) {
-          console.log(company);
           setBasicProfileData(company.basic_data);
           setEmailData(company.email);
           setPhoneData(company.phone);
@@ -139,7 +137,6 @@ function ProfileContent(props) {
   };
 
   const onShowJobDetail = (values) => {
-    console.log(values);
     setJobDetail(values);
     showJobDetailModal();
   };

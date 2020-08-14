@@ -1,6 +1,6 @@
-import React from 'react'
-import BraftEditor from 'braft-editor'
-import 'braft-editor/dist/index.css'
+import BraftEditor from 'braft-editor';
+import 'braft-editor/dist/index.css';
+import React from 'react';
 
 class MyEditor extends React.Component {
 
@@ -9,7 +9,6 @@ class MyEditor extends React.Component {
     this.state = {
       editorState: BraftEditor.createEditorState(this.props.defaultHtml),
     }
-   // console.log(this.props.defaultHtml);
   }
 
   getHtml() {
@@ -20,12 +19,12 @@ class MyEditor extends React.Component {
     this.setState({ editorState })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.isLivinig = true
     setTimeout(this.setEditorContentAsync, 500)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.isLivinig = false
   }
 
@@ -33,10 +32,9 @@ class MyEditor extends React.Component {
     this.isLivinig && this.setState({
       editorState: BraftEditor.createEditorState(this.props.descriptionData)
     })
-    console.log(this.props.descriptionData);
   }
 
-  render () {
+  render() {
 
     const { editorState } = this.state
 
@@ -55,4 +53,4 @@ class MyEditor extends React.Component {
 
 }
 
-export { MyEditor }
+export { MyEditor };

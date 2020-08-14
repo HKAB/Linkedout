@@ -1,8 +1,9 @@
 //import Form from "antd/lib/form/Form";
 import {
-  MinusCircleFilled,
   EditOutlined,
-  EllipsisOutlined, MinusCircleOutlined,
+  EllipsisOutlined, MinusCircleFilled,
+
+  MinusCircleOutlined,
   PlusOutlined
 } from "@ant-design/icons";
 import {
@@ -104,18 +105,13 @@ function ProfileChange() {
 
   useEffect(() => {
     let user = accountServices.userValue;
-    console.log(user);
     if (user) {
       companyServices.getCompany(user.account.id);
       const subscription = companyServices.companyObject
         .subscribe((company) => {
-          console.log(company);
           if (company) {
             setCompanyBasicData(company.basic_data);
-            setJobData(company.job);
-            console.log(jobData);
-            console.log('check');
-            console.log(company.job);
+            setJobData(company.job);;
             setEditorDescription(company.basic_data.description);
           }
         });
@@ -143,9 +139,9 @@ function ProfileChange() {
     // setOutputHTML(editorState.toHTML());
     // console.log(outputHTML);
   }
+
   const onEditorFinish = () => {
     // setOutputHTML(editorState.toHTML());
-    console.log(editorRef.getHtml());
     var descriptionHtml = editorRef.getHtml();
     companyServices
       .updateBasicCompany(
@@ -160,7 +156,6 @@ function ProfileChange() {
         setEditorDescription(descriptionHtml);
       })
       .catch((error) => {
-        console.log(error);
         message.success(error);
       });
 
@@ -197,7 +192,6 @@ function ProfileChange() {
       createTags.getTags(),
     )
       .then((listjob) => {
-        console.log(listjob);
         if (selectedNewJobPicture) {
           var id_new_job = listjob[listjob.length - 1].id;
           let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': id_new_job };
@@ -222,8 +216,6 @@ function ProfileChange() {
   };
 
   const onEditJob = (values) => {
-    console.log("edit job");
-    console.log(values);
     jobServices.updateJob(
       values.id,
       values.title,
@@ -252,7 +244,6 @@ function ProfileChange() {
         handleEditJobCancel();
       })
       .catch((error) => {
-        console.log(error);
         message.success("Lỗi cập nhật việc làm");
         handleEditJobCancel();
       });
@@ -261,7 +252,6 @@ function ProfileChange() {
   };
 
   const onConfirmDeleteJob = (id) => {
-    console.log(id);
     jobServices.deleteJob(id)
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
@@ -269,13 +259,11 @@ function ProfileChange() {
 
       })
       .catch((error) => {
-        console.log(error);
         message.error({ title: "uWu", content: error });
       });
   }
 
   const onJobModify = (item) => {
-    console.log(item);
     formEdit.setFieldsValue({
       id: item.id,
       title: item.title,
@@ -292,10 +280,8 @@ function ProfileChange() {
   };
 
   const onAddSpecialityFinish = (values) => {
-    console.log(values.speciality_info[0].speciality);
     var newSpeciality = companyBasicData.specialties;
     newSpeciality.push(values.speciality_info[0].speciality);
-    console.log(newSpeciality);
     companyServices
       .updateBasicCompany(
         companyBasicData.name,
@@ -314,13 +300,11 @@ function ProfileChange() {
   };
 
   const onConfirmDeleteSpeciality = (values) => {
-    console.log(values);
     var new_speciality = companyBasicData.specialties;
     const index = new_speciality.indexOf(values);
     if (index > -1) {
       new_speciality.splice(index, 1);
     }
-    console.log(new_speciality);
     // var descriptionHtml = editorRef.getHtml();
     companyServices
       .updateBasicCompany(
@@ -348,7 +332,6 @@ function ProfileChange() {
   };
 
   const onShowJobDetail = (values) => {
-    console.log(values);
     setJobDetail(values);
     showJobDetailModal();
   };
@@ -357,7 +340,6 @@ function ProfileChange() {
     if (data) {
 
       getSpecialty(data).then(data => {
-        console.log(data.tag.map(x => ({ value: x })));
         setAutoCompleteSpeciality(data.tag.map(x => ({ value: x })));
       })
         .catch(error => {
@@ -370,14 +352,11 @@ function ProfileChange() {
   }
 
   const onChangeAutoCompleteCity = (text) => {
-    console.log(text);
     if (text) {
       getCityName(text).then(data => {
-        console.log(data);
         if (data) {
           var data_name = data.tag.map(x => ({ value: x }));
           setAutoCompleteCity(data_name);
-          console.log(data_name);
         }
       })
         .catch(error => {
@@ -390,14 +369,11 @@ function ProfileChange() {
   };
 
   const onChangeAutoCompleteEditCity = (text) => {
-    console.log(text);
     if (text) {
       getCityName(text).then(data => {
-        console.log(data);
         if (data) {
           var data_name = data.tag.map(x => ({ value: x }));
           setAutoCompleteEditCity(data_name);
-          console.log(data_name);
         }
       })
         .catch(error => {
@@ -621,11 +597,9 @@ function ProfileChange() {
         onOk={() => {
           formEdit.validateFields()
             .then(values => {
-              console.log(values);
               onEditJob(values);
             })
             .catch(info => {
-              console.log(info);
             })
         }}
       >

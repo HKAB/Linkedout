@@ -32,7 +32,6 @@ class EditableTagGroup extends React.Component {
 
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
-    console.log(tags);
     this.setState({ tags });
   };
 
@@ -50,7 +49,6 @@ class EditableTagGroup extends React.Component {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
     }
-    console.log(tags);
     this.setState({
       tags,
       inputVisible: false,
@@ -85,10 +83,8 @@ class EditableTagGroup extends React.Component {
 
   onChangeAutocompleteSkillTag = (text) => {
     this.setState({ inputValue: text });
-    console.log(text);
     if (text) {
       getSkillName(text).then(data => {
-        console.log(data);
         if (data) {
           var data_tag = data.tag.map(x => ({ value: x }));
           this.setState({ autoCompleteSkillTags: data_tag });
@@ -106,10 +102,8 @@ class EditableTagGroup extends React.Component {
 
   onChangeAutocompleteEditSkillTag = (text) => {
     this.setState({ editInputValue: text });
-    console.log(text);
     if (text) {
       getSkillName(text).then(data => {
-        console.log(data);
         if (data) {
           var data_tag = data.tag.map(x => ({ value: x }));
           this.setState({ autoCompleteEditSkillTags: data_tag });

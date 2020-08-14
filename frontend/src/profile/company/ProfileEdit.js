@@ -2,7 +2,7 @@ import {
   MinusCircleOutlined,
   PlusOutlined
 } from "@ant-design/icons";
-import { Avatar, Button, Card, Col, Form, Input, List, Menu, message, Modal, Popconfirm, Row, Space, Switch, Tabs, Upload } from 'antd';
+import { Avatar, Button, Card, Col, Form, Input, List, Menu, message, Popconfirm, Row, Space, Switch, Tabs, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { accountServices, companyServices } from "services";
 import { Config } from "../../config/consts";
@@ -40,7 +40,6 @@ function beforeUpload(file) {
 }
 
 const onConfirmDeletePhone = (values) => {
-  console.log(values);
   companyServices.deleteCompanyPhone(values)
     .then(() => {
       companyServices.getCompany(accountServices.userValue.account.id);
@@ -53,7 +52,6 @@ const onConfirmDeletePhone = (values) => {
 }
 
 const onConfirmDeleteEmail = (values) => {
-  console.log(values);
   companyServices.deleteCompanyEmail(values)
     .then(() => {
       companyServices.getCompany(accountServices.userValue.account.id);
@@ -82,7 +80,6 @@ function ProfileEdit() {
     values.phone_info.forEach((phone_info) => {
       companyServices.createCompanyPhone(phone_info.phone)
         .then(() => {
-          console.log(phone_info.phone);
           companyServices.getCompany(accountServices.userValue.account.id);
           message.success({ title: "uWu", content: "Phone created!" });
           formAddPhone.resetFields();
@@ -95,11 +92,9 @@ function ProfileEdit() {
   };
 
   const onAddEmailFinish = (values) => {
-    console.log(values);
     values.email_info.forEach((email_info) => {
       companyServices.createCompanyEmail(email_info.email)
         .then(() => {
-          console.log(email_info.email);
           companyServices.getCompany(accountServices.userValue.account.id);
           message.success({ title: "uWu", content: "Email created!" });
           formAddEmail.resetFields();
@@ -126,7 +121,6 @@ function ProfileEdit() {
 
   useEffect(() => {
     let user = accountServices.userValue;
-    console.log(user);
     if (user) {
       companyServices.getCompany(user.account.id);
       const subscription = companyServices.companyObject
@@ -152,7 +146,6 @@ function ProfileEdit() {
     setDisabled(!disabled);
   }
   const editProfileCompany = values => {
-    console.log(values);
     companyServices
       .updateBasicCompany(
         values.name,
@@ -234,13 +227,12 @@ function ProfileEdit() {
 
   }
   const onFinishChangePass = values => {
-    console.log(values.newPass, values.oldPass);
     if (values.newPass !== values.confPass) {
       message.error({ title: "╯︿╰", content: 'Password not match!' });
     } else {
       accountServices.changePassword(values.oldPass, values.newPass).then()
         .then(() => {
-          message.success({ title: "\^o^/", content: "Change Password successfully!!!" });
+          message.success({ title: "\\^o^/", content: "Change Password successfully!!!" });
         })
         .catch((error) => {
           message.error({ title: "╯︿╰", content: error });

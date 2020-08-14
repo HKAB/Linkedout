@@ -21,8 +21,6 @@ function StudentProfile(props) {
       studentServices.getStudent(user.account.id);
       const subscription = studentServices.studentObject.subscribe((student) => {
         if (student) {
-          console.log("Has student");
-          console.log(student);
           setProfileData({
             firstname: student.basic_data.firstname,
             lastname: student.basic_data.lastname,

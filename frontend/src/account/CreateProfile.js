@@ -13,7 +13,6 @@ function CreateProfile({ history }) {
 
     if (user) {
       if (user.account.account_type == "student") {
-        console.log(values);
         studentServices.createBasicStudent(values.firstname, values.lastname, values.dateofbirth.format("YYYY-MM-DD"), values.description, values.gender).then() // quick fix
           .then(() => {
             message.success("Tạo tài khoản thành công!")
@@ -34,7 +33,6 @@ function CreateProfile({ history }) {
 
     if (user) {
       if (user.account.account_type == "company") {
-        console.log(values);
         companyServices.createBasicCompany(values.name, values.website, [values.specialities], values.description)
           .then(() => {
             alert("Create successfully");
@@ -56,7 +54,6 @@ function CreateProfile({ history }) {
       setAutoCompleteValue(data);
 
       getSpecialty(data).then(data => {
-        console.log(data.tag.map(x => ({ value: x })));
         setSpeciality(data.tag.map(x => ({ value: x })));
       })
         .catch(error => {
@@ -154,3 +151,4 @@ function CreateProfile({ history }) {
   // }
 }
 export { CreateProfile };
+

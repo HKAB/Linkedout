@@ -98,7 +98,6 @@ function ProfileContent(props) {
             setEmailData(student.email);
             setPhoneData(student.phone);
             setSkillData(student.skill);
-            console.log(student);
             var timeline_element = []
             student.education.forEach(item => {
               timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
@@ -116,7 +115,6 @@ function ProfileContent(props) {
               })
             // if (educationData.length == 0) setState({educationData : []});
             // else setState({educationElement: timeline_element});
-            console.log(skillData);
           }
           setIsLoading(false);
         })
@@ -141,7 +139,6 @@ function ProfileContent(props) {
             setEmailData(student.email);
             setPhoneData(student.phone);
             setSkillData(student.skill);
-            console.log(student);
             var timeline_element = []
             student.education.forEach(item => {
               timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
@@ -154,21 +151,15 @@ function ProfileContent(props) {
             followService.getCompaniesFollowed(user.account.id)
               .then((values) => {
                 setFollowData(values);
-                console.log('gagskdda');
-                console.log(values);
               })
               .catch((error) => {
                 console.log(error);
               })
             // if (educationData.length == 0) setState({educationData : []});
             // else setState({educationElement: timeline_element});
-            console.log(skillData);
           }
           // if (educationData.length == 0) setState({educationData : []});
           // else setState({educationElement: timeline_element});
-
-          console.log(skillData);
-
           return () => {
             subscription.unsubscribe();
           }

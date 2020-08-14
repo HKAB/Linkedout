@@ -14,7 +14,6 @@ import {
   Row, Space, Timeline,
   Typography
 } from "antd";
-import { MyEditor } from 'components';
 import Meta from "antd/lib/card/Meta";
 import TextArea from "antd/lib/input/TextArea";
 import moment from 'moment';
@@ -25,7 +24,6 @@ const { Title } = Typography;
 const dateFormat = 'YYYY-MM-DD';
 
 const onConfirmDeleteEducation = (id) => {
-  console.log(id);
   studentServices.deleteStudentEducation(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
@@ -38,7 +36,6 @@ const onConfirmDeleteEducation = (id) => {
 }
 
 const onConfirmDeleteExperience = (id) => {
-  console.log(id);
   studentServices.deleteStudentExperience(id)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
@@ -72,7 +69,6 @@ const onEditExperience = (values) => {
 };
 
 const onConfirmDeleteSkill = (skill) => {
-  console.log(skill);
   studentServices.deleteStudentSkill(skill)
     .then(() => {
       studentServices.getStudent(accountServices.userValue.account.id);
@@ -178,7 +174,6 @@ function ProfileChange() {
   };
 
   const onSaveExperience = (fieldsValue) => {
-    console.log(fieldsValue);
     // TODO: handle request here!!
     setVisible(false)
   };
@@ -189,8 +184,6 @@ function ProfileChange() {
 
   // modify experience list item
   const onModify = (item) => {
-    console.log(item);
-
     formEditExperience.setFieldsValue({
       company_name: item.company_name,
       title: item.title,
@@ -206,14 +199,11 @@ function ProfileChange() {
 
   // handle auto complete
   const onChangeAutocompleteCompany = (text) => {
-    console.log(text);
     if (text) {
       getCompanyName(text).then(data => {
-        console.log(data);
         if (data) {
           var data_name = data.map(x => ({ value: x.name }));
           setAutoCompleteCompany(data_name);
-          console.log(data_name);
         }
       })
         .catch(error => {
@@ -228,7 +218,6 @@ function ProfileChange() {
   const onChangeAutocompleteSchool = (text) => {
     if (text) {
       getSchoolName(text).then(data => {
-        console.log(data);
         if (data) {
           var data_name = data.map(x => ({ value: x.name }));
           setAutoCompleteSchool(data_name);
@@ -246,7 +235,6 @@ function ProfileChange() {
   const onChangeAutocompleteSkill = (text) => {
     if (text) {
       getSkillName(text).then(data => {
-        console.log(data.tag);
         if (data) {
           var data_name = data.tag.map(x => ({ value: x }));
           setAutoCompleteSkill(data_name);
@@ -268,14 +256,11 @@ function ProfileChange() {
         onConfirmDeleteExperience(d.id);
       }
     })
-
-    console.log(arraySelected)
   }
 
   useEffect(() => {
     const subscription = studentServices.studentObject.subscribe((student) => {
       if (student) {
-        console.log("updateee");
         setExperienceData(student.experience);
         setEducationData(student.education);
         setSkillData(student.skill);
@@ -313,9 +298,6 @@ function ProfileChange() {
             </Timeline.Item>
           ));
         });
-
-        console.log("timeline_element");
-        console.log(timeline_element);
         setEducationElement(timeline_element);
       }
 
@@ -338,12 +320,10 @@ function ProfileChange() {
         onOk={() => {
           formEditExperience.validateFields()
             .then(values => {
-              console.log(values);
               onEditExperience(values);
               hideModal();
             })
             .catch(info => {
-              console.log(info);
             })
         }}
       >
@@ -427,7 +407,6 @@ function ProfileChange() {
               <Checkbox style={{ marginRight: 12, position: 'relative', top: -10 }}
                 onChange={e => {
                   let checked = e.target.checked;
-                  console.log(checkList);
                   setCheckList(
                     checkList.map(data => {
                       if (item.id === data.id) {
@@ -788,8 +767,8 @@ function ProfileChange() {
           </Form.Item>
         </Form>
       </Card>
-      
-     
+
+
     </>
   );
 }

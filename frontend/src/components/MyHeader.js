@@ -1,5 +1,5 @@
-import { HomeOutlined, LogoutOutlined, ProfileOutlined, UserOutlined, FileSearchOutlined } from '@ant-design/icons';
-import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
+import { FileSearchOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
@@ -38,13 +38,9 @@ class MyHeader extends Component {
             this.setState({ avatar: Config.backendUrl + student.basic_data.profile_picture });
           }
         });
-        console.log(user);
-        console.log('Student');
         hasFeed = <Button title="Feed" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/feed'><ProfileOutlined /></Link></Button>
       }
       else {
-        console.log(user);
-        console.log('Company');
         companyServices.getCompany(user.account.id);
         const subscription = companyServices.companyObject.subscribe((company) => {
           if (company) {
@@ -63,13 +59,13 @@ class MyHeader extends Component {
   render() {
     return (
       // <Affix offsetTop={0}>
-        <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
-          {/* <div className="logo"> */}
-          <Space>
-            <Link to="/"><img src={logo} width="48" height="48"></img></Link>
-            <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
-          </Space>
-          {/* <Space>
+      <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
+        {/* <div className="logo"> */}
+        <Space>
+          <Link to="/"><img src={logo} width="48" height="48"></img></Link>
+          <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
+        </Space>
+        {/* <Space>
            
             <Search
             placeholder="Search St"
@@ -77,21 +73,21 @@ class MyHeader extends Component {
             style={{ width: 300, marginTop: 15, marginLeft: 30 }}
             />
           </Space> */}
-          {/* </div> */}
-          <span className="left-menu">
+        {/* </div> */}
+        <span className="left-menu">
           <Button title="Search" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/search'><FileSearchOutlined /></Link></Button>
-            <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>
-            {hasFeed}
-            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{ pathname: '/profile', defaultTab: "Content" }}><UserOutlined /></Link></Button>
-            <Dropdown overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
-              <Button type="text" style={{ height: 64 }}>
-                {/* <Avatar size="large" className="avatar-picture" />
+          <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>
+          {hasFeed}
+          <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{ pathname: '/profile', defaultTab: "Content" }}><UserOutlined /></Link></Button>
+          <Dropdown overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
+            <Button type="text" style={{ height: 64 }}>
+              {/* <Avatar size="large" className="avatar-picture" />
                 <span className="username">{this.state.account_data.username}</span> */}
-                <Avatar size="large" className="avatar-picture" className="username" src={this.state.avatar} alt=""></Avatar>
-              </Button>
-            </Dropdown>
-          </span>
-        </Header>
+              <Avatar size="large" className="avatar-picture" className="username" src={this.state.avatar} alt=""></Avatar>
+            </Button>
+          </Dropdown>
+        </span>
+      </Header>
       // </Affix>
     );
   }
