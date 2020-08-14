@@ -24,10 +24,6 @@ function updateJob(id, title, description, seniority_level, employment_type, rec
 
 function uploadJobPicture(data) {
   return fetchWrapper.post_multipartdata(Config.backendUrl + '/api/job/upload', data)
-    .catch(error => {
-      console.log("error");
-      console.log(error);
-    });
 }
 
 export const jobServices = {

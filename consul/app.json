@@ -4,7 +4,7 @@
     "tags": [
       "python",
       "django",
-      "production"
+      "prod"
     ],
     "port": 8000,
     "connect": {

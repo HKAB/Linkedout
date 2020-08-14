@@ -11,7 +11,6 @@ RUN ["pip", "install", "-r", "requirements.txt"]
 COPY ./consul /consul/config
 COPY ./backend /app/backend
 COPY ./app /app/app
-COPY ./media /app/media
 COPY ./manage.py /app/manage.py
 COPY ./docker-entrypoint.sh .
 

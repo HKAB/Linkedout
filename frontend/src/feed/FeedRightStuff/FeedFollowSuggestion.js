@@ -2,7 +2,7 @@ import { CheckOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect } from 'react';
-import { accountServices, studentServices } from "services";
+import { studentServices } from "services";
 import { followService } from 'services/follow.service';
 import { Config } from '../../config/consts';
 const { Title, Text } = Typography;
@@ -38,7 +38,6 @@ function FeedFollowSuggestion(props) {
   }
 
   const handleClick = (e, item) => {
-    // TODO: Change handle click event, send request blah blah
     // E=mc2 stuff, make change to only 1 object
     if (!item.followed) doFollow(item.id);
     else doUnFollow(item.id);

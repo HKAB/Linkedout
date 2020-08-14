@@ -3,13 +3,14 @@ Module for taking care of JWT based authentication.
 https://dev.to/a_atalla/django-rest-framework-custom-jwt-authentication-5n5
 """
 
-from django.contrib.auth.models import User
 import jwt
-from rest_framework.authentication import BaseAuthentication
-from rest_framework import exceptions
+from django.contrib.auth.models import User
 from django.middleware.csrf import CsrfViewMiddleware
-from backend.settings import SECRET_KEY
+from rest_framework import exceptions
+from rest_framework.authentication import BaseAuthentication
+
 from app.models.account import Account
+from backend.settings import SECRET_KEY
 
 
 class CSRFCheck(CsrfViewMiddleware):
@@ -38,7 +39,8 @@ class JWTAuthentication(BaseAuthentication):
             raise exceptions.AuthenticationFailed('access_token expired.')
         except IndexError:
             raise exceptions.AuthenticationFailed('Token prefix missing.')
-        except:
+        except Exception as exc:
+            print(exc)
             raise exceptions.AuthenticationFailed('Invalid access token.')
 
         account = Account.objects.get(id=payload['user_id'])

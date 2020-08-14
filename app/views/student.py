@@ -1,15 +1,16 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from rest_framework import status, serializers
-from rest_framework.views import APIView
+from django.views.decorators.csrf import ensure_csrf_cookie
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status
+from rest_framework.exceptions import ParseError
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser
-from rest_framework.exceptions import ParseError
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 
 from app.models.student import Student
-from app.services.student import get_student, create_student, update_student, set_profile_picture
+from app.services.student import (create_student, get_student,
+                                  set_profile_picture, update_student)
 
 
 class StudentProfilePictureView(APIView):
@@ -36,7 +37,7 @@ class StudentGetView(APIView):
         class Meta:
             model = Student
             ref_name = 'StudentGetOut'
-            fields = ['firstname', 'lastname', 'dateofbirth','gender',
+            fields = ['firstname', 'lastname', 'dateofbirth', 'gender',
                       'profile_picture', 'description']
 
     permission_classes = [AllowAny]
@@ -56,13 +57,14 @@ class StudentCreateView(APIView):
         class Meta:
             model = Student
             ref_name = 'StudentCreateIn'
-            fields = ['firstname', 'lastname', 'dateofbirth','gender', 'description']
+            fields = ['firstname', 'lastname',
+                      'dateofbirth', 'gender', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         class Meta:
             model = Student
             ref_name = 'StudentCreateOut'
-            fields = ['firstname', 'lastname', 'dateofbirth','gender',
+            fields = ['firstname', 'lastname', 'dateofbirth', 'gender',
                       'profile_picture', 'description']
 
     permission_classes = [IsAuthenticated]
@@ -82,13 +84,14 @@ class StudentUpdateView(APIView):
         class Meta:
             model = Student
             ref_name = 'StudentUpdateIn'
-            fields = ['firstname', 'lastname', 'dateofbirth','gender', 'description']
+            fields = ['firstname', 'lastname',
+                      'dateofbirth', 'gender', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         class Meta:
             model = Student
             ref_name = 'StudentUpdateOut'
-            fields = ['firstname', 'lastname', 'dateofbirth','gender',
+            fields = ['firstname', 'lastname', 'dateofbirth', 'gender',
                       'profile_picture', 'description']
 
     permission_classes = [IsAuthenticated]

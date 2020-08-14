@@ -107,6 +107,9 @@ class FeedGetView(APIView):
             serializer = self.get_serializer(instance.__class__)
             return serializer(instance, context=self.context).data
 
+        class Meta:
+            ref_name = 'FeedGetOut'
+
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(responses={200: OutputSerializer(many=True)})
@@ -114,7 +117,6 @@ class FeedGetView(APIView):
     def get(self, request):
         result = get_feed(account=request.user)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
-
 
 
 class FeedSuggestJobView(APIView):

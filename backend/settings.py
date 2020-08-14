@@ -92,7 +92,7 @@ CORS_ORIGIN_WHITELIST = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django_prometheus.db.backends.mysql',
         'NAME': os.environ['DJANGO_DATABASE_NAME'],
         'HOST': os.environ['DJANGO_DATABASE_HOST'],
         'USER': os.environ['DJANGO_DATABASE_USER'],

@@ -719,7 +719,7 @@ function ProfileChange() {
                         style={{ color: "red" }}
                         count={<MinusCircleOutlined />}
                       >
-                        <Avatar />
+                        <Avatar src={Config.backendUrl + "/media/icon/skill_default.jpg"} />
                       </Badge>
                     </a>
                   </Popconfirm>

@@ -140,10 +140,6 @@ function deleteStudentSkill(skill) {
 
 function uploadStudentPictureProfile(data) {
   return fetchWrapper.post_multipartdata(Config.backendUrl + '/api/student/upload', data)
-    .catch(error => {
-      console.log("error");
-      console.log(error);
-    });
 }
 
 //

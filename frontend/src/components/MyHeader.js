@@ -1,19 +1,19 @@
-import { HomeOutlined, LogoutOutlined, ProfileOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography, Input, AutoComplete   } from 'antd';
+import { HomeOutlined, LogoutOutlined, ProfileOutlined, UserOutlined } from '@ant-design/icons';
+import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
 import logo from "../account/assets/logo.png";
+import { Config } from '../config/consts';
 import "./assets/css/MyHeader.css";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
-const {Search} = Input;
 const menu = (
   <Menu>
-    <Menu.Item key='1' icon={<UserOutlined />}><Link to={{pathname: '/profile'}}>Account</Link></Menu.Item>
+    <Menu.Item key='1' icon={<UserOutlined />}><Link to={{ pathname: '/profile' }}>Account</Link></Menu.Item>
     {/* <Menu.Item key='5' icon={<SettingOutlined />}><Link to={{pathname: '/profile'}}>Settings</Link></Menu.Item> */}
-    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />}><Link to="/" onClick={accountServices.logout}>Sign out</Link> </Menu.Item>
+    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />} onClick={accountServices.logout}><Link to="/">Sign out</Link> </Menu.Item>
   </Menu>
 )
 
@@ -35,7 +35,7 @@ class MyHeader extends Component {
         studentServices.getStudent(user.account.id);
         const subscription = studentServices.studentObject.subscribe((student) => {
           if (student) {
-            this.setState({ avatar: "http://127.0.0.1:8000" + student.basic_data.profile_picture });
+            this.setState({ avatar: Config.backendUrl + student.basic_data.profile_picture });
           }
         });
         console.log(user);
@@ -48,7 +48,7 @@ class MyHeader extends Component {
         companyServices.getCompany(user.account.id);
         const subscription = companyServices.companyObject.subscribe((company) => {
           if (company) {
-            this.setState({ avatar: "http://127.0.0.1:8000" + company.basic_data.profile_picture });
+            this.setState({ avatar: Config.backendUrl + company.basic_data.profile_picture });
           }
         });
         hasFeed = <></>
@@ -81,7 +81,7 @@ class MyHeader extends Component {
           <span className="left-menu">
             <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>
             {hasFeed}
-            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{pathname: '/profile', defaultTab: "Content"}}><UserOutlined /></Link></Button>
+            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{ pathname: '/profile', defaultTab: "Content" }}><UserOutlined /></Link></Button>
             <Dropdown overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
               <Button type="text" style={{ height: 64 }}>
                 {/* <Avatar size="large" className="avatar-picture" />
@@ -97,3 +97,4 @@ class MyHeader extends Component {
 }
 
 export { MyHeader };
+

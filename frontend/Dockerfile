@@ -10,8 +10,13 @@ RUN npm ci
 RUN npm run build
 
 # Run environment
-FROM nginx:latest
+FROM nginx
+
 COPY --from=consul /bin/consul /usr/local/bin/consul
 COPY --from=envoyproxy/envoy-alpine:v1.14.1 /usr/local/bin/envoy /usr/local/bin/envoy
+
+RUN apt update && \
+    apt install -y prometheus-node-exporter
+
 COPY --from=build /app/build /usr/share/nginx/html
 COPY ["./docker-entrypoint.sh", "/docker-entrypoint.sh"]

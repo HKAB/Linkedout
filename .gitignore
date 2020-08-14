@@ -173,9 +173,26 @@ sketch
 app/migrations/0*
 
 # media
-!media
-media/
-!media/profile/default.jpg
+#!media
+#media/
+#!media/profile/default.jpg
+#!media/post/default.jpg
+#!media/job/default.jpg
+#!media/icon/skill_default.jpg
+
+!/media/
+media/*
+
+!media/profile
+media/profile/*
+!media/profile/student_default_male.jpg
+!media/profile/student_default_female.jpg
+!media/profile/company_default.jpg
+
+!media/post
+media/post/*
 !media/post/default.jpg
+
+!media/job
+media/job/*
 !media/job/default.jpg
-!media/icon/skill_default.jpg

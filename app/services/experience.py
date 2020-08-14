@@ -25,7 +25,7 @@ def list_experience(*, id: int) -> list:
             result.append({
                 'id': e.id,
                 'company_name': e.company_name,
-                'profile_picture': None,
+                'profile_picture': e.company_picture,
                 'start_date': e.start_date,
                 'end_date': e.end_date,
                 'title': e.title,

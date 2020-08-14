@@ -59,7 +59,8 @@ function ProfileEdit() {
   };
 
   const onUploadImage = (data) => {
-    studentServices.uploadStudentPictureProfile(data)
+    let multipart_formdata = {"file": data.file}
+    studentServices.uploadStudentPictureProfile(multipart_formdata)
       .then(() => {
         message.success("Upload avatar successful!");
       });

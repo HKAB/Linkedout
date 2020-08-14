@@ -117,19 +117,7 @@ function ProfileContent(props) {
           }
           // if (educationData.length == 0) setState({educationData : []});
           // else setState({educationElement: timeline_element});
-            console.log(educationElement);
-            followService.getCompaniesFollowed(viewStudentId)
-            .then((values)=>
-            {
-             setFollowData(values);
-             setIsLoading(false);
-            })
-            .catch(()=>{
-              setIsLoading(true);
-            });
-            
-            
-
+          console.log(skillData);
         }
 
         return () => {
@@ -250,7 +238,7 @@ function ProfileContent(props) {
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar />}
+                    avatar={<Avatar src={Config.backendUrl + "/media/icon/skill_default.jpg"} />}
                     title={item}
                   />
                 </List.Item>
@@ -311,12 +299,12 @@ function ProfileContent(props) {
         visible={skillVisible}
         onCancel={handleSkillCancel}
       >
-        <List style={{ marginTop: 24 }}
+        <List
           dataSource={skillData}
           renderItem={item => (
             <List.Item>
               <List.Item.Meta
-                avatar={<Avatar />}
+                avatar={<Avatar src={Config.backendUrl + "/media/icon/skill_default.jpg"} />}
                 title={item}
               />
             </List.Item>

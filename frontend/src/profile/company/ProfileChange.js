@@ -7,8 +7,7 @@ import {
 } from "@ant-design/icons";
 import {
   AutoComplete, Avatar,
-  Badge, Button, Card,Divider ,
-
+  Badge, Button, Card,
   Col, Form, Input, List,
   message, Modal,
   Popconfirm, Row, Select, Space, Tag, Typography, Upload
@@ -19,7 +18,8 @@ import { EditableTagGroup, MyEditor } from 'components';
 import React, { useEffect, useState } from "react";
 import { accountServices, companyServices, getCityName, getSpecialty, jobServices } from "services";
 import '../assets/css/profile.css';
-
+import UploadableAvatar from "components/UploadableAvatar"
+import { Config } from "../../config/consts";
 // import {Editor, EditorState} from 'draft-js';
 
 
@@ -70,6 +70,8 @@ function getBase64(file) {
   });
 }
 
+
+
 function ProfileChange() {
 
   const [visible, setVisible] = useState(false);
@@ -89,7 +91,11 @@ function ProfileChange() {
   const [editorDescription, setEditorDescription] = useState([]);
   const [jobDetail, setJobDetail] = useState([]);
   const [jobDetailVisible, setJobDetailVisible] = useState(false);
+
+  const [selectedNewJobPicture, setSelectedNewJobPicture] = useState();
+
   var editTags = useState(null);
+  var uploadableAvatarRef = useState(null);
   var createTags = useState(null);
   var editorRef = useState(null);
 
@@ -111,8 +117,6 @@ function ProfileChange() {
             console.log('check');
             console.log(company.job);
             setEditorDescription(company.basic_data.description);
-            console.log(editorDescription);
-            console.log(companyBasicData)
           }
         });
       return () => {
@@ -123,6 +127,14 @@ function ProfileChange() {
       console.log("Oh no!");
     }
   }, [])
+
+  const onUploadJobPicture = (data) => {
+    setSelectedNewJobPicture(data)
+    // studentServices.uploadStudentPictureProfile(multipart_formdata)
+    //   .then(() => {
+    //     message.success("Upload avatar successful!");
+    //   });
+  }
 
   const handleEditorChange = (editorState) => {
     // console.log(editorState);
@@ -184,14 +196,26 @@ function ProfileChange() {
       [values.cities], // quick fix
       createTags.getTags(),
     )
-      .then(() => {
+      .then((listjob) => {
+        console.log(listjob);
+        if (selectedNewJobPicture)
+        {
+          var id_new_job = listjob[listjob.length - 1].id;
+          let multipart_formdata = {'file': selectedNewJobPicture.file, 'id': id_new_job};
+          jobServices.uploadJobPicture(multipart_formdata)
+          .then(() => {
+            message.success("Tải ảnh bìa cho job thành công!");
+          })
+          .catch(error => {
+            message.error(error);
+          });
+        }
         companyServices.getCompany(accountServices.userValue.account.id);
-        Modal.success({ title: "uWu", content: "Việc làm đã được tạo thành công!" });
+        message.success("Tạo việc làm thành công!");
         handleCreateJobCancel();
       })
       .catch((error) => {
-        console.log(error);
-        Modal.error({ title: "uWu", content: error });
+        message.error(error);
         handleCreateJobCancel();
       });
         console.log(createTags);
@@ -250,6 +274,7 @@ function ProfileChange() {
     });
     //EditTag.setState({tags: item.skills});
     editTags.setTags(item.skills);
+    uploadableAvatarRef.setImageUrl(Config.backendUrl + item.job_picture);
     showEditJobModal();
   };
 
@@ -563,6 +588,10 @@ function ProfileChange() {
           >
             <EditableTagGroup ref={ref => (createTags = ref)} />
           </Form.Item>
+
+          <Form.Item label="Ảnh bìa">
+          <UploadableAvatar onUploadImage={onUploadJobPicture}></UploadableAvatar>
+        </Form.Item>
         </Form>
       </Modal>
 
@@ -664,6 +693,10 @@ function ProfileChange() {
           >
             {/* <EditTag/> */}
             <EditableTagGroup ref={ref => (editTags = ref)} />
+          </Form.Item>
+
+          <Form.Item label="Ảnh bìa">
+            <UploadableAvatar ref={ref => (uploadableAvatarRef = ref)} onUploadImage={onUploadJobPicture}></UploadableAvatar>
           </Form.Item>
         </Form>
       </Modal>
