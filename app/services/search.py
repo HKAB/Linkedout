@@ -60,23 +60,19 @@ def student_search (query: str, skills: str) -> list:
 
 def job_search (query: str, skills: str) -> list:
     if skills == '':
-        jobs_sw = Job.objects.filter(title__istartswith=query)
-        jobs_ct = Job.objects.filter(title__icontains=query)
+        jobs_ct = Job.objects.filter(title__icontains=query).order_by('-published_date')
     else:
         skill_list = skills.split(',')
-        jobs_sw = Job.objects.filter(title__istartswith=query, skills__name__in=skill_list).annotate(num_attr=Count('skills')).filter(num_attr=len(skill_list))
-        jobs_ct = Job.objects.filter(title__icontains=query, skills__name__in=skill_list).annotate(num_attr=Count('skills')).filter(num_attr=len(skill_list))
+        jobs_ct = Job.objects.filter(title__icontains=query, skills__name__in=skill_list).annotate(num_attr=Count('skills')).filter(num_attr=len(skill_list)).order_by('-published_date')
 
-    return list(jobs_sw.union(jobs_ct, all=False))
+    return list(jobs_ct)
 
 
 def post_search (query: str, skills: str) -> list:
     if skills == '':
-        posts_sw = Post.objects.filter(title__istartswith=query)
-        posts_ct = Post.objects.filter(title__icontains=query)
+        posts_ct = Post.objects.filter(title__icontains=query).order_by('-published_date')
     else:
         skill_list = skills.split(',')
-        posts_sw = Post.objects.filter(title__istartswith=query, skills__name__in=skill_list).annotate(num_attr=Count('skills')).filter(num_attr=len(skill_list))
-        posts_ct = Post.objects.filter(title__icontains=query, skills__name__in=skill_list).annotate(num_attr=Count('skills')).filter(num_attr=len(skill_list))
+        posts_ct = Post.objects.filter(title__icontains=query, skills__name__in=skill_list).annotate(num_attr=Count('skills')).filter(num_attr=len(skill_list)).order_by('-published_date')
 
-    return list(posts_sw.union(posts_ct, all=False))
+    return list(posts_ct)

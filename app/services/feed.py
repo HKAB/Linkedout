@@ -27,7 +27,7 @@ def get_feed(*, account: Account) -> list:
         skills__in=not_have_skills).order_by('-published_date')
 
     feed = sorted(chain(job_list, post_list),
-                  key=lambda instance: instance.published_date)
+                  key=lambda instance: instance.published_date, reverse=True)
     return feed
 
 
