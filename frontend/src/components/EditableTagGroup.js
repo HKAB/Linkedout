@@ -206,6 +206,7 @@ class EditableTagGroup extends React.Component {
             onChange={this.onChangeAutocompleteSkillTag}
             onBlur={this.handleInputConfirm}
             options={this.state.autoCompleteSkillTags}
+            style={{ margin: 3 }}
           />
         )}
         {!inputVisible && (

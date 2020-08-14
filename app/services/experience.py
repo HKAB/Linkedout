@@ -1,10 +1,10 @@
 from datetime import date
 
-from app.models.experience import Experience
-from app.models.student import Student
+from app.exceptions import InvalidInputFormat
 from app.models.account import Account
 from app.models.company import Company
-from app.exceptions import InvalidInputFormat
+from app.models.experience import Experience
+from app.models.student import Student
 
 
 def list_experience(*, id: int) -> list:
@@ -14,6 +14,7 @@ def list_experience(*, id: int) -> list:
         if e.company:
             result.append({
                 'id': e.id,
+                'account_id': e.company.account.id,
                 'company_name': e.company.name,
                 'profile_picture': e.company.profile_picture,
                 'start_date': e.start_date,

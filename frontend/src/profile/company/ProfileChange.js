@@ -3,7 +3,7 @@ import {
   CloseOutlined,
   EditOutlined,
   EllipsisOutlined, MinusCircleOutlined,
-  PlusOutlined,
+  PlusOutlined
 } from "@ant-design/icons";
 import {
   AutoComplete, Avatar,
@@ -15,11 +15,11 @@ import {
 import Meta from "antd/lib/card/Meta";
 import TextArea from 'antd/lib/input/TextArea';
 import { EditableTagGroup, MyEditor } from 'components';
+import UploadableAvatar from "components/UploadableAvatar";
 import React, { useEffect, useState } from "react";
 import { accountServices, companyServices, getCityName, getSpecialty, jobServices } from "services";
-import '../assets/css/profile.css';
-import UploadableAvatar from "components/UploadableAvatar"
 import { Config } from "../../config/consts";
+import '../assets/css/profile.css';
 // import {Editor, EditorState} from 'draft-js';
 
 
@@ -198,17 +198,16 @@ function ProfileChange() {
     )
       .then((listjob) => {
         console.log(listjob);
-        if (selectedNewJobPicture)
-        {
+        if (selectedNewJobPicture) {
           var id_new_job = listjob[listjob.length - 1].id;
-          let multipart_formdata = {'file': selectedNewJobPicture.file, 'id': id_new_job};
+          let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': id_new_job };
           jobServices.uploadJobPicture(multipart_formdata)
-          .then(() => {
-            message.success("Tải ảnh bìa cho job thành công!");
-          })
-          .catch(error => {
-            message.error(error);
-          });
+            .then(() => {
+              message.success("Tải ảnh bìa cho job thành công!");
+            })
+            .catch(error => {
+              message.error(error);
+            });
         }
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success("Tạo việc làm thành công!");
@@ -219,7 +218,7 @@ function ProfileChange() {
         handleCreateJobCancel();
       });
 
-      setSelectedNewJobPicture("");
+    setSelectedNewJobPicture("");
   };
 
   const onEditJob = (values) => {
@@ -237,16 +236,15 @@ function ProfileChange() {
     )
       .then(() => {
 
-        if (selectedNewJobPicture)
-        {
-          let multipart_formdata = {'file': selectedNewJobPicture.file, 'id': values.id};
+        if (selectedNewJobPicture) {
+          let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': values.id };
           jobServices.uploadJobPicture(multipart_formdata)
-          .then(() => {
-            message.success("Tải ảnh bìa cho job thành công!");
-          })
-          .catch(error => {
-            message.error(error);
-          });
+            .then(() => {
+              message.success("Tải ảnh bìa cho job thành công!");
+            })
+            .catch(error => {
+              message.error(error);
+            });
         }
 
         companyServices.getCompany(accountServices.userValue.account.id);
@@ -259,7 +257,7 @@ function ProfileChange() {
         handleEditJobCancel();
       });
 
-      setSelectedNewJobPicture("");
+    setSelectedNewJobPicture("");
   };
 
   const onConfirmDeleteJob = (id) => {
@@ -526,7 +524,7 @@ function ProfileChange() {
           formCreate.validateFields()
             .then(values => {
               onAddJobFinish(values);
-              //formCreate.resetFields();
+              formCreate.resetFields();
             })
             .catch(info => {
               console.log('Validate Failed:', info);
@@ -605,8 +603,8 @@ function ProfileChange() {
           </Form.Item>
 
           <Form.Item label="Ảnh bìa">
-          <UploadableAvatar onUploadImage={onUploadJobPicture}></UploadableAvatar>
-        </Form.Item>
+            <UploadableAvatar onUploadImage={onUploadJobPicture}></UploadableAvatar>
+          </Form.Item>
         </Form>
       </Modal>
 

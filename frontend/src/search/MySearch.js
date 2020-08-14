@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
-import { Input, Layout, Row, Col, Select, List } from 'antd'
+import { Input, Layout, Row, Col, Select, List, Card, Typography, Tooltip, Avatar, Tag, Space, Button} from 'antd'
 import { accountServices, searchData } from 'services'
+import { Config } from "../config/consts";
+import moment from 'moment';
+import {
+    ClockCircleOutlined,
+    HomeOutlined, 
+    SafetyCertificateOutlined
+} from '@ant-design/icons';
+
 const { Search } = Input;
 const { Option } = Select;
+const { Meta } = Card;
+const { Title, Link } = Typography;
 
 const skillList = ['abc', 'def', 'sample'];
 const specialityList = ['code', 'test', 'dev'];
@@ -13,6 +23,7 @@ function MySearch() {
     const [queryData, setQueryData] = useState();
     const [skillData, setSkillData] = useState([]);
     const [specialityData, setSpecialityData] = useState([]);
+    const [listData, setListData] = useState([]);
     
     const onTypeChange = (values) => {
         console.log(values);
@@ -38,13 +49,13 @@ function MySearch() {
         console.log(specialityData);
         searchData(typeData, values, skillData, specialityData).then((data) =>{
             console.log(data);
+            setListData(data);
         })
     }
     return (
         <Layout>
             <Row gutter={[0, 16]}>
-                <Col span={8}></Col>
-                <Col span={8}>
+                <Col span={8} offset={8}>
                     <Input.Group compact>
                         <Select defaultValue="student" style={{ width: '30%' }} onChange = {onTypeChange}>
                             <Option value="company">Company</Option>
@@ -55,7 +66,6 @@ function MySearch() {
                         <Search placeholder="Nhập tên bạn muốn tìm" style={{ width: '70%' }} onSearch={onSearch}></Search>
                     </Input.Group>
                 </Col>
-                <Col span={8}></Col>
             </Row>
             <Row gutter={[0, 16]}>
                 <Col span={8} offset={8}>
@@ -89,6 +99,122 @@ function MySearch() {
                     </Input.Group>
                 </Col>
             </Row>
+            <List
+                itemLayout="vertical"
+                dataSource={listData}
+                renderItem = {(item) =>{
+                    if (typeData == 'student')
+                        return(
+                            <Row>
+                                <Col span={8} offset={8}>
+                                    <Card style={{ marginTop: 12 }}>
+                                        <Meta
+                                            avatar={
+                                                <Tooltip placement="bottom" title={item.firstname + " " + item.lastname}><Avatar src={Config.backendUrl + item.profile_picture}></Avatar></Tooltip>
+                                            }
+                                            title={
+                                                <Link level={4} href={'http://localhost:3000/profile/student/[id]'}>
+                                                    {item.firstname + " " + item.lastname}
+                                                </Link>
+                                            }
+                                            description={
+                                                <List dataSource={item.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
+                                            }
+                                        ></Meta>
+                                    </Card>
+                                </Col>
+                            </Row>
+                        )
+                    else if (typeData == 'company')
+                        return(
+                            <Row>
+                                <Col span={8} offset={8}>
+                                    <Card style={{ marginTop: 12 }}>
+                                        <Meta
+                                            avatar={
+                                                <Tooltip placement="bottom" title={item.name}><Avatar src={Config.backendUrl + item.profile_picture}></Avatar></Tooltip>
+                                            }
+                                            title={
+                                                <Link level={4} href={'http://localhost:3000/profile/company/[id]'}>
+                                                    {item.name}
+                                                </Link>
+                                            }
+                                            description={
+                                                <List dataSource={item.specialties} renderItem={specialties => (<Tag style={{ margin: 3 }}>{specialties}</Tag>)}></List>
+                                            }
+                                        ></Meta>
+                                    </Card>
+                                </Col>
+                            </Row>
+                        )
+                    else if (typeData == 'job')
+                        return (
+                            <Row>
+                                <Col span={8} offset={8}>
+                                    <Card style={{ marginTop: 12 }}>
+                                        <Meta
+                                            avatar={
+                                                <Tooltip placement="bottom" title={item.company_name}><Avatar src={Config.backendUrl + item.company_profile_picture}></Avatar></Tooltip>
+                                            }
+                                            title={
+                                                <>
+                                                    <Link level={4} href={item.recruitment_url}>
+                                                        {item.title}
+                                                    </Link>
+                                                    <div>
+                                                        <u><i>
+                                                            {moment(item.published_date, 'YYYY-MM-DD').format('MMMM Do YYYY')}
+                                                        </i></u>
+                                                    </div>
+                                                </>
+                                            }
+                                            description={
+                                                <>
+                                                    <Row>
+                                                        <Col span={18}>
+                                                            <div style={{ fontSize: 14 }}>{item.description}</div>
+                                                            <Space>
+                                                                <List
+                                                                    dataSource={item.skills}
+                                                                    renderItem={(skill) => <Tag>{skill}</Tag>}
+                                                                ></List>
+                                                            </Space>
+                                                        </Col>
+                                                        <Col offset={1} span={4}>
+                                                            <div>
+                                                                <Space>
+                                                                    <SafetyCertificateOutlined />
+                                                                    {item.seniority_level}
+                                                                </Space>
+                                                            </div>
+                                                            <div>
+                                                                <Space>
+                                                                    <ClockCircleOutlined />
+                                                                    {item.employment_type}
+                                                                </Space>
+                                                            </div>
+                                                            <Space>
+                                                                <HomeOutlined />
+                                                                <List
+                                                                    grid={{ gutter: 8 }}
+                                                                    dataSource={item.cities}
+                                                                    renderItem={(city) => city}
+                                                                ></List>
+                                                            </Space>
+                                                        </Col>
+                                                    </Row>
+                                                </>
+                                            }
+                                        ></Meta>
+                                    </Card>
+                                </Col>
+                            </Row>
+                        )
+                }
+                }
+            >
+
+            </List>
         </Layout>
     )
 }

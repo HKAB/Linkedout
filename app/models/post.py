@@ -7,7 +7,7 @@ from .student import Student
 
 def store_picture(instance, filename: str) -> str:
     extension = filename.split('.')[-1]
-    return "post_" + "{}.{}".format(instance.post.id, extension)
+    return "post_" + "{}.{}".format(instance.id, extension)
 
 
 class Post(ExportModelOperationsMixin('post'), models.Model):
