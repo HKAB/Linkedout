@@ -117,6 +117,15 @@ function ProfileContent(props) {
           }
           // if (educationData.length == 0) setState({educationData : []});
           // else setState({educationElement: timeline_element});
+          followService.getCompaniesFollowed(viewStudentId)
+          .then ((values)=>{
+              setFollowData(values);
+              console.log(values);
+          })
+          .catch((error)=>{
+              console.log(error);
+          })
+
           console.log(skillData);
         }
 
