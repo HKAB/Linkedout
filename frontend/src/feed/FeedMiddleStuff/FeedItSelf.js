@@ -130,10 +130,23 @@ function FeedItSelf() {
   // },
 
   const [posts, setPosts] = React.useState([]);
+  const [count, setCount] = React.useState({n_job: 10, n_post: 10});
 
   useEffect(() => {
     studentServices.getStudentFeedPost().then((posts) => {
       setPosts(posts);
+      var n_job = 0;
+      var n_post = 0;
+
+      posts.forEach(post => {
+        if (post.type == "job")
+          n_job++
+        else
+          n_post++
+      });
+      console.log(n_job)
+      console.log(n_post)
+      setCount({n_job: n_job, n_post: 10});
     });
   }, [])
 
@@ -142,17 +155,17 @@ function FeedItSelf() {
       <Card>
         <Row style={{ textAlign: 'center' }}>
           <Col span={8} style={{ borderRight: '1px solid #ecf0f1' }}>
-            <Title level={4}>Post</Title>
-            <div>{history_data.post}</div>
+            <Title level={4}>Giới thiệu việc</Title>
+            <div>{count.n_job}</div>
           </Col>
 
           <Col span={8} style={{ borderRight: '1px solid #ecf0f1' }}>
-            <Title level={4}>Viewed</Title>
-            <div>{history_data.viewed}</div>
+            <Title level={4}>Tổng</Title>
+            <div>{count.n_job + count.n_post}</div>
           </Col>
           <Col span={8}>
-            <Title level={4}>Interested</Title>
-            <div>{history_data.interested}</div>
+            <Title level={4}>Tìm đồng đội</Title>
+            <div>{count.n_post}</div>
           </Col>
         </Row>
       </Card>
@@ -248,7 +261,7 @@ function FeedItSelf() {
                   className="card-info"
                   key={item.id}
                   style={{ marginTop: 24 }}
-                  cover={<img src={item.post_picture} height={200}></img>}
+                  cover={<img src={ Config.backendUrl + item.post_picture} height={200}></img>}
                 >
                   <Meta
                     avatar={

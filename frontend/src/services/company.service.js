@@ -49,10 +49,6 @@ function getCompany(account_id) {
 // basic info of company
 function createBasicCompany(name, website, specialties, description) {
   return fetchWrapper.post(Config.backendUrl + `/api/company/create`, { name, website, specialties, description })
-    .catch((error) => {
-      console.log(error);
-      return {};
-    });
 }
 
 function updateBasicCompany(name, website, specialties, description) {

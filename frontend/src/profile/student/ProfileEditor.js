@@ -1,18 +1,21 @@
 import { MyEditor ,EditableTagGroup} from "../../components";
 import "../assets/css/profileEditor.css";
 import{Card, Typography, Button, Col, Upload, message, Row, List, Avatar,Popconfirm, Tag , Modal, Form,
-  Input,DatePicker, Spin
+  Input,DatePicker, Spin, Tooltip
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Meta from "antd/lib/card/Meta";
 import React, {useState, useEffect} from 'react'
-import {LoadingOutlined,ArrowUpOutlined , EditOutlined, CloseOutlined} from  "@ant-design/icons";
+import {LoadingOutlined,ArrowUpOutlined , EditOutlined, ExpandAltOutlined, MinusCircleFilled} from  "@ant-design/icons";
 import {postService,accountServices} from 'services'
 import { studentServices } from "services";
 import { Config } from "../../config/consts";
+import { postServices } from 'services/student/post.service'
+import UploadableAvatar from "components/UploadableAvatar"
+import moment from 'moment';
 
 const dateFormat = 'YYYY-MM-DD';
-const { Title } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 
 
@@ -43,8 +46,11 @@ function ProfileEditor() {
     const [createPostvisible, setCreatePostVisible] = useState(false);
     const [editPostvisible, setEditPostVisible] = useState(false);
     const [isLoading, setisLoading] = useState(false)
+    const [selectedNewPostPicture, setSelectedNewPostPicture] = useState("")
     var editTags = useState(null);
     var createTags = useState(null);
+    var uploadableAvatarRefOnEdit = useState(null);
+    var uploadableAvatarRefOnCreate = useState(null);
 
 
     const [formEdit] = Form.useForm();
@@ -59,38 +65,67 @@ function ProfileEditor() {
            studentServices.getStudent(user.account.id)
            .then(()=>{
               setisLoading(false);
+              postServices.listPost(user.account.id)
+              .then((list_post) => {
+                setPostData(list_post);
+              })
+              .catch((error) => {
+                message.error(error);
+              })
            })
            .catch(()=>{
             setisLoading(true);
            })
-           const subscription = studentServices.studentObject
-           .subscribe((student)=>{
-             if(student){
-               
-               setPostData(student.post);
-               setisLoading(false);
-             }
-           });
-           return () =>{
-             subscription.unsubscribe();
-           }
          }
          else 
          {
            console.log('OHHHH');
          }
-    },[])
+    }, [])
 
+    const onUploadPostPicture = (data) => {
+      setSelectedNewPostPicture(data)
+    }
 
-    const onEditPost = (values)=>{
-      postService.updatePost(
+    const onEditPost = (values)=> {
+      postServices.updatePost(
         values.id,
         values.title,
         values.content,
         editTags.getTags(),
       )
-      .then(()=>{
+      .then(() => {
         message.success({title:"uWu", content:"Post đã được cập nhật !!"});
+        if (selectedNewPostPicture.file)
+        {
+          let multipart_formdata = {'file': selectedNewPostPicture.file, 'id': values.id};
+          console.log(multipart_formdata);
+          postServices.uploadPostPicture(multipart_formdata)
+          .then(() => {
+            postServices.listPost(accountServices.userValue.account.id)
+            .then((list_post) => {
+              list_post[list_post.length - 1].post_picture = list_post[list_post.length - 1].post_picture + "?" + moment().unix();
+              setPostData(list_post);
+            })
+            .catch((error) => { 
+              message.error(error);
+            })
+            message.success("Tải ảnh bìa cho job thành công!");
+          })
+          .catch(error => {
+            message.error(error);
+          });
+        }
+        else {
+          postServices.listPost(accountServices.userValue.account.id)
+          .then((list_post) => {
+            setPostData(list_post);
+          })
+          .catch((error) => { 
+            message.error(error);
+          })
+        }
+
         handleEditPostCancel();
       })
       .catch((err)=>{
@@ -100,13 +135,46 @@ function ProfileEditor() {
     }
 
     const onAddPostFinish = (values)=>{
-      postService.createPost(
+      postServices.createPost(
         values.title,
         values.content,
         createTags.getTags(),
       )
-      .then(()=>{
-        message.success({title:'uWu', content:'Create Post Success!!'});
+      .then((list_post) => {
+        
+        var id_new_post = list_post[list_post.length - 1].id;
+        message.success({title:'uWu', content:'Tạo post thành công!!'});
+        if (selectedNewPostPicture.file)
+        {
+          let multipart_formdata = {'file': selectedNewPostPicture.file, 'id': id_new_post};
+          console.log(multipart_formdata);
+          postServices.uploadPostPicture(multipart_formdata)
+          .then(() => {
+            postServices.listPost(accountServices.userValue.account.id)
+            .then((list_post) => {
+              list_post[list_post.length - 1].post_picture = list_post[list_post.length - 1].post_picture + "?" + moment().unix();
+              setPostData(list_post);
+            })
+            .catch((error) => { 
+              message.error(error);
+            })
+            message.success("Tải ảnh bìa cho post thành công!");
+          })
+          .catch(error => {
+            message.error(error);
+          });
+        }
+        else {
+          postServices.listPost(accountServices.userValue.account.id)
+          .then((list_post) => {
+            setPostData(list_post);
+          })
+          .catch((error) => { 
+            message.error(error);
+          })
+        }
+
+
         handleCreatePostCancel();
       })
       .catch((er)=>{
@@ -122,10 +190,16 @@ function ProfileEditor() {
       };
 
       const handleEditPostCancel = () =>{
+        setSelectedNewPostPicture([]);
+        // uploadableAvatarRefOnEdit.setImageUrl(undefined);
         setEditPostVisible(false);
+        formEdit.resetFields();
       }
       const handleCreatePostCancel=()=>{
+        // uploadableAvatarRefOnCreate.setImageUrl(undefined);
+        setSelectedNewPostPicture([]);
         setCreatePostVisible(false);
+        formCreate.resetFields();
       }
       const onUploadImage = () => {
         message.success('Upload image success');
@@ -142,6 +216,8 @@ function ProfileEditor() {
           title: item.title,
           content: item.content,
          });
+
+         uploadableAvatarRefOnEdit.setImageUrl(Config.backendUrl + item.post_picture);
          
          editTags.setTags(item.skills);
          showEditPostModal();
@@ -151,18 +227,27 @@ function ProfileEditor() {
         setEditPostVisible(true);
       };
     
-      const onShowPostDetail = item =>{
-        setPostDetail(item);
-        showPostDetailModal();
+      const onShowPostDetail = item => {
+        studentServices.getAccountInterestPost(item.id).then((accounts) => {
+          item.account_interested = accounts;
+          setPostDetail(item);
+          showPostDetailModal();
+        })
       }
       const showPostDetailModal = () => {
         setPostDetailVisible(true);
       };
       const onConfirmDeletePost= id =>{
         console.log(id);
-        postService.deletePost(id)
+        postServices.deletePost(id)
         .then(()=>{
-          studentServices.getStudent(accountServices.userValue.account.id);
+          postServices.listPost(accountServices.userValue.account.id)
+          .then((list_post) => {
+            setPostData(list_post);
+          })
+          .catch((error) => {
+            message.error(error);
+          })
           message.success({title:"uWu", content:'Đã xóa thành công bài Post của bạn!!'})
         })
         .catch((er)=>{
@@ -181,16 +266,7 @@ function ProfileEditor() {
       return (
     
     <Row>
-      <Col span={21}>
-    <Card className="card-editor" style={{ marginTop: 24 }}>
-        <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
-        <MyEditor></MyEditor>
-        
-        <Button type="primary" htmlType="submit" style={{position:'absolute', left:24, bottom:  24 }} onClick={{}}>Save</Button>
-    </Card>
-
-
-  
+      <Col span={21}>  
     <Card
         className="card-post"
         style={{
@@ -206,12 +282,12 @@ function ProfileEditor() {
                 style={{ marginTop: 16 }}
                 actions={[
                   <EditOutlined key="edit" onClick={() => onPostModify(item)} />,
-                  <Button type="primary" onClick={() => onShowPostDetail(item)}>Detail</Button>
+                  <ExpandAltOutlined type="primary" onClick={() => onShowPostDetail(item)}/>
                 ]}
               >
                 <Meta
                 // tí có post picture thì gắn thêm vào
-                  avatar={<Avatar src={Config.backendUrl+item.post_picture}></Avatar>}
+                  avatar={<Avatar  src={Config.backendUrl + item.post_picture}></Avatar>}
                   title={
                     <span >
                       <span>{item.title}</span>
@@ -221,7 +297,7 @@ function ProfileEditor() {
                           onConfirm={() => onConfirmDeletePost(item.id)}
                           okText="Yes"
                           cancelText="No">
-                          <a><CloseOutlined style={{ color: 'red', fontSize: 20, float: 'right' }} /></a>
+                          <MinusCircleFilled style={{ color: 'red', fontSize: 16, float: 'right' }} />
                         </Popconfirm>
                       </span>
                     </span>
@@ -241,28 +317,35 @@ function ProfileEditor() {
       </Card>
 
       <Modal
-        forceRender
-        title="Bài Đăng"
+        // forceRender
+        title={<Title level={4}>Bài đăng</Title>}
         visible={postDetailVisible}
         onCancel={handlePostDetailCancel}
         footer={null}
       >
         <List grid={{ gutter: 24, column: 2 }}>
           <List.Item>
+            <Card
+            bordered={false}
+            cover={<img src={Config.backendUrl + postDetail.post_picture} />}>
             <Meta
-            // tis cos avata thi gan them vao
-              avatar={<Avatar></Avatar>}
-              title={postDetail.title}
+              title={<Title level={3}>{postDetail.title}</Title>}
               description={<div>
-                <div>Nội dung: {postDetail.content}</div>
+                <Text underline>Ngày đăng {postDetail.published_date}</Text>
+                <Title level={4}>Nội dung </Title>
+                  <Paragraph>
+                    {postDetail.content}
+                  </Paragraph>
                 
-                  <div>Ngày đăng: {postDetail.published_date}</div>
-                  <div style={{ display: 'flex' }}>
-                  <div>Kỹ năng: </div>
-                  <List dataSource={postDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List>
-                </div>
+                
+                  
+                  <Title level={4}>Kỹ năng </Title>
+                  <Paragraph><List dataSource={postDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List></Paragraph>
+                  <Title level={4}>Những người quan tâm</Title>
+                  <Paragraph><List dataSource={postDetail.account_interested} renderItem={account => (<Tooltip title={account.firstname + " " + account.lastname}><Avatar src={Config.backendUrl + account.profile_picture}></Avatar></Tooltip>)}></List></Paragraph>
               </div>}
             />
+            </Card>
           </List.Item>
         </List>
       </Modal>
@@ -306,23 +389,20 @@ function ProfileEditor() {
           </Form.Item>
 
           <Form.Item
-            label="Published date:"
-            name="published_date"
-            rules={[{ required: true, message: "Published Date is required!" }]}
-          >
-            <DatePicker style={{ width: "100%" }} format={dateFormat} />
-          </Form.Item>
-          <Form.Item
             initialValue="skill"
             label="Skill"
             name="skills"
           >
             <EditableTagGroup ref={ref => (createTags = ref)} />
           </Form.Item>
+
+          <Form.Item label="Ảnh bìa">
+            <UploadableAvatar ref={ref => (uploadableAvatarRefOnCreate = ref)} onUploadImage={onUploadPostPicture}></UploadableAvatar>
+          </Form.Item>
         </Form>
       </Modal>
 
-      {/* <Modal
+      <Modal
         forceRender
         title="Chỉnh sửa bài đăng"
         visible={editPostvisible}
@@ -368,15 +448,6 @@ function ProfileEditor() {
           </Form.Item>
 
           <Form.Item
-            initialValue="published_date"
-            label="Published Date: "
-            name="published_date"
-            rules={[{ required: true, message: "Published Date is required!" }]}
-          >
-            <DatePicker style={{ width: "100%" }} format={dateFormat} />
-          </Form.Item>
-
-          <Form.Item
             initialValue="skill"
             label="Skill:"
             name="skills"
@@ -385,21 +456,13 @@ function ProfileEditor() {
             
             <EditableTagGroup ref={ref => (editTags = ref)} />
           </Form.Item>
+
+          <Form.Item label="Ảnh bìa">
+            <UploadableAvatar ref={ref => (uploadableAvatarRefOnEdit = ref)} onUploadImage={onUploadPostPicture}></UploadableAvatar>
+          </Form.Item>
         </Form>
-      </Modal> */}
+      </Modal>
       </Col>
-      <Col span={2}style={{marginTop:24, marginLeft:16}}>
-                <Upload
-                  showUploadList={false}
-                  beforeUpload={beforeUpload}
-                  onChange={handleChangePicture}
-                  customRequest={onUploadImage}
-                  className='picture-upload'
-                  listType='picture-card'
-                >
-                   {imageUrl ? <img src={imageUrl} alt="picture" style={{width:'100%'}}/> : uploadButton}
-                </Upload>
-        </Col>
     </Row>
   );
 }

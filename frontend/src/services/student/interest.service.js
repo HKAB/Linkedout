@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Config } from '../../config/consts';
 
 function getPostInterested() {
-    return fetchWrapper.get(Config.backendUrl + `/api/interest/post_interested`)
+    return fetchWrapper.get(Config.backendUrl + `/api/interest/post-interested`)
 }
 
 function createPostInterested(id) {
@@ -23,7 +23,7 @@ function checkPostInterested(id) {
 }
 
 function getAccountInterestPost(id) {
-    return fetchWrapper.get(Config.backendUrl + `/api/interest/account_interested?id=${id}`)
+    return fetchWrapper.get(Config.backendUrl + `/api/interest/account-interested?id=${id}`)
 }
 
 

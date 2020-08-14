@@ -89,43 +89,70 @@ function ProfileContent(props) {
     setIsLoading(true);
     let user = accountServices.userValue;
     if (user) {
-      let viewStudentId = user.account.id
       if (props.id) {
-        viewStudentId = props.id;
-      }
-      studentServices.getStudent(viewStudentId).then(() => {
-        setIsLoading(false);
-      })
-        .catch(() => {
-          setIsLoading(true);
+        studentServices.viewStudent(props.id).then((student) => {
+          if (student) {
+            setBasicProfileData(student.basic_data);
+            setExperienceData(student.experience);
+            setEducationData(student.education);
+            setEmailData(student.email);
+            setPhoneData(student.phone);
+            setSkillData(student.skill);
+            console.log(student);
+            var timeline_element = []
+            student.education.forEach(item => {
+              timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
+            });
+            if (timeline_element.length == 0) setEducationElement([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
+            else {
+              setEducationElement(timeline_element);
+            }
+            // if (educationData.length == 0) setState({educationData : []});
+            // else setState({educationElement: timeline_element});
+            console.log(skillData);
+          }
+          setIsLoading(false);
+        })
+          .catch(() => {
+            setIsLoading(true);
         });
 
-      const subscription = studentServices.studentObject.subscribe((student) => {
-        if (student) {
-          setBasicProfileData(student.basic_data);
-          setExperienceData(student.experience);
-          setEducationData(student.education);
-          setEmailData(student.email);
-          setPhoneData(student.phone);
-          setSkillData(student.skill);
-          console.log(student);
-          var timeline_element = []
-          student.education.forEach(item => {
-            timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
-          });
-          if (timeline_element.length == 0) setEducationElement([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
-          else {
-            setEducationElement(timeline_element);
-          }
-          // if (educationData.length == 0) setState({educationData : []});
-          // else setState({educationElement: timeline_element});
-          console.log(skillData);
-        }
+      }
+      else {
+        studentServices.getStudent(user.account.id).then(() => {
+          setIsLoading(false);
+        })
+          .catch(() => {
+            setIsLoading(true);
+        });
 
-        return () => {
-          subscription.unsubscribe();
-        }
-      });
+        const subscription = studentServices.studentObject.subscribe((student) => {
+          if (student) {
+            setBasicProfileData(student.basic_data);
+            setExperienceData(student.experience);
+            setEducationData(student.education);
+            setEmailData(student.email);
+            setPhoneData(student.phone);
+            setSkillData(student.skill);
+            console.log(student);
+            var timeline_element = []
+            student.education.forEach(item => {
+              timeline_element.push((<Timeline.Item key={item.id} label={dayjs(item.start_date).format("MMMM YYYY") + " - " + dayjs(item.end_date).format("MMMM YYYY")}><div><b>{item.school_name}</b></div><div>{"Degree: " + item.degree}</div><div>{"Major: " + item.major}</div></Timeline.Item>));
+            });
+            if (timeline_element.length == 0) setEducationElement([<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />]);
+            else {
+              setEducationElement(timeline_element);
+            }
+            // if (educationData.length == 0) setState({educationData : []});
+            // else setState({educationElement: timeline_element});
+            console.log(skillData);
+          }
+
+          return () => {
+            subscription.unsubscribe();
+          }
+        });
+      }
     }
     else {
       message.error("You need to login!");

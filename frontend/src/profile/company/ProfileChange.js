@@ -1,6 +1,6 @@
 //import Form from "antd/lib/form/Form";
 import {
-  CloseOutlined,
+  MinusCircleFilled,
   EditOutlined,
   EllipsisOutlined, MinusCircleOutlined,
   PlusOutlined
@@ -314,24 +314,29 @@ function ProfileChange() {
   };
 
   const onConfirmDeleteSpeciality = (values) => {
-    console.log(values.speciality_info);
-    console.log(values.speciality_info + companyBasicData.specialties);
+    console.log(values);
+    var new_speciality = companyBasicData.specialties;
+    const index = new_speciality.indexOf(values);
+    if (index > -1) {
+      new_speciality.splice(index, 1);
+    }
+    console.log(new_speciality);
     // var descriptionHtml = editorRef.getHtml();
-    // companyServices
-    //   .updateBasicCompany(
-    //     companyBasicData.name,
-    //     companyBasicData.website,
-    //     companyBasicData.specialties,
-    //     companyBasicData.descriptionHtml
-    //   )
-    //   .then(() => {
-    //     companyServices.getCompany(accountServices.userValue.account.id);
-    //     message.success('Updated description!');
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     message.success(error);
-    //   });
+    companyServices
+      .updateBasicCompany(
+        companyBasicData.name,
+        companyBasicData.website,
+        new_speciality,
+        companyBasicData.descriptionHtml
+      )
+      .then(() => {
+        companyServices.getCompany(accountServices.userValue.account.id);
+        message.success('Cập nhật specialty!');
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error(error);
+      });
   }
 
   const showJobDetailModal = () => {
@@ -459,7 +464,7 @@ function ProfileChange() {
                 ]}
               >
                 <Meta
-                  avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+                  avatar={<Avatar src="https://image.flaticon.com/icons/svg/1063/1063196.svg"></Avatar>}
                   title={
                     <span >
                       <span>{item.title}</span>
@@ -469,7 +474,7 @@ function ProfileChange() {
                           onConfirm={() => onConfirmDeleteJob(item.id)}
                           okText="Yes"
                           cancelText="No">
-                          <a><CloseOutlined style={{ color: 'red', fontSize: 20, float: 'right' }} /></a>
+                          <MinusCircleFilled style={{ color: 'red', fontSize: 16, float: 'right' }} />
                         </Popconfirm>
                       </span>
                     </span>
@@ -736,7 +741,7 @@ function ProfileChange() {
                             style={{ color: "red" }}
                             count={<MinusCircleOutlined />}
                           >
-                            <Avatar />
+                            <Avatar src="https://image.flaticon.com/icons/svg/1828/1828749.svg" />
                           </Badge>
                         </a>
                       </Popconfirm>

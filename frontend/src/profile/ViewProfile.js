@@ -39,6 +39,7 @@ function ViewProfile(props) {
     else if (props.accountType == "company") {
       return (
         <Row>
+          <MyHeader />
           <Col></Col>
           <Col span={24}>
             <Layout style={{ padding: "0 24px 24px" }}>

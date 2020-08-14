@@ -84,12 +84,12 @@ function ProfileEdit() {
         .then(() => {
           console.log(phone_info.phone);
           companyServices.getCompany(accountServices.userValue.account.id);
-          Modal.success({ title: "uWu", content: "Phone created!" });
+          message.success({ title: "uWu", content: "Phone created!" });
           formAddPhone.resetFields();
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "uWu", content: error });
+          message.error({ title: "uWu", content: error });
         });
     })
   };
@@ -101,12 +101,12 @@ function ProfileEdit() {
         .then(() => {
           console.log(email_info.email);
           companyServices.getCompany(accountServices.userValue.account.id);
-          Modal.success({ title: "uWu", content: "Email created!" });
+          message.success({ title: "uWu", content: "Email created!" });
           formAddEmail.resetFields();
         })
         .catch((error) => {
           console.log(error);
-          Modal.error({ title: "uWu", content: error });
+          message.error({ title: "uWu", content: error });
         });
     })
   };
@@ -236,14 +236,14 @@ function ProfileEdit() {
   const onFinishChangePass = values => {
     console.log(values.newPass, values.oldPass);
     if (values.newPass !== values.confPass) {
-      Modal.error({ title: "╯︿╰", content: 'Password not match!' });
+      message.error({ title: "╯︿╰", content: 'Password not match!' });
     } else {
       accountServices.changePassword(values.oldPass, values.newPass).then()
         .then(() => {
-          Modal.success({ title: "\^o^/", content: "Change Password successfully!!!" });
+          message.success({ title: "\^o^/", content: "Change Password successfully!!!" });
         })
         .catch((error) => {
-          Modal.error({ title: "╯︿╰", content: error });
+          message.error({ title: "╯︿╰", content: error });
         })
     }
   }
@@ -290,8 +290,8 @@ function ProfileEdit() {
                 <Form.Item name="phoneNumber"  >
                   <Input />
                 </Form.Item>
-                <span>Specialties</span>
-                <Form.Item name="specialties"  >
+                {/* <span>Specialties</span> */}
+                <Form.Item hidden={true} name="specialties"  >
                   <Input />
                 </Form.Item>
 

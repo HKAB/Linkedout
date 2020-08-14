@@ -62,7 +62,7 @@ class MyHeader extends Component {
 
   render() {
     return (
-      <Affix offsetTop={0}>
+      // <Affix offsetTop={0}>
         <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
           {/* <div className="logo"> */}
           <Space>
@@ -91,7 +91,7 @@ class MyHeader extends Component {
             </Dropdown>
           </span>
         </Header>
-      </Affix>
+      // </Affix>
     );
   }
 }
