@@ -47,8 +47,10 @@ function StudentProfile(props) {
         <Row justify="center">
           <Col>
             <div style={{ textAlign: "center" }}>
-              <Avatar style={{ marginBottom: 32 }} size={128} src={Config.backendUrl + profileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
-              <Title level={3} className="user-fullname">{profileData.firstname + " " + profileData.lastname}</Title>
+              <a href="/profile">
+                <Avatar style={{ marginBottom: 32 }} size={128} src={Config.backendUrl + profileData.profile_picture} onError={(e) => { console.log(e); }}></Avatar>
+                <Title level={3} className="user-fullname">{profileData.firstname + " " + profileData.lastname}</Title>
+              </a>
               <Text className="user-quotes">{profileData.description}</Text>
             </div>
           </Col>
@@ -63,14 +65,16 @@ function StudentProfile(props) {
                 <Text style={{ textAlign: "left" }}>{profileData.dob}</Text>
               </Col>
             </Row>
-            <Row gutter={[8, 8]}>
-              <Col>
-                <PhoneTwoTone />
-              </Col>
-              <Col>
-                <Text style={{ textAlign: "left" }}>{profileData.phone}</Text>
-              </Col>
-            </Row>
+            {profileData.phone &&
+              <Row gutter={[8, 8]}>
+                <Col>
+                  <PhoneTwoTone />
+                </Col>
+                <Col>
+                  <Text style={{ textAlign: "left" }}>{profileData.phone}</Text>
+                </Col>
+              </Row>
+            }
             <Row gutter={[8, 8]}>
               <Col>
                 <MailTwoTone />
@@ -100,3 +104,4 @@ function StudentProfile(props) {
 }
 
 export { StudentProfile };
+
