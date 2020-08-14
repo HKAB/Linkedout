@@ -47,6 +47,7 @@ class SpecialtyRelatedField(serializers.RelatedField):
         return Specialty.objects.get(name=data)
 
 class PostSerializer(serializers.ModelSerializer):
+    type = serializers.SerializerMethodField()
     student_firstname = serializers.SerializerMethodField()
     student_lastname = serializers.SerializerMethodField()
     student_profile_picture = serializers.SerializerMethodField()
@@ -67,10 +68,11 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         ref_name = 'PostSerializer'
-        fields = ['id', 'student_firstname', 'student_lastname', 'student_profile_picture',
+        fields = ['type', 'id', 'student_firstname', 'student_lastname', 'student_profile_picture',
                   'title', 'content', 'published_date', 'post_picture', 'skills']
 
 class JobSerializer(serializers.ModelSerializer):
+    type = serializers.SerializerMethodField()
     company_name = serializers.SerializerMethodField()
     company_profile_picture = serializers.SerializerMethodField()
     cities = CityRelatedField(queryset=City.objects.all(), many=True)
@@ -88,31 +90,48 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         ref_name = 'JobSerializer'
-        fields = ['id', 'company_name', 'company_profile_picture', 'title', 'description',
+        fields = ['type', 'id', 'company_name', 'company_profile_picture', 'title', 'description',
                   'seniority_level', 'employment_type', 'recruitment_url', 'published_date',
                   'job_picture', 'cities', 'skills']
 
 class CompanySerializer(serializers.ModelSerializer):
+    type = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
     specialties = SpecialtyRelatedField(
         queryset=Specialty.objects.all(),
         many=True
     )
 
+    def get_id(self, obj):
+        return obj.account.id
+
+    def get_type(self, obj):
+        return 'company'
+
     class Meta:
         model = Company
         ref_name = 'CompanySerializer'
-        fields = ['name', 'website', 'description', 'profile_picture', 'specialties']
+        fields = ['type', 'id', 'name', 'website', 'description', 'profile_picture',
+                  'specialties']
 
 class StudentSerializer(serializers.ModelSerializer):
+    type = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
     skills = SkillRelatedField(
         queryset=Skill.objects.all(),
         many=True
     )
 
+    def get_id(self, obj):
+        return obj.account.id
+
+    def get_type(self, obj):
+        return 'student'
+
     class Meta:
         model = Student
         ref_name = 'StudentSerializer'
-        fields = ['firstname', 'lastname', 'dateofbirth','gender',
+        fields = ['type', 'id', 'firstname', 'lastname', 'dateofbirth','gender',
                   'profile_picture', 'description', 'skills']
 
 class SearchView(APIView):

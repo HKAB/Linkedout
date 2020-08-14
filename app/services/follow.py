@@ -57,6 +57,7 @@ def company_followed (*, account: Account, id: int) -> list:
         {
             'id': c.account.id,
             'name': c.name,
+            'profile_picture': c.profile_picture,
             'description': c.description,
             'followed_count': c.followers.count(),
         } for c in companies

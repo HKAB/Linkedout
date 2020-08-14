@@ -134,7 +134,7 @@ class CompanyFollowedView(APIView):
 
         class Meta:
             ref_name = 'CompanyFollowedOut'
-            fields = ['id', 'name', 'description', 'followed_count']
+            fields = ['id', 'name', 'profile_picture', 'description', 'followed_count']
 
     # permission_classes = [IsAuthenticated]
     permission_classes = [AllowAny]
