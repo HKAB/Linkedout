@@ -4,7 +4,7 @@ import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { accountServices, studentServices,  followService } from "services";
+import { accountServices, followService, studentServices } from "services";
 import { Config } from "../../config/consts";
 import { dateHelper } from '../../helpers/date';
 import '../assets/css/profile.css';
@@ -108,12 +108,12 @@ function ProfileContent(props) {
               setEducationElement(timeline_element);
             }
             followService.getCompaniesFollowed(props.id)
-            .then ((values)=> {
+              .then((values) => {
                 setFollowData(values);
-            })
-            .catch((error)=>{
+              })
+              .catch((error) => {
                 console.log(error);
-            })
+              })
             // if (educationData.length == 0) setState({educationData : []});
             // else setState({educationElement: timeline_element});
             console.log(skillData);
@@ -122,7 +122,7 @@ function ProfileContent(props) {
         })
           .catch(() => {
             setIsLoading(true);
-        });
+          });
 
       }
       else {
@@ -131,7 +131,7 @@ function ProfileContent(props) {
         })
           .catch(() => {
             setIsLoading(true);
-        });
+          });
 
         const subscription = studentServices.studentObject.subscribe((student) => {
           if (student) {
@@ -152,14 +152,14 @@ function ProfileContent(props) {
             }
 
             followService.getCompaniesFollowed(user.account.id)
-            .then ((values)=> {
+              .then((values) => {
                 setFollowData(values);
                 console.log('gagskdda');
                 console.log(values);
-            })
-            .catch((error)=>{
+              })
+              .catch((error) => {
                 console.log(error);
-            })
+              })
             // if (educationData.length == 0) setState({educationData : []});
             // else setState({educationElement: timeline_element});
             console.log(skillData);
@@ -235,8 +235,8 @@ function ProfileContent(props) {
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar src={Config.backendUrl + item.profile_picture} />}
-                    title={item.name}
+                    avatar={<a href={"/profile/company/" + item.id}><Avatar src={Config.backendUrl + item.profile_picture} /></a>}
+                    title={<a href={"/profile/company/" + item.id}>{item.name}</a>}
                     description={<div style={{ position: 'relative', marginTop: -12 }} className="company-info" id={item.id}>
                       <div>{item.description}</div>
                     </div>}
@@ -264,9 +264,8 @@ function ProfileContent(props) {
                 <List.Item>
                   <List.Item.Meta
                     avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
-                    title={item.company_name}
+                    title={<span>{item.account_id ? <a href={"/profile/company/" + item.account_id}>{item.company_name}</a> : item.company_name} • <i>{item.title}</i></span>}
                     description={<div className="company-info" id={item.id}>
-                      <Text strong>{item.title}</Text><br />
                       <Text>{dateHelper.toText(item.start_date) + " - " + dateHelper.toText(item.end_date)}</Text>
                     </div>}
                   />
@@ -330,9 +329,8 @@ function ProfileContent(props) {
             <List.Item>
               <List.Item.Meta
                 avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
-                title={item.company_name}
+                title={<span>{item.account_id ? <a href={"/profile/company/" + item.account_id}>{item.company_name}</a> : item.company_name} • <i>{item.title}</i></span>}
                 description={<div className="company-info" id={item.id}>
-                  <Text strong>{item.title}</Text><br />
                   <Text>{dateHelper.toText(item.start_date) + " - " + dateHelper.toText(item.end_date)}</Text>
                   <div>{item.description}</div>
                 </div>}
@@ -368,13 +366,13 @@ function ProfileContent(props) {
         visible={followVisible}
         onCancel={handleFollowCancel}
       >
-        <List style={{ marginTop: 24 }}
+        <List
           dataSource={followData}
           renderItem={item => (
             <List.Item>
               <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={item.name}
+                avatar={<a href={"/profile/company/" + item.id}><Avatar src={Config.backendUrl + item.profile_picture} /></a>}
+                title={<a href={"/profile/company/" + item.id}>{item.name}</a>}
                 description={<div className="company-info" id={item.id}>
                   <div>{item.description}</div>
                 </div>}

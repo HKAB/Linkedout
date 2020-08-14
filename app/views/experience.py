@@ -21,7 +21,7 @@ class ExperienceListView(APIView):
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
-        account_id: serializers.IntegerField()
+        account_id = serializers.IntegerField(required=False)
         company_name = serializers.CharField()
         profile_picture = serializers.ImageField()
         start_date = serializers.DateField()

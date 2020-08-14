@@ -39,10 +39,10 @@ function FeedFollowSuggestion(props) {
 
   const handleClick = (e, item) => {
     // E=mc2 stuff, make change to only 1 object
-    if (!item.followed) doFollow(item.id);
-    else doUnFollow(item.id);
+    if (!item.followed) doFollow(item.account_id);
+    else doUnFollow(item.account_id);
     setSuggestions([...suggestions].map(object => {
-      if (object.id == item.id) {
+      if (object.account_id == item.account_id) {
         return {
           ...object,
           followed: !object.followed
