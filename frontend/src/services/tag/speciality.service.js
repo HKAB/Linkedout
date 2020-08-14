@@ -1,7 +1,7 @@
 import { fetchWrapper } from "helpers"
 import { Config } from "../../config/consts"
 
-function getSpecialty(query) {
+function getSpecialty(query="") {
   return fetchWrapper.get(Config.backendUrl + `/api/tag/specialty?query=${query}`)
 }
 

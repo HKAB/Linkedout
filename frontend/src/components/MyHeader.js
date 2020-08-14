@@ -1,4 +1,4 @@
-import { HomeOutlined, LogoutOutlined, ProfileOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, LogoutOutlined, ProfileOutlined, UserOutlined, FileSearchOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
@@ -79,6 +79,7 @@ class MyHeader extends Component {
           </Space> */}
           {/* </div> */}
           <span className="left-menu">
+          <Button title="Search" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/search'><FileSearchOutlined /></Link></Button>
             <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>
             {hasFeed}
             <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{ pathname: '/profile', defaultTab: "Content" }}><UserOutlined /></Link></Button>

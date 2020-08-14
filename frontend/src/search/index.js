@@ -6,7 +6,9 @@ function Search() {
     return (
         <>
         <MyHeader></MyHeader>
-        <MySearch></MySearch>
+        <div style={{ minHeight: "100vh" }}>
+            <MySearch></MySearch>
+        </div>
         </>
     );
 }
