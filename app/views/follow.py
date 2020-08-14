@@ -129,6 +129,7 @@ class CompanyFollowedView(APIView):
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
         name = serializers.CharField()
+        profile_picture = serializers.ImageField()
         description = serializers.CharField()
         followed_count = serializers.IntegerField()
 
