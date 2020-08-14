@@ -187,6 +187,7 @@ function getStudentFeedPost() {
 
 export const studentServices = {
   getStudent,
+  viewStudent,
   createBasicStudent,
   updateBasicStudent,
 

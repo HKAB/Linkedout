@@ -107,6 +107,13 @@ function ProfileContent(props) {
             else {
               setEducationElement(timeline_element);
             }
+            followService.getCompaniesFollowed(props.id)
+            .then ((values)=> {
+                setFollowData(values);
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
             // if (educationData.length == 0) setState({educationData : []});
             // else setState({educationElement: timeline_element});
             console.log(skillData);
@@ -143,21 +150,22 @@ function ProfileContent(props) {
             else {
               setEducationElement(timeline_element);
             }
+
+            followService.getCompaniesFollowed(user.account.id)
+            .then ((values)=> {
+                setFollowData(values);
+                console.log('gagskdda');
+                console.log(values);
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
             // if (educationData.length == 0) setState({educationData : []});
             // else setState({educationElement: timeline_element});
             console.log(skillData);
           }
           // if (educationData.length == 0) setState({educationData : []});
           // else setState({educationElement: timeline_element});
-          followService.getCompaniesFollowed(viewStudentId)
-          .then ((values)=>{
-              setFollowData(values);
-              console.log('gagskdda');
-              console.log(values);
-          })
-          .catch((error)=>{
-              console.log(error);
-          })
 
           console.log(skillData);
 
@@ -227,7 +235,7 @@ function ProfileContent(props) {
               renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={<Avatar src={item.avatar} />}
+                    avatar={<Avatar src={Config.backendUrl + item.profile_picture} />}
                     title={item.name}
                     description={<div style={{ position: 'relative', marginTop: -12 }} className="company-info" id={item.id}>
                       <div>{item.description}</div>
