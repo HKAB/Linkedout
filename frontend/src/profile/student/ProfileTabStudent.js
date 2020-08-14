@@ -49,7 +49,7 @@ class ProfileTabStudent extends Component {
           }}
         />
       </Tooltip>
-      <Tooltip placement="right" title={"ở đây có Editor"}>
+      <Tooltip placement="right" title={"Quản lý bài đăng"}>
           <Button
           style={{ boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56 }}
           shape="circle-outline"

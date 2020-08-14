@@ -106,7 +106,7 @@ function MySearch() {
 						</Select>
 						<Search
 							size="large"
-							placeholder="Nhập tên bạn muốn tìm"
+							placeholder="Nhập tên, để trống nếu tìm all"
 							style={{ width: "70%" }}
 							onSearch={onSearch}
 						></Search>
@@ -122,7 +122,7 @@ function MySearch() {
 						<Select
 							mode="multiple"
 							disabled={skillDisable}
-							placeholder="Chọn kỹ năng bạn muốn tìm"
+							placeholder="Chọn kỹ năng, để trống nếu tìm all"
 							style={{ width: "70%" }}
 							onChange={onSkillChange}
 						>
@@ -147,7 +147,7 @@ function MySearch() {
 						<Select
 							mode="multiple"
 							disabled={specialityDisable}
-							placeholder="Chọn chuyên môn bạn muốn tìm"
+							placeholder="Chọn chuyên môn,  để trống nếu tìm all"
 							style={{ width: "70%" }}
 							onChange={onSpecialityChange}
 						>
