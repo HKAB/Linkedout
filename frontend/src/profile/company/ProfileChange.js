@@ -218,7 +218,8 @@ function ProfileChange() {
         message.error(error);
         handleCreateJobCancel();
       });
-        console.log(createTags);
+
+      setSelectedNewJobPicture("");
   };
 
   const onEditJob = (values) => {
@@ -235,6 +236,19 @@ function ProfileChange() {
       editTags.getTags(),
     )
       .then(() => {
+
+        if (selectedNewJobPicture)
+        {
+          let multipart_formdata = {'file': selectedNewJobPicture.file, 'id': values.id};
+          jobServices.uploadJobPicture(multipart_formdata)
+          .then(() => {
+            message.success("Tải ảnh bìa cho job thành công!");
+          })
+          .catch(error => {
+            message.error(error);
+          });
+        }
+
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success("Việc làm đã được cập nhật!");
         handleEditJobCancel();
@@ -245,6 +259,7 @@ function ProfileChange() {
         handleEditJobCancel();
       });
 
+      setSelectedNewJobPicture("");
   };
 
   const onConfirmDeleteJob = (id) => {
