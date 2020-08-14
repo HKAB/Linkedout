@@ -5,32 +5,35 @@ from app.models.post import Post
 
 def students_by_skill () -> list:
     skill_list = Skill.objects.all()
-    return [
+    res = [
         {
             'name': s.name,
             'count': Student.objects.filter(skills=s).count()
         }
         for s in skill_list
     ]
+    return sorted(res, key=lambda x: x['count'], reverse=True)
 
 
 def jobs_by_skill () -> list:
     skill_list = Skill.objects.all()
-    return [
+    res = [
         {
             'name': s.name,
             'count': Job.objects.filter(skills=s).count()
         }
         for s in skill_list
     ]
+    return sorted(res, key=lambda x: x['count'], reverse=True)
 
 
 def posts_by_skill () -> list:
     skill_list = Skill.objects.all()
-    return [
+    res = [
         {
             'name': s.name,
             'count': Post.objects.filter(skills=s).count()
         }
         for s in skill_list
     ]
+    return sorted(res, key=lambda x: x['count'], reverse=True)
