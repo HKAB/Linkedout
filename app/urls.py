@@ -14,6 +14,7 @@ from app.views.post import PostGetView, PostListView, PostCreateView, PostUpdate
 from app.views.interest import InterestCheckView, InterestCreateView, InterestDeleteView, InterestCountView, AccountInterestedView, PostInterestedView
 from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView, SpecialtyTagView, LocationTagView
 from app.views.feed import FeedGetView, FeedSuggestJobView, FeedSuggestFollowView
+from app.views.statistic import StudentsBySkillView, JobsBySkillView, PostsBySkillView
 from app.views.search import SearchView
 
 
@@ -121,6 +122,12 @@ feed_patterns = [
     path('suggest-follow', FeedSuggestFollowView.as_view()),
 ]
 
+statistic_patterns = [
+    path('students-by-skill', StudentsBySkillView.as_view()),
+    path('jobs-by-skill', JobsBySkillView.as_view()),
+    path('posts-by-skill', PostsBySkillView.as_view()),
+]
+
 urlpatterns = [
     path('account/', include((account_patterns, 'account'))),
     path('student/', include((student_patterns, 'student'))),
@@ -136,5 +143,6 @@ urlpatterns = [
     path('interest/', include((interest_patterns, 'interest'))),
     path('tag/', include((tag_patterns, 'tag'))),
     path('feed/', include((feed_patterns, 'feed'))),
+    path('statistic/', include((statistic_patterns, 'statistic'))),
     path('search', SearchView.as_view())
 ]
