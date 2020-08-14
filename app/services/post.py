@@ -19,7 +19,6 @@ def list_post(*, id: int) -> list:
             'published_date': p.published_date,
             'post_picture': p.post_picture,
             'skills': p.skills,
-
         } for p in posts
     ]
 
@@ -50,6 +49,7 @@ def update_post(*, account: Account, id: int, title: str, content: str, skills: 
         content=content,
         published_date=date.today()
     )
+    p.first().skills.clear()
     p.first().skills.add(*skills)
 
     return list_post(id=account.id)
