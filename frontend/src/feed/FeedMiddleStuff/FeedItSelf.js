@@ -186,12 +186,12 @@ function FeedItSelf() {
                 >
                   <Meta
                     avatar={
-                      <Tooltip placement="bottom" title={item.company_name}><Avatar src={Config.backendUrl + item.company_profile_picture}></Avatar></Tooltip>
+                      <Tooltip placement="bottom" title={item.company_name}><Avatar src={Config.backendUrl + item.company_profile_picture} ></Avatar></Tooltip>
                     }
                     title={
                       <>
                         <Title level={4} href={item.recruitment_url}>
-                          {item.title} <a><i>tại {item.company_name}</i></a>
+                          {item.title} •<a href={"/profile/company/" + item.account_id}><i> {item.company_name}</i></a>
                         </Title>
                         <Button
                           style={{ float: "right", width: 100, marginRight: 45, bottom: 24 }}

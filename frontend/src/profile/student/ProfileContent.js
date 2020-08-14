@@ -4,7 +4,7 @@ import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { accountServices, studentServices } from "services";
+import { accountServices, studentServices,  followService } from "services";
 import { Config } from "../../config/consts";
 import { dateHelper } from '../../helpers/date';
 import '../assets/css/profile.css';
@@ -147,6 +147,19 @@ function ProfileContent(props) {
             // else setState({educationElement: timeline_element});
             console.log(skillData);
           }
+          // if (educationData.length == 0) setState({educationData : []});
+          // else setState({educationElement: timeline_element});
+          followService.getCompaniesFollowed(viewStudentId)
+          .then ((values)=>{
+              setFollowData(values);
+              console.log('gagskdda');
+              console.log(values);
+          })
+          .catch((error)=>{
+              console.log(error);
+          })
+
+          console.log(skillData);
 
           return () => {
             subscription.unsubscribe();
