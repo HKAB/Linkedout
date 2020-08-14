@@ -7,12 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app.services.tag import *
-from app.utils import inline_serializer
 
 
 class SkillTagView(APIView):
     class InputSerializer(serializers.Serializer):
-        query = serializers.CharField(required=True)
+        query = serializers.CharField(allow_null=True, required=True)
 
         class Meta:
             ref_name = 'SkillTagIn'
@@ -38,7 +37,7 @@ class SkillTagView(APIView):
 
 class TitleTagView(APIView):
     class InputSerializer(serializers.Serializer):
-        query = serializers.CharField(required=True)
+        query = serializers.CharField(allow_null=True, required=True)
 
         class Meta:
             ref_name = 'TitleTagIn'
@@ -64,7 +63,7 @@ class TitleTagView(APIView):
 
 class SchoolTagView(APIView):
     class InputSerializer(serializers.Serializer):
-        query = serializers.CharField(required=True)
+        query = serializers.CharField(allow_null=True, required=True)
 
         class Meta:
             ref_name = 'SchoolTagIn'
@@ -90,7 +89,7 @@ class SchoolTagView(APIView):
 
 class CompanyTagView(APIView):
     class InputSerializer(serializers.Serializer):
-        query = serializers.CharField(required=True)
+        query = serializers.CharField(allow_null=True, required=True)
 
         class Meta:
             ref_name = 'CompanyTagIn'
@@ -117,7 +116,7 @@ class CompanyTagView(APIView):
 
 class SpecialtyTagView(APIView):
     class InputSerializer(serializers.Serializer):
-        query = serializers.CharField(required=True)
+        query = serializers.CharField(allow_null=True, required=True)
 
         class Meta:
             ref_name = 'SpecialtyTagIn'
@@ -143,7 +142,7 @@ class SpecialtyTagView(APIView):
 
 class LocationTagView(APIView):
     class InputSerializer(serializers.Serializer):
-        query = serializers.CharField(required=True)
+        query = serializers.CharField(allow_null=True, required=True)
 
         class Meta:
             ref_name = 'LocationTagIn'
