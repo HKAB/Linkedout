@@ -52,7 +52,7 @@ def suggest_job(*, account: Account) -> list:
     return job_list[first_post:first_post + NUMBER_OF_SUGGESTION]
 
 
-def suggest_follow (*, account: Account) -> list:
+def suggest_follow(*, account: Account) -> list:
     NUMBER_OF_SUGGESTION = 3
     student = get_student_account(account)
 
@@ -61,7 +61,6 @@ def suggest_follow (*, account: Account) -> list:
         return comps
     fst = randint(0, comps.count() - NUMBER_OF_SUGGESTION)
     return comps[fst:fst + NUMBER_OF_SUGGESTION]
-
 
 
 def get_student_account(account: Account) -> Student:

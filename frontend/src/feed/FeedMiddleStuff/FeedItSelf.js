@@ -173,13 +173,20 @@ function FeedItSelf() {
                 >
                   <Meta
                     avatar={
-                      <Tooltip placement="bottom" title={item.company_name}><Avatar src={Config.backendUrl + item.company_profile_picture}></Avatar></Tooltip>
+                      <Tooltip placement="bottom" title={item.company_name}><Avatar src={Config.backendUrl + item.company_profile_picture} ></Avatar></Tooltip>
                     }
                     title={
                       <>
                         <Title level={4} href={item.recruitment_url}>
-                          {item.title}
+                          {item.title} •<a href={"/profile/company/" + item.account_id}><i> {item.company_name}</i></a>
                         </Title>
+                        <Button
+                          style={{ float: "right", width: 100, marginRight: 45, bottom: 24 }}
+                          type="primary"
+                          onClick={() => window.open(item.recruitment_url)}
+                        >
+                          Apply
+                        </Button>
                         <u>
                           <i>
                             {moment(item.published_date, 'YYYY-MM-DD').format(
@@ -192,10 +199,10 @@ function FeedItSelf() {
                     description={
                       <>
                         <Row>
-                          <Col span={19}>
+                          <Col span={18}>
                             <div style={{ fontSize: 14 }}>{item.description}</div>
                           </Col>
-                          <Col offset={1} span={4}>
+                          <Col offset={1} span={5}>
                             <div>
                               <Space>
                                 <SafetyCertificateOutlined />
@@ -211,7 +218,7 @@ function FeedItSelf() {
                             <Space>
                               <HomeOutlined />
                               <List
-                                grid={{ gutter: 8 }}
+                                grid={{ gutter: 0 }}
                                 dataSource={item.cities}
                                 renderItem={(city) => city}
                               ></List>
@@ -226,15 +233,6 @@ function FeedItSelf() {
                                 renderItem={(skill) => <Tag>{skill}</Tag>}
                               ></List>
                             </Space>
-                          </Col>
-                          <Col span={5}>
-                            <Button
-                              style={{ float: 'right' }}
-                              type="primary"
-                              onClick={() => window.open(item.recruitment_url)}
-                            >
-                              Apply
-												</Button>
                           </Col>
                         </Row>
                       </>

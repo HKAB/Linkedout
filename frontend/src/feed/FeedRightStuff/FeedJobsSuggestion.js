@@ -3,7 +3,7 @@ import { Affix, Avatar, Button, Card, Col, Divider, List, Row, Typography } from
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 // import { feedJobSuggestionService } from 'services/feed/feedJobSuggestion.service';
-import { accountServices, studentServices } from "services";
+import { studentServices } from "services";
 import { Config } from '../../config/consts';
 const { Title, Text } = Typography;
 
@@ -15,6 +15,7 @@ function FeedJobSuggestion(props) {
     let result = response.map((item) => {
       return {
         jobId: item.id,
+        accountId: item.account_id,
         companyName: item.company_name,
         companyProfilePicture: item.company_profile_picture,
         jobTitle: item.title,
@@ -44,11 +45,13 @@ function FeedJobSuggestion(props) {
               <Card bordered={false} style={{ padding: 0 }}>
                 <Row justify="space-between">
                   <Col span={4}>
-                    <Avatar shape="square" size={32} src={Config.backendUrl + item.companyProfilePicture} style={{ marginTop: 16, marginLeft: 0 }} />
+                    <a href={"profile/company/" + item.accountId}>
+                      <Avatar shape="square" size={32} src={Config.backendUrl + item.companyProfilePicture} style={{ marginTop: 16, marginLeft: 0 }} />
+                    </a>
                   </Col>
                   <Col span={14}>
-                    <Row justify="left"><Text ellipsis>{item.jobTitle}</Text></Row>
-                    <Row justify="left"><Text ellipsis type="secondary">{item.companyName}</Text></Row>
+                    <Row justify="left"><a href={"profile/company/" + item.accountId}><Text ellipsis>{item.jobTitle}</Text></a></Row>
+                    <Row justify="left"><a href={"profile/company/" + item.accountId}><Text ellipsis type="secondary">{item.companyName}</Text></a></Row>
                     <Row justify="left"><Text ellipsis type="secondary">{item.cities.join(", ")}</Text></Row>
                   </Col>
                   <Col span={6}>
@@ -70,3 +73,4 @@ function FeedJobSuggestion(props) {
 }
 
 export { FeedJobSuggestion };
+

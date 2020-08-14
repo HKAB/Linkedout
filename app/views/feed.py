@@ -1,18 +1,18 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from rest_framework import status, serializers
-from rest_framework.views import APIView
+from django.views.decorators.csrf import ensure_csrf_cookie
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 
+from app.models.city import City
+from app.models.company import Company
 from app.models.job import Job
 from app.models.post import Post
-from app.models.company import Company
 from app.models.skill import Skill
-from app.models.city import City
 from app.models.specialty import Specialty
-from app.services.feed import get_feed, suggest_job, suggest_follow
+from app.services.feed import get_feed, suggest_follow, suggest_job
 
 
 class SkillRelatedField(serializers.RelatedField):
@@ -25,6 +25,7 @@ class SkillRelatedField(serializers.RelatedField):
     def to_internal_value(self, data):
         return Skill.objects.get(name=data)
 
+
 class CityRelatedField(serializers.RelatedField):
     def display_value(self, instance):
         return instance
@@ -34,6 +35,7 @@ class CityRelatedField(serializers.RelatedField):
 
     def to_internal_value(self, data):
         return City.objects.get(name=data)
+
 
 class SpecialtyRelatedField(serializers.RelatedField):
     def display_value(self, instance):
@@ -71,10 +73,12 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['type', 'id', 'student_firstname', 'student_lastname', 'student_profile_picture',
                   'title', 'content', 'published_date', 'post_picture', 'skills']
 
+
 class JobSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     company_name = serializers.SerializerMethodField()
     company_profile_picture = serializers.SerializerMethodField()
+    account_id = serializers.SerializerMethodField()
     cities = CityRelatedField(queryset=City.objects.all(), many=True)
     skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
@@ -84,15 +88,19 @@ class JobSerializer(serializers.ModelSerializer):
     def get_company_profile_picture(self, obj):
         return obj.company.profile_picture.url
 
+    def get_account_id(self, obj):
+        return obj.company.account.id
+
     def get_type(self, obj):
         return 'job'
 
     class Meta:
         model = Job
         ref_name = 'JobSerializer'
-        fields = ['type', 'id', 'company_name', 'company_profile_picture', 'title', 'description',
+        fields = ['type', 'id', 'company_name', 'account_id', 'company_profile_picture', 'title', 'description',
                   'seniority_level', 'employment_type', 'recruitment_url', 'published_date',
                   'job_picture', 'cities', 'skills']
+
 
 class FeedGetView(APIView):
     class OutputSerializer(serializers.Serializer):
@@ -121,9 +129,13 @@ class FeedGetView(APIView):
 
 class FeedSuggestJobView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
+        account_id = serializers.SerializerMethodField()
         company_name = serializers.SerializerMethodField()
         company_profile_picture = serializers.SerializerMethodField()
         cities = CityRelatedField(queryset=City.objects.all(), many=True)
+
+        def get_account_id(self, obj):
+            return obj.company.account.id
 
         def get_company_name(self, obj):
             return obj.company.name
@@ -134,7 +146,7 @@ class FeedSuggestJobView(APIView):
         class Meta:
             model = Job
             ref_name = 'FeedSuggestJobOut'
-            fields = ['id', 'company_name', 'company_profile_picture', 'title',
+            fields = ['id', 'account_id', 'company_name', 'company_profile_picture', 'title',
                       'recruitment_url', 'cities']
 
     permission_classes = [IsAuthenticated]
@@ -148,16 +160,17 @@ class FeedSuggestJobView(APIView):
 
 class FeedSuggestFollowView(APIView):
     class OutputSerializer(serializers.ModelSerializer):
-        id = serializers.SerializerMethodField()
-        specialties = SpecialtyRelatedField(queryset=Specialty.objects.all(), many=True)
+        account_id = serializers.SerializerMethodField()
+        specialties = SpecialtyRelatedField(
+            queryset=Specialty.objects.all(), many=True)
 
-        def get_id(self, obj):
+        def get_account_id(self, obj):
             return obj.account.id
 
         class Meta:
             model = Company
             ref_name = 'FeedSuggestFollowOut'
-            fields = ['id', 'name', 'profile_picture', 'specialties']
+            fields = ['account_id', 'name', 'profile_picture', 'specialties']
 
     permission_classes = [IsAuthenticated]
 

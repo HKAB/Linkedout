@@ -4,7 +4,7 @@ import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { accountServices, studentServices, followService } from "services";
+import { accountServices, studentServices } from "services";
 import { Config } from "../../config/consts";
 import { dateHelper } from '../../helpers/date';
 import '../assets/css/profile.css';
@@ -53,7 +53,9 @@ function ProfileContent(props) {
   const [educationVisible, setEducationVisible] = useState(false);
   const [skillVisible, setSkillVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [followVisible, setFollowVisible]=useState(false);
+  const [followVisible, setFollowVisible] = useState(false);
+
+
   const showExperienceModal = () => {
     setExperienceVisible(true);
   };
@@ -65,7 +67,7 @@ function ProfileContent(props) {
   const showSkillModal = () => {
     setSkillVisible(true);
   };
-  const showFollowModal = () =>{
+  const showFollowModal = () => {
     setFollowVisible(true);
   }
   const handleExperienceCancel = (e) => {
@@ -97,7 +99,7 @@ function ProfileContent(props) {
         .catch(() => {
           setIsLoading(true);
         });
-      
+
       const subscription = studentServices.studentObject.subscribe((student) => {
         if (student) {
           setBasicProfileData(student.basic_data);
@@ -187,22 +189,22 @@ function ProfileContent(props) {
 
           <Card className="card-info" style={{ marginTop: 24 }}>
             <Meta title={<Title level={3}>Theo dõi</Title>}></Meta>
-            <List 
-            itemLayout="vertical"
-            style={{ marginTop: 24 }} grid={{ column: 2 }}
-              dataSource={followData.slice(0,6)}
-              renderItem={item=> (
+            <List
+              itemLayout="vertical"
+              style={{ marginTop: 24 }} grid={{ column: 2 }}
+              dataSource={followData.slice(0, 6)}
+              renderItem={item => (
                 <List.Item>
                   <List.Item.Meta
-                   avatar={<Avatar src={item.avatar}/>}
-                  title={item.name}
-                  description={<div style={{position:'relative', marginTop:-12}}className="company-info" id={item.id}>
-                  <div>{item.description}</div>  
-                </div>}
+                    avatar={<Avatar src={item.avatar} />}
+                    title={item.name}
+                    description={<div style={{ position: 'relative', marginTop: -12 }} className="company-info" id={item.id}>
+                      <div>{item.description}</div>
+                    </div>}
                   />
                 </List.Item>
               )}
-              
+
             />
             <Button
               type="link"
@@ -331,14 +333,14 @@ function ProfileContent(props) {
           dataSource={followData}
           renderItem={item => (
             <List.Item>
-                  <List.Item.Meta
-                   avatar={<Avatar src={item.avatar}/>}
-                  title={item.name}
-                  description={<div className="company-info" id={item.id}>
-                  <div>{item.description}</div>  
+              <List.Item.Meta
+                avatar={<Avatar src={item.avatar} />}
+                title={item.name}
+                description={<div className="company-info" id={item.id}>
+                  <div>{item.description}</div>
                 </div>}
-                  />
-                </List.Item>
+              />
+            </List.Item>
           )}
         />
       </Modal>

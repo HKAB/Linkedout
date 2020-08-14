@@ -15,7 +15,7 @@ function FeedFollowSuggestion(props) {
     let response = await studentServices.getStudentFollowSuggestion();
     let result = response.map((item) => {
       return {
-        id: item.id,
+        account_id: item.account_id,
         name: item.name,
         avatar: item.profile_picture,
         specialties: item.specialties,
@@ -68,10 +68,10 @@ function FeedFollowSuggestion(props) {
               <Card bordered={false} style={{ padding: 0 }}>
                 <Row justify="space-between">
                   <Col span={4}>
-                    <Avatar src={Config.backendUrl + item.avatar} style={{ marginTop: 5, marginLeft: 0 }} />
+                    <a href={"/profile/company/" + item.account_id}><Avatar src={Config.backendUrl + item.avatar} style={{ marginTop: 5, marginLeft: 0 }} /></a>
                   </Col>
                   <Col span={14}>
-                    <Row justify="left"><Text ellipsis>{item.name}</Text></Row>
+                    <Row justify="left"><a href={"/profile/company/" + item.account_id}><Text ellipsis>{item.name}</Text></a></Row>
                     <Row justify="left"><Text ellipsis type="secondary">Company - {item.specialties.join(", ")}</Text></Row>
                   </Col>
                   <Col span={6}>

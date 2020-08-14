@@ -1,22 +1,36 @@
-from django.urls import path, include
+from django.urls import include, path
 
-from app.views.account import LoginView, RegisterView, ChangePasswordView
-from app.views.student import StudentGetView, StudentCreateView, StudentUpdateView, StudentProfilePictureView
-from app.views.company import CompanyGetView, CompanyCreateView, CompanyUpdateView, CompanyProfilePictureView
-from app.views.skill import SkillListView, SkillCreateView, SkillDeleteView
-from app.views.email import EmailListView, EmailCreateView, EmailUpdateView, EmailDeleteView
-from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, PhoneDeleteView
-from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
-from app.views.experience import ExperienceListView, ExperienceCreateView, ExperienceUpdateView, ExperienceDeleteView
-from app.views.job import JobGetView, JobListView, JobCreateView, JobUpdateView, JobDeleteView, JobPictureView
-from app.views.follow import FollowCheckView, FollowCreateView, FollowDeleteView, FollowCountView, CompanyFollowedView
-from app.views.post import PostGetView, PostListView, PostCreateView, PostUpdateView, PostDeleteView, PostPictureView
-from app.views.interest import InterestCheckView, InterestCreateView, InterestDeleteView, InterestCountView, AccountInterestedView, PostInterestedView
-from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView, SpecialtyTagView, LocationTagView
-from app.views.feed import FeedGetView, FeedSuggestJobView, FeedSuggestFollowView
-from app.views.statistic import StudentsBySkillView, JobsBySkillView, PostsBySkillView
+from app.views.account import ChangePasswordView, LoginView, RegisterView
+from app.views.company import (CompanyCreateView, CompanyGetView,
+                               CompanyProfilePictureView, CompanyUpdateView)
+from app.views.education import (EducationCreateView, EducationDeleteView,
+                                 EducationListView, EducationUpdateView)
+from app.views.email import (EmailCreateView, EmailDeleteView, EmailListView,
+                             EmailUpdateView)
+from app.views.experience import (ExperienceCreateView, ExperienceDeleteView,
+                                  ExperienceListView, ExperienceUpdateView)
+from app.views.feed import (FeedGetView, FeedSuggestFollowView,
+                            FeedSuggestJobView)
+from app.views.follow import (CompanyFollowedView, FollowCheckView,
+                              FollowCountView, FollowCreateView,
+                              FollowDeleteView)
+from app.views.interest import (AccountInterestedView, InterestCheckView,
+                                InterestCountView, InterestCreateView,
+                                InterestDeleteView, PostInterestedView)
+from app.views.job import (JobCreateView, JobDeleteView, JobGetView,
+                           JobListView, JobPictureView, JobUpdateView)
+from app.views.phone import (PhoneCreateView, PhoneDeleteView, PhoneListView,
+                             PhoneUpdateView)
+from app.views.post import (PostCreateView, PostDeleteView, PostGetView,
+                            PostListView, PostPictureView, PostUpdateView)
 from app.views.search import SearchView
-
+from app.views.skill import SkillCreateView, SkillDeleteView, SkillListView
+from app.views.statistic import (JobsBySkillView, PostsBySkillView,
+                                 StudentsBySkillView)
+from app.views.student import (StudentCreateView, StudentGetView,
+                               StudentProfilePictureView, StudentUpdateView)
+from app.views.tag import (CompanyTagView, LocationTagView, SchoolTagView,
+                           SkillTagView, SpecialtyTagView, TitleTagView)
 
 account_patterns = [
     path('login', LoginView.as_view()),
@@ -86,7 +100,7 @@ follow_patterns = [
     path('create', FollowCreateView.as_view()),
     path('delete', FollowDeleteView.as_view()),
     path('count', FollowCountView.as_view()),
-    path('company_followed', CompanyFollowedView.as_view()),
+    path('company-followed', CompanyFollowedView.as_view()),
 ]
 
 post_patterns = [
@@ -103,8 +117,8 @@ interest_patterns = [
     path('create', InterestCreateView.as_view()),
     path('delete', InterestDeleteView.as_view()),
     path('count', InterestCountView.as_view()),
-    path('account_interested', AccountInterestedView.as_view()),
-    path('post_interested', PostInterestedView.as_view()),
+    path('account-interested', AccountInterestedView.as_view()),
+    path('post-interested', PostInterestedView.as_view()),
 ]
 
 tag_patterns = [
