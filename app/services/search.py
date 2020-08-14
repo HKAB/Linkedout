@@ -11,23 +11,23 @@ from app.exceptions import InvalidInputFormat
 def search (*, type: str, **kwargs) -> list:
     if type == 'company':
         return company_search(
-            kwargs.get('query') if ('query' in kwargs) else '',
-            kwargs.get('specialties') if ('specialties' in kwargs) else ''
+            (kwargs.get('query') or '') if ('query' in kwargs) else '',
+            (kwargs.get('specialties') or '') if ('specialties' in kwargs) else ''
         )
     elif type == 'student':
         return student_search(
-            kwargs.get('query') if ('query' in kwargs) else '',
-            kwargs.get('skills') if ('skills' in kwargs) else ''
+            (kwargs.get('query') or '') if ('query' in kwargs) else '',
+            (kwargs.get('skills') or '') if ('skills' in kwargs) else ''
         )
     elif type == 'job':
         return job_search(
-            kwargs.get('query') if ('query' in kwargs) else '',
-            kwargs.get('skills') if ('skills' in kwargs) else ''
+            (kwargs.get('query') or '') if ('query' in kwargs) else '',
+            (kwargs.get('skills') or '') if ('skills' in kwargs) else ''
         )
     elif type == 'post':
         return post_search(
-            kwargs.get('query') if ('query' in kwargs) else '',
-            kwargs.get('skills') if ('skills' in kwargs) else ''
+            (kwargs.get('query') or '') if ('query' in kwargs) else '',
+            (kwargs.get('skills') or '') if ('skills' in kwargs) else ''
         )
     else:
         raise InvalidInputFormat("Invalid search type!")
@@ -46,7 +46,7 @@ def company_search (query: str, specialties: str) -> list:
 
 
 def student_search (query: str, skills: str) -> list:
-    print(query)
+    print(skills)
     if skills == '':
         students_sw = Student.objects.filter(Q(firstname__istartswith=query) | Q(lastname__istartswith=query))
         students_ct = Student.objects.filter(Q(firstname__icontains=query) | Q(lastname__icontains=query))
