@@ -4,7 +4,7 @@ import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { accountServices, studentServices } from "services";
+import { accountServices, studentServices,  followService } from "services";
 import { Config } from "../../config/consts";
 import { dateHelper } from '../../helpers/date';
 import '../assets/css/profile.css';
@@ -122,6 +122,7 @@ function ProfileContent(props) {
           followService.getCompaniesFollowed(viewStudentId)
           .then ((values)=>{
               setFollowData(values);
+              console.log('gagskdda');
               console.log(values);
           })
           .catch((error)=>{

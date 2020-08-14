@@ -6,9 +6,9 @@ import { accountServices, companyServices, studentServices } from "services";
 import { Config } from '../config/consts';
 import logo from "./assets/images/logo.svg";
 
-const { SubMenu } = Menu;
+
 const { Title } = Typography;
-const { Header, Content } = Layout;
+const { Header} = Layout;
 
 const menu = (
   <Menu>
