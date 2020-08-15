@@ -18,43 +18,84 @@ import woman from "./assets/images/woman.svg";
 import { HomeHeader } from "./HomeHeader";
 import { getJobsBySkill, getPostsBySkill, getStudentsBySkill } from 'services';
 
-const { Title } = Typography;
+import male from './assets/images/male.svg'
+import female from './assets/images/female.svg'
 
-const data = [
-  { type: "C++", value: 502 },
-  { type: "C#", value: 635 },
-  { type: "Nodejs", value: 163 },
-  { type: "Python", value: 203 },
-];
+const { Title } = Typography;
 
 const data_comment = [
   {
-    avatar: "https://image.flaticon.com/icons/svg/3220/3220298.svg",
-    title: "Ivan Konev",
+    avatar: male,
+    title: "Lê Đức Tùng",
     description:
-      "The 2nd Red Banner Army was a Soviet field army of World War II that was formed at Khabarovsk in the Soviet Far East in July 1938. It spent most of the war guarding the border in the Blagoveshchensk area, sending formations to the Eastern Front while undergoing several reorganizations.",
+      `Lab Member 001,<br/>
+      The founder of this lab<br/>
+      The seeker of chaos, the destroyer of this world's ruling structure...<br/>
+      The mad scientist...<br/>
+      Hououin... Kyouma!`,
   },
 
   {
-    avatar: "https://image.flaticon.com/icons/svg/3220/3220298.svg",
-    title: "Ivan Konev",
+    avatar: female,
+    title: "Vũ Thị Dịu",
     description:
-      "The 2nd Red Banner Army was a Soviet field army of World War II that was formed at Khabarovsk in the Soviet Far East in July 1938. It spent most of the war guarding the border in the Blagoveshchensk area, sending formations to the Eastern Front while undergoing several reorganizations.",
+      "Life is short. Smile while you still have teeth. You 're magical",
   },
 
   {
-    avatar: "https://image.flaticon.com/icons/svg/3220/3220298.svg",
-    title: "Ivan Konev",
+    avatar: female,
+    title: "Nguyễn Thị Thanh Bảo",
     description:
-      "The 2nd Red Banner Army was a Soviet field army of World War II that was formed at Khabarovsk in the Soviet Far East in July 1938. It spent most of the war guarding the border in the Blagoveshchensk area, sending formations to the Eastern Front while undergoing several reorganizations.",
+      "VY Canis Majoris (abbreviated to VY CMa) is an extreme oxygen-rich (O-rich) red hypergiant (RHG) or red supergiant (RSG) and pulsating variable star located at 1.2 kiloparsecs (3,900 ly) away from Earth in the constellation of Canis Major. It is one of the largest known stars by radius, and is also one of the most luminous and massive red supergiants, as well as one of the most luminous stars in the Milky Way",
+  },
+
+  {
+    avatar: male,
+    title: "Lê Trần Hải Tùng",
+    description:
+      "Tuỳ.",
+  },
+
+  {
+    avatar: male,
+    title: "Nguyễn Xuân Trường",
+    description:
+      "You are ill. I recommend suicide :v",
+  },
+
+  {
+    avatar: male,
+    title: "Nguyễn Phú Trường",
+    description:
+      `Individuals and interactions over processes and tools<br/>
+      Working software over comprehensive documentation<br/>
+      Customer collaboration over contract negotiation<br/>
+      Responding to change over following a plan`,
   },
 ];
+
+function getRandom(arr, n) {
+  var result = new Array(n),
+      len = arr.length,
+      taken = new Array(len);
+  if (n > len)
+      throw new RangeError("getRandom: more elements taken than available");
+  while (n--) {
+      var x = Math.floor(Math.random() * len);
+      result[n] = arr[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+  }
+  return result;
+}
 
 function Home({ history }) {
   const sponsor = [acer, canon, cisco, samsung];
   const [satisticJobsBySkillData, setSatisticJobsBySkillData] = useState([]);
   const [satisticPostsBySkillData, setSatisticPostsBySkillData] = useState([]);
   const [satisticStudentsBySkillData, setSatisticStudentsBySkillData] = useState([]);
+
+  const show_comments = getRandom(data_comment, 3);
+
 
   const sponsor_children = sponsor.map((d, i) => (
     <QueueAnim
@@ -67,19 +108,19 @@ function Home({ history }) {
     </QueueAnim>
   ));
 
-  const comments = data_comment.map((d, i) => (
+  const comments = show_comments.map((d, i) => (
     <QueueAnim
       component={Col}
       key={i}
       type="bottom"
       componentProps={{ span: 6, offset: 1 }}
     >
-      <Card >
+      <Card style={{height: 250}}>
         <Card.Meta
           key={i}
           avatar={<Avatar src={d.avatar} />}
           title={d.title}
-          description={d.description}
+          description={(<div dangerouslySetInnerHTML={{__html: d.description}}></div>)}
         />
       </Card>
     </QueueAnim>
@@ -432,17 +473,6 @@ function Home({ history }) {
                     <DonutChart
                       key="donut"
                       data={satisticJobsBySkillData}
-                      title={{
-                        visible: true,
-                        //text:'Jobs By Skill', 
-                      }}
-                      meta={{
-                        value: {
-                          alias:
-                            "Cũng như bên cạnh, nhưng hình tròn",
-                          // formatter:(v)=>{return `${v}个`}
-                        },
-                      }}
                       // highlight-end
                       angleField="count"
                       colorField="name"
@@ -462,17 +492,6 @@ function Home({ history }) {
                     <DonutChart
                       key="donut"
                       data={satisticPostsBySkillData}
-                      title={{
-                        visible: true,
-                       // text:'Posts By Skill',
-                      }}
-                      meta={{
-                        value: {
-                          alias:
-                            "Cũng như bên cạnh, nhưng hình tròn",
-                          // formatter:(v)=>{return `${v}个`}
-                        },
-                      }}
                       // highlight-end
                       angleField="count"
                       colorField="name"
@@ -493,17 +512,6 @@ function Home({ history }) {
                     <DonutChart
                       key="donut"
                       data={satisticStudentsBySkillData}
-                      title={{
-                        visible: true,
-                        //text:'Students By Skill',
-                      }}
-                      meta={{
-                        value: {
-                          alias:
-                            "Cũng như bên cạnh, nhưng hình tròn",
-                          // formatter:(v)=>{return `${v}个`}
-                        },
-                      }}
                       // highlight-end
                       angleField="count"
                       colorField="name"
@@ -517,35 +525,11 @@ function Home({ history }) {
                     
                   </div>
                 </Col>
-
-                {/* <Col span={12}>
-                  <div>
-                    <BarChart
-                      key="bar"
-                      data={data}
-                      title={{
-                        visible: true,
-                      }}
-                      meta={{
-                        value: {
-                          alias: " ",
-                          formatter: (v) => {
-                            return `${v}`;
-                          },
-                        },
-                      }}
-                      // highlight-end
-                      xField="value"
-                      yField="type"
-                      colorField="type"
-                    />
-                  </div>
-                </Col> */}
               </Row>
               <Row >
-                <Col span={7} offset={1}><Title level={3} style={{textAlign:'center'}}>Công việc</Title></Col>
-                <Col span={7} offset={1}><Title level={3} style={{textAlign:'center'}}>Tuyển dụng</Title></Col>
-                <Col span={7} offset={1}><Title level={3} style={{textAlign:'center'}}>Sinh viên</Title></Col>
+                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Công việc</Title></Col>
+                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Tuyển dụng</Title></Col>
+                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Sinh viên</Title></Col>
               </Row>
             </div>
           </OverPack>
