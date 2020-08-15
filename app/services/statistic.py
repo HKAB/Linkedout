@@ -12,7 +12,7 @@ def students_by_skill () -> list:
         }
         for s in skill_list
     ]
-    return sorted(res, key=lambda x: x['count'], reverse=True)
+    return sorted(res, key=lambda x: x['name'], reverse=True)
 
 
 def jobs_by_skill () -> list:
@@ -24,7 +24,7 @@ def jobs_by_skill () -> list:
         }
         for s in skill_list
     ]
-    return sorted(res, key=lambda x: x['count'], reverse=True)
+    return sorted(res, key=lambda x: x['name'], reverse=True)
 
 
 def posts_by_skill () -> list:
@@ -36,4 +36,4 @@ def posts_by_skill () -> list:
         }
         for s in skill_list
     ]
-    return sorted(res, key=lambda x: x['count'], reverse=True)
+    return sorted(res, key=lambda x: x['name'], reverse=True)
