@@ -2,7 +2,7 @@ import { Avatar, Button, Card, Col, Input, Row, Space, Typography } from "antd";
 import { BarChart, DonutChart } from "bizcharts";
 import QueueAnim from "rc-queue-anim";
 import OverPack from "rc-scroll-anim/lib/ScrollOverPack";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { accountServices } from "services";
 import blacklivematter from "./assets/images/blacklivematter.svg";
 import communication from "./assets/images/communication.svg";
@@ -16,6 +16,7 @@ import samsung from "./assets/images/sponsor/samsung.svg";
 import subscribemail from "./assets/images/subscribemail.svg";
 import woman from "./assets/images/woman.svg";
 import { HomeHeader } from "./HomeHeader";
+import { getJobsBySkill, getPostsBySkill, getStudentsBySkill } from 'services';
 
 const { Title } = Typography;
 
@@ -51,6 +52,10 @@ const data_comment = [
 
 function Home({ history }) {
   const sponsor = [acer, canon, cisco, samsung];
+  const [satisticJobsBySkillData, setSatisticJobsBySkillData] = useState([]);
+  const [satisticPostsBySkillData, setSatisticPostsBySkillData] = useState([]);
+  const [satisticStudentsBySkillData, setSatisticStudentsBySkillData] = useState([]);
+
   const sponsor_children = sponsor.map((d, i) => (
     <QueueAnim
       component={Col}
@@ -79,6 +84,24 @@ function Home({ history }) {
       </Card>
     </QueueAnim>
   ));
+  
+  useEffect(() => {
+    getJobsBySkill()
+    .then((data) => {
+      setSatisticJobsBySkillData(data);
+    });
+
+    getPostsBySkill()
+    .then((data) => {
+      setSatisticPostsBySkillData(data);
+    });
+
+    getStudentsBySkill()
+    .then((data) => {
+      setSatisticStudentsBySkillData(data);
+    });
+
+  }, [])
 
   const user = accountServices.userValue;
   return (
@@ -399,17 +422,19 @@ function Home({ history }) {
                   marginTop: 64,
                 }}
               >
-                STATISTIC
+                Thống kê kỹ năng
 							</div>
 
               <Row>
-                <Col span={12}>
+                <Col span={8}>
                   <div>
+                  
                     <DonutChart
                       key="donut"
-                      data={data}
+                      data={satisticJobsBySkillData}
                       title={{
                         visible: true,
+                        //text:'Jobs By Skill', 
                       }}
                       meta={{
                         value: {
@@ -419,8 +444,8 @@ function Home({ history }) {
                         },
                       }}
                       // highlight-end
-                      angleField="value"
-                      colorField="type"
+                      angleField="count"
+                      colorField="name"
                       legend={{
                         position: "left-center",
                       }}
@@ -431,7 +456,69 @@ function Home({ history }) {
                   </div>
                 </Col>
 
-                <Col span={12}>
+                <Col span={8}>
+                  <div>
+                    
+                    <DonutChart
+                      key="donut"
+                      data={satisticPostsBySkillData}
+                      title={{
+                        visible: true,
+                       // text:'Posts By Skill',
+                      }}
+                      meta={{
+                        value: {
+                          alias:
+                            "Cũng như bên cạnh, nhưng hình tròn",
+                          // formatter:(v)=>{return `${v}个`}
+                        },
+                      }}
+                      // highlight-end
+                      angleField="count"
+                      colorField="name"
+                      legend={{
+                        position: "left-center",
+                      }}
+                      statistic={{
+                        totalLabel: "Tổng",
+                      }}
+                    />
+                    
+                  </div>
+                </Col>
+
+                <Col span={8}>
+                  <div>
+                    
+                    <DonutChart
+                      key="donut"
+                      data={satisticStudentsBySkillData}
+                      title={{
+                        visible: true,
+                        //text:'Students By Skill',
+                      }}
+                      meta={{
+                        value: {
+                          alias:
+                            "Cũng như bên cạnh, nhưng hình tròn",
+                          // formatter:(v)=>{return `${v}个`}
+                        },
+                      }}
+                      // highlight-end
+                      angleField="count"
+                      colorField="name"
+                      legend={{
+                        position: "left-center",
+                      }}
+                      statistic={{
+                        totalLabel: "Tổng",
+                      }}
+                    />
+                    
+                  </div>
+                </Col>
+
+                {/* <Col span={12}>
                   <div>
                     <BarChart
                       key="bar"
@@ -453,7 +540,12 @@ function Home({ history }) {
                       colorField="type"
                     />
                   </div>
-                </Col>
+                </Col> */}
+              </Row>
+              <Row >
+                <Col span={7} offset={1}><Title level={3} style={{textAlign:'center'}}>Công việc</Title></Col>
+                <Col span={7} offset={1}><Title level={3} style={{textAlign:'center'}}>Tuyển dụng</Title></Col>
+                <Col span={7} offset={1}><Title level={3} style={{textAlign:'center'}}>Sinh viên</Title></Col>
               </Row>
             </div>
           </OverPack>
