@@ -299,9 +299,10 @@ function ProfileEditor() {
                         </span>
                       }
                       description={<div>
-                        <div>Title: {item.title}</div>
-                        <div>Content: {item.content}</div>
-                        <div>Published date: {item.published_date}</div>
+                          <Text>Published date: {item.published_date}</Text>
+                          <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}>
+                            Content: {item.content}
+                          </Paragraph>
                         <List dataSource={item.skills} renderItem={skill => (<Tag>{skill}</Tag>)}></List>
                       </div>}
                     />
@@ -325,11 +326,17 @@ function ProfileEditor() {
                   bordered={false}
                   cover={<img src={Config.backendUrl + postDetail.post_picture} />}>
                   <Meta
-                    title={<Title level={3}>{postDetail.title}</Title>}
+                    title={<Title ellipsis={true} level={3}>{postDetail.title}</Title>}
                     description={<div>
+<<<<<<< Updated upstream
                       <Text underline>Published Date {postDetail.published_date}</Text>
                       <Title level={4}>Content </Title>
                       <Paragraph>
+=======
+                      <Text underline>Ngày đăng {postDetail.published_date}</Text>
+                      <Title level={4}>Nội dung </Title>
+                      <Paragraph ellipsis={{ rows: 4, expandable: true, symbol: 'more' }}>
+>>>>>>> Stashed changes
                         {postDetail.content}
                       </Paragraph>
 

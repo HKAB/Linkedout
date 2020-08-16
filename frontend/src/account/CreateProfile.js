@@ -80,11 +80,19 @@ function CreateProfile({ history }) {
         <DatePicker style={{ width: "100%" }} picker="date" size="large" placeholder="Date of birth" />
       </Form.Item>
 
+<<<<<<< Updated upstream
       <Form.Item name="gender" rules={[{ required: true, message: "Can't be blank" }]}>
         <Select placeholder="Gender" style={{ width: "100%" }}>
           <Option value="Male">Male</Option>
           <Option value="Female">Female</Option>
           <Option value="Secret">Other</Option>
+=======
+      <Form.Item name="gender" rules={[{ required: true, message: 'Đừng để trống' }]}>
+        <Select size="large" placeholder="Giới tính" style={{ width: "100%" }}>
+          <Option value="Male">Nam</Option>
+          <Option value="Female">Nữ</Option>
+          <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+>>>>>>> Stashed changes
         </Select>
       </Form.Item>
 

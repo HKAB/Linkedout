@@ -97,8 +97,8 @@ function Login({ history }) {
                   <Form.Item name="register_email" rules={[{ required: true, message: "Can't be blank" }]}>
                     <Input size="large" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email"></Input>
                   </Form.Item>
-                  <Form.Item name="register_account_type" rules={[{ required: true, message: "Select one"}]}>
-                    <Select placeholder="Who are you? Student or Company?">
+                  <Form.Item name="register_account_type" rules={[{ required: true, message: 'Hãy chọn' }]}>
+                    <Select size="large" placeholder="Who are you? Student or Company?">
                       <Option value="student"><SmileOutlined /> Student</Option>
                       <Option value="company"><ShopOutlined /> Company</Option>
                     </Select>

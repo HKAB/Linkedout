@@ -23,7 +23,7 @@ function Profile(props) {
     else
       profileRender = (<ProfileTabCompany />);
     return (
-      <Layout>
+      <Layout style={{minHeight: "100vh"}}>
         <MyHeader />
         <Layout>
           {profileRender}
