@@ -155,7 +155,7 @@ function ProfileEdit() {
       )
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
-        message.success({ title: "\^o^/", content: "Cập nhật thông tin cơ bản!" });
+        message.success({ title: "\^o^/", content: "Updated basic information!" });
       })
       .catch((error) => {
         console.log(error);
@@ -170,7 +170,7 @@ function ProfileEdit() {
           )
           .then(() => {
             companyServices.getCompany(accountServices.userValue.account.id);
-            message.success({ title: "\^o^/", content: "Thêm số điện thoại!" });
+            message.success({ title: "\^o^/", content: "Added phoneNumber!" });
           })
           .catch((error) => {
             console.log(error);
@@ -185,7 +185,7 @@ function ProfileEdit() {
           )
           .then(() => {
             companyServices.getCompany(accountServices.userValue.account.id);
-            message.success({ title: "\^o^/", content: "Cập nhật số điện thoại!" });
+            message.success({ title: "\^o^/", content: "Updated phoneNumber!" });
           })
           .catch((error) => {
             console.log(error);
@@ -201,7 +201,7 @@ function ProfileEdit() {
             values.email,
           )
           .then(() => {
-            message.success({ title: "\^o^/", content: "Thêm email!" });
+            message.success({ title: "\^o^/", content: "Added  Email!" });
           })
           .catch((error) => {
             console.log(error);
@@ -215,7 +215,7 @@ function ProfileEdit() {
             values.email,
           )
           .then(() => {
-            message.success({ title: "\^o^/", content: "Cập nhật email!" });
+            message.success({ title: "\^o^/", content: "Updated email!" });
           })
           .catch((error) => {
             console.log(error);
@@ -243,8 +243,8 @@ function ProfileEdit() {
   return (
     <Card style={{ marginTop: "10vh", minHeight: "60vh" }}>
       <Tabs tabPosition="left" style={{ marginLeft: 24 }}>
-        <TabPane tab="Thông tin tài khoản" key="1" style={{ marginTop: 20 }}>
-          <span style={{ fontWeight: "bold" }}>THÔNG TIN TÀI KHOẢN</span>
+        <TabPane tab="Account information" key="1" style={{ marginTop: 20 }}>
+          <span style={{ fontWeight: "bold" }}>ACCOUNT INFORMATION</span>
           <Row>
 
             <Col span={10} offset={4}>
@@ -364,7 +364,7 @@ function ProfileEdit() {
                       />
 
                       <Popconfirm
-                        title="Bạn có muốn xóa cái này?"
+                        title="Do you wanna delete this?"
                         onConfirm={() => onConfirmDeletePhone(item)}
                         okText="Yes"
                         cancelText="No">
@@ -462,7 +462,7 @@ function ProfileEdit() {
                       />
 
                       <Popconfirm
-                        title="Bạn có muốn xóa cái này?"
+                        title="Do you wanna delete this?"
                         onConfirm={() => onConfirmDeleteEmail(item)}
                         okText="Yes"
                         cancelText="No">

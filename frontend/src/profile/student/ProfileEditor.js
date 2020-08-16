@@ -95,7 +95,7 @@ function ProfileEditor() {
       editTags.getTags(),
     )
       .then(() => {
-        message.success({ title: "uWu", content: "Post đã được cập nhật !!" });
+        message.success({ title: "uWu", content: "Updated post !!" });
         if (selectedNewPostPicture.file) {
           let multipart_formdata = { 'file': selectedNewPostPicture.file, 'id': values.id };
           postServices.uploadPostPicture(multipart_formdata)
@@ -108,7 +108,7 @@ function ProfileEditor() {
                 .catch((error) => {
                   message.error(error);
                 })
-              message.success("Tải ảnh bìa cho job thành công!");
+              message.success("Upload cover photo successfully!");
             })
             .catch(error => {
               message.error(error);
@@ -141,7 +141,7 @@ function ProfileEditor() {
       .then((list_post) => {
 
         var id_new_post = list_post[list_post.length - 1].id;
-        message.success({ title: 'uWu', content: 'Tạo post thành công!!' });
+        message.success({ title: 'uWu', content: 'Create post successfully!!' });
         if (selectedNewPostPicture.file) {
           let multipart_formdata = { 'file': selectedNewPostPicture.file, 'id': id_new_post };
           postServices.uploadPostPicture(multipart_formdata)
@@ -154,7 +154,7 @@ function ProfileEditor() {
                 .catch((error) => {
                   message.error(error);
                 })
-              message.success("Tải ảnh bìa cho post thành công!");
+              message.success("Upload cover photo successfully!");
             })
             .catch(error => {
               message.error(error);
@@ -244,7 +244,7 @@ function ProfileEditor() {
           .catch((error) => {
             message.error(error);
           })
-        message.success({ title: "uWu", content: 'Đã xóa thành công bài Post của bạn!!' })
+        message.success({ title: "uWu", content: 'Delete post success!!' })
       })
       .catch((er) => {
         console.log(er);
@@ -268,7 +268,7 @@ function ProfileEditor() {
             style={{
               marginTop: 24,
             }}>
-            <Meta title={<Title level={3}>Bài Đăng</Title>}></Meta>
+            <Meta title={<Title level={3}>Post</Title>}></Meta>
             <List
               grid={{ gutter: 24, column: 2 }}
               dataSource={postData}
@@ -289,7 +289,7 @@ function ProfileEditor() {
                           <span>{item.title}</span>
                           <span>
                             <Popconfirm
-                              title="Bạn có muốn xóa cái này?"
+                              title="Do you wanna delete this?"
                               onConfirm={() => onConfirmDeletePost(item.id)}
                               okText="Yes"
                               cancelText="No">
@@ -314,7 +314,7 @@ function ProfileEditor() {
 
           <Modal
             // forceRender
-            title={<Title level={4}>Bài đăng</Title>}
+            title={<Title level={4}>Post</Title>}
             visible={postDetailVisible}
             onCancel={handlePostDetailCancel}
             footer={null}
@@ -327,17 +327,17 @@ function ProfileEditor() {
                   <Meta
                     title={<Title level={3}>{postDetail.title}</Title>}
                     description={<div>
-                      <Text underline>Ngày đăng {postDetail.published_date}</Text>
-                      <Title level={4}>Nội dung </Title>
+                      <Text underline>Published Date {postDetail.published_date}</Text>
+                      <Title level={4}>Content </Title>
                       <Paragraph>
                         {postDetail.content}
                       </Paragraph>
 
 
 
-                      <Title level={4}>Kỹ năng </Title>
+                      <Title level={4}>Skills </Title>
                       <Paragraph><List dataSource={postDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List></Paragraph>
-                      <Title level={4}>Những người quan tâm</Title>
+                      <Title level={4}>Account interested</Title>
                       <Paragraph><List dataSource={postDetail.account_interested} renderItem={account => (<Tooltip title={account.firstname + " " + account.lastname}><Avatar src={Config.backendUrl + account.profile_picture}></Avatar></Tooltip>)}></List></Paragraph>
                     </div>}
                   />
@@ -348,7 +348,7 @@ function ProfileEditor() {
 
           <Modal
             forceRender
-            title="Tạo bài đăng"
+            title="Create Post"
             visible={createPostvisible}
             onCancel={handleCreatePostCancel}
             onOk={() => {
@@ -392,7 +392,7 @@ function ProfileEditor() {
                 <EditableTagGroup ref={ref => (createTags = ref)} />
               </Form.Item>
 
-              <Form.Item label="Ảnh bìa">
+              <Form.Item label="Cover Photo">
                 <UploadableAvatar ref={ref => (uploadableAvatarRefOnCreate = ref)} onUploadImage={onUploadPostPicture}></UploadableAvatar>
               </Form.Item>
             </Form>
@@ -400,7 +400,7 @@ function ProfileEditor() {
 
           <Modal
             forceRender
-            title="Chỉnh sửa bài đăng"
+            title="Edit Post"
             visible={editPostvisible}
             onCancel={handleEditPostCancel}
             onOk={() => {
@@ -452,7 +452,7 @@ function ProfileEditor() {
                 <EditableTagGroup ref={ref => (editTags = ref)} />
               </Form.Item>
 
-              <Form.Item label="Ảnh bìa">
+              <Form.Item label="Cover Photo">
                 <UploadableAvatar ref={ref => (uploadableAvatarRefOnEdit = ref)} onUploadImage={onUploadPostPicture}></UploadableAvatar>
               </Form.Item>
             </Form>

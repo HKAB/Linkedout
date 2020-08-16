@@ -101,7 +101,7 @@ function ProfileContent(props) {
       })
         .catch(() => {
           setIsLoading(true);
-          message.error("Xin hãy nhập thông tin cơ bản trước!")
+          message.error("Please enter basic information!")
           history.push("/create-profile")
         });
       const subscription = companyServices.companyObject.subscribe((company) => {
@@ -192,7 +192,7 @@ function ProfileContent(props) {
           style={{
             marginTop: 24,
           }}>
-          <Meta title={<Title level={3}>Mô tả</Title>}></Meta>
+          <Meta title={<Title level={3}>Description</Title>}></Meta>
           {/* <div style={{ marginTop: 16 }}>{basicProfileData.description}</div> */}
           <div style={{ marginTop: 16, overflowWrap: 'break-word', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: basicProfileData.description }}></div>
           {/* <span styles={{marginTop: 100}}>{data.description}</span> */}
@@ -204,9 +204,9 @@ function ProfileContent(props) {
             marginTop: 24,
           }}>
           <Row>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Yêu cầu {leftChartData.name}</Title></Col>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Mức độ tuyển dụng</Title></Col>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Đang theo dõi</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Skill {leftChartData.name}</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Seniority level</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Followers</Title></Col>
           </Row>
           <Row justify="center" align="middle">
             <Col span={8} style={{ textAlign: "center" }}>
@@ -237,7 +237,7 @@ function ProfileContent(props) {
             marginTop: 24,
             padding: 24
           }}>
-          <Meta title={<Title level={3}>Việc làm</Title>}></Meta>
+          <Meta title={<Title level={3}>Job</Title>}></Meta>
           <List
             pagination={{pageSize: 4}}
             grid={{ gutter: 24, column: 2 }}
@@ -254,9 +254,9 @@ function ProfileContent(props) {
                     avatar={<Avatar src={protest}></Avatar>}
                     title={item.title}
                     description={<Space direction="vertical" size={3}>
-                      <div>Mức độ: {item.seniority_level}</div>
-                      <div>Địa điểm: {item.cities.join(', ')}</div>
-                      <div>Công việc: {item.employment_type}</div>
+                      <div>Seniority Level: {item.seniority_level}</div>
+                      <div>Cities: {item.cities.join(', ')}</div>
+                      <div>Employment type: {item.employment_type}</div>
                       <List dataSource={item.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
                     </Space>}
                   />
@@ -268,7 +268,7 @@ function ProfileContent(props) {
 
         <Modal
           forceRender
-          title="Việc làm"
+          title="Job"
           visible={jobDetailVisible}
           onCancel={handleJobDetailCancel}
           footer={null}
@@ -279,12 +279,12 @@ function ProfileContent(props) {
                 avatar={<Avatar src={protest}></Avatar>}
                 title={jobDetail.title}
                 description={<Space direction="vertical" size={3}>
-                  <div>Yêu cầu: {jobDetail.seniority_level}</div>
-                  <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
-                  <div>Công việc: {jobDetail.employment_type}</div>
-                  <div>Mô tả: {jobDetail.description}</div>
+                  <div>Seniority Level: {jobDetail.seniority_level}</div>
+                  <div>Cities: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
+                  <div>Employment type: {jobDetail.employment_type}</div>
+                  <div>Description: {jobDetail.description}</div>
                   <div style={{ display: 'flex' }}>
-                    <div>Kỹ năng: </div>
+                    <div>Skills: </div>
                     <List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
                   </div>
                 </Space>}

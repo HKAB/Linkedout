@@ -102,7 +102,7 @@ function ProfileContent(props) {
         })
         .catch(() => {
           setIsLoading(true);
-          message.error("Xin hãy nhập thông tin cơ bản trước!")
+          message.error("Plz enter basic information!")
           history.push("/create-profile");
         });
 
@@ -181,7 +181,7 @@ function ProfileContent(props) {
       <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
         <Col span={12}>
           <Card className="card-info">
-            <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
+            <Meta title={<Title level={3}>Educations</Title>}></Meta>
             <Timeline style={{ marginTop: 24, paddingTop: 16 }} mode="left">
               {educationElement.slice(0, 4)}
             </Timeline>
@@ -193,7 +193,7 @@ function ProfileContent(props) {
           </Card>
 
           <Card className="card-info" style={{ marginTop: 24 }}>
-            <Meta title={<Title level={3}>Theo dõi</Title>}></Meta>
+            <Meta title={<Title level={3}>Following</Title>}></Meta>
             <List
               itemLayout="vertical"
               style={{ marginTop: 24 }} grid={{ column: 2 }}
@@ -221,7 +221,7 @@ function ProfileContent(props) {
 
         <Col span={12}>
           <Card className="card-info">
-            <Meta title={<Title level={3}>Kinh nghiệm</Title>}></Meta>
+            <Meta title={<Title level={3}>Experiences</Title>}></Meta>
             <List
               itemLayout="vertical"
               style={{ marginTop: 24 }}
@@ -247,7 +247,7 @@ function ProfileContent(props) {
           </Card>
 
           <Card className="card-info" style={{ marginTop: 24 }}>
-            <Meta title={<Title level={3}>Kỹ năng</Title>}></Meta>
+            <Meta title={<Title level={3}>Skills</Title>}></Meta>
             <List style={{ marginTop: 24 }} grid={{ column: 2 }}
               dataSource={skillData.slice(0, 6)}
               renderItem={item => (

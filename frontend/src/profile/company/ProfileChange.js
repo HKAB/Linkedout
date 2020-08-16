@@ -170,14 +170,14 @@ function ProfileChange() {
           let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': id_new_job };
           jobServices.uploadJobPicture(multipart_formdata)
             .then(() => {
-              message.success("Tải ảnh bìa cho job thành công!");
+              message.success("Updated cover photo!");
             })
             .catch(error => {
               message.error(error);
             });
         }
         companyServices.getCompany(accountServices.userValue.account.id);
-        message.success("Tạo việc làm thành công!");
+        message.success("Create job successfully!");
         handleCreateJobCancel();
       })
       .catch((error) => {
@@ -204,7 +204,7 @@ function ProfileChange() {
           let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': values.id };
           jobServices.uploadJobPicture(multipart_formdata)
             .then(() => {
-              message.success("Tải ảnh bìa cho job thành công!");
+              message.success("Update cover photo for a job successfully!");
             })
             .catch(error => {
               message.error(error);
@@ -212,11 +212,11 @@ function ProfileChange() {
         }
 
         companyServices.getCompany(accountServices.userValue.account.id);
-        message.success("Việc làm đã được cập nhật!");
+        message.success("Job has been updated!");
         handleEditJobCancel();
       })
       .catch((error) => {
-        message.success("Lỗi cập nhật việc làm");
+        message.success("Job update error");
         handleEditJobCancel();
       });
 
@@ -227,7 +227,7 @@ function ProfileChange() {
     jobServices.deleteJob(id)
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
-        message.success({ title: "uWu", content: "Việc làm đã được xóa" });
+        message.success({ title: "uWu", content: "The job has been deleted" });
 
       })
       .catch((error) => {
@@ -287,7 +287,7 @@ function ProfileChange() {
       )
       .then(() => {
         companyServices.getCompany(accountServices.userValue.account.id);
-        message.success('Cập nhật specialty!');
+        message.success('Update specialty!');
       })
       .catch((error) => {
         console.log(error);
@@ -388,9 +388,9 @@ function ProfileChange() {
   );
   return (
     <>
-      <Card className="card-info" style={{ marginTop: 24 }} title={<Title level={3}>Mô tả</Title>}>
+      <Card className="card-info" style={{ marginTop: 24 }} title={<Title level={3}>Description</Title>}>
         <MyEditor ref={ref => (editorRef = ref)} descriptionData={editorDescription}></MyEditor>
-        <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Lưu</Button>
+        <Button type="primary" htmlType="submit" onClick={() => onEditorFinish()}>Save</Button>
       </Card>
 
       <Card
@@ -398,7 +398,7 @@ function ProfileChange() {
         style={{
           marginTop: 24,
         }}>
-        <Meta title={<Title level={3}>Việc làm</Title>}></Meta>
+        <Meta title={<Title level={3}>Job</Title>}></Meta>
         <List
           pagination={{pageSize: 4}}
           grid={{ gutter: 24, column: 2 }}
@@ -419,7 +419,7 @@ function ProfileChange() {
                       <span>{item.title}</span>
                       <span>
                         <Popconfirm
-                          title="Bạn có muốn xóa cái này?"
+                          title="Do you wanna delete this?"
                           onConfirm={() => onConfirmDeleteJob(item.id)}
                           okText="Yes"
                           cancelText="No">
@@ -429,9 +429,9 @@ function ProfileChange() {
                     </span>
                   }
                   description={<Space direction="vertical" size={3}>
-                    <div>Yêu cầu: {item.seniority_level}</div>
-                    <div>Địa điểm: {item.cities[0]}</div>
-                    <div>Công việc: {item.employment_type}</div>
+                    <div>Seniority Level: {item.seniority_level}</div>
+                    <div>City: {item.cities[0]}</div>
+                    <div>Job Type: {item.employment_type}</div>
                     <List dataSource={item.skills} renderItem={skill => (<Tag style={{ margin: 3 }}>{skill}</Tag>)}></List>
                   </Space>}
                 />
@@ -444,7 +444,7 @@ function ProfileChange() {
 
       <Modal
         forceRender
-        title={<Title level={4}>Việc làm</Title>}
+        title={<Title level={4}>Job</Title>}
         visible={jobDetailVisible}
         onCancel={handleJobDetailCancel}
         footer={null}
@@ -458,19 +458,19 @@ function ProfileChange() {
                     title={<Title level={3}>{jobDetail.title}</Title>}
                     description={<div>
 
-                      <Title level={4}>Yêu cầu </Title>
+                      <Title level={4}>Seniority Level </Title>
                       <Paragraph>{jobDetail.seniority_level}</Paragraph>
-                      <Title level={4}>Địa điểm </Title>
+                      <Title level={4}>City </Title>
                       <Paragraph><Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></Paragraph>
-                      <Title level={4}>Công việc </Title>
+                      <Title level={4}>Employee Type </Title>
                       <Paragraph>{jobDetail.employment_type}</Paragraph>
 
-                      <Title level={4}>Mô tả </Title>
+                      <Title level={4}>Description </Title>
                       <Paragraph>
                         {jobDetail.description}
                       </Paragraph>
 
-                      <Title level={4}>Kỹ năng</Title>
+                      <Title level={4}>Skills </Title>
                       <Paragraph><List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List></Paragraph>
                     </div>}
                   />
@@ -481,7 +481,7 @@ function ProfileChange() {
 
       <Modal
         forceRender
-        title="Tạo việc làm"
+        title="Create job"
         visible={createJob_visible}
         onCancel={handleCreateJobCancel}
         onOk={() => {
@@ -566,7 +566,7 @@ function ProfileChange() {
             <EditableTagGroup ref={ref => (createTags = ref)} />
           </Form.Item>
 
-          <Form.Item label="Ảnh bìa">
+          <Form.Item label="Cover photo">
             <UploadableAvatar onUploadImage={onUploadJobPicture}></UploadableAvatar>
           </Form.Item>
         </Form>
@@ -574,7 +574,7 @@ function ProfileChange() {
 
       <Modal
         forceRender
-        title="Chỉnh sửa việc làm"
+        title="Edit job"
         visible={editJob_visible}
         onCancel={handleEditJobCancel}
         onOk={() => {
@@ -608,7 +608,7 @@ function ProfileChange() {
 
           <Form.Item
             initialValue="seniority_level"
-            label="Yêu cầu:"
+            label="Seniority level:"
             name="seniority_level"
             rules={[{ required: true, message: "Seniority level is required!" }]}
           >
@@ -621,7 +621,7 @@ function ProfileChange() {
 
           <Form.Item
             initialValue="city"
-            label="Địa điểm:"
+            label="Cities:"
             name="cities"
             rules={[{ required: true, message: "City is required!" }]}
           >
@@ -630,7 +630,7 @@ function ProfileChange() {
 
           <Form.Item
             initialValue="employee_type"
-            label="Công việc:"
+            label="Employee type:"
             name="employee_type"
             rules={[{ required: true, message: "Employee type is required!" }]}
           >
@@ -670,7 +670,7 @@ function ProfileChange() {
             <EditableTagGroup ref={ref => (editTags = ref)} />
           </Form.Item>
 
-          <Form.Item label="Ảnh bìa">
+          <Form.Item label="Cover photo">
             <UploadableAvatar ref={ref => (uploadableAvatarRef = ref)} onUploadImage={onUploadJobPicture}></UploadableAvatar>
           </Form.Item>
         </Form>
@@ -679,7 +679,7 @@ function ProfileChange() {
       <Row gutter={16}>
         <Col span={12}>
           <Card style={{ marginTop: 24 }}>
-            <Meta title={<Title level={3}>Chuyên môn</Title>}></Meta>
+            <Meta title={<Title level={3}>Specialties</Title>}></Meta>
             <List
               style={{ marginTop: 24 }}
               grid={{ column: 2 }}
@@ -689,7 +689,7 @@ function ProfileChange() {
                   <List.Item.Meta
                     avatar={
                       <Popconfirm
-                        title="Bạn có muốn xóa cái này?"
+                        title="Do you wanna delete this?"
                         onConfirm={() => onConfirmDeleteSpeciality(item)}
                         okText="Yes"
                         cancelText="No">
@@ -734,7 +734,7 @@ function ProfileChange() {
                               rules={[{ required: true, message: "Missing speciality" },]}
                             >
                               {/* <Input /> */}
-                              <AutoComplete options={autoCompleteSpeciality} onChange={onChangeAutoCompleteSpeciality} placeholder="Chuyên môn công ty" ></AutoComplete>
+                              <AutoComplete options={autoCompleteSpeciality} onChange={onChangeAutoCompleteSpeciality} placeholder="Speciality" ></AutoComplete>
                             </Form.Item>
                           </Col>
                           <Form.Item>
@@ -770,7 +770,7 @@ function ProfileChange() {
         </Col>
         <Col span={12}>
           <Card className="card-info" style={{ marginTop: 24 }}>
-            <Meta title={<Title level={3}>Ảnh bìa <Tooltip title="Feature sắp có"><Badge status="processing" /></Tooltip></Title>}></Meta>
+            <Meta title={<Title level={3}>Cover Photo <Tooltip title="Feature sắp có"><Badge status="processing" /></Tooltip></Title>}></Meta>
             <Upload
               //action ???
               listType="picture-card"

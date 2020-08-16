@@ -104,7 +104,7 @@ function ProfileEdit() {
     )
       .then(() => {
         studentServices.getStudent(accountServices.userValue.account.id);
-        message.success({ title: "uWu", content: "Cập nhật thông tin cơ bản!" });
+        message.success({ title: "uWu", content: "Updated basic information!" });
       })
       .catch((error) => {
         console.log(error);
@@ -118,7 +118,7 @@ function ProfileEdit() {
         )
           .then(() => {
             studentServices.getStudent(accountServices.userValue.account.id);
-            message.success({ title: "uWu", content: "Cập nhật số điện thoại!" });
+            message.success({ title: "uWu", content: "Updated phone number!" });
           })
           .catch((error) => {
             console.log(error);
@@ -133,7 +133,7 @@ function ProfileEdit() {
           )
           .then(() => {
             studentServices.getStudent(accountServices.userValue.account.id);
-            message.success({ title: "uWu", content: "Thêm số điện thoại!" });
+            message.success({ title: "uWu", content: "Added phone number!" });
           })
           .catch((error) => {
             console.log(error);
@@ -149,7 +149,7 @@ function ProfileEdit() {
           values.email,
         )
         .then(() => {
-          message.success({ title: "\^o^/", content: "Cập nhật email!" });
+          message.success({ title: "\^o^/", content: "Updated email!" });
         })
         .catch((error) => {
           console.log(error);
@@ -187,8 +187,8 @@ function ProfileEdit() {
   return (
     <Card style={{ marginTop: "10vh", minHeight: "60vh" }}>
       <Tabs tabPosition="left" style={{ marginLeft: 24 }}>
-        <TabPane tab="Thông tin tài khoản" key="1" style={{ marginTop: 20 }}>
-          <span style={{ fontWeight: "bold" }}>THÔNG TIN TÀI KHOẢN</span>
+        <TabPane tab="Account information" key="1" style={{ marginTop: 20 }}>
+          <span style={{ fontWeight: "bold" }}>ACCOUNT INFORMATION</span>
           <Row>
 
             <Col span={10} offset={4}>
@@ -217,12 +217,12 @@ function ProfileEdit() {
                   <Input></Input>
                 </Form.Item>
 
-                <span>Giới tính </span>
+                <span>Gender</span>
                 <Form.Item name="gender" >
                   <Select style={{ width: "100%" }}>
-                    <Option value="Male">Nam</Option>
-                    <Option value="Female">Nữ</Option>
-                    <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+                    <Option value="Male">Male</Option>
+                    <Option value="Female">Female</Option>
+                    <Option value="Secret">Other</Option>
                   </Select>
                 </Form.Item>
 
@@ -246,7 +246,7 @@ function ProfileEdit() {
                   <Input />
                 </Form.Item>
 
-                <Button type="primary" htmlType="submit">Lưu</Button>
+                <Button type="primary" htmlType="submit">Save</Button>
               </Form>
             </Col>
             <Col span={10} style={{ textAlign: "center" }}>
@@ -266,41 +266,41 @@ function ProfileEdit() {
           </Row>
 
         </TabPane>
-        <TabPane tab="Đổi mật khẩu" key="3" style={{ marginTop: 20 }}   >
-          <span style={{ fontWeight: "bold" }}>Đổi mật khẩu</span>
+        <TabPane tab="Change Password" key="3" style={{ marginTop: 20 }}   >
+          <span style={{ fontWeight: "bold" }}>CHANGE PASSWORD</span>
           <Row>
             <Col span={10} offset={4}>
               <Form
                 onFinish={onFinishChangePass}
                 style={{ marginTop: 32 }} >
-                <span>Mật khẩu cũ</span>
-                <Form.Item name="oldPass" rules={[{ required: true, message: 'Đừng để trống' }]}>
-                  <Input.Password placeholder="Nhập mật khẩu cũ"  ></Input.Password>
+                <span>Old Password</span>
+                <Form.Item name="oldPass" rules={[{ required: true, message: "Can't be blank" }]}>
+                  <Input.Password placeholder="Old Password"  ></Input.Password>
                 </Form.Item>
 
-                <span>Mật khẩu mới</span>
-                <Form.Item name="newPass" rules={[{ required: true, message: 'Đừng để trống' }]}>
-                  <Input.Password placeholder="Nhập mật khẩu mới"  ></Input.Password>
+                <span>New Password</span>
+                <Form.Item name="newPass" rules={[{ required: true, message: "Can't be blank" }]}>
+                  <Input.Password placeholder="New Password"  ></Input.Password>
                 </Form.Item>
 
-                <span>Nhập lại mật khẩu cũ</span>
-                <Form.Item name="confPass" rules={[{ required: true, message: 'Đừng để trống' }]}>
-                  <Input.Password placeholder="Nhập lại mật khẩu mới" ></Input.Password>
+                <span>Confirm Password</span>
+                <Form.Item name="confPass" rules={[{ required: true, message: "Can't be blank" }]}>
+                  <Input.Password placeholder="Confirm password" ></Input.Password>
                 </Form.Item>
 
                 <Space>
-                  <Button type="primary" htmlType="submit" >Lưu</Button>
+                  <Button type="primary" htmlType="submit" >Save</Button>
                 </Space>
               </Form>
             </Col>
             <Col span={10}></Col>
           </Row>
         </TabPane>
-        <TabPane tab="Cài đặt" key="2" style={{ marginTop: 20 }}>
-          <span style={{ fontWeight: "bold" }}>Cài đặt</span>
+        <TabPane tab="Settings" key="2" style={{ marginTop: 20 }}>
+          <span style={{ fontWeight: "bold" }}>SETTINGS</span>
           <Row style={{ marginTop: 56 }}>
             <Col span={20} offset={4}>
-              <span>Thông báo</span>
+              <span>Notification</span>
               <Switch style={{ position: 'absolute', right: 64 }} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={changeDisabled} />
             </Col>
           </Row>

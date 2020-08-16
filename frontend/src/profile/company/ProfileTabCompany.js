@@ -12,7 +12,7 @@ class ProfileTabCompany extends Component {
   }
   changeTabButton = (
     <Space direction="vertical" style={{ position: "fixed" }}>
-      <Tooltip placement="right" title={"Profile nè"}>
+      <Tooltip placement="right" title={"Profile"}>
         <Button
           style={{ boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56 }}
           shape="circle-outline"
@@ -23,7 +23,7 @@ class ProfileTabCompany extends Component {
           }}
         />
       </Tooltip>
-      <Tooltip placement="right" title={"Thông tin tài khoản nè"}>
+      <Tooltip placement="right" title={"Account information"}>
         <Button
           style={{ boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56 }}
           shape="circle-outline"
@@ -34,7 +34,7 @@ class ProfileTabCompany extends Component {
           }}
         />
       </Tooltip>
-      <Tooltip placement="right" title={"Thông tin CV nè"}>
+      <Tooltip placement="right" title={"CV information"}>
         <Button
           style={{ boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.4)", width: 56, height: 56 }}
           shape="circle-outline"

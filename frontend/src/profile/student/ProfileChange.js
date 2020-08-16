@@ -284,7 +284,7 @@ function ProfileChange() {
               <div>{"Degree: " + item.degree}</div>
               <div>{"Major: " + item.major}</div>
               <Popconfirm
-                title="Bạn có muốn xóa cái này?"
+                title="Do you wanna delete this?"
                 onConfirm={() => onConfirmDeleteEducation(item.id)}
                 okText="Yes"
                 cancelText="No"
@@ -312,7 +312,7 @@ function ProfileChange() {
 
       <Modal
         forceRender
-        title="Đổi thông tin"
+        title=" "
         visible={visible}
         onCancel={handleCancel}
         onOk={() => {
@@ -379,7 +379,7 @@ function ProfileChange() {
       </Modal>
 
       <Card className="card-info" style={{ marginTop: 24 }}>
-        <Meta title={<Title level={3}>Kinh nghiệm</Title>}></Meta>
+        <Meta title={<Title level={3}>Experiences</Title>}></Meta>
         <List >
           <Checkbox
             onChange={e => {
@@ -488,7 +488,7 @@ function ProfileChange() {
                             fieldKey={[field.fieldKey, "company_name"]}
                             rules={[{ required: true, message: "Missing company name", }]}
                           >
-                            <AutoComplete style={{ width: '100%' }} options={autoCompleteCompany} onChange={onChangeAutocompleteCompany} placeholder="Tên công ty" ></AutoComplete>
+                            <AutoComplete style={{ width: '100%' }} options={autoCompleteCompany} onChange={onChangeAutocompleteCompany} placeholder="Company Name" ></AutoComplete>
                           </Form.Item>
                         </Col>
                         <Col span={5}>
@@ -568,7 +568,7 @@ function ProfileChange() {
       </Card>
 
       <Card className="card-info" style={{ marginTop: 24 }}>
-        <Meta title={<Title level={3}>Học vấn</Title>}></Meta>
+        <Meta title={<Title level={3}>Educations</Title>}></Meta>
 
         <Timeline mode="left" style={{ marginTop: 24 }}>
           {educationElement}
@@ -601,7 +601,7 @@ function ProfileChange() {
                           rules={[{ required: true, message: "Missing school name" },]}
                         >
                           {/* <Input placeholder="School Name" /> */}
-                          <AutoComplete style={{ width: '100%' }} options={autoCompleteSchool} onChange={onChangeAutocompleteSchool} placeholder="Tên trường" ></AutoComplete>
+                          <AutoComplete style={{ width: '100%' }} options={autoCompleteSchool} onChange={onChangeAutocompleteSchool} placeholder="Education Name" ></AutoComplete>
                         </Form.Item>
                       </Col>
                       <Col span={5}>
@@ -677,7 +677,7 @@ function ProfileChange() {
         </Form>
       </Card>
       <Card className="card-info" style={{ marginTop: 24 }}>
-        <Meta title={<Title level={3}>Kỹ năng</Title>}></Meta>
+        <Meta title={<Title level={3}>Skills</Title>}></Meta>
         <List
           style={{ marginTop: 24 }}
           grid={{ column: 2 }}
@@ -687,7 +687,7 @@ function ProfileChange() {
               <List.Item.Meta
                 avatar={
                   <Popconfirm
-                    title="Bạn có muốn xóa cái này?"
+                    title="Do you wanna delete this?"
                     onConfirm={() => onConfirmDeleteSkill(item)}
                     okText="Yes"
                     cancelText="No">
@@ -733,7 +733,7 @@ function ProfileChange() {
                         rules={[{ required: true, message: "Missing skill name" },]}
                       >
                         {/* <Input placeholder="Skill Name" /> */}
-                        <AutoComplete style={{ width: 100 }} options={autoCompleteSkill} onChange={onChangeAutocompleteSkill} placeholder="Tên kỹ năng" ></AutoComplete>
+                        <AutoComplete style={{ width: 100 }} options={autoCompleteSkill} onChange={onChangeAutocompleteSkill} placeholder="Skill Name" ></AutoComplete>
 
                       </Form.Item>
 

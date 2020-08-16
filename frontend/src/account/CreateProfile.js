@@ -15,7 +15,7 @@ function CreateProfile({ history }) {
       if (user.account.account_type == "student") {
         studentServices.createBasicStudent(values.firstname, values.lastname, values.dateofbirth.format("YYYY-MM-DD"), values.description, values.gender).then() // quick fix
           .then(() => {
-            message.success("Tạo tài khoản thành công!")
+            message.success("Create successfully!")
             history.push("/profile")
           })
           .catch(error => {
@@ -68,28 +68,28 @@ function CreateProfile({ history }) {
 
   const formStudent = (
     <Form onFinish={onCreateBasicStudentFinish} className="create-basic-student-form">
-      <Form.Item name="firstname" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <Input size="large" placeholder="Họ"></Input>
+      <Form.Item name="firstname" rules={[{ required: true, message: "Can't be blank" }]}>
+        <Input size="large" placeholder="First Name"></Input>
       </Form.Item>
 
-      <Form.Item name="lastname" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <Input size="large" placeholder="Tên"></Input>
+      <Form.Item name="lastname" rules={[{ required: true, message: "Can't be blank" }]}>
+        <Input size="large" placeholder="Last Name"></Input>
       </Form.Item>
 
-      <Form.Item name="dateofbirth" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <DatePicker style={{ width: "100%" }} picker="date" size="large" placeholder="Sinh nhật bạn" />
+      <Form.Item name="dateofbirth" rules={[{ required: true, message: "Can't be blank" }]}>
+        <DatePicker style={{ width: "100%" }} picker="date" size="large" placeholder="Date of birth" />
       </Form.Item>
 
-      <Form.Item name="gender" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <Select placeholder="Giới tính" style={{ width: "100%" }}>
-          <Option value="Male">Nam</Option>
-          <Option value="Female">Nữ</Option>
-          <Option value="Secret">Ơ đằng kia có gì kìa</Option>
+      <Form.Item name="gender" rules={[{ required: true, message: "Can't be blank" }]}>
+        <Select placeholder="Gender" style={{ width: "100%" }}>
+          <Option value="Male">Male</Option>
+          <Option value="Female">Female</Option>
+          <Option value="Secret">Other</Option>
         </Select>
       </Form.Item>
 
-      <Form.Item name="description" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <Input size="large" placeholder="Miêu tả về bạn"></Input>
+      <Form.Item name="description" rules={[{ required: true, message: "Can't be blank" }]}>
+        <Input size="large" placeholder="Description"></Input>
       </Form.Item>
 
       <Form.Item style={{ textAlign: "center" }}>
@@ -100,21 +100,21 @@ function CreateProfile({ history }) {
 
   const formCompany = (
     <Form onFinish={onCreateBasicCompanyFinish} className="create-basic-company-form">
-      <Form.Item name="name" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <Input size="large" placeholder="Tên công ty"></Input>
+      <Form.Item name="name" rules={[{ required: true, message: "Can't be blank" }]}>
+        <Input size="large" placeholder="Company Name"></Input>
       </Form.Item>
 
-      <Form.Item name="website" rules={[{ required: true, message: 'Đừng để trống' }]}>
+      <Form.Item name="website" rules={[{ required: true, message: "Can't be blank" }]}>
         <Input size="large" placeholder="Website"></Input>
       </Form.Item>
 
-      <Form.Item name="specialities" rules={[{ required: true, message: 'Đừng để trống' }]}>
+      <Form.Item name="specialities" rules={[{ required: true, message: "Can't be blank" }]}>
         {/* <Input size="large" placeholder="Chuyên môn công ty"></Input> */}
-        <AutoComplete size="large" options={autoCompleteSpeciality} onChange={onChange} placeholder="Chuyên môn chính của công ty" ></AutoComplete>
+        <AutoComplete size="large" options={autoCompleteSpeciality} onChange={onChange} placeholder="Specialities" ></AutoComplete>
       </Form.Item>
 
-      <Form.Item name="description" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <Input size="large" placeholder="Miêu tả ngắn về công ty bạn"></Input>
+      <Form.Item name="description" rules={[{ required: true, message: "Can't be blank" }]}>
+        <Input size="large" placeholder="Description"></Input>
       </Form.Item>
 
       <Form.Item style={{ textAlign: "center" }}>

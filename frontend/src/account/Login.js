@@ -37,7 +37,7 @@ function Login({ history }) {
     else {
       accountServices.register(values.register_username, values.register_email, values.register_password, values.register_account_type).then()
         .then(() => {
-          Modal.success({ title: "uWu", content: "Register successfully!! Now gimme some infomation :)" });
+          Modal.success({ title: "uWu", content: "Register successfully!! Now give me some infomation :)" });
           accountServices.login(values.register_username, values.register_password)
             .then(() => {
               history.push("/create-profile");
@@ -60,15 +60,15 @@ function Login({ history }) {
         </Col>
         <Col span={5} offset={3}>
           <Card style={{ boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" }}>
-            <div align="center" className="logo"><img src={logo} width="64" height="64"></img></div>
-            <Title align="center">THĂM NGÀN NETWORK</Title>
+            <div align="center" className="logo"><img src={logo} width="144" height="64"></img></div>
+            {/* <Title align="center">LinkedOut</Title> */}
             <Tabs centered>
-              <TabPane key="1" tab={<span>Đăng nhập <LoginOutlined /></span>}>
+              <TabPane key="1" tab={<span>Login <LoginOutlined /></span>}>
                 <Form className="login-form" onFinish={onLoginFinish}>
-                  <Form.Item name="login_username" rules={[{ required: true, message: 'Đừng để trống' }]}>
+                  <Form.Item name="login_username" rules={[{ required: true, message: "Can't be blank" }]}>
                     <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"></Input>
                   </Form.Item>
-                  <Form.Item name="login_password" rules={[{ required: true, message: 'Đừng để trống' }]}>
+                  <Form.Item name="login_password" rules={[{ required: true, message: "Can't be blank" }]}>
                     <Input.Password
                       size="large"
                       prefix={<LockOutlined className="site-form-item-icon" />}
@@ -84,41 +84,41 @@ function Login({ history }) {
 
                   <Form.Item>
                     <Button shape="round" type="primary" htmlType="submit" className="login-form-button">
-                      Đăng nhập
+                      Submit
 		      				</Button>
                   </Form.Item>
                 </Form>
               </TabPane>
-              <TabPane key="2" tab={<span>Đăng ký <UserAddOutlined /></span>}>
+              <TabPane key="2" tab={<span>Register <UserAddOutlined /></span>}>
                 <Form className="register-form" onFinish={onRegisterFinish}>
-                  <Form.Item name="register_username" rules={[{ required: true, message: 'Đừng để trống' }]}>
+                  <Form.Item name="register_username" rules={[{ required: true, message: "Can't be blank" }]}>
                     <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"></Input>
                   </Form.Item>
-                  <Form.Item name="register_email" rules={[{ required: true, message: 'Đừng để trống' }]}>
+                  <Form.Item name="register_email" rules={[{ required: true, message: "Can't be blank" }]}>
                     <Input size="large" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email"></Input>
                   </Form.Item>
-                  <Form.Item name="register_account_type" rules={[{ required: true, message: 'Hãy chọn' }]}>
+                  <Form.Item name="register_account_type" rules={[{ required: true, message: "Select one"}]}>
                     <Select placeholder="Who are you? Student or Company?">
                       <Option value="student"><SmileOutlined /> Student</Option>
                       <Option value="company"><ShopOutlined /> Company</Option>
                     </Select>
                   </Form.Item>
-                  <Form.Item name="register_password" rules={[{ required: true, message: 'Đừng để trống' }]}>
+                  <Form.Item name="register_password" rules={[{ required: true, message: "Can't be blank" }]}>
                     <Input.Password
                       size="large"
                       prefix={<LockOutlined className="site-form-item-icon" />}
                       placeholder="Password"
                       iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}></Input.Password>
                   </Form.Item>
-                  <Form.Item name="register_repassword" rules={[{ required: true, message: 'Đừng để trống' }]}>
+                  <Form.Item name="register_repassword" rules={[{ required: true, message: "Can't be blank" }]}>
                     <Input size="large" type="password" prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Retype password"></Input>
                   </Form.Item>
                   <Form.Item name="license_agreement" valuePropName="checked" noStyle>
-                    <Checkbox>Với việc đăng ký, bạn đã chấp nhận mọi hậu quả sau khi đăng ký. List <a>hậu quả</a></Checkbox>
+                    <Checkbox>You agree to LinkedOut's Terms of Service, PrivacyPolicy. List <a>consequence</a></Checkbox>
                   </Form.Item>
                   <Form.Item style={{ paddingTop: 16 }}>
                     <Button shape="round" type="primary" htmlType="submit" className="register-form-button">
-                      Đăng ký
+                      Submit
 			      				</Button>
                   </Form.Item>
                 </Form>

@@ -81,7 +81,7 @@ function MySearch() {
 						</Select>
 						<Search
 							size="large"
-							placeholder="Nhập tên, để trống nếu tìm all"
+							placeholder="Import name, to blank if you find all"
 							style={{ width: "80%", borderRadius: 25}}
 							onSearch={onSearch}
 						></Search>
@@ -93,7 +93,7 @@ function MySearch() {
 					<Card
 					className="card-info"
 					 >
-						 <Meta title={ <Title level={4}>Kỹ năng</Title>}></Meta>
+						 <Meta title={ <Title level={4}>Skills</Title>}></Meta>
 						 <div style={{maxHeight: "200px",overflow: "auto"}}>
 							 <Checkbox.Group disabled={skillDisable} onChange={(checkedval) => {
 								 setSkillData(checkedval);
@@ -110,7 +110,7 @@ function MySearch() {
 					style={{marginTop: 16}}
 					className="card-info"
 						>
-							<Meta title={ <Title level={4}>Chuyên ngành</Title>}></Meta>
+							<Meta title={ <Title level={4}>Specialities</Title>}></Meta>
 							<div style={{maxHeight: "200px",overflow: "auto"}}>
 
 							<Checkbox.Group disabled={specialityDisable} onChange={(checkedval) => {
@@ -128,7 +128,7 @@ function MySearch() {
 				<Col span={14} offset={1}>
                 <Card style={{minHeight: "50vh"}} bordered={false}>
                     <List
-					locale={{emptyText: "Không có gì"}}
+					locale={{emptyText:"Empty"}}
 					pagination={{
 						pageSize: 10,
 					  }}
@@ -181,7 +181,7 @@ function MySearch() {
 														{item.description}
 													</Paragraph>
 													<List
-                                                        locale={{emptyText: "Không có gì"}}
+                                                        locale={{emptyText: "Empty"}}
 														dataSource={item.skills}
 														renderItem={(
 															skills
@@ -242,7 +242,7 @@ function MySearch() {
 														{item.description}
 													</Paragraph>
 													<List
-                                                        locale={{emptyText: "Không có gì"}}
+                                                        locale={{emptyText: "Empty"}}
 														dataSource={
 															item.specialties
 														}
@@ -380,7 +380,7 @@ function MySearch() {
                                     <Space>
                                       <HomeOutlined />
                                       <List
-                                        locale={{ emptyText: "Không có gì" }}
+                                        locale={{ emptyText: "Empty" }}
                                         grid={{
                                           gutter: 0,
                                         }}
@@ -402,7 +402,7 @@ function MySearch() {
                                   <Col span={19}>
                                     <Space>
                                       <List
-                                        locale={{ emptyText: "Không có gì" }}
+                                        locale={{ emptyText: "Empty" }}
                                         dataSource={
                                           item.skills
                                         }
@@ -500,7 +500,7 @@ function MySearch() {
                                   <Col span={19}>
                                     <Space>
                                       <List
-                                        locale={{ emptyText: "Không có gì" }}
+                                        locale={{ emptyText: "Empty" }}
                                         dataSource={
                                           item.skills
                                         }

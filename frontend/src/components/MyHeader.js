@@ -62,8 +62,8 @@ class MyHeader extends Component {
       <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
         {/* <div className="logo"> */}
         <Space>
-          <Link to="/"><img src={logo} width="48" height="48" style={{position:'relative', bottom:10}}></img></Link>
-          <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
+          <Link to="/"><img src={logo} width="144" height="48" style={{position:'absolute', top:8}}></img></Link>
+          {/* <Title level={2} style={{ position: 'relative', top: 4 }}>LinkedOut</Title> */}
         </Space>
         {/* <Space>
            

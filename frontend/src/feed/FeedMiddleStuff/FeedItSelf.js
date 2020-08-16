@@ -26,10 +26,10 @@ function FeedItSelf() {
   const addInterestedPost = (item) => {
     studentServices.createPostInterested(item.id)
       .then(() => {
-        message.success("Thêm vào interested post!");
+        message.success("Add to interested post!");
       })
       .catch(error => {
-        message.error("Lỗi gì đó, hay bạn đã interest rồi 🤨");
+        message.error("You added to interested post before!");
       });
   }
 
@@ -69,16 +69,16 @@ function FeedItSelf() {
       <Card>
         <Row style={{ textAlign: 'center' }}>
           <Col span={8} style={{ borderRight: '1px solid #ecf0f1' }}>
-            <Title level={4}>Giới thiệu việc</Title>
+            <Title level={4}>Job Introduction</Title>
             <div>{count.n_job}</div>
           </Col>
 
           <Col span={8} style={{ borderRight: '1px solid #ecf0f1' }}>
-            <Title level={4}>Tổng</Title>
+            <Title level={4}>Sum</Title>
             <div>{count.n_job + count.n_post}</div>
           </Col>
           <Col span={8}>
-            <Title level={4}>Tìm đồng đội</Title>
+            <Title level={4}>Find your partner</Title>
             <div>{count.n_post}</div>
           </Col>
         </Row>

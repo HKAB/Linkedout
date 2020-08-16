@@ -91,8 +91,8 @@ setShowFeatures(true);
     <Header style={{ backgroundColor: "white" }}>
       <Menu mode="horizontal" style={{ borderBottom: "0px" }}>
         <Space>
-          <Link to="/"><img src={logo} width="48" height="48"></img></Link>
-          <Title level={2} style={{ position: 'relative', top: 16 }}>Thăm ngàn Network</Title>
+          <Link to="/"><img src={logo} width="144" height="48" style={{position:'absolute',top:10}}></img></Link>
+          {/* <Title level={2} style={{ position: 'relative', top: 16 }}>LinkedOut</Title> */}
         </Space>
         <span style={{ float: "right" }}>
           {isLogin}
