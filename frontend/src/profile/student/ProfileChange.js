@@ -275,7 +275,6 @@ function ProfileChange() {
         }))
         setCheckList(odd => [...odd, { select: false, id: -1 }])
 
-
         student.education.forEach((item) => {
           timeline_element.push((
             <Timeline.Item key={item.id} label={item.start_date + " - " + item.end_date}>
@@ -300,7 +299,6 @@ function ProfileChange() {
         });
         setEducationElement(timeline_element);
       }
-
     });
 
     return () => {

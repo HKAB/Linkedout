@@ -2,8 +2,8 @@ import { fetchWrapper } from "helpers";
 import { BehaviorSubject } from 'rxjs';
 import { Config } from '../../config/consts';
 
-function getPostInterested() {
-    return fetchWrapper.get(Config.backendUrl + `/api/interest/post-interested`)
+function getPostInterested(id) {
+    return fetchWrapper.get(Config.backendUrl + `/api/interest/post-interested?id=${id}`);
 }
 
 function createPostInterested(id) {

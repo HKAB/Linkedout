@@ -9,7 +9,7 @@ import { createExperience, deleleExperience, getExperience, updateExperience } f
 import { getJobSuggestions } from './feed/feedJobSuggestion.service';
 import { getFollowSuggestions } from './feed/feedFollowSuggestion.service';
 import { getFeedPost } from './feed/feedPost.service';
-import { createPostInterested, getAccountInterestPost } from './student/interest.service'
+import { createPostInterested, getAccountInterestPost, getPostInterested } from './student/interest.service'
 const studentObject = new BehaviorSubject(null);
 
 function getStudent(id) {
@@ -218,6 +218,7 @@ export const studentServices = {
   getStudentFeedPost,
 
   createPostInterested,
+  getPostInterested,
   getAccountInterestPost,
 
   get studentValue() { return studentObject.value },

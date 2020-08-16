@@ -11,9 +11,9 @@ import {
   Tooltip, Typography
 } from 'antd';
 import moment from 'moment';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { studentServices } from "services";
+import { studentServices, accountServices } from "services";
 import { Config } from "../../config/consts";
 
 
@@ -35,7 +35,7 @@ function FeedItSelf() {
 
   const [posts, setPosts] = React.useState([]);
   const [count, setCount] = React.useState({ n_job: 0, n_post: 0 });
-
+  const [interested, setInterested] = useState([]);
   useEffect(() => {
     studentServices.getStudentFeedPost().then((posts) => {
       setPosts(posts);
@@ -50,6 +50,18 @@ function FeedItSelf() {
       });
       setCount({ n_job: n_job, n_post: n_post });
     });
+   
+      studentServices.getPostInterested(accountServices.userValue.account.id)
+      .then((values)=>{
+        let interested = values;
+        setInterested(interested.map(d=>{
+          return {id: d.id}
+        }))
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+
   }, [])
 
   return (
@@ -200,14 +212,17 @@ function FeedItSelf() {
                             </Space>
                           </Col>
                           <Col span={5}>
-                            <Button
+                             <Button
                               style={{ float: 'right' }}
                               type="primary"
                               shape="circle"
+                              disabled={interested.filter(e => e.id === item.id)[0] !== undefined?true: false}
                               onClick={() => addInterestedPost(item)}
                             >
                               <HeartFilled />
                             </Button>
+                           
+                            
                           </Col>
                         </Row>
                       </>
@@ -224,4 +239,3 @@ function FeedItSelf() {
 }
 
 export { FeedItSelf };
-
