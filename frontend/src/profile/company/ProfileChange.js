@@ -179,6 +179,7 @@ function ProfileChange() {
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success("Create job successfully!");
         handleCreateJobCancel();
+        formCreate.resetFields();
       })
       .catch((error) => {
         message.error(error);
@@ -216,8 +217,8 @@ function ProfileChange() {
         handleEditJobCancel();
       })
       .catch((error) => {
-        message.success("Job update error");
-        handleEditJobCancel();
+        message.success("Update job error");
+       // handleEditJobCancel();
       });
 
     setSelectedNewJobPicture("");
@@ -488,7 +489,7 @@ function ProfileChange() {
           formCreate.validateFields()
             .then(values => {
               onAddJobFinish(values);
-              formCreate.resetFields();
+              //formCreate.resetFields();
             })
             .catch(info => {
               console.log('Validate Failed:', info);

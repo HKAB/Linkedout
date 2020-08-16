@@ -464,7 +464,7 @@ function Home({ history }) {
                   marginTop: 64,
                 }}
               >
-                Skill Statistics
+                STATISTIC
 							</div>
 
               <Row>
@@ -529,7 +529,7 @@ function Home({ history }) {
               </Row>
               <Row >
                 <Col span={8} style={{textAlign: "center"}}><Title level={3}>Job</Title></Col>
-                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Recruitment</Title></Col>
+                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Post</Title></Col>
                 <Col span={8} style={{textAlign: "center"}}><Title level={3}>Student</Title></Col>
               </Row>
             </div>

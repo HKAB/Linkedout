@@ -1,11 +1,21 @@
 import { LogoutOutlined, UserOutlined , SendOutlined, CheckOutlined} from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Layout, Menu, Space, Spin, Typography , Modal} from 'antd';
+import { Avatar, Button, Dropdown, Layout, List, Tag, Menu, Space, Spin, Typography , Modal, Carousel, Badge, Tooltip} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
 import { Config } from '../config/consts';
 import logo from "./assets/images/logo.svg";
-import { List } from 'antd/lib/form/Form';
+import Meta from 'antd/lib/card/Meta';
+
+import bao from "./assets/images/contributor/B.jpg";
+import diu from "./assets/images/contributor/D.jpg";
+import xtruong from "./assets/images/contributor/XT.jpg";
+import ptruong from "./assets/images/contributor/PT.jpg";
+import ductung from "./assets/images/contributor/DT.jpg";
+import haitung from "./assets/images/contributor/HT.jpg";
+
+import django_logo from "./assets/images/framework/django.png";
+import react_logo from "./assets/images/framework/react.png";
 
 
 const { Title } = Typography;
@@ -18,6 +28,46 @@ const menu = (
     <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} onClick={accountServices.logout}><Link to="/"><LogoutOutlined /> Sign out</Link> </Menu.Item>
   </Menu>
 )
+
+const about_us = [
+  {
+    name: "Dịu",
+    role: "frontend",
+    avatar: diu,
+    tooltip_text: 'this dude kêu "học nhiều làm gì" trong khi sắp deadline'
+  },
+  {
+    name: "P.Trường",
+    role: "frontend",
+    avatar: ptruong,
+    tooltip_text: "this dude do some design shit"
+  },
+  {
+    name: "X.Trường",
+    role: "frontend",
+    avatar: xtruong,
+    tooltip_text: "this dude tự nhận thần CSS, javascript, react, django"
+  },
+  {
+    name: "Bảo",
+    role: "backend",
+    avatar: bao,
+    tooltip_text: "this dude do some backend work, không biết ทำงาน(aka thăm ngàn) là gì"
+  },
+  {
+    name: "Đ.Tùng",
+    role: "backend",
+    avatar: ductung,
+    tooltip_text: "this dude để frontend làm phần testing, design shit logo"
+  },
+  {
+    name: "H.Tùng",
+    role: "backend",
+    avatar: haitung,
+    tooltip_text: "this dude do some backend work, docker grafana prome@#$@"
+  }
+
+]
 
 function HomeHeader() {
   const user = accountServices.userValue;
@@ -102,10 +152,11 @@ setShowFeatures(true);
         <Menu.Item style={{ float: "right", fontFamily: "sans-serif", fontSize: 16 }} onClick={onShowWhyUs}>Why us?</Menu.Item>
       </Menu>
       <Modal 
+      closable={false}
        title={<Title level={4} style={{textAlign:'center'}}>Why Us</Title>}
        visible={showWhyUs}
-       onOk={handleOkWhyUs}
        onCancel={handleOkWhyUs}
+       footer={null}
        style={{fontFamily: "sans-serif"}}
       >
         <div style={{fontSize:20, marginRight: 24}}>
@@ -117,11 +168,12 @@ setShowFeatures(true);
         </div>
         
       </Modal>
-      <Modal 
+      <Modal
+      closable={false}
        title={<Title level={4} style={{textAlign:'center'}}>Features</Title>}
        visible={showFeatures}
-       onOk={handleOkFeatures}
        onCancel={handleOkFeatures}
+       footer={null}
        style={{fontFamily: "sans-serif"}}
       >
          <div style={{fontSize:20, marginRight: 24}}>
@@ -133,21 +185,33 @@ setShowFeatures(true);
         </div>
       </Modal>
       <Modal 
-       title={<Title level={4} style={{textAlign:'center'}}>About us</Title>}
-       visible={showAboutUs}
-       onOk={handleOkAboutUs}
-       onCancel={handleOkAboutUs}
-      >
-        <div style={{display:'grid', fontSize:20, marginRight: 24, marginBottom:20 }}>
-        <a style={{marginBottom: 20}}href="https://www.facebook.com/hkabpietaker"><Avatar src={'https://scontent.fhan8-1.fna.fbcdn.net/v/t1.0-9/95137030_2684415785121490_8173338840350588928_n.jpg?_nc_cat=105&_nc_sid=09cbfe&_nc_ohc=Qxf4KHXtmTsAX9RliUE&_nc_ht=scontent.fhan8-1.fna&oh=3a0ee033bd540c4011133df48b913dcf&oe=5F5D9420'}></Avatar> Nguyễn Phú Trường </a>
-        
-        <a style={{marginBottom: 20}} href="https://www.facebook.com/hoamayman.2910"><Avatar src={'https://scontent.fhan8-1.fna.fbcdn.net/v/t1.0-9/116907537_297717714776838_7062892457081446245_n.jpg?_nc_cat=100&_nc_sid=09cbfe&_nc_ohc=vtGHdPpckGYAX-0Y_O-&_nc_ht=scontent.fhan8-1.fna&oh=aa5e31657dd68f116764d10336e2615e&oe=5F5CDAD1'}></Avatar> Vũ Thị Dịu</a>
-        <a style={{marginBottom: 20}} href="https://www.facebook.com/tacbliw"><Avatar src={'https://scontent.fhan8-1.fna.fbcdn.net/v/t1.0-9/36522088_1300746486728496_8306472149237891072_o.jpg?_nc_cat=107&_nc_sid=09cbfe&_nc_ohc=NrZ2ZWbmpiAAX_YSDzY&_nc_ht=scontent.fhan8-1.fna&oh=c4268cde357cae19ec99832628358adb&oe=5F5CDB7A'}></Avatar> Lê Trần Hải Tùng</a>
-        <a style={{marginBottom: 20}} href="https://www.facebook.com/ultoxtung"><Avatar src={'https://scontent.fhan8-1.fna.fbcdn.net/v/t1.0-9/91080452_2805352593025333_8705038156459671552_o.jpg?_nc_cat=100&_nc_sid=09cbfe&_nc_ohc=STU7GCPGW0gAX-Qi3G8&_nc_ht=scontent.fhan8-1.fna&oh=2cbb5ca4dee18c10fe9ab3651a9c3afd&oe=5F5DB4B4'}></Avatar> Lê Đức Tùng</a>
-        <a style={{marginBottom: 20}} href="https://www.facebook.com/truong.nguyenxuan.58323431"><Avatar src={'https://1.bp.blogspot.com/-A7UYXuVWb_Q/XncdHaYbcOI/AAAAAAAAZhM/hYOevjRkrJEZhcXPnfP42nL3ZMu4PvIhgCLcBGAsYHQ/s1600/Trend-Avatar-Facebook%2B%25281%2529.jpg'}></Avatar> Nguyễn Xuân Trường</a>
-        <a style={{marginBottom: 20}} href="https://www.facebook.com/ThanhBao117"> <Avatar src={'https://dohoafx.com/wp-content/uploads/2014/07/geometric.jpg'}></Avatar>Nguyễn Thị Thanh Bảo</a>
-        
-      </div>
+      closable={false}
+      style={{minWidth: "600px"}}
+      visible={showAboutUs}
+      onCancel={handleOkAboutUs}
+      footer={null}>
+        <Title level={4}>Contributor ({about_us.length})</Title>
+          <List 
+          grid={{column: 3}}
+          dataSource={about_us}
+          renderItem={(item) => (
+            <List.Item>
+              <List.Item.Meta
+              avatar={<Tooltip title={item.tooltip_text}><Avatar size={64} src={item.avatar}></Avatar></Tooltip>}
+              title={<Title level={4}>{item.name}</Title>}
+              description={<Tag color={item.role=="frontend"?"#f50":"#108ee9"}>{item.role}</Tag>}
+              >
+
+              </List.Item.Meta>
+            </List.Item>
+          )}>
+          </List>
+
+          <Title level={4}>We use</Title>
+          <Space>
+            <Tooltip title=""><Avatar size={64} src={django_logo}></Avatar></Tooltip>
+            <Tooltip title="pretty good"><Avatar size={64} src={react_logo}></Avatar></Tooltip>
+            </Space>
       </Modal>
     </Header>
 

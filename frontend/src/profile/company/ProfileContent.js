@@ -41,6 +41,8 @@ function ProfileContent(props) {
   const [followCount, setFollowCount] = useState(0);
   const [middleChartData, setMiddleChartData] = useState([0, 0, 0]);
   const [leftChartData, setLeftChartData] = useState({ name: "", percent: 0 });
+  const [phoneDataVisible, setPhoneDataVisible] = useState(false);
+  const [emailDataVisible, setEmailDataVisible] = useState(false);
 
   const fetchFollowCount = async (id) => {
     let response = await followService.count(id);
@@ -144,6 +146,22 @@ function ProfileContent(props) {
     showJobDetailModal();
   };
 
+  const showPhoneDataModal = () => {
+    setPhoneDataVisible(true);
+  };
+
+  const handlePhoneDataCancel = () => {
+    setPhoneDataVisible(false);
+  };
+
+  const showEmailDataModal = () => {
+    setEmailDataVisible(true);
+  };
+
+  const handleEmailDataCancel = () => {
+    setEmailDataVisible(false);
+  };
+
   if (isLoading) {
     return (
       <Spin />
@@ -167,9 +185,9 @@ function ProfileContent(props) {
               <Space><Text strong>{basicProfileData.specialties.slice(0, 3).join(', ')}</Text></Space>
               <div><ProfileTwoTone /> Website: <a href={basicProfileData.website}>{basicProfileData.website}</a> </div>
               <div>
-                <MailTwoTone />{" Email: " + (emailData.length > 0 ? emailData[0] : "")}
+                <span onClick={showEmailDataModal}><MailTwoTone />{" Email: " + (emailData.length > 0 ? emailData[0] : "")}</span>
                 <Divider type="vertical" />
-                <PhoneTwoTone />{" Phone: " + (phoneData.length > 0 ? phoneData[0] : "")}
+                <span onClick={showPhoneDataModal}><PhoneTwoTone />{" Phone: " + (phoneData.length > 0 ? phoneData[0] : "")}</span>
               </div>
 
             </Col>
@@ -186,6 +204,44 @@ function ProfileContent(props) {
             </Col>
           </Row>
         </Card>
+        
+        <Modal
+          forceRender
+          title="Email"
+          visible={emailDataVisible}
+          onCancel={handleEmailDataCancel}
+          footer={null}
+        >
+          <List
+            dataSource={emailData}
+            renderItem={(item) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={item}
+                />
+              </List.Item>
+            )}
+          ></List>
+        </Modal>
+
+        <Modal
+          forceRender
+          title="Số điện thoại"
+          visible={phoneDataVisible}
+          onCancel={handlePhoneDataCancel}
+          footer={null}
+        >
+          <List
+            dataSource={phoneData}
+            renderItem={(item) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={item}
+                />
+              </List.Item>
+            )}
+          ></List>
+        </Modal>
 
         <Card
           className="card-info"
