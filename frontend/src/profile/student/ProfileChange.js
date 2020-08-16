@@ -392,7 +392,7 @@ function ProfileChange() {
             checked={checkList.filter(e => e.id === -1)[0] !== undefined ? checkList.filter(e => e.id === -1)[0].select : false}
             disabled={checkList.length > 1 ? false : true}
           ></Checkbox>
-          <Button style={{ float: 'right' }} type="primary" danger shape="round" onClick={deleteElementSelected} disabled={checkList.length > 0 ? false : true} >Delete<DeleteOutlined /> </Button>
+          <Button style={{ float: 'right' }} type="primary" danger shape="round" onClick={deleteElementSelected} disabled={checkList.length > 0 ? false : true} >Delete<DeleteOutlined /></Button>
         </List>
 
 

@@ -11,9 +11,9 @@ const { Title } = Typography;
 const { Header, Content } = Layout;
 const menu = (
   <Menu>
-    <Menu.Item key='1' icon={<UserOutlined />}><Link to={{ pathname: '/profile' }}>Account</Link></Menu.Item>
+    <Menu.Item key='1'><Link to={{ pathname: '/profile' }}><UserOutlined /> Account</Link></Menu.Item>
     {/* <Menu.Item key='5' icon={<SettingOutlined />}><Link to={{pathname: '/profile'}}>Settings</Link></Menu.Item> */}
-    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} icon={<LogoutOutlined />} onClick={accountServices.logout}><Link to="/">Sign out</Link> </Menu.Item>
+    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} onClick={accountServices.logout}><Link to="/"><LogoutOutlined /> Sign out</Link> </Menu.Item>
   </Menu>
 )
 

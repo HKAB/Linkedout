@@ -35,11 +35,11 @@ function CreateProfile({ history }) {
       if (user.account.account_type == "company") {
         companyServices.createBasicCompany(values.name, values.website, [values.specialities], values.description)
           .then(() => {
-            alert("Create successfully");
+            message.success("Create successfully")
             history.push("/profile")
           })
           .catch(error => {
-            alert(error);
+            message.error(error);
           });
       }
     }
@@ -57,7 +57,7 @@ function CreateProfile({ history }) {
         setSpeciality(data.tag.map(x => ({ value: x })));
       })
         .catch(error => {
-          alert(error);
+          message.error(error);
         })
     }
     else {
@@ -81,7 +81,7 @@ function CreateProfile({ history }) {
       </Form.Item>
 
       <Form.Item name="gender" rules={[{ required: true, message: 'Đừng để trống' }]}>
-        <Select style={{ width: "100%" }}>
+        <Select placeholder="Giới tính" style={{ width: "100%" }}>
           <Option value="Male">Nam</Option>
           <Option value="Female">Nữ</Option>
           <Option value="Secret">Ơ đằng kia có gì kìa</Option>

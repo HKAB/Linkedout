@@ -9,6 +9,7 @@ import { followService } from '../../services/follow.service';
 import '../assets/css/profile.css';
 import pic1 from '../assets/images/abc.jpg';
 import pic2 from '../assets/images/xyz.jpg';
+import protest from '../assets/images/protest.svg'
 
 const { Title, Text } = Typography;
 
@@ -100,6 +101,8 @@ function ProfileContent(props) {
       })
         .catch(() => {
           setIsLoading(true);
+          message.error("Xin hãy nhập thông tin cơ bản trước!")
+          history.push("/create-profile")
         });
       const subscription = companyServices.companyObject.subscribe((company) => {
         if (company) {
@@ -236,6 +239,7 @@ function ProfileContent(props) {
           }}>
           <Meta title={<Title level={3}>Việc làm</Title>}></Meta>
           <List
+            pagination={{pageSize: 4}}
             grid={{ gutter: 24, column: 2 }}
             dataSource={listJobData}
             renderItem={item => (
@@ -247,7 +251,7 @@ function ProfileContent(props) {
                   onClick={() => onShowJobDetail(item)}
                 >
                   <Meta
-                    avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+                    avatar={<Avatar src={protest}></Avatar>}
                     title={item.title}
                     description={<Space direction="vertical" size={3}>
                       <div>Mức độ: {item.seniority_level}</div>
@@ -272,7 +276,7 @@ function ProfileContent(props) {
           <List grid={{ gutter: 24, column: 2 }}>
             <List.Item>
               <Meta
-                avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
+                avatar={<Avatar src={protest}></Avatar>}
                 title={jobDetail.title}
                 description={<Space direction="vertical" size={3}>
                   <div>Yêu cầu: {jobDetail.seniority_level}</div>

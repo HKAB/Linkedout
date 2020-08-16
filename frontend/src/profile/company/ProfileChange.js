@@ -11,7 +11,7 @@ import {
   Badge, Button, Card,
   Col, Form, Input, List,
   message, Modal,
-  Popconfirm, Row, Select, Space, Tag, Typography, Upload
+  Popconfirm, Row, Select, Space, Tag, Typography, Upload, Tooltip
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 import TextArea from 'antd/lib/input/TextArea';
@@ -23,38 +23,11 @@ import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
 // import {Editor, EditorState} from 'draft-js';
 
+import protest from '../assets/images/protest.svg'
+import info from '../assets/images/info.svg'
 
 const { Option } = Select;
-const { Title } = Typography;
-const jobs = [
-  {
-    title: "Tuyển Dev tại facebook.wap.sh",
-    seniority_level: "Junior",
-    employment_type: "Full time",
-    cities: "Hà Nội",
-    skills: ["Python", "C++", "C#", "Java", "Coffee"],
-    description: "",
-    recruitment_url: "",
-  },
-  {
-    title: "Tuyển Dev tại facebook.wap.sh",
-    seniority_level: "Mid level",
-    employment_type: "Part time",
-    cities: "Hà Nội",
-    skills: ["Python", "C++", "C#", "Java", "Coffee"],
-    description: "",
-    recruitment_url: "",
-  },
-  {
-    title: "Tuyển Dev tại facebook.wap.sh",
-    seniority_level: "Fresher",
-    employment_type: "Remote",
-    cities: "Hà Nội",
-    skills: ["Python", "C++", "C#", "Java", "Coffee"],
-    description: "",
-    recruitment_url: "",
-  }
-]
+const { Title, Paragraph } = Typography;
 
 const speciality_data = [
   { speciality: 'code' },
@@ -209,7 +182,6 @@ function ProfileChange() {
       })
       .catch((error) => {
         message.error(error);
-        handleCreateJobCancel();
       });
 
     setSelectedNewJobPicture("");
@@ -428,6 +400,7 @@ function ProfileChange() {
         }}>
         <Meta title={<Title level={3}>Việc làm</Title>}></Meta>
         <List
+          pagination={{pageSize: 4}}
           grid={{ gutter: 24, column: 2 }}
           dataSource={jobData}
           renderItem={item => (
@@ -440,7 +413,7 @@ function ProfileChange() {
                 ]}
               >
                 <Meta
-                  avatar={<Avatar src="https://image.flaticon.com/icons/svg/1063/1063196.svg"></Avatar>}
+                  avatar={<Avatar src={protest}></Avatar>}
                   title={
                     <span >
                       <span>{item.title}</span>
@@ -466,32 +439,42 @@ function ProfileChange() {
             </List.Item>
           )}>
         </List>
-        <Button style={{ float: "right" }} size="large" type="primary" shape="circle" onClick={() => showCreateJobModal()}><PlusOutlined /></Button>
+        <Button style={{ float: "right", marginTop: 16 }} size="large" type="primary" shape="circle" onClick={() => showCreateJobModal()}><PlusOutlined /></Button>
       </Card>
 
       <Modal
         forceRender
-        title="Việc làm"
+        title={<Title level={4}>Việc làm</Title>}
         visible={jobDetailVisible}
         onCancel={handleJobDetailCancel}
         footer={null}
       >
         <List grid={{ gutter: 24, column: 2 }}>
           <List.Item>
-            <Meta
-              avatar={<Avatar src="https://image.flaticon.com/icons/svg/3198/3198832.svg"></Avatar>}
-              title={jobDetail.title}
-              description={<Space direction="vertical" size={3}>
-                <div>Yêu cầu: {jobDetail.seniority_level}</div>
-                <div>Địa điểm: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
-                <div>Công việc: {jobDetail.employment_type}</div>
-                <div>Mô tả: {jobDetail.description}</div>
-                <div style={{ display: 'flex' }}>
-                  <div>Kỹ năng: </div>
-                  <List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
-                </div>
-              </Space>}
-            />
+               <Card
+                  bordered={false}
+                  cover={<img src={Config.backendUrl + jobDetail.job_picture} />}>
+                  <Meta
+                    title={<Title level={3}>{jobDetail.title}</Title>}
+                    description={<div>
+
+                      <Title level={4}>Yêu cầu </Title>
+                      <Paragraph>{jobDetail.seniority_level}</Paragraph>
+                      <Title level={4}>Địa điểm </Title>
+                      <Paragraph><Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></Paragraph>
+                      <Title level={4}>Công việc </Title>
+                      <Paragraph>{jobDetail.employment_type}</Paragraph>
+
+                      <Title level={4}>Mô tả </Title>
+                      <Paragraph>
+                        {jobDetail.description}
+                      </Paragraph>
+
+                      <Title level={4}>Kỹ năng</Title>
+                      <Paragraph><List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List></Paragraph>
+                    </div>}
+                  />
+                </Card>
           </List.Item>
         </List>
       </Modal>
@@ -715,7 +698,7 @@ function ProfileChange() {
                             style={{ color: "red" }}
                             count={<MinusCircleOutlined />}
                           >
-                            <Avatar src="https://image.flaticon.com/icons/svg/1828/1828749.svg" />
+                            <Avatar src={info} />
                           </Badge>
                         </a>
                       </Popconfirm>
@@ -787,7 +770,7 @@ function ProfileChange() {
         </Col>
         <Col span={12}>
           <Card className="card-info" style={{ marginTop: 24 }}>
-            <Meta title={<Title level={3}>Ảnh bìa</Title>}></Meta>
+            <Meta title={<Title level={3}>Ảnh bìa <Tooltip title="Feature sắp có"><Badge status="processing" /></Tooltip></Title>}></Meta>
             <Upload
               //action ???
               listType="picture-card"

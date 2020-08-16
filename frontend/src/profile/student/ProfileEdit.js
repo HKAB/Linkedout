@@ -246,8 +246,7 @@ function ProfileEdit() {
                   <Input />
                 </Form.Item>
 
-                <Button type="primary" htmlType="submit">Save</Button>
-                <Button type="primary" style={{ marginLeft: 16 }} htmlType="cancel" >Cancel</Button>
+                <Button type="primary" htmlType="submit">Lưu</Button>
               </Form>
             </Col>
             <Col span={10} style={{ textAlign: "center" }}>
@@ -267,50 +266,44 @@ function ProfileEdit() {
           </Row>
 
         </TabPane>
-        <TabPane tab="Change Password" key="3" style={{ marginTop: 20 }}   >
-          <span style={{ fontWeight: "bold" }}>CHANGE PASSWORD</span>
+        <TabPane tab="Đổi mật khẩu" key="3" style={{ marginTop: 20 }}   >
+          <span style={{ fontWeight: "bold" }}>Đổi mật khẩu</span>
           <Row>
             <Col span={10} offset={4}>
               <Form
                 onFinish={onFinishChangePass}
                 style={{ marginTop: 32 }} >
-                <span> Old Password</span>
+                <span>Mật khẩu cũ</span>
                 <Form.Item name="oldPass" rules={[{ required: true, message: 'Đừng để trống' }]}>
-                  <Input.Password placeholder="Old Password"  ></Input.Password>
+                  <Input.Password placeholder="Nhập mật khẩu cũ"  ></Input.Password>
                 </Form.Item>
 
-                <span>New Password</span>
+                <span>Mật khẩu mới</span>
                 <Form.Item name="newPass" rules={[{ required: true, message: 'Đừng để trống' }]}>
-                  <Input.Password placeholder="New Password"  ></Input.Password>
+                  <Input.Password placeholder="Nhập mật khẩu mới"  ></Input.Password>
                 </Form.Item>
 
-                <span> Confirm Password</span>
+                <span>Nhập lại mật khẩu cũ</span>
                 <Form.Item name="confPass" rules={[{ required: true, message: 'Đừng để trống' }]}>
-                  <Input.Password placeholder="Confirm Password" ></Input.Password>
+                  <Input.Password placeholder="Nhập lại mật khẩu mới" ></Input.Password>
                 </Form.Item>
 
                 <Space>
-                  <Button type="primary" htmlType="submit" >Save</Button>
-                  <Button type="primary" htmlType="cancel" >Cancel</Button>
+                  <Button type="primary" htmlType="submit" >Lưu</Button>
                 </Space>
               </Form>
             </Col>
             <Col span={10}></Col>
           </Row>
         </TabPane>
-        <TabPane tab="Settings" key="2" style={{ marginTop: 20 }}>
-          <span style={{ fontWeight: "bold" }}>CHANGE PASSWORD</span>
+        <TabPane tab="Cài đặt" key="2" style={{ marginTop: 20 }}>
+          <span style={{ fontWeight: "bold" }}>Cài đặt</span>
           <Row style={{ marginTop: 56 }}>
             <Col span={20} offset={4}>
-              <span>Notification</span>
+              <span>Thông báo</span>
               <Switch style={{ position: 'absolute', right: 64 }} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={changeDisabled} />
             </Col>
           </Row>
-          {/* <Row>
-                                <Dropdown disabled={disabled} overlay={color} placement="bottomCenter" >
-                                  <Button class="changeColor" style={{marginTop:24}}>Color</Button>
-                              </Dropdown>
-                            </Row> */}
         </TabPane>
 
       </Tabs>
