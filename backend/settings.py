@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'django_prometheus',
+    'baton.autodiscover',
 ]
 
 MIDDLEWARE = [
@@ -137,7 +139,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/backendstatic/'
+STATIC_URL = '/static/'
 
 # rest_framework
 
@@ -150,5 +152,67 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES ': (
         'rest_framework.parsers.JSONParser',
+    ),
+}
+
+BATON = {
+    'SITE_HEADER': '<img src="https://i.imgur.com/RCeabui.png" width="180">',
+    'SITE_TITLE': 'LinkedOut',
+    'INDEX_TITLE': 'Site administration',
+    'SUPPORT_HREF': 'mailto:khoahockithuatmc@gmail.com',
+    'COPYRIGHT': 'Copyright © 2020 LinkedOut</a>', # noqa
+    'POWERED_BY': '<a href="https://www.otto.to.it">Otto srl</a>',
+    'CONFIRM_UNSAVED_CHANGES': True,
+    'SHOW_MULTIPART_UPLOADING': True,
+    'ENABLE_IMAGES_PREVIEW': True,
+    'CHANGELIST_FILTERS_IN_MODAL': True,
+    'MENU_ALWAYS_COLLAPSED': False,
+    'MENU_TITLE': 'Menu',
+    'GRAVATAR_DEFAULT_IMG': 'identicon',
+    'MENU': (
+        { 'type': 'title', 'label': 'main', 'apps': ('auth', ) },
+        {
+            'type': 'app',
+            'name': 'auth',
+            'label': 'Authentication',
+            'icon': 'fa fa-lock',
+            'models': (
+                {
+                    'name': 'user',
+                    'label': 'Users'
+                },
+                {
+                    'name': 'group',
+                    'label': 'Groups'
+                },
+            )
+        },
+        {
+            'type': 'app',
+            'name': 'rest_framework',
+            'label': 'Tag Adding',
+            'icon': 'fa fa-lock',
+            'models': (
+                {
+                    'name': 'Skill',
+                    'label': 'Skills'
+                },
+                {
+                    'name': 'City',
+                    'label': 'Cities'
+                },
+                {
+                    'name': 'Specialty',
+                    'label': 'Specialties'
+                },
+            )
+        },
+        # { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
+        # { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
+        # { 'type': 'free', 'label': 'Relax', 'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
+        { 'type': 'free', 'label': 'Relaxing', 'default_open': False, 'icon': 'fa fa-puzzle-piece', 'children': [
+            { 'type': 'free', 'label': 'Tetris', 'url': 'https://tetris.com/play-tetris/' },
+            { 'type': 'free', 'label': 'Guess what is this', 'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+        ] },
     ),
 }
