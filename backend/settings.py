@@ -139,7 +139,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/backendstatic/'
 
 # rest_framework
 
@@ -160,7 +160,7 @@ BATON = {
     'SITE_TITLE': 'LinkedOut',
     'INDEX_TITLE': 'Site administration',
     'SUPPORT_HREF': 'mailto:khoahockithuatmc@gmail.com',
-    'COPYRIGHT': 'Copyright © 2020 LinkedOut</a>', # noqa
+    'COPYRIGHT': 'Copyright © 2020 LinkedOut</a>',  # noqa
     'POWERED_BY': '<a href="https://www.otto.to.it">Otto srl</a>',
     'CONFIRM_UNSAVED_CHANGES': True,
     'SHOW_MULTIPART_UPLOADING': True,
@@ -170,7 +170,7 @@ BATON = {
     'MENU_TITLE': 'Menu',
     'GRAVATAR_DEFAULT_IMG': 'identicon',
     'MENU': (
-        { 'type': 'title', 'label': 'main', 'apps': ('auth', ) },
+        {'type': 'title', 'label': 'main', 'apps': ('auth', )},
         {
             'type': 'app',
             'name': 'auth',
@@ -190,9 +190,11 @@ BATON = {
         # { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
         # { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
         # { 'type': 'free', 'label': 'Relax', 'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
-        { 'type': 'free', 'label': 'Relaxing', 'default_open': False, 'icon': 'fa fa-puzzle-piece', 'children': [
-            { 'type': 'free', 'label': 'Tetris', 'url': 'https://tetris.com/play-tetris/' },
-            { 'type': 'free', 'label': 'Guess what is this', 'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
-        ] },
+        # {'type': 'free', 'label': 'Relaxing', 'default_open': False, 'icon': 'fa fa-puzzle-piece', 'children': [
+        #     {'type': 'free', 'label': 'Tetris',
+        #         'url': 'https://tetris.com/play-tetris/'},
+        #     {'type': 'free', 'label': 'Guess what is this',
+        #         'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'},
+        # ]},
     ),
 }

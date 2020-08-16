@@ -30,6 +30,7 @@ services:
       - "80:80"
     volumes:
       - "./deployment/gateway/consul:/consul/config"
+      - "./deployment/gateway/config/default.conf:/etc/nginx/conf.d/default.conf"
     depends_on:
       - "consul-server"
 

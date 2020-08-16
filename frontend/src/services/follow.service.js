@@ -7,7 +7,7 @@ export const followService = {
   },
 
   getCompaniesFollowed(id) {
-    return fetchWrapper.get(`http://localhost:8000/api/follow/company-followed?id=${id}`);
+    return fetchWrapper.get(Config.backendUrl + `/api/follow/company-followed?id=${id}`);
   },
 
   count(id) {
