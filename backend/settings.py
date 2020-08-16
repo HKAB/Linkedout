@@ -187,26 +187,6 @@ BATON = {
                 },
             )
         },
-        {
-            'type': 'app',
-            'name': 'rest_framework',
-            'label': 'Tag Adding',
-            'icon': 'fa fa-lock',
-            'models': (
-                {
-                    'name': 'Skill',
-                    'label': 'Skills'
-                },
-                {
-                    'name': 'City',
-                    'label': 'Cities'
-                },
-                {
-                    'name': 'Specialty',
-                    'label': 'Specialties'
-                },
-            )
-        },
         # { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
         # { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
         # { 'type': 'free', 'label': 'Relax', 'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
