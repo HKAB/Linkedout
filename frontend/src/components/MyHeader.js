@@ -3,7 +3,7 @@ import { Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd'
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { accountServices, companyServices, studentServices } from "services";
-import logo from "../account/assets/logo.png";
+import logo from '../home/assets/images/logo.svg'
 import { Config } from '../config/consts';
 import "./assets/css/MyHeader.css";
 
@@ -62,7 +62,7 @@ class MyHeader extends Component {
       <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
         {/* <div className="logo"> */}
         <Space>
-          <Link to="/"><img src={logo} width="48" height="48"></img></Link>
+          <Link to="/"><img src={logo} width="48" height="48" style={{position:'relative', bottom:10}}></img></Link>
           <Title level={2} style={{ position: 'relative', top: 4 }}>Thăm ngàn Network</Title>
         </Space>
         {/* <Space>

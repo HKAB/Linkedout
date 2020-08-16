@@ -3,7 +3,7 @@ import { Button, Card, Checkbox, Col, Form, Input, message, Modal, Row, Select, 
 import React, { useEffect } from 'react';
 import { accountServices } from "services";
 import leftLoginPicture from "./assets/leftLogin.svg";
-import logo from "./assets/logo.png";
+import logo from "../home/assets/images/logo.svg";
 
 const { Option } = Select;
 const { Title } = Typography;
