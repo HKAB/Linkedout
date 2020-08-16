@@ -178,7 +178,6 @@ function ProfileEditor() {
       })
       .catch((er) => {
         message.error({ title: 'uWu', content: er });
-        handleCreatePostCancel();
       })
   }
   const handleChangePicture = info => {
