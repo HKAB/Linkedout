@@ -464,7 +464,7 @@ function Home({ history }) {
                   marginTop: 64,
                 }}
               >
-                Thống kê kỹ năng
+                STATISTIC
 							</div>
 
               <Row>
@@ -528,9 +528,9 @@ function Home({ history }) {
                 </Col>
               </Row>
               <Row >
-                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Công việc</Title></Col>
-                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Tuyển dụng</Title></Col>
-                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Sinh viên</Title></Col>
+                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Job</Title></Col>
+                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Post</Title></Col>
+                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Student</Title></Col>
               </Row>
             </div>
           </OverPack>
