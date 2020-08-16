@@ -5,11 +5,12 @@ import {
 } from "@ant-design/icons";
 import {
   Avatar,
-  Button, Card, Col, Input,
+  Button, Card,
+  Checkbox, Col, Input,
   Layout,
   List, Row,
   Select,
-  Space, Tag, Tooltip, Typography, Checkbox
+  Space, Tag, Tooltip, Typography
 } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -34,273 +35,270 @@ function MySearch() {
   const [skillList, setSkillList] = useState([]);
   const [specialityList, setSpecialityList] = useState([]);
 
-	const onTypeChange = (values) => {
-		setSpecialityDisable(values == "company" ? false : true);
-		setSkillDisable(values == "company" ? true : false);
-		setTypeData(values);
-		setListData([]);
-	};
+  const onTypeChange = (values) => {
+    setSpecialityDisable(values == "company" ? false : true);
+    setSkillDisable(values == "company" ? true : false);
+    setTypeData(values);
+    setListData([]);
+  };
 
-	useEffect(() => {
-		getSpecialty().then((spec_list) => {
-			console.log(spec_list);
-			setSpecialityList(spec_list.tag);
-		});
-		getSkillName().then((skill_list) => {
-			setSkillList(skill_list.tag);
-		});
-	}, []);
+  useEffect(() => {
+    getSpecialty().then((spec_list) => {
+      console.log(spec_list);
+      setSpecialityList(spec_list.tag);
+    });
+    getSkillName().then((skill_list) => {
+      setSkillList(skill_list.tag);
+    });
+  }, []);
 
-	const onSearch = (values) => {
-		var string_skillData = encodeURIComponent(skillData.toString());
-		var string_specialityData = encodeURIComponent(
-			specialityData.toString()
-		);
-		searchServices
-			.search(typeData, values, string_skillData, string_specialityData)
-			.then((data) => {
-				console.log(data);
-				setListData(data);
-			});
-	};
-	return (
-		<Layout style={{ minHeight: "100vh" }} >
-			<Row style={{marginTop: 64}} gutter={[0, 16]}>
-				<Col span={8} offset={10}>
-					{/* <Input.Group compact> */}
-						<Select 
-							bordered={false}
-							size="large"
-							defaultValue="student"
-							onChange={onTypeChange}
-						>
-							<Option value="company">Company</Option>
-							<Option value="student">Student</Option>
-							<Option value="job">Job</Option>
-							<Option value="post">Post</Option>
-						</Select>
-						<Search
-							size="large"
-							placeholder="Import name, to blank if you find all"
-							style={{ width: "80%", borderRadius: 25}}
-							onSearch={onSearch}
-						></Search>
-					{/* </Input.Group> */}
-				</Col>
-			</Row>
-			<Row gutter={[0, 16]}>
-				<Col span={4} offset={2}>
-					<Card
-					className="card-info"
-					 >
-						 <Meta title={ <Title level={4}>Skills</Title>}></Meta>
-						 <div style={{maxHeight: "200px",overflow: "auto"}}>
-							 <Checkbox.Group disabled={skillDisable} onChange={(checkedval) => {
-								 setSkillData(checkedval);
-							 }}>
-								{skillList.map((item) => (
-								<Checkbox style={{ display: "block", marginLeft: 0, paddingTop: 12, paddingBottom: 12}} key={item} value={item}>
-									{item}
-								</Checkbox>
-							))}
-						</Checkbox.Group>
-						</div>
-				</Card>
-					<Card
-					style={{marginTop: 16}}
-					className="card-info"
-						>
-							<Meta title={ <Title level={4}>Specialities</Title>}></Meta>
-							<div style={{maxHeight: "200px",overflow: "auto"}}>
+  const onSearch = (values) => {
+    var string_skillData = encodeURIComponent(skillData.toString());
+    var string_specialityData = encodeURIComponent(
+      specialityData.toString()
+    );
+    searchServices
+      .search(typeData, values, string_skillData, string_specialityData)
+      .then((data) => {
+        console.log(data);
+        setListData(data);
+      });
+  };
+  return (
+    <Layout style={{ minHeight: "100vh" }} >
+      <Row style={{ marginTop: 64 }} gutter={[0, 16]}>
+        <Col span={8} offset={10}>
+          {/* <Input.Group compact> */}
+          <Select
+            bordered={false}
+            size="large"
+            defaultValue="student"
+            onChange={onTypeChange}
+          >
+            <Option value="company">Company</Option>
+            <Option value="student">Student</Option>
+            <Option value="job">Job</Option>
+            <Option value="post">Post</Option>
+          </Select>
+          <Search
+            size="large"
+            placeholder="Import name, to blank if you find all"
+            style={{ width: "80%", borderRadius: 25 }}
+            onSearch={onSearch}
+          ></Search>
+          {/* </Input.Group> */}
+        </Col>
+      </Row>
+      <Row gutter={[0, 16]}>
+        <Col span={4} offset={2}>
+          <Card
+            className="card-info"
+          >
+            <Meta title={<Title level={4}>Skills</Title>}></Meta>
+            <div style={{ maxHeight: "200px", overflow: "auto" }}>
+              <Checkbox.Group disabled={skillDisable} onChange={(checkedval) => {
+                setSkillData(checkedval);
+              }}>
+                {skillList.map((item) => (
+                  <Checkbox style={{ display: "block", marginLeft: 0, paddingTop: 12, paddingBottom: 12 }} key={item} value={item}>
+                    {item}
+                  </Checkbox>
+                ))}
+              </Checkbox.Group>
+            </div>
+          </Card>
+          <Card
+            style={{ marginTop: 16 }}
+            className="card-info"
+          >
+            <Meta title={<Title level={4}>Specialities</Title>}></Meta>
+            <div style={{ maxHeight: "200px", overflow: "auto" }}>
 
-							<Checkbox.Group disabled={specialityDisable} onChange={(checkedval) => {
-								 setSpecialityData(checkedval)
-							 }}>
-								{specialityList.map((item) => (
-								<Checkbox style={{ display: "block", marginLeft: 0, paddingTop: 12, paddingBottom: 12}} key={item} value={item}>
-									{item}
-								</Checkbox>
-								))}
-							</Checkbox.Group>
-						</div>
-				</Card>
-				</Col>
-				<Col span={14} offset={1}>
-                <Card style={{minHeight: "50vh"}} bordered={false}>
-                    <List
-					locale={{emptyText:"Empty"}}
-					pagination={{
-						pageSize: 10,
-					  }}
-				itemLayout="vertical"
-				dataSource={listData}
-				renderItem={(item) => {
-					if (typeData == "student")
-						return (
-							<Row>
-								<Col span={16} offset={4}>
-									<Card
-										className="card-info"
-										style={{ marginTop: 12 }}
-									>
-										<Meta
-											avatar={
-												<Tooltip
-													placement="bottom"
-													title={
-														item.firstname +
-														" " +
-														item.lastname
-													}
-												>
-													<Avatar
-														src={
-															Config.backendUrl +
-															item.profile_picture
-														}
-													></Avatar>
-												</Tooltip>
-											}
-											title={
-												<Link
-													to={
-														"/profile/student/" +
-														item.id
-													}
-												>
-													<Title level={4}>
-														{item.firstname +
-															" " +
-															item.lastname}
-													</Title>
-												</Link>
-											}
-											description={
-												<>
-													<Paragraph>
-														{item.description}
-													</Paragraph>
-													<List
-                                                        locale={{emptyText: "Empty"}}
-														dataSource={item.skills}
-														renderItem={(
-															skills
-														) => (
-															<Tag
-																style={{
-																	margin: 3,
-																}}
-															>
-																{skills}
-															</Tag>
-														)}
-													></List>
-												</>
-											}
-										></Meta>
-									</Card>
-								</Col>
-							</Row>
-						);
-					else if (typeData == "company")
-						return (
-							<Row>
-								<Col span={16} offset={4}>
-									<Card
-										className="card-info"
-										style={{ marginTop: 12 }}
-									>
-										<Meta
-											avatar={
-												<Tooltip
-													placement="bottom"
-													title={item.name}
-												>
-													<Avatar
-														src={
-															Config.backendUrl +
-															item.profile_picture
-														}
-													></Avatar>
-												</Tooltip>
-											}
-											title={
-												<Link
-													to={
-														"/profile/company/" +
-														item.id
-													}
-												>
-													<Title level={4}>
-														{item.name}
-													</Title>
-												</Link>
-											}
-											description={
-												<>
-													<Paragraph>
-														{item.description}
-													</Paragraph>
-													<List
-                                                        locale={{emptyText: "Empty"}}
-														dataSource={
-															item.specialties
-														}
-														renderItem={(
-															specialties
-														) => (
-															<Tag
-																style={{
-																	margin: 3,
-																}}
-															>
-																{specialties}
-															</Tag>
-														)}
-													></List>
-												</>
-											}
-										></Meta>
-									</Card>
-								</Col>
-							</Row>
-						);
-					else if (typeData == "job")
-						return (
-							<Row>
-								<Col span={16} offset={4}>
-									<Card
-										className="card-info"
-										key={item.id}
-										style={{ marginTop: 24 }}
-										cover={
-											<img
-												src={
-													Config.backendUrl +
-													item.job_picture
-												}
-												height={200}
-											></img>
-										}
-									>
-										<Meta
-											avatar={
-												<Tooltip
-													placement="bottom"
-													title={item.company_name}
-												>
-													<Avatar
-														src={
-															Config.backendUrl +
-															item.company_profile_picture
-														}
-													></Avatar>
-												</Tooltip>
-											}
-											title={
-												<>
-													<Title level={4}>
-														{item.title} •
+              <Checkbox.Group disabled={specialityDisable} onChange={(checkedval) => {
+                setSpecialityData(checkedval)
+              }}>
+                {specialityList.map((item) => (
+                  <Checkbox style={{ display: "block", marginLeft: 0, paddingTop: 12, paddingBottom: 12 }} key={item} value={item}>
+                    {item}
+                  </Checkbox>
+                ))}
+              </Checkbox.Group>
+            </div>
+          </Card>
+        </Col>
+        <Col span={14} offset={1}>
+          <Card style={{ minHeight: "50vh" }} bordered={false}>
+            <List
+              locale={{ emptyText: "Empty" }}
+              pagination={{
+                pageSize: 10,
+              }}
+              itemLayout="vertical"
+              dataSource={listData}
+              renderItem={(item) => {
+                if (typeData == "student")
+                  return (
+                    <Row>
+                      <Col span={16} offset={4}>
+                        <Card
+                          className="card-info"
+                          style={{ marginTop: 12 }}
+                        >
+                          <Meta
+                            avatar={
+                              <Tooltip
+                                placement="bottom"
+                                title={
+                                  item.firstname +
+                                  " " +
+                                  item.lastname
+                                }
+                              >
+                                <Avatar
+                                  src={
+                                    Config.backendUrl +
+                                    item.profile_picture
+                                  }
+                                ></Avatar>
+                              </Tooltip>
+                            }
+                            title={
+                              <Link
+                                to={
+                                  "/profile/student/" +
+                                  item.id
+                                }
+                              >
+                                <Title level={4}>
+                                  {item.firstname +
+                                    " " +
+                                    item.lastname}
+                                </Title>
+                              </Link>
+                            }
+                            description={
+                              <>
+                                <Paragraph>
+                                  {item.description}
+                                </Paragraph>
+                                <List
+                                  locale={{ emptyText: "Empty" }}
+                                  dataSource={item.skills}
+                                  renderItem={(
+                                    skills
+                                  ) => (
+                                      <Tag
+                                        style={{
+                                          margin: 3,
+                                        }}
+                                      >
+                                        {skills}
+                                      </Tag>
+                                    )}
+                                ></List>
+                              </>
+                            }
+                          ></Meta>
+                        </Card>
+                      </Col>
+                    </Row>
+                  );
+                else if (typeData == "company")
+                  return (
+                    <Row>
+                      <Col span={16} offset={4}>
+                        <Card
+                          className="card-info"
+                          style={{ marginTop: 12 }}
+                        >
+                          <Meta
+                            avatar={
+                              <Tooltip
+                                placement="bottom"
+                                title={item.name}
+                              >
+                                <Avatar
+                                  src={
+                                    Config.backendUrl +
+                                    item.profile_picture
+                                  }
+                                ></Avatar>
+                              </Tooltip>
+                            }
+                            title={
+                              <Link
+                                to={
+                                  "/profile/company/" +
+                                  item.id
+                                }
+                              >
+                                <Title level={4}>
+                                  {item.name}
+                                </Title>
+                              </Link>
+                            }
+                            description={
+                              <>
+                                <List
+                                  locale={{ emptyText: "Empty" }}
+                                  dataSource={
+                                    item.specialties
+                                  }
+                                  renderItem={(
+                                    specialties
+                                  ) => (
+                                      <Tag
+                                        style={{
+                                          margin: 3,
+                                        }}
+                                      >
+                                        {specialties}
+                                      </Tag>
+                                    )}
+                                ></List>
+                              </>
+                            }
+                          ></Meta>
+                        </Card>
+                      </Col>
+                    </Row>
+                  );
+                else if (typeData == "job")
+                  return (
+                    <Row>
+                      <Col span={16} offset={4}>
+                        <Card
+                          className="card-info"
+                          key={item.id}
+                          style={{ marginTop: 24 }}
+                          cover={
+                            <img
+                              src={
+                                Config.backendUrl +
+                                item.job_picture
+                              }
+                              height={200}
+                            ></img>
+                          }
+                        >
+                          <Meta
+                            avatar={
+                              <Tooltip
+                                placement="bottom"
+                                title={item.company_name}
+                              >
+                                <Avatar
+                                  src={
+                                    Config.backendUrl +
+                                    item.company_profile_picture
+                                  }
+                                ></Avatar>
+                              </Tooltip>
+                            }
+                            title={
+                              <>
+                                <Title level={4}>
+                                  {item.title} •
 														<Link
                                     to={
                                       "/profile/company/" +
@@ -526,22 +524,22 @@ function MySearch() {
                               <HeartFilled />
                             </Button>
                           </Col> */}
-													</Row>
-												</>
-											}
-										></Meta>
-									</Card>
-								</Col>
-							</Row>
-						);
-					}
-				}}
-			></List>
-                </Card>
-                </Col>
-			</Row>
-        </Layout>
-	);
+                                </Row>
+                              </>
+                            }
+                          ></Meta>
+                        </Card>
+                      </Col>
+                    </Row>
+                  );
+                }
+              }}
+            ></List>
+          </Card>
+        </Col>
+      </Row>
+    </Layout>
+  );
 }
 
 export { MySearch };

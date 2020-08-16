@@ -1,5 +1,5 @@
 import { CheckOutlined, MailTwoTone, PhoneTwoTone, PlusOutlined, ProfileTwoTone } from '@ant-design/icons';
-import { Avatar, Button, Card, Carousel, Col, Divider, Empty, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
+import { Avatar, Button, Card, Col, Divider, Empty, List, message, Modal, Progress, Row, Space, Spin, Statistic, Tag, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -7,9 +7,7 @@ import { accountServices, companyServices } from "services";
 import { Config } from "../../config/consts";
 import { followService } from '../../services/follow.service';
 import '../assets/css/profile.css';
-import pic1 from '../assets/images/abc.jpg';
-import pic2 from '../assets/images/xyz.jpg';
-import protest from '../assets/images/protest.svg'
+import protest from '../assets/images/protest.svg';
 
 const { Title, Text } = Typography;
 
@@ -183,11 +181,11 @@ function ProfileContent(props) {
             <Col style={{ marginLeft: 24, marginTop: 16 }} span={16}>
               <Title level={3}>{basicProfileData.name}</Title>
               <Space><Text strong>{basicProfileData.specialties.slice(0, 3).join(', ')}</Text></Space>
-              <div style={{paddingTop: "4px", paddingBottom: "4px"}}><ProfileTwoTone /> Website: <a href={basicProfileData.website}>{basicProfileData.website}</a> </div>
+              <div style={{ paddingTop: "4px", paddingBottom: "4px" }}><ProfileTwoTone /> Website: <a href={basicProfileData.website}>{basicProfileData.website}</a> </div>
               <div>
-                <Button type="text" style={{paddingLeft: 0, paddingRight: 0}} onClick={showEmailDataModal}><MailTwoTone />{" Email: " + (emailData.length > 0 ? emailData[0] : "")}</Button>
+                <Button type="text" style={{ paddingLeft: 0, paddingRight: 0 }} onClick={showEmailDataModal}><MailTwoTone />{" Email: " + (emailData.length > 0 ? emailData[0] : "")}</Button>
                 <Divider type="vertical" />
-                <Button type="text" style={{paddingLeft: 0, paddingRight: 0}} onClick={showPhoneDataModal}><PhoneTwoTone />{" Phone: " + (phoneData.length > 0 ? phoneData[0] : "")}</Button>
+                <Button type="text" style={{ paddingLeft: 0, paddingRight: 0 }} onClick={showPhoneDataModal}><PhoneTwoTone />{" Phone: " + (phoneData.length > 0 ? phoneData[0] : "")}</Button>
               </div>
 
             </Col>
@@ -204,10 +202,10 @@ function ProfileContent(props) {
             </Col>
           </Row>
         </Card>
-        
+
         <Modal
           forceRender
-          title={<><MailTwoTone/> Email</>}
+          title={<><MailTwoTone /> Email</>}
           visible={emailDataVisible}
           onCancel={handleEmailDataCancel}
           footer={null}
@@ -226,7 +224,7 @@ function ProfileContent(props) {
 
         <Modal
           forceRender
-          title={<><PhoneTwoTone/> Số điện thoại</>}
+          title={<><PhoneTwoTone /> Số điện thoại</>}
           visible={phoneDataVisible}
           onCancel={handlePhoneDataCancel}
           footer={null}
@@ -248,7 +246,7 @@ function ProfileContent(props) {
           style={{
             marginTop: 24,
           }}>
-          <Meta title={<Title level={3}>Description</Title>}></Meta>
+          <Meta title={<Title level={3}>About us</Title>}></Meta>
           {/* <div style={{ marginTop: 16 }}>{basicProfileData.description}</div> */}
           <div style={{ marginTop: 16, overflowWrap: 'break-word', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: basicProfileData.description }}></div>
           {/* <span styles={{marginTop: 100}}>{data.description}</span> */}
@@ -260,9 +258,9 @@ function ProfileContent(props) {
             marginTop: 24,
           }}>
           <Row>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Skill {leftChartData.name}</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Prefer {leftChartData.name}</Title></Col>
             <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Seniority level</Title></Col>
-            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Followers</Title></Col>
+            <Col style={{ textAlign: "center" }} span={8}><Title level={4}>Popularity</Title></Col>
           </Row>
           <Row justify="center" align="middle">
             <Col span={8} style={{ textAlign: "center" }}>
@@ -295,7 +293,7 @@ function ProfileContent(props) {
           }}>
           <Meta title={<Title level={3}>Job</Title>}></Meta>
           <List
-            pagination={{pageSize: 4}}
+            pagination={{ pageSize: 4 }}
             grid={{ gutter: 24, column: 2 }}
             dataSource={listJobData}
             renderItem={item => (

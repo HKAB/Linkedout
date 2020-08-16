@@ -11,21 +11,20 @@ import {
   Badge, Button, Card,
   Col, Form, Input, List,
   message, Modal,
-  Popconfirm, Row, Select, Space, Tag, Typography, Upload, Tooltip
+  Popconfirm, Row, Select, Space, Tag, Tooltip, Typography, Upload
 } from "antd";
 import Meta from "antd/lib/card/Meta";
 import TextArea from 'antd/lib/input/TextArea';
 import { EditableTagGroup, MyEditor } from 'components';
 import UploadableAvatar from "components/UploadableAvatar";
+import moment from 'moment';
 import React, { useEffect, useState } from "react";
 import { accountServices, companyServices, getCityName, getSpecialty, jobServices } from "services";
-import moment from 'moment'
 import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
+import info from '../assets/images/info.svg';
 // import {Editor, EditorState} from 'draft-js';
-
-import protest from '../assets/images/protest.svg'
-import info from '../assets/images/info.svg'
+import protest from '../assets/images/protest.svg';
 
 const { Option } = Select;
 const { Title, Paragraph } = Typography;
@@ -177,13 +176,13 @@ function ProfileChange() {
           jobServices.uploadJobPicture(multipart_formdata)
             .then(() => {
               jobServices.listJob(accountServices.userValue.account.id)
-              .then((list_job) => {
-                list_job[list_job.length - 1].job_picture = list_job[list_job.length - 1].job_picture + "?" + moment().unix();
-                setJobData(list_job);
-              })
-              .catch((error) => {
-                message.error(error);
-              })
+                .then((list_job) => {
+                  list_job[list_job.length - 1].job_picture = list_job[list_job.length - 1].job_picture + "?" + moment().unix();
+                  setJobData(list_job);
+                })
+                .catch((error) => {
+                  message.error(error);
+                })
               message.success("Updated cover photo!");
             })
             .catch(error => {
@@ -192,12 +191,12 @@ function ProfileChange() {
         }
         else {
           jobServices.listJob(accountServices.userValue.account.id)
-          .then((list_job) => {
-            setJobData(list_job);
-          })
-          .catch((error) => {
-            message.error(error);
-          })
+            .then((list_job) => {
+              setJobData(list_job);
+            })
+            .catch((error) => {
+              message.error(error);
+            })
         }
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success("Create job successfully!");
@@ -227,16 +226,16 @@ function ProfileChange() {
           jobServices.uploadJobPicture(multipart_formdata)
             .then(() => {
               jobServices.listJob(accountServices.userValue.account.id)
-              .then((list_job) => {
-                list_job.forEach(job => {
-                  if (job.id == values.id)
-                    job.job_picture = job.job_picture + "?" + moment().unix();  
-                });
-                setJobData(list_job);
-              })
-              .catch((error) => {
-                message.error(error);
-              })
+                .then((list_job) => {
+                  list_job.forEach(job => {
+                    if (job.id == values.id)
+                      job.job_picture = job.job_picture + "?" + moment().unix();
+                  });
+                  setJobData(list_job);
+                })
+                .catch((error) => {
+                  message.error(error);
+                })
               message.success("Update cover photo for a job successfully!");
             })
             .catch(error => {
@@ -245,12 +244,12 @@ function ProfileChange() {
         }
         else {
           jobServices.listJob(accountServices.userValue.account.id)
-          .then((list_job) => {
-            setJobData(list_job);
-          })
-          .catch((error) => {
-            message.error(error);
-          })
+            .then((list_job) => {
+              setJobData(list_job);
+            })
+            .catch((error) => {
+              message.error(error);
+            })
         }
 
         companyServices.getCompany(accountServices.userValue.account.id);
@@ -259,7 +258,7 @@ function ProfileChange() {
       })
       .catch((error) => {
         message.success("Update job error");
-       // handleEditJobCancel();
+        // handleEditJobCancel();
       });
 
   };
@@ -441,7 +440,7 @@ function ProfileChange() {
         }}>
         <Meta title={<Title level={3}>Job</Title>}></Meta>
         <List
-          pagination={{pageSize: 4}}
+          pagination={{ pageSize: 4 }}
           grid={{ gutter: 24, column: 2 }}
           dataSource={jobData}
           renderItem={item => (
@@ -492,30 +491,30 @@ function ProfileChange() {
       >
         <List grid={{ gutter: 24, column: 2 }}>
           <List.Item>
-               <Card
-                  bordered={false}
-                  cover={<img src={Config.backendUrl + jobDetail.job_picture} />}>
-                  <Meta
-                    title={<Title level={3}>{jobDetail.title}</Title>}
-                    description={<div>
+            <Card
+              bordered={false}
+              cover={<img src={Config.backendUrl + jobDetail.job_picture} />}>
+              <Meta
+                title={<Title level={3}>{jobDetail.title}</Title>}
+                description={<div>
 
-                      <Title level={4}>Seniority Level </Title>
-                      <Paragraph>{jobDetail.seniority_level}</Paragraph>
-                      <Title level={4}>City </Title>
-                      <Paragraph><Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></Paragraph>
-                      <Title level={4}>Employee Type </Title>
-                      <Paragraph>{jobDetail.employment_type}</Paragraph>
+                  <Title level={4}>Seniority Level </Title>
+                  <Paragraph>{jobDetail.seniority_level}</Paragraph>
+                  <Title level={4}>City </Title>
+                  <Paragraph><Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></Paragraph>
+                  <Title level={4}>Employee Type </Title>
+                  <Paragraph>{jobDetail.employment_type}</Paragraph>
 
-                      <Title level={4}>Description </Title>
-                      <Paragraph>
-                        {jobDetail.description}
-                      </Paragraph>
+                  <Title level={4}>Description </Title>
+                  <Paragraph>
+                    {jobDetail.description}
+                  </Paragraph>
 
-                      <Title level={4}>Skills </Title>
-                      <Paragraph><List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List></Paragraph>
-                    </div>}
-                  />
-                </Card>
+                  <Title level={4}>Skills </Title>
+                  <Paragraph><List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List></Paragraph>
+                </div>}
+              />
+            </Card>
           </List.Item>
         </List>
       </Modal>

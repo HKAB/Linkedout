@@ -1,13 +1,15 @@
 import { Avatar, Button, Card, Col, Input, Row, Space, Typography } from "antd";
-import { BarChart, DonutChart } from "bizcharts";
+import { DonutChart } from "bizcharts";
 import QueueAnim from "rc-queue-anim";
 import OverPack from "rc-scroll-anim/lib/ScrollOverPack";
-import React, { useState, useEffect } from "react";
-import { accountServices } from "services";
+import React, { useEffect, useState } from "react";
+import { accountServices, getJobsBySkill, getPostsBySkill, getStudentsBySkill } from "services";
 import blacklivematter from "./assets/images/blacklivematter.svg";
 import communication from "./assets/images/communication.svg";
 import CV from "./assets/images/CV.svg";
+import female from './assets/images/female.svg';
 import findjob from "./assets/images/findjob.svg";
+import male from './assets/images/male.svg';
 import mancoding from "./assets/images/mancoding.svg";
 import acer from "./assets/images/sponsor/acer.svg";
 import canon from "./assets/images/sponsor/canon.svg";
@@ -16,10 +18,7 @@ import samsung from "./assets/images/sponsor/samsung.svg";
 import subscribemail from "./assets/images/subscribemail.svg";
 import woman from "./assets/images/woman.svg";
 import { HomeHeader } from "./HomeHeader";
-import { getJobsBySkill, getPostsBySkill, getStudentsBySkill } from 'services';
 
-import male from './assets/images/male.svg'
-import female from './assets/images/female.svg'
 
 const { Title } = Typography;
 
@@ -77,14 +76,14 @@ const data_comment = [
 // shamelessly copy from so
 function getRandom(arr, n) {
   var result = new Array(n),
-      len = arr.length,
-      taken = new Array(len);
+    len = arr.length,
+    taken = new Array(len);
   if (n > len)
-      throw new RangeError("getRandom: more elements taken than available");
+    throw new RangeError("getRandom: more elements taken than available");
   while (n--) {
-      var x = Math.floor(Math.random() * len);
-      result[n] = arr[x in taken ? taken[x] : x];
-      taken[x] = --len in taken ? taken[len] : len;
+    var x = Math.floor(Math.random() * len);
+    result[n] = arr[x in taken ? taken[x] : x];
+    taken[x] = --len in taken ? taken[len] : len;
   }
   return result;
 }
@@ -116,32 +115,32 @@ function Home({ history }) {
       type="bottom"
       componentProps={{ span: 6, offset: 1 }}
     >
-      <Card style={{height: 250}}>
+      <Card style={{ height: 250 }}>
         <Card.Meta
           key={i}
           avatar={<Avatar src={d.avatar} />}
           title={d.title}
-          description={(<div dangerouslySetInnerHTML={{__html: d.description}}></div>)}
+          description={(<div dangerouslySetInnerHTML={{ __html: d.description }}></div>)}
         />
       </Card>
     </QueueAnim>
   ));
-  
+
   useEffect(() => {
     getJobsBySkill()
-    .then((data) => {
-      setSatisticJobsBySkillData(data);
-    });
+      .then((data) => {
+        setSatisticJobsBySkillData(data);
+      });
 
     getPostsBySkill()
-    .then((data) => {
-      setSatisticPostsBySkillData(data);
-    });
+      .then((data) => {
+        setSatisticPostsBySkillData(data);
+      });
 
     getStudentsBySkill()
-    .then((data) => {
-      setSatisticStudentsBySkillData(data);
-    });
+      .then((data) => {
+        setSatisticStudentsBySkillData(data);
+      });
 
   }, [])
 
@@ -243,7 +242,7 @@ function Home({ history }) {
                     verticalAlign: "middle",
                     padding: "10px"
                   }}
-                  href="https://youtu.be/dQw4w9WgXcQ"
+                  href="/login"
                 >
                   Get started now!
 								</Button>
@@ -470,7 +469,7 @@ function Home({ history }) {
               <Row>
                 <Col span={8}>
                   <div>
-                  
+
                     <DonutChart
                       key="donut"
                       data={satisticJobsBySkillData}
@@ -489,7 +488,7 @@ function Home({ history }) {
 
                 <Col span={8}>
                   <div>
-                    
+
                     <DonutChart
                       key="donut"
                       data={satisticPostsBySkillData}
@@ -503,13 +502,13 @@ function Home({ history }) {
                         totalLabel: "Total",
                       }}
                     />
-                    
+
                   </div>
                 </Col>
 
                 <Col span={8}>
                   <div>
-                    
+
                     <DonutChart
                       key="donut"
                       data={satisticStudentsBySkillData}
@@ -523,14 +522,14 @@ function Home({ history }) {
                         totalLabel: "Total",
                       }}
                     />
-                    
+
                   </div>
                 </Col>
               </Row>
               <Row >
-                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Job</Title></Col>
-                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Post</Title></Col>
-                <Col span={8} style={{textAlign: "center"}}><Title level={3}>Student</Title></Col>
+                <Col span={8} style={{ textAlign: "center" }}><Title level={3}>Job</Title></Col>
+                <Col span={8} style={{ textAlign: "center" }}><Title level={3}>Post</Title></Col>
+                <Col span={8} style={{ textAlign: "center" }}><Title level={3}>Student</Title></Col>
               </Row>
             </div>
           </OverPack>
