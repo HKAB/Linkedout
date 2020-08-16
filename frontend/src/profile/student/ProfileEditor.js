@@ -102,7 +102,10 @@ function ProfileEditor() {
             .then(() => {
               postServices.listPost(accountServices.userValue.account.id)
                 .then((list_post) => {
-                  list_post[list_post.length - 1].post_picture = list_post[list_post.length - 1].post_picture + "?" + moment().unix();
+                  list_post.forEach(post => {
+                    if (post.id == values.id)
+                      post.post_picture = post.post_picture + "?" + moment().unix();  
+                  });
                   setPostData(list_post);
                 })
                 .catch((error) => {
@@ -187,12 +190,12 @@ function ProfileEditor() {
 
   const handleEditPostCancel = () => {
     setSelectedNewPostPicture([]);
-    // uploadableAvatarRefOnEdit.setImageUrl(undefined);
+    if (uploadableAvatarRefOnEdit) uploadableAvatarRefOnEdit.setImageUrl(null);
     setEditPostVisible(false);
     formEdit.resetFields();
   }
   const handleCreatePostCancel = () => {
-    // uploadableAvatarRefOnCreate.setImageUrl(undefined);
+    if (uploadableAvatarRefOnCreate) uploadableAvatarRefOnCreate.setImageUrl(null);
     setSelectedNewPostPicture([]);
     setCreatePostVisible(false);
     formCreate.resetFields();

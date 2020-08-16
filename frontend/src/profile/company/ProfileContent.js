@@ -183,11 +183,11 @@ function ProfileContent(props) {
             <Col style={{ marginLeft: 24, marginTop: 16 }} span={16}>
               <Title level={3}>{basicProfileData.name}</Title>
               <Space><Text strong>{basicProfileData.specialties.slice(0, 3).join(', ')}</Text></Space>
-              <div><ProfileTwoTone /> Website: <a href={basicProfileData.website}>{basicProfileData.website}</a> </div>
+              <div style={{paddingTop: "4px", paddingBottom: "4px"}}><ProfileTwoTone /> Website: <a href={basicProfileData.website}>{basicProfileData.website}</a> </div>
               <div>
-                <span onClick={showEmailDataModal}><MailTwoTone />{" Email: " + (emailData.length > 0 ? emailData[0] : "")}</span>
+                <Button type="text" style={{paddingLeft: 0, paddingRight: 0}} onClick={showEmailDataModal}><MailTwoTone />{" Email: " + (emailData.length > 0 ? emailData[0] : "")}</Button>
                 <Divider type="vertical" />
-                <span onClick={showPhoneDataModal}><PhoneTwoTone />{" Phone: " + (phoneData.length > 0 ? phoneData[0] : "")}</span>
+                <Button type="text" style={{paddingLeft: 0, paddingRight: 0}} onClick={showPhoneDataModal}><PhoneTwoTone />{" Phone: " + (phoneData.length > 0 ? phoneData[0] : "")}</Button>
               </div>
 
             </Col>
@@ -207,7 +207,7 @@ function ProfileContent(props) {
         
         <Modal
           forceRender
-          title="Email"
+          title={<><MailTwoTone/> Email</>}
           visible={emailDataVisible}
           onCancel={handleEmailDataCancel}
           footer={null}
@@ -226,7 +226,7 @@ function ProfileContent(props) {
 
         <Modal
           forceRender
-          title="Số điện thoại"
+          title={<><PhoneTwoTone/> Số điện thoại</>}
           visible={phoneDataVisible}
           onCancel={handlePhoneDataCancel}
           footer={null}
@@ -348,17 +348,6 @@ function ProfileContent(props) {
             </List.Item>
           </List>
         </Modal>
-
-        <Card
-          className="card-info"
-          style={{
-            marginTop: 24,
-          }}>
-          <Carousel>
-            <img src={pic1} style={{ maxWidth: "100%", maxHeight: "100%" }}></img>
-            <img src={pic2} style={{ maxWidth: "100%", maxHeight: "100%" }}></img>
-          </Carousel>
-        </Card>
       </>
     )
   }
