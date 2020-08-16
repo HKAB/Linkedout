@@ -328,15 +328,9 @@ function ProfileEditor() {
                   <Meta
                     title={<Title ellipsis={true} level={3}>{postDetail.title}</Title>}
                     description={<div>
-<<<<<<< Updated upstream
-                      <Text underline>Published Date {postDetail.published_date}</Text>
-                      <Title level={4}>Content </Title>
-                      <Paragraph>
-=======
                       <Text underline>Ngày đăng {postDetail.published_date}</Text>
                       <Title level={4}>Nội dung </Title>
                       <Paragraph ellipsis={{ rows: 4, expandable: true, symbol: 'more' }}>
->>>>>>> Stashed changes
                         {postDetail.content}
                       </Paragraph>
 
