@@ -60,7 +60,7 @@ function Login({ history }) {
         </Col>
         <Col span={5} offset={3}>
           <Card style={{ boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" }}>
-            <div align="center" className="logo"><img src={logo} width="144" height="64"></img></div>
+            <div align="center" className="logo"><img src={logo} width="256" height="128"></img></div>
             {/* <Title align="center">LinkedOut</Title> */}
             <Tabs centered>
               <TabPane key="1" tab={<span>Login <LoginOutlined /></span>}>
@@ -114,7 +114,7 @@ function Login({ history }) {
                     <Input size="large" type="password" prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Retype password"></Input>
                   </Form.Item>
                   <Form.Item name="license_agreement" valuePropName="checked" noStyle>
-                    <Checkbox>You agree to LinkedOut's Terms of Service, PrivacyPolicy. List <a>consequence</a></Checkbox>
+                    <Checkbox>You have to agree to LinkedOut's Terms of Service, Privacy Policy. List of <a>consequence</a></Checkbox>
                   </Form.Item>
                   <Form.Item style={{ paddingTop: 16 }}>
                     <Button shape="round" type="primary" htmlType="submit" className="register-form-button">

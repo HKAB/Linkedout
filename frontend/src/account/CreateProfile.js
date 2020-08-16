@@ -19,7 +19,7 @@ function CreateProfile({ history }) {
             history.push("/profile")
           })
           .catch(error => {
-            alert(error);
+            message.error(error);
           });
       }
       history.push("/profile")

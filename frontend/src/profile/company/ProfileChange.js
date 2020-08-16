@@ -19,6 +19,7 @@ import { EditableTagGroup, MyEditor } from 'components';
 import UploadableAvatar from "components/UploadableAvatar";
 import React, { useEffect, useState } from "react";
 import { accountServices, companyServices, getCityName, getSpecialty, jobServices } from "services";
+import moment from 'moment'
 import { Config } from "../../config/consts";
 import '../assets/css/profile.css';
 // import {Editor, EditorState} from 'draft-js';
@@ -69,9 +70,10 @@ function ProfileChange() {
   const [selectedNewJobPicture, setSelectedNewJobPicture] = useState();
 
   var editTags = useState(null);
-  var uploadableAvatarRef = useState(null);
+  var uploadableAvatarRefOnEdit = useState(null);
   var createTags = useState(null);
   var editorRef = useState(null);
+  var uploadableAvatarRefOnCreate = useState(null);
 
   const [formEdit] = Form.useForm();
   const [formCreate] = Form.useForm();
@@ -84,7 +86,7 @@ function ProfileChange() {
         .subscribe((company) => {
           if (company) {
             setCompanyBasicData(company.basic_data);
-            setJobData(company.job);;
+            setJobData(company.job);
             setEditorDescription(company.basic_data.description);
           }
         });
@@ -143,6 +145,8 @@ function ProfileChange() {
   };
 
   const handleCreateJobCancel = (e) => {
+    if (uploadableAvatarRefOnCreate) uploadableAvatarRefOnCreate.setImageUrl(null);
+    setSelectedNewJobPicture([]);
     setCreateJob_visible(false);
   };
 
@@ -151,6 +155,8 @@ function ProfileChange() {
   };
 
   const handleEditJobCancel = (e) => {
+    if (uploadableAvatarRefOnEdit) uploadableAvatarRefOnEdit.setImageUrl(null);
+    setSelectedNewJobPicture([]);
     setEditJob_visible(false);
   };
 
@@ -165,16 +171,33 @@ function ProfileChange() {
       createTags.getTags(),
     )
       .then((listjob) => {
-        if (selectedNewJobPicture) {
+        if (selectedNewJobPicture.file) {
           var id_new_job = listjob[listjob.length - 1].id;
           let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': id_new_job };
           jobServices.uploadJobPicture(multipart_formdata)
             .then(() => {
+              jobServices.listJob(accountServices.userValue.account.id)
+              .then((list_job) => {
+                list_job[list_job.length - 1].job_picture = list_job[list_job.length - 1].job_picture + "?" + moment().unix();
+                setJobData(list_job);
+              })
+              .catch((error) => {
+                message.error(error);
+              })
               message.success("Updated cover photo!");
             })
             .catch(error => {
               message.error(error);
             });
+        }
+        else {
+          jobServices.listJob(accountServices.userValue.account.id)
+          .then((list_job) => {
+            setJobData(list_job);
+          })
+          .catch((error) => {
+            message.error(error);
+          })
         }
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success("Create job successfully!");
@@ -184,8 +207,6 @@ function ProfileChange() {
       .catch((error) => {
         message.error(error);
       });
-
-    setSelectedNewJobPicture("");
   };
 
   const onEditJob = (values) => {
@@ -201,15 +222,35 @@ function ProfileChange() {
     )
       .then(() => {
 
-        if (selectedNewJobPicture) {
+        if (selectedNewJobPicture.file) {
           let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': values.id };
           jobServices.uploadJobPicture(multipart_formdata)
             .then(() => {
+              jobServices.listJob(accountServices.userValue.account.id)
+              .then((list_job) => {
+                list_job.forEach(job => {
+                  if (job.id == values.id)
+                    job.job_picture = job.job_picture + "?" + moment().unix();  
+                });
+                setJobData(list_job);
+              })
+              .catch((error) => {
+                message.error(error);
+              })
               message.success("Update cover photo for a job successfully!");
             })
             .catch(error => {
               message.error(error);
             });
+        }
+        else {
+          jobServices.listJob(accountServices.userValue.account.id)
+          .then((list_job) => {
+            setJobData(list_job);
+          })
+          .catch((error) => {
+            message.error(error);
+          })
         }
 
         companyServices.getCompany(accountServices.userValue.account.id);
@@ -221,7 +262,6 @@ function ProfileChange() {
        // handleEditJobCancel();
       });
 
-    setSelectedNewJobPicture("");
   };
 
   const onConfirmDeleteJob = (id) => {
@@ -248,7 +288,7 @@ function ProfileChange() {
     });
     //EditTag.setState({tags: item.skills});
     editTags.setTags(item.skills);
-    uploadableAvatarRef.setImageUrl(Config.backendUrl + item.job_picture);
+    uploadableAvatarRefOnEdit.setImageUrl(Config.backendUrl + item.job_picture);
     showEditJobModal();
   };
 
@@ -568,7 +608,7 @@ function ProfileChange() {
           </Form.Item>
 
           <Form.Item label="Cover photo">
-            <UploadableAvatar onUploadImage={onUploadJobPicture}></UploadableAvatar>
+            <UploadableAvatar ref={ref => (uploadableAvatarRefOnCreate = ref)} onUploadImage={onUploadJobPicture}></UploadableAvatar>
           </Form.Item>
         </Form>
       </Modal>
@@ -672,7 +712,7 @@ function ProfileChange() {
           </Form.Item>
 
           <Form.Item label="Cover photo">
-            <UploadableAvatar ref={ref => (uploadableAvatarRef = ref)} onUploadImage={onUploadJobPicture}></UploadableAvatar>
+            <UploadableAvatar ref={ref => (uploadableAvatarRefOnEdit = ref)} onUploadImage={onUploadJobPicture}></UploadableAvatar>
           </Form.Item>
         </Form>
       </Modal>
