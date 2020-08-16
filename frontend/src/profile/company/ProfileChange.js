@@ -179,6 +179,7 @@ function ProfileChange() {
         companyServices.getCompany(accountServices.userValue.account.id);
         message.success("Tạo việc làm thành công!");
         handleCreateJobCancel();
+        formCreate.resetFields();
       })
       .catch((error) => {
         message.error(error);
@@ -217,7 +218,7 @@ function ProfileChange() {
       })
       .catch((error) => {
         message.success("Lỗi cập nhật việc làm");
-        handleEditJobCancel();
+       // handleEditJobCancel();
       });
 
     setSelectedNewJobPicture("");
@@ -488,7 +489,7 @@ function ProfileChange() {
           formCreate.validateFields()
             .then(values => {
               onAddJobFinish(values);
-              formCreate.resetFields();
+              //formCreate.resetFields();
             })
             .catch(info => {
               console.log('Validate Failed:', info);
