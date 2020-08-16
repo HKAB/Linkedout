@@ -21,7 +21,10 @@ class SkillRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Skill.objects.get(name=data)
+        try:
+            return Skill.objects.get(name=data)
+        except:
+            raise ParseError('Skill doesn\'t exist')
 
 
 class PostListView(APIView):
