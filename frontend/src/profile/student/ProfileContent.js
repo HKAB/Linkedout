@@ -3,40 +3,13 @@ import { Avatar, Button, Card, Col, Empty, List, message, Modal, Row, Spin, Time
 import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { accountServices, followService, studentServices } from "services";
 import { Config } from "../../config/consts";
 import { dateHelper } from '../../helpers/date';
 import '../assets/css/profile.css';
 
 const { Title, Text } = Typography;
-const followData = [
-  {
-    avatar: 'https://image.flaticon.com/icons/svg/1532/1532495.svg',
-    title_href: 'https://ant.design',
-    title: 'Apple',
-  },
-  {
-    avatar: 'https://image.flaticon.com/icons/svg/2965/2965278.svg',
-    title_href: 'https://ant.design',
-    title: 'Google',
-  },
-  {
-    avatar: 'https://image.flaticon.com/icons/svg/3046/3046121.svg',
-    title_href: 'https://ant.design',
-    title: 'Tiktok',
-  },
-  {
-    avatar: 'https://image.flaticon.com/icons/svg/882/882747.svg',
-    title_href: 'https://ant.design',
-    title: 'Samsung',
-  },
-  {
-    avatar: 'https://image.flaticon.com/icons/svg/806/806086.svg',
-    title_href: 'https://ant.design',
-    title: 'Tesla',
-  },
-];
 
 function ProfileContent(props) {
   let history = useHistory();
@@ -127,9 +100,11 @@ function ProfileContent(props) {
         studentServices.getStudent(user.account.id).then(() => {
           setIsLoading(false);
         })
-          .catch(() => {
-            setIsLoading(true);
-          });
+        .catch(() => {
+          setIsLoading(true);
+          message.error("Xin hãy nhập thông tin cơ bản trước!")
+          history.push("/create-profile");
+        });
 
         const subscription = studentServices.studentObject.subscribe((student) => {
           if (student) {
@@ -255,7 +230,7 @@ function ProfileContent(props) {
                 <List.Item>
                   <List.Item.Meta
                     avatar={<Avatar src={Config.backendUrl + item.profile_picture}></Avatar>}
-                    title={<span>{item.account_id ? <a href={"/profile/company/" + item.account_id}>{item.company_name}</a> : item.company_name} • <i>{item.title}</i></span>}
+                    title={<span>{item.account_id ? <Link to={"/profile/company/" + item.account_id}>{item.company_name}</Link> : item.company_name} • <i>{item.title}</i></span>}
                     description={<div className="company-info" id={item.id}>
                       <Text>{dateHelper.toText(item.start_date) + " - " + dateHelper.toText(item.end_date)}</Text>
                     </div>}

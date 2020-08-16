@@ -39,7 +39,7 @@ function FeedJobSuggestion(props) {
           style={{ margin: 0 }}
           grid={{ gutter: 0, column: 1 }}
           itemLayout="vertical"
-          dataSource={suggestions.slice(0, 3)}
+          dataSource={suggestions}
           renderItem={item => (
             <List.Item style={{ margin: 0, padding: 0 }} key={item.jobId}>
               <Card bordered={false} style={{ padding: 0 }}>

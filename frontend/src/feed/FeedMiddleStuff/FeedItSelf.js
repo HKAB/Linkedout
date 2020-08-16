@@ -105,7 +105,7 @@ function FeedItSelf() {
                     title={
                       <>
                         <Title level={4} href={item.recruitment_url}>
-                          {item.title} •<Link href={"/profile/company/" + item.account_id}><i> {item.company_name}</i></Link>
+                          {item.title} •<Link to={"/profile/company/" + item.account_id}><i> {item.company_name}</i></Link>
                         </Title>
                         <Button
                           style={{ float: "right", width: 100, marginRight: 45, bottom: 24 }}

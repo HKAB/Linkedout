@@ -74,6 +74,7 @@ const data_comment = [
   },
 ];
 
+// shamelessly copy from so
 function getRandom(arr, n) {
   var result = new Array(n),
       len = arr.length,

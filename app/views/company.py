@@ -8,6 +8,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.exceptions import ParseError
 from drf_yasg.utils import swagger_auto_schema
 
+from app.exceptions import InvalidInputFormat
 from app.models.company import Company
 from app.models.specialty import Specialty
 from app.services.company import get_company, create_company, update_company, set_profile_picture
@@ -21,7 +22,10 @@ class SpecialtyRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Specialty.objects.get(name=data)
+        try:
+            return Specialty.objects.get(name=data)
+        except:
+            raise ParseError('Specialty doesn\'t exist')
 
 
 class CompanyProfilePictureView(APIView):

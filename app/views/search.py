@@ -4,6 +4,7 @@ from rest_framework import status, serializers
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import ParseError
 from drf_yasg.utils import swagger_auto_schema
 
 from app.models.job import Job
@@ -24,7 +25,10 @@ class SkillRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Skill.objects.get(name=data)
+        try:
+            return Skill.objects.get(name=data)
+        except:
+            raise ParseError('Skill doesn\'t exist')
 
 class CityRelatedField(serializers.RelatedField):
     def display_value(self, instance):
@@ -34,7 +38,10 @@ class CityRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return City.objects.get(name=data)
+        try:
+            return City.objects.get(name=data)
+        except:
+            raise ParseError('City doesn\'t exist')
 
 class SpecialtyRelatedField(serializers.RelatedField):
     def display_value(self, instance):
@@ -44,7 +51,10 @@ class SpecialtyRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Specialty.objects.get(name=data)
+        try:
+            return Specialty.objects.get(name=data)
+        except:
+            raise ParseError('Specialty doesn\'t exist')
 
 class PostSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
