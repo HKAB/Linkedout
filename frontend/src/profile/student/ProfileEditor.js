@@ -341,7 +341,7 @@ function ProfileEditor() {
                       <Title level={4}>Skills </Title>
                       <Paragraph><List dataSource={postDetail.skills} renderItem={skills => (<Tag>{skills}</Tag>)}></List></Paragraph>
                       <Title level={4}>Account interested</Title>
-                      <Paragraph><List dataSource={postDetail.account_interested} renderItem={account => (<Tooltip title={account.firstname + " " + account.lastname}><Avatar src={Config.backendUrl + account.profile_picture}></Avatar></Tooltip>)}></List></Paragraph>
+                      <Paragraph><List dataSource={postDetail.account_interested} renderItem={account => (<a href={"/profile/student/" + account.id}><Tooltip title={account.firstname + " " + account.lastname}><Avatar src={Config.backendUrl + account.profile_picture}></Avatar></Tooltip></a>)}></List></Paragraph>
                     </div>}
                   />
                 </Card>
