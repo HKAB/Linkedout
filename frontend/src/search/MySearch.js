@@ -302,7 +302,7 @@ function MySearch() {
 														<Link
                                     to={
                                       "/profile/company/" +
-                                      item.id
+                                      item.account_id
                                     }
                                   >
                                     <i>
