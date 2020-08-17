@@ -104,7 +104,7 @@ function ProfileEditor() {
                 .then((list_post) => {
                   list_post.forEach(post => {
                     if (post.id == values.id)
-                      post.post_picture = post.post_picture + "?" + moment().unix();  
+                      post.post_picture = post.post_picture + "?" + moment().unix();
                   });
                   setPostData(list_post);
                 })
@@ -301,10 +301,10 @@ function ProfileEditor() {
                         </span>
                       }
                       description={<div>
-                          <Text>Published date: {item.published_date}</Text>
-                          <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}>
-                            Content: {item.content}
-                          </Paragraph>
+                        <Text>Published date: {item.published_date}</Text>
+                        <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}>
+                          Content: {item.content}
+                        </Paragraph>
                         <List dataSource={item.skills} renderItem={skill => (<Tag>{skill}</Tag>)}></List>
                       </div>}
                     />
@@ -330,8 +330,8 @@ function ProfileEditor() {
                   <Meta
                     title={<Title ellipsis={true} level={3}>{postDetail.title}</Title>}
                     description={<div>
-                      <Text underline>Ngày đăng {postDetail.published_date}</Text>
-                      <Title level={4}>Nội dung </Title>
+                      <Text underline>Published Date {postDetail.published_date}</Text>
+                      <Title level={4}>Description</Title>
                       <Paragraph ellipsis={{ rows: 4, expandable: true, symbol: 'more' }}>
                         {postDetail.content}
                       </Paragraph>

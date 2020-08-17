@@ -601,7 +601,7 @@ function ProfileChange() {
                           rules={[{ required: true, message: "Missing school name" },]}
                         >
                           {/* <Input placeholder="School Name" /> */}
-                          <AutoComplete style={{ width: '100%' }} options={autoCompleteSchool} onChange={onChangeAutocompleteSchool} placeholder="Education Name" ></AutoComplete>
+                          <AutoComplete style={{ width: '100%' }} options={autoCompleteSchool} onChange={onChangeAutocompleteSchool} placeholder="School" ></AutoComplete>
                         </Form.Item>
                       </Col>
                       <Col span={5}>
