@@ -26,8 +26,9 @@ def get_feed(*, account: Account) -> list:
     post_list = post_list.exclude(
         skills__in=not_have_skills).order_by('-published_date')
 
-    feed = sorted(chain(job_list, post_list),
-                  key=lambda instance: instance.published_date, reverse=True)
+    feed = list(sorted(chain(job_list, post_list),
+                       key=lambda instance: instance.published_date, reverse=True))
+    feed = list(dict.fromkeys(list))
     return feed
 
 
@@ -46,10 +47,13 @@ def suggest_job(*, account: Account) -> list:
     job_list = job_list.exclude(
         company__followers=student).order_by('-published_date')
 
-    if job_list.count() < NUMBER_OF_SUGGESTION:
-        return job_list
-    first_post = randint(0, job_list.count() - NUMBER_OF_SUGGESTION)
-    return job_list[first_post:first_post + NUMBER_OF_SUGGESTION]
+    res = list(job_list)
+    res = list(dict.fromkeys(res))
+
+    if len(res) < NUMBER_OF_SUGGESTION:
+        return res
+    first_post = randint(0, len(res) - NUMBER_OF_SUGGESTION)
+    return res[first_post:first_post + NUMBER_OF_SUGGESTION]
 
 
 def suggest_follow(*, account: Account) -> list:
