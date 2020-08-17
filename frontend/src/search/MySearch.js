@@ -82,7 +82,7 @@ function MySearch() {
           </Select>
           <Search
             size="large"
-            placeholder="Import name, to blank if you find all"
+            placeholder="Input name, leave it blank if find all"
             style={{ width: "80%", borderRadius: 25 }}
             onSearch={onSearch}
           ></Search>

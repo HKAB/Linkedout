@@ -170,7 +170,7 @@ function ProfileChange() {
       createTags.getTags(),
     )
       .then((listjob) => {
-        if (selectedNewJobPicture.file) {
+        if (selectedNewJobPicture && selectedNewJobPicture.file) {
           var id_new_job = listjob[listjob.length - 1].id;
           let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': id_new_job };
           jobServices.uploadJobPicture(multipart_formdata)
@@ -221,7 +221,7 @@ function ProfileChange() {
     )
       .then(() => {
 
-        if (selectedNewJobPicture.file) {
+        if (selectedNewJobPicture && selectedNewJobPicture.file) {
           let multipart_formdata = { 'file': selectedNewJobPicture.file, 'id': values.id };
           jobServices.uploadJobPicture(multipart_formdata)
             .then(() => {
@@ -257,7 +257,7 @@ function ProfileChange() {
         handleEditJobCancel();
       })
       .catch((error) => {
-        message.success("Update job error");
+        message.error("Update job error");
         // handleEditJobCancel();
       });
 

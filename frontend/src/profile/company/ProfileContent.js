@@ -9,7 +9,7 @@ import { followService } from '../../services/follow.service';
 import '../assets/css/profile.css';
 import protest from '../assets/images/protest.svg';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const rowStyle = {
   position: "relative",
@@ -321,31 +321,41 @@ function ProfileContent(props) {
         </Card>
 
         <Modal
-          forceRender
-          title="Job"
-          visible={jobDetailVisible}
-          onCancel={handleJobDetailCancel}
-          footer={null}
-        >
-          <List grid={{ gutter: 24, column: 2 }}>
-            <List.Item>
+        forceRender
+        title={<Title level={4}>Job</Title>}
+        visible={jobDetailVisible}
+        onCancel={handleJobDetailCancel}
+        footer={null}
+      >
+        <List grid={{ gutter: 24, column: 2 }}>
+          <List.Item>
+            <Card
+              bordered={false}
+              cover={<img src={Config.backendUrl + jobDetail.job_picture} />}>
               <Meta
-                avatar={<Avatar src={protest}></Avatar>}
-                title={jobDetail.title}
-                description={<Space direction="vertical" size={3}>
-                  <div>Seniority Level: {jobDetail.seniority_level}</div>
-                  <div>Cities: <Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></div>
-                  <div>Employment type: {jobDetail.employment_type}</div>
-                  <div>Description: {jobDetail.description}</div>
-                  <div style={{ display: 'flex' }}>
-                    <div>Skills: </div>
-                    <List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List>
-                  </div>
-                </Space>}
+                title={<Title level={3}>{jobDetail.title}</Title>}
+                description={<div>
+
+                  <Title level={4}>Seniority Level </Title>
+                  <Paragraph>{jobDetail.seniority_level}</Paragraph>
+                  <Title level={4}>City </Title>
+                  <Paragraph><Space><List dataSource={jobDetail.cities} renderItem={city => (city)}></List></Space></Paragraph>
+                  <Title level={4}>Employee Type </Title>
+                  <Paragraph>{jobDetail.employment_type}</Paragraph>
+
+                  <Title level={4}>Description </Title>
+                  <Paragraph ellipsis={{ rows: 4, expandable: true, symbol: 'more' }}>
+                    {jobDetail.description}
+                  </Paragraph>
+
+                  <Title level={4}>Skills </Title>
+                  <Paragraph><List dataSource={jobDetail.skills} renderItem={skills => (<Tag style={{ margin: 3 }}>{skills}</Tag>)}></List></Paragraph>
+                </div>}
               />
-            </List.Item>
-          </List>
-        </Modal>
+            </Card>
+          </List.Item>
+        </List>
+      </Modal>
       </>
     )
   }
