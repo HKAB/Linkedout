@@ -9,7 +9,7 @@ Project for 1920H_PTUDW class
 Install MySql database, then create database and grant permissions.
 
 ```sql
-CREATE DATABASE backend;
+CREATE DATABASE backend CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER 'backend'@'%' IDENTIFIED BY 'backend';
 GRANT ALL PRIVILEGES ON backend.* TO 'backend'@'%';
 FLUSH PRIVILEGES;

@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+  consul-server:
+    image: consul:latest
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+    volumes:
+      - "./deployment/consul-server/server.json:/consul/config/server.json"
+    command:
+      ["consul", "agent", "-config-dir=/consul/config/", "-node=consul-server"]
+
+  prometheus:
+    build: deployment/prometheus
+    ports:
+      - "8001:9090"
+    volumes:
+      - "./deployment/prometheus/config.yaml:/etc/prometheus/prometheus.yml"
+      - "./deployment/prometheus/consul:/consul/config"
+
+  grafana:
+    build: "./deployment/grafana"
+    ports:
+      - "8002:3000"
+
+  gateway:
+    build: deployment/gateway/
+    ports:
+      - "80:80"
+    volumes:
+      - "./deployment/gateway/consul:/consul/config"
+      - "./deployment/gateway/config/default.conf:/etc/nginx/conf.d/default.conf"
+    depends_on:
+      - "consul-server"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - "./frontend/consul:/consul/config"
+      - "./frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+    depends_on:
+      - "consul-server"
+
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./media:/app/media"
+    environment:
+      DJANGO_DATABASE_HOST: "mysql"
+      DJANGO_DATABASE_NAME: "backend"
+      DJANGO_DATABASE_USER: "backend"
+      DJANGO_DATABASE_PASSWORD: "backend"
+      DJANGO_CONFIG_SECRETKEY: "ihateyou"
+    depends_on:
+      - "consul-server"
+      - "mysql"
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: "backend"
+      MYSQL_USER: "backend"
+      MYSQL_PASSWORD: "backend"
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]

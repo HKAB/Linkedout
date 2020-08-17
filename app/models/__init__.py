@@ -13,6 +13,7 @@ from .skill import Skill
 from .specialty import Specialty
 from .student import Student
 from .title import Title
+from .social import Social
 
 __all__ = ['Account', 'City', 'Company', 'Education', 'Email', 'Experience',
-           'Job', 'Phone', 'Post', 'School', 'Skill', 'Specialty', 'Student', 'Title']
+           'Job', 'Phone', 'Post', 'School', 'Skill', 'Specialty', 'Student','Social', 'Title']

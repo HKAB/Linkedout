@@ -1,12 +1,13 @@
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from rest_framework.views import APIView
+from django.views.decorators.csrf import ensure_csrf_cookie
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status, serializers
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 
-from app.services.experience import list_experience, create_experience, update_experience, delete_experience
+from app.services.experience import (create_experience, delete_experience,
+                                     list_experience, update_experience)
 from app.utils import inline_serializer
 
 
@@ -20,6 +21,7 @@ class ExperienceListView(APIView):
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
+        account_id = serializers.IntegerField(required=False)
         company_name = serializers.CharField()
         profile_picture = serializers.ImageField()
         start_date = serializers.DateField()
@@ -29,7 +31,8 @@ class ExperienceListView(APIView):
 
         class Meta:
             ref_name = 'ExperienceListOut'
-            fields = ['id', 'company_name', 'profile_picture', 'start_date', 'end_date', 'title', 'description']
+            fields = ['id', 'account_id', 'company_name', 'profile_picture',
+                      'start_date', 'end_date', 'title', 'description']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -47,13 +50,15 @@ class ExperienceCreateView(APIView):
     class InputSerializer(serializers.Serializer):
         company_name = serializers.CharField(required=True)
         start_date = serializers.DateField(required=True)
-        end_date = serializers.DateField(required=True)  # Does this really required? idk
+        # Does this really required? idk
+        end_date = serializers.DateField(required=True)
         title = serializers.CharField(required=True)
         description = serializers.CharField(required=True)
 
         class Meta:
             ref_name = 'ExperienceCreateIn'
-            fields = ['company_name', 'start_date', 'end_date', 'title', 'description']
+            fields = ['company_name', 'start_date',
+                      'end_date', 'title', 'description']
 
     class OutputSerializer(serializers.Serializer):
         id = serializers.IntegerField()
@@ -66,7 +71,8 @@ class ExperienceCreateView(APIView):
 
         class Meta:
             ref_name = 'ExperienceCreateOut'
-            fields = ['id', 'company_name', 'profile_picture', 'start_date', 'end_date', 'title', 'description']
+            fields = ['id', 'company_name', 'profile_picture',
+                      'start_date', 'end_date', 'title', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -75,7 +81,8 @@ class ExperienceCreateView(APIView):
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = create_experience(account=request.user, **serializer.validated_data)
+        result = create_experience(
+            account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_201_CREATED)
 
 
@@ -85,7 +92,8 @@ class ExperienceUpdateView(APIView):
         experience = inline_serializer(fields={
             'company_name': serializers.CharField(required=True),
             'start_date': serializers.DateField(required=True),
-            'end_date': serializers.DateField(required=True),  # Does this really required? idk
+            # Does this really required? idk
+            'end_date': serializers.DateField(required=True),
             'title': serializers.CharField(required=True),
             'description': serializers.CharField(required=True),
         })
@@ -105,7 +113,8 @@ class ExperienceUpdateView(APIView):
 
         class Meta:
             ref_name = 'ExperienceUpdateOut'
-            ['id', 'company_name', 'profile_picture', 'start_date', 'end_date', 'title', 'description']
+            ['id', 'company_name', 'profile_picture',
+                'start_date', 'end_date', 'title', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -114,7 +123,8 @@ class ExperienceUpdateView(APIView):
     def put(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = update_experience(account=request.user, **serializer.validated_data)
+        result = update_experience(
+            account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
 
 
@@ -137,7 +147,8 @@ class ExperienceDeleteView(APIView):
 
         class Meta:
             ref_name = 'ExperienceDeleteOut'
-            ['id', 'company_name', 'profile_picture', 'start_date', 'end_date', 'title', 'description']
+            ['id', 'company_name', 'profile_picture',
+                'start_date', 'end_date', 'title', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -146,5 +157,6 @@ class ExperienceDeleteView(APIView):
     def delete(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = delete_experience(account=request.user, **serializer.validated_data)
+        result = delete_experience(
+            account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)

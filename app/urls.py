@@ -1,16 +1,37 @@
-from django.urls import path, include
+from django.urls import include, path
 
-from app.views.account import LoginView, RegisterView, ChangePasswordView
-from app.views.student import StudentGetView, StudentCreateView, StudentUpdateView, StudentProfilePictureView
-from app.views.company import CompanyGetView, CompanyCreateView, CompanyUpdateView, CompanyProfilePictureView
-from app.views.skill import SkillListView, SkillCreateView, SkillDeleteView
-from app.views.email import EmailListView, EmailCreateView, EmailUpdateView, EmailDeleteView
-from app.views.phone import PhoneListView, PhoneCreateView, PhoneUpdateView, PhoneDeleteView
-from app.views.education import EducationListView, EducationCreateView, EducationUpdateView, EducationDeleteView
-from app.views.experience import ExperienceListView, ExperienceCreateView, ExperienceUpdateView, ExperienceDeleteView
-from app.views.job import JobGetView, JobListView, JobCreateView, JobUpdateView, JobDeleteView
-from app.views.tag import SkillTagView, TitleTagView, SchoolTagView, CompanyTagView, SpecialtyTagView, LocationTagView
-from app.views.post import PostListView, PostCreateView, PostUpdateView, PostDeleteView
+from app.views.account import ChangePasswordView, LoginView, RegisterView
+from app.views.company import (CompanyCreateView, CompanyGetView,
+                               CompanyProfilePictureView, CompanyUpdateView)
+from app.views.education import (EducationCreateView, EducationDeleteView,
+                                 EducationListView, EducationUpdateView)
+from app.views.email import (EmailCreateView, EmailDeleteView, EmailListView,
+                             EmailUpdateView)
+from app.views.experience import (ExperienceCreateView, ExperienceDeleteView,
+                                  ExperienceListView, ExperienceUpdateView)
+from app.views.feed import (FeedGetView, FeedSuggestFollowView,
+                            FeedSuggestJobView)
+from app.views.follow import (CompanyFollowedView, FollowCheckView,
+                              FollowCountView, FollowCreateView,
+                              FollowDeleteView)
+from app.views.interest import (AccountInterestedView, InterestCheckView,
+                                InterestCountView, InterestCreateView,
+                                InterestDeleteView, PostInterestedView)
+from app.views.job import (JobCreateView, JobDeleteView, JobGetView,
+                           JobListView, JobPictureView, JobUpdateView)
+from app.views.phone import (PhoneCreateView, PhoneDeleteView, PhoneListView,
+                             PhoneUpdateView)
+from app.views.post import (PostCreateView, PostDeleteView, PostGetView,
+                            PostListView, PostPictureView, PostUpdateView)
+from app.views.search import SearchView
+from app.views.skill import SkillCreateView, SkillDeleteView, SkillListView
+from app.views.statistic import (JobsBySkillView, PostsBySkillView,
+                                 StudentsBySkillView)
+from app.views.student import (StudentCreateView, StudentGetView,
+                               StudentProfilePictureView, StudentUpdateView)
+from app.views.tag import (CompanyTagView, LocationTagView, SchoolTagView,
+                           SkillTagView, SpecialtyTagView, TitleTagView)
+
 account_patterns = [
     path('login', LoginView.as_view()),
     path('register', RegisterView.as_view()),
@@ -71,6 +92,33 @@ job_patterns = [
     path('create', JobCreateView.as_view()),
     path('update', JobUpdateView.as_view()),
     path('delete', JobDeleteView.as_view()),
+    path('upload', JobPictureView.as_view()),
+]
+
+follow_patterns = [
+    path('check', FollowCheckView.as_view()),
+    path('create', FollowCreateView.as_view()),
+    path('delete', FollowDeleteView.as_view()),
+    path('count', FollowCountView.as_view()),
+    path('company-followed', CompanyFollowedView.as_view()),
+]
+
+post_patterns = [
+    path('get', PostGetView.as_view()),
+    path('list', PostListView.as_view()),
+    path('create', PostCreateView.as_view()),
+    path('update', PostUpdateView.as_view()),
+    path('delete', PostDeleteView.as_view()),
+    path('upload', PostPictureView.as_view()),
+]
+
+interest_patterns = [
+    path('check', InterestCheckView.as_view()),
+    path('create', InterestCreateView.as_view()),
+    path('delete', InterestDeleteView.as_view()),
+    path('count', InterestCountView.as_view()),
+    path('account-interested', AccountInterestedView.as_view()),
+    path('post-interested', PostInterestedView.as_view()),
 ]
 
 tag_patterns = [
@@ -81,12 +129,19 @@ tag_patterns = [
     path('specialty', SpecialtyTagView.as_view()),
     path('location', LocationTagView.as_view()),
 ]
-post_patterns = [
-    path('list', PostListView.as_view()),
-    path('create', PostCreateView.as_view()),
-    path('update', PostUpdateView.as_view()),
-    path('delete', PostDeleteView.as_view()),
+
+feed_patterns = [
+    path('get', FeedGetView.as_view()),
+    path('suggest-job', FeedSuggestJobView.as_view()),
+    path('suggest-follow', FeedSuggestFollowView.as_view()),
 ]
+
+statistic_patterns = [
+    path('students-by-skill', StudentsBySkillView.as_view()),
+    path('jobs-by-skill', JobsBySkillView.as_view()),
+    path('posts-by-skill', PostsBySkillView.as_view()),
+]
+
 urlpatterns = [
     path('account/', include((account_patterns, 'account'))),
     path('student/', include((student_patterns, 'student'))),
@@ -97,7 +152,11 @@ urlpatterns = [
     path('education/', include((education_patterns, 'education'))),
     path('experience/', include((experience_patterns, 'experience'))),
     path('job/', include((job_patterns, 'job'))),
-    path('tag/', include((tag_patterns, 'tag'))),
+    path('follow/', include((follow_patterns, 'follow'))),
     path('post/', include((post_patterns, 'post'))),
-
+    path('interest/', include((interest_patterns, 'interest'))),
+    path('tag/', include((tag_patterns, 'tag'))),
+    path('feed/', include((feed_patterns, 'feed'))),
+    path('statistic/', include((statistic_patterns, 'statistic'))),
+    path('search', SearchView.as_view())
 ]

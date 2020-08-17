@@ -1,259 +1,316 @@
-import React from 'react'
-import { Component } from 'react';
-import {Tabs,Menu, Form, Input, Button, Dropdown, Upload, Space, DatePicker, Modal} from  'antd';
-import{ Row, Col, Avatar, Switch} from 'antd';
-import {EditOutlined, UploadOutlined} from '@ant-design/icons';             
+import { Avatar, Button, Card, Col, DatePicker, Form, Input, Menu, message, Modal, Row, Select, Space, Switch, Tabs, Upload } from 'antd';
 import moment from 'moment';
-import { studentServices } from "@/services";
-import { accountServices } from "@/services";
+import React, { useEffect, useState } from 'react';
+import { accountServices, studentServices } from "services";
+import { Config } from "../../config/consts";
 
-
+const { Option } = Select;
 const dateFormat = 'YYYY-MM-DD';
 
-const  {TabPane} =  Tabs;
+const { TabPane } = Tabs;
 const color = (
-    <Menu style={{ marginLeft:450}}>
-        <Button  key='3' title="Orange" style={{backgroundColor:"rgb(250,173,20"}}>Orange</Button>
-        <Button key='4'title="Daybreak Blue" style={{backgroundColor:'rgb(24,144,255)'}}>LBlue</Button>
-        <Button key='5'title="Red" style={{backgroundColor:"rgb(245,34,45)"}}>Red</Button>
-        <Button key='6'title="Volcano" style={{backgroundColor:"rgb(250,84,28)"}}>Volc</Button>
-        <Button key='7'title="Cyan" style={{backgroundColor:"rgb(19,194,194)"}}>Cyan</Button>
-        <Button key='8'title="Green" style={{backgroundColor:"rgb(82,196,26)"}}>Green</Button>
-        <Button key='9'title="Geek Blue" style={{backgroundColor:"rgb(47,84,235)"}}>GBlue</Button>
-        <Button key='10'title="Purple" style={{backgroundColor:"rgb(114,46,209)"}}>Purple</Button>
-    </Menu>
-    )
-class ProfileEdit extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            disabled: false,
-            basic_profile_data: {},
-            email_data: [],
-            phone_data: []
-        }
-        this.formRef = React.createRef();
-    }
+  <Menu style={{ marginLeft: 450 }}>
+    <Button key='3' title="Orange" style={{ backgroundColor: "rgb(250,173,20" }}>Orange</Button>
+    <Button key='4' title="Daybreak Blue" style={{ backgroundColor: 'rgb(24,144,255)' }}>LBlue</Button>
+    <Button key='5' title="Red" style={{ backgroundColor: "rgb(245,34,45)" }}>Red</Button>
+    <Button key='6' title="Volcano" style={{ backgroundColor: "rgb(250,84,28)" }}>Volc</Button>
+    <Button key='7' title="Cyan" style={{ backgroundColor: "rgb(19,194,194)" }}>Cyan</Button>
+    <Button key='8' title="Green" style={{ backgroundColor: "rgb(82,196,26)" }}>Green</Button>
+    <Button key='9' title="Geek Blue" style={{ backgroundColor: "rgb(47,84,235)" }}>GBlue</Button>
+    <Button key='10' title="Purple" style={{ backgroundColor: "rgb(114,46,209)" }}>Purple</Button>
+  </Menu>
+)
 
-
-    componentDidMount() {
-        let user = accountServices.userValue;
-        if (user) {
-          studentServices.getStudent(user.account.id);
-          studentServices.studentObject.subscribe((student) => {
-              if (student) {
-                this.setState({basic_profile_data: student.basic_data});
-                this.setState({email_data: student.email});
-                this.setState({phone_data: student.phone});
-
-                this.formRef.current.resetFields();
-              }
-          });
-        }
-        else {
-          console.log("Oh no!");
-        }
-      }
-
-    changeDisabled = () =>{
-        this.setState({
-            disabled: !this.state.disabled,
-          });
-        }
-    editProfileStudent = values =>{
-        // if(values.firstName==null) values.firstName =  this.state.firstName;
-        // if(values.lastName==null) values.lastName =  this.state.lastName;
-        // if(values.email==null) values.email =  this.state.email;
-        // if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
-        // if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
-
-        // if(values.firstName==null) values.firstName =  this.state.firstName;
-        // if(values.lastName==null) values.lastName =  this.state.lastName;
-        // if(values.email==null) values.email =  this.state.email;
-        // if(values.dateOfBirth==null) values.dateOfBirth =  this.state.dateOfBirth;
-        // if(values.phoneNumber==null) values.phoneNumber =  this.state.phoneNumber;
-
-        console.log(values);
-        studentServices.updateBasicStudent(
-            values.firstName,
-            values.lastName,
-            values.dateOfBirth.format("YYYY-MM-DD"),
-            values.description
-            // this.state.description
-        )
-        .then(() => {
-            studentServices.getStudent(accountServices.userValue.account.id);
-            Modal.success({ title: "uWu", content: "Basic information updated!" });
-          })
-          .catch((error) => {
-            console.log(error);
-            Modal.error({ title: "uWu", content: error });
-          });
-
-
-        studentServices
-        .updateStudentPhone(
-            this.state.phone_data[0],
-            values.phoneNumber,
-        )
-        .then(() => {
-            studentServices.getStudent(accountServices.userValue.account.id);
-            Modal.success({ title: "uWu", content: "Phone updated!" });
-          })
-          .catch((error) => {
-            console.log(error);
-            Modal.error({ title: "uWu", content: error });
-          });
-
-        studentServices
-        .updateStudentEmail(
-            this.state.email_data[0],
-            values.email,
-        )
-        .then(() => {
-            Modal.success({title: "\^o^/", content: "Success"});
-        })
-        .catch((error)=>{
-            console.log(error);
-            Modal.error({title: "╯︿╰", content: error});
-        });
-        
-        
-    }
-    onFinishChangePass = values =>{
-        console.log(values.newPass, values.oldPass);
-            if (values.newPass!==values.confPass){
-                Modal.error({title: "╯︿╰", content: 'Password not match!'});
-            }else{
-                accountServices.changePassword(values.oldPass, values.newPass).then()
-                .then(()=>{
-                    Modal.success({title: "\^o^/", content: "Change Password successfully!!!"});
-                })
-                .catch((error)=>{
-                    Modal.error({title: "╯︿╰", content:error});
-                })
-            }
-        }
-    render()
-    {
-        return(
-            <Menu  mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{padding: 24,
-                margin: 0,
-                minHeight: 600,
-                marginTop: 24,
-                }}
-                title="Thay đổi" icon={<EditOutlined />}  key="sub1"
-                >
-                    <Tabs  tabPosition="left" style={{marginLeft:24}}>
-                        <TabPane tab="Thông tin tài khoản" key="1" style={{marginTop:20}}>
-                            <span style={{fontWeight: "bold"}}>THÔNG TIN TÀI KHOẢN</span>
-                            <Row align="middle">
-                            
-                                <Col span="14">
-                                    <Form 
-                                    ref={this.formRef} 
-                                    onFinish={this.editProfileStudent} 
-                                    style={{marginTop:32}} 
-                                    initialValues={{firstName: this.state.basic_profile_data.firstname,
-                                                    lastName: this.state.basic_profile_data.lastname,
-                                                    email: this.state.email_data[0],
-                                                    dateOfBirth: moment(this.state.basic_profile_data.dateofbirth, dateFormat),
-                                                    phoneNumber: this.state.phone_data[0],
-                                                    description: this.state.basic_profile_data.description
-                                                }}
-                                    >
-                                        
-                                        <span>First Name</span>
-                                        <Form.Item name="firstName" >
-                                            <Input></Input>
-                                        </Form.Item>
-                                        <span>Last Name</span>
-                                        <Form.Item name="lastName" >
-                                            <Input></Input>
-                                        </Form.Item>
-
-                                        <span>Email</span>
-                                        <Form.Item  name="email" >
-                                            <Input ></Input>
-                                        </Form.Item>
-
-                                        <span>Date of birth</span>
-                                        <Form.Item  name="dateOfBirth">
-                                            <DatePicker format={dateFormat}  />
-                                        </Form.Item>
-                                        
-                                        <span>Phone Number</span>
-                                        <Form.Item  name="phoneNumber"  >
-                                            <Input/>
-                                        </Form.Item>
-
-                                        <span>Short description</span>
-                                        <Form.Item  name="description" >
-                                            <Input/>
-                                        </Form.Item>
-
-                                        <Button type="primary" htmlType="submit">Save</Button>
-                                        <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
-                                    </Form>
-                                </Col>
-                                <Col span="6" offset="11" style={{position:'absolute',top:150}}>
-                                <Avatar style={{width: 180, height: 180, marginBottom:10}} src={"http://127.0.0.1:8000" + this.state.basic_profile_data.profile_picture} ></Avatar>
-                                    <Space style={{position:'relative', right:-20}}>
-                                        <Upload >
-                                    <Button >
-                                        <UploadOutlined /> Change avatar
-                                    </Button>
-                                    </Upload>
-                                    </Space>
-                                    
-                                </Col>
-                            </Row>
-                            
-                        </TabPane>
-                        <TabPane tab="Change Password" key="3" style={{ marginTop:20}}   >
-                        <span style={{fontWeight: "bold"}}>CHANGE PASSWORD</span>
-                            <Form  onFinish={this.onFinishChangePass} style={{marginTop:32, marginRight:150}} >
-                                            <span> Old Password</span>
-                                            <Form.Item  span="6" name="oldPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
-                                            <Input.Password    placeholder="Old Password"  ></Input.Password>
-                                            </Form.Item>
-
-                                            <span>New Password</span>
-                                            <Form.Item span="6" name="newPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
-                                            <Input.Password   placeholder="New Password"  ></Input.Password>
-                                            </Form.Item>
-
-                                            <span> Confirm Password</span>
-                                            <Form.Item span="6" name="confPass" rules={[{ required: true, message: 'Đừng để trống'}]}>
-                                            <Input.Password   placeholder="Confirm Password" ></Input.Password>
-                                            </Form.Item>
-
-                                            <Button type="primary" htmlType="submit" >Save</Button>
-                                            <Button type="primary" style={{marginLeft: 16}} htmlType="cancel" >Cancel</Button>
-                            </Form>
-                        
-                            </TabPane>
-                         <TabPane tab="Settings" key="2" style={{fontSize: 16, marginTop:32}}>
-                             <Row>
-                                <Col>Theme Color</Col>
-                                <Col style={{position:'absolute', right:64}}> <Switch checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={this.changeDisabled} /></Col>
-                             </Row>
-                            <Row>
-                                <Dropdown disabled={this.state.disabled} overlay={color} placement="bottomCenter" >
-                                  <Button class="changeColor" style={{marginTop:24}}>Color</Button>
-                              </Dropdown>
-                            </Row>
-                         </TabPane>
-                        
-                     </Tabs>
-             </Menu>
-        
-           
-        );
-    }
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
 }
- 
-export {ProfileEdit};
+
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJpgOrPng && isLt2M;
+}
+
+function ProfileEdit() {
+
+  const [disabled, setDisabled] = useState([]);
+  const [basicProfileData, setBasicProfileData] = useState([]);
+  const [emailData, setEmailData] = useState([]);
+  const [phoneData, setPhoneData] = useState([]);
+  const [loading, setLoading] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageFormData, setImageFormData] = useState([]);
+
+  const [formEditBasicInfo] = Form.useForm();
+
+  const handleChangeAvatar = info => {
+    setImageFormData(info.file);
+    getBase64(info.file.originFileObj, picture =>
+      setImageUrl(picture)
+    );
+  };
+
+  const onUploadImage = (data) => {
+    let multipart_formdata = { "file": data.file }
+    studentServices.uploadStudentPictureProfile(multipart_formdata)
+      .then(() => {
+        message.success("Upload avatar successful!");
+      });
+  }
+
+  useEffect(() => {
+    let user = accountServices.userValue;
+    if (user) {
+      studentServices.getStudent(user.account.id);
+      const subscription = studentServices.studentObject.subscribe((student) => {
+        if (student) {
+          student.basic_data.profile_picture = Config.backendUrl + student.basic_data.profile_picture;
+          setBasicProfileData(student.basic_data);
+          setEmailData(student.email);
+          setPhoneData(student.phone);
+          // if (formRef.current) formRef.current.resetFields();
+          console.log(basicProfileData)
+          console.log(student.basic_data.profile_picture);
+          formEditBasicInfo.resetFields();
+        }
+      });
+      return () => {
+        subscription.unsubscribe();
+      }
+    }
+    else {
+      console.log("Oh no!");
+    }
+  }, [])
+
+  const changeDisabled = () => {
+    setDisabled(!disabled);
+  }
+  const editProfileStudent = values => {
+    studentServices.updateBasicStudent(
+      values.firstName,
+      values.lastName,
+      values.dateOfBirth.format("YYYY-MM-DD"),
+      values.gender,
+      values.description
+    )
+      .then(() => {
+        studentServices.getStudent(accountServices.userValue.account.id);
+        message.success({ title: "uWu", content: "Updated basic information!" });
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error({ title: "uWu", content: error });
+      });
+
+    if (phoneData[0] != values.phoneNumber) {
+      if (!phoneData[0]) {
+        studentServices.createStudentPhone(
+          values.phoneNumber
+        )
+          .then(() => {
+            studentServices.getStudent(accountServices.userValue.account.id);
+            message.success({ title: "uWu", content: "Updated phone number!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "uWu", content: error });
+          });
+      }
+      else {
+        studentServices
+          .updateStudentPhone(
+            phoneData[0],
+            values.phoneNumber,
+          )
+          .then(() => {
+            studentServices.getStudent(accountServices.userValue.account.id);
+            message.success({ title: "uWu", content: "Added phone number!" });
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error({ title: "uWu", content: error });
+          });
+      }
+    }
+
+    if (emailData[0] != values.email) {
+      studentServices
+        .updateStudentEmail(
+          emailData[0],
+          values.email,
+        )
+        .then(() => {
+          message.success({ title: "\^o^/", content: "Updated email!" });
+        })
+        .catch((error) => {
+          console.log(error);
+          message.error({ title: "╯︿╰", content: error });
+        });
+    }
+
+
+  }
+  const onFinishChangePass = values => {
+    if (values.newPass !== values.confPass) {
+      Modal.error({ title: "╯︿╰", content: 'Password not match!' });
+    } else {
+      accountServices.changePassword(values.oldPass, values.newPass).then()
+        .then(() => {
+          Modal.success({ title: "\^o^/", content: "Change Password successfully!!!" });
+        })
+        .catch((error) => {
+          Modal.error({ title: "╯︿╰", content: error });
+        })
+    }
+  }
+
+
+  // let imgPreview;
+  // if (imageUrl!=null) {
+  //     imgPreview = <Avatar style={{width: 180, height: 180, marginBottom:10}} src={imageUrl} alt=''></Avatar>
+  // }
+  // else 
+  // {
+  //     imgPreview= <Avatar style={{width: 180, height: 180, marginBottom:10}} src={Config.backendUrl + basicProfileData.profile_picture} ></Avatar>
+  // }
+
+
+  return (
+    <Card style={{ marginTop: "10vh", minHeight: "60vh" }}>
+      <Tabs tabPosition="left" style={{ marginLeft: 24 }}>
+        <TabPane tab="Account information" key="1" style={{ marginTop: 20 }}>
+          <span style={{ fontWeight: "bold" }}>ACCOUNT INFORMATION</span>
+          <Row>
+
+            <Col span={10} offset={4}>
+              <Form
+                // ref={formRef}
+                form={formEditBasicInfo}
+                onFinish={editProfileStudent}
+                style={{ marginTop: 32 }}
+                initialValues={{
+                  firstName: basicProfileData.firstname,
+                  lastName: basicProfileData.lastname,
+                  gender: basicProfileData.gender,
+                  email: emailData[0],
+                  dateOfBirth: moment(basicProfileData.dateofbirth, dateFormat),
+                  phoneNumber: phoneData[0],
+                  description: basicProfileData.description
+                }}
+              >
+
+                <span>First Name</span>
+                <Form.Item name="firstName" >
+                  <Input></Input>
+                </Form.Item>
+                <span>Last Name</span>
+                <Form.Item name="lastName" >
+                  <Input></Input>
+                </Form.Item>
+
+                <span>Gender</span>
+                <Form.Item name="gender" >
+                  <Select style={{ width: "100%" }}>
+                    <Option value="Male">Male</Option>
+                    <Option value="Female">Female</Option>
+                    <Option value="Secret">Other</Option>
+                  </Select>
+                </Form.Item>
+
+                <span>Email</span>
+                <Form.Item name="email" >
+                  <Input ></Input>
+                </Form.Item>
+
+                <span>Date of birth</span>
+                <Form.Item name="dateOfBirth">
+                  <DatePicker style={{ width: "100%" }} format={dateFormat} />
+                </Form.Item>
+
+                <span>Phone Number</span>
+                <Form.Item name="phoneNumber"  >
+                  <Input />
+                </Form.Item>
+
+                <span>Short description</span>
+                <Form.Item name="description" >
+                  <Input />
+                </Form.Item>
+
+                <Button type="primary" htmlType="submit">Save</Button>
+              </Form>
+            </Col>
+            <Col span={10} style={{ textAlign: "center" }}>
+              <Space style={{ marginTop: 32 }} direction="vertical">
+                <Upload
+                  name="avatar"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                  onChange={handleChangeAvatar}
+                  customRequest={onUploadImage}
+                >
+                  <Avatar style={{ width: 180, height: 180, marginBottom: 10 }} src={imageUrl ? imageUrl : basicProfileData.profile_picture} alt=''></Avatar>
+                </Upload>
+              </Space>
+            </Col>
+          </Row>
+
+        </TabPane>
+        <TabPane tab="Change Password" key="3" style={{ marginTop: 20 }}   >
+          <span style={{ fontWeight: "bold" }}>CHANGE PASSWORD</span>
+          <Row>
+            <Col span={10} offset={4}>
+              <Form
+                onFinish={onFinishChangePass}
+                style={{ marginTop: 32 }} >
+                <span>Old Password</span>
+                <Form.Item name="oldPass" rules={[{ required: true, message: "Can't be blank" }]}>
+                  <Input.Password placeholder="Old Password"  ></Input.Password>
+                </Form.Item>
+
+                <span>New Password</span>
+                <Form.Item name="newPass" rules={[{ required: true, message: "Can't be blank" }]}>
+                  <Input.Password placeholder="New Password"  ></Input.Password>
+                </Form.Item>
+
+                <span>Confirm Password</span>
+                <Form.Item name="confPass" rules={[{ required: true, message: "Can't be blank" }]}>
+                  <Input.Password placeholder="Confirm password" ></Input.Password>
+                </Form.Item>
+
+                <Space>
+                  <Button type="primary" htmlType="submit" >Save</Button>
+                </Space>
+              </Form>
+            </Col>
+            <Col span={10}></Col>
+          </Row>
+        </TabPane>
+        <TabPane tab="Settings" key="2" style={{ marginTop: 20 }}>
+          <span style={{ fontWeight: "bold" }}>SETTINGS</span>
+          <Row style={{ marginTop: 56 }}>
+            <Col span={20} offset={4}>
+              <span>Notification</span>
+              <Switch style={{ position: 'absolute', right: 64 }} checkedChildren="ON" unCheckedChildren="OFF" defaultChecked onClick={changeDisabled} />
+            </Col>
+          </Row>
+        </TabPane>
+
+      </Tabs>
+    </Card>
+
+
+  );
+}
+
+export { ProfileEdit };

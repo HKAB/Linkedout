@@ -1,21 +1,41 @@
+import { Layout, Spin } from 'antd';
+import { MyHeader } from "components";
+import { ProfileTabCompany } from "profile/company/ProfileTabCompany";
+import { ProfileTabStudent } from "profile/student/ProfileTabStudent";
 import React from 'react';
+import { accountServices } from "services";
+import './assets/css/profile.css';
+import {
+  useParams
+} from 'react-router-dom'
 
-import { ProfileTab } from "@/profile/company/ProfileTab";
-import { ProfileSider } from "@/profile/student/ProfileSider";
-import { MyHeader } from "@/components"
-import { Layout } from 'antd';
 
+function Profile(props) {
+  const user = accountServices.userValue;
 
+  // let { defaultTab } = useParams();
+  // console.log(props.location.defaultTab);
 
-function Profile() {
-	return (
-		<Layout>
-			<MyHeader />
-			<Layout>
-				<ProfileSider />
-			</Layout>
-		</Layout>
-	);
+  var profileRender = (<Spin></Spin>);
+  if (user) {
+    if (user.account.account_type == "student")
+      profileRender = (<ProfileTabStudent />);
+    else
+      profileRender = (<ProfileTabCompany />);
+    return (
+      <Layout style={{minHeight: "100vh"}}>
+        <MyHeader />
+        <Layout>
+          {profileRender}
+          {/* <ProfileTabCompany /> */}
+          {/* <ProfileTabStudent /> */}
+        </Layout>
+      </Layout>
+    );
+  }
+  return (
+    <Spin></Spin>
+  );
 }
 
-export { Profile }
+export { Profile };

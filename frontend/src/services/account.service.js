@@ -1,26 +1,48 @@
-import { BehaviorSubject} from 'rxjs'
-
-import { fetchWrapper } from "@/helpers"
+import { fetchWrapper } from "helpers";
+import jwt from 'jsonwebtoken';
+import { BehaviorSubject } from 'rxjs';
+import { Config } from "../config/consts";
 
 const userSubject = new BehaviorSubject(null);
 
+
+
 function login(username, password) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/account/login`, {username, password})
-	.then(user => {
-		userSubject.next(user);
-		// start refresh token timer
-		return user;
-	})
+  return fetchWrapper.post(Config.backendUrl + `/api/account/login`, { username, password })
+    .then(user => {
+      userSubject.next(user);
+      // start refresh token timer
+      localStorage.setItem('user', JSON.stringify(user));
+      return user;
+    })
 }
 function register(username, email, password, account_type) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/account/register`, {username, password, email, account_type})
+  return fetchWrapper.post(Config.backendUrl + `/api/account/register`, { username, password, email, account_type })
 }
-function changePassword(current_password, new_password){
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/account/changepassword`, {current_password, new_password})
+function changePassword(current_password, new_password) {
+  return fetchWrapper.post(Config.backendUrl + `/api/account/changepassword`, { current_password, new_password })
+}
+function logout() {
+  userSubject.next(null);
+  localStorage.clear();
 }
 export const accountServices = {
-	changePassword,
-	login,
-	register,
-	get userValue () { return userSubject.value }
+  changePassword,
+  login,
+  logout,
+  register,
+  get userValue() {
+    var user = JSON.parse(localStorage.getItem('user'));
+
+    if (user) {
+      var decodedToken = jwt.decode(user.access_token, { complete: true });
+      if (decodedToken) {
+        var dateNow = new Date();
+        if (decodedToken.payload.exp * 1000 > dateNow.getTime()) {
+          return user
+        }
+      }
+    }
+    return userSubject.value
+  }
 }

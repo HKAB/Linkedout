@@ -10,13 +10,21 @@
     "antd": "^4.4.2",
     "babel-polyfill": "^6.26.0",
     "bizcharts": "^4.0.12",
+    "braft-editor": "^2.3.9",
     "braft-extensions": "^0.1.0",
     "dayjs": "^1.8.31",
-    "draft-js": "^0.11.6",
+    "draft-js": "^0.10.5",
+    "jsonwebtoken": "^8.5.1",
+    "rc-animate": "^3.1.0",
+    "rc-queue-anim": "^1.8.5",
+    "rc-scroll-anim": "^2.7.4",
     "react": "^16.13.1",
+    "react-autocomplete": "^1.8.1",
+    "react-avatar-edit": "^0.8.3",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-virtualized": "^9.22.2",
     "recharts": "^1.8.5"
   },
   "scripts": {
@@ -42,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.10.4",
     "babel-eslint": "^10.1.0"
   }
 }

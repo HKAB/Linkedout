@@ -1,0 +1,21 @@
+{
+  "service": {
+    "name": "backend",
+    "tags": [
+      "python",
+      "django",
+      "prod"
+    ],
+    "port": 8000,
+    "connect": {
+      "sidecar_service": {}
+    },
+    "check": {
+      "id": "backend",
+      "name": "backend TCP on port 8000",
+      "tcp": "localhost:8000",
+      "interval": "10s",
+      "timeout": "1s"
+    }
+  }
+}

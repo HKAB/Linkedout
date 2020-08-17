@@ -1,73 +1,97 @@
-import React from 'react'
-import { Component } from 'react';
-import { Layout, Menu, Button, Avatar, Dropdown} from 'antd';
-import '../components/assets/css/MyHeader.css'
-import logo from '../components/assets/images/logo.png'
-import {
-  QuestionCircleOutlined,BellOutlined,UserOutlined,SettingOutlined, LogoutOutlined
-} from '@ant-design/icons';
+import { FileSearchOutlined, HomeOutlined, LogoutOutlined, ProfileOutlined, UserOutlined } from '@ant-design/icons';
+import { Affix, Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from 'antd';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { accountServices, companyServices, studentServices } from "services";
+import { Config } from '../config/consts';
+import logo from '../home/assets/images/logo.svg';
+import "./assets/css/MyHeader.css";
 
-import { accountServices } from "@/services"
-
+const { Title } = Typography;
 const { Header, Content } = Layout;
-
 const menu = (
-    <Menu>
-        <Menu.Item key='4' icon={<UserOutlined/>}>Account</Menu.Item>
-        <Menu.Item key='5' icon={<SettingOutlined/>}>Settings</Menu.Item>
-        <Menu.Item key='6' style={{borderTop:'1px  solid #dbdbdb'}} icon={<LogoutOutlined/>}>Sign out</Menu.Item>
-    </Menu>
-    )
+  <Menu>
+    <Menu.Item key='1'><Link to={{ pathname: '/profile' }}><UserOutlined /> Account</Link></Menu.Item>
+    {/* <Menu.Item key='5' icon={<SettingOutlined />}><Link to={{pathname: '/profile'}}>Settings</Link></Menu.Item> */}
+    <Menu.Item key='2' style={{ borderTop: '1px  solid #dbdbdb' }} onClick={accountServices.logout}><Link to="/"><LogoutOutlined /> Sign out</Link> </Menu.Item>
+  </Menu>
+)
 
+var hasFeed = (<></>)
 class MyHeader extends Component {
-
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            account_data: {}
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      account_data: {},
+      avatar: ""
     }
+  }
 
-
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
+  componentDidMount() {
+    let user = accountServices.userValue;
+    if (user) {
+      this.setState({ account_data: user.account })
+      if (user.account.account_type == "student") {
+        studentServices.getStudent(user.account.id);
+        const subscription = studentServices.studentObject.subscribe((student) => {
+          if (student) {
+            this.setState({ avatar: Config.backendUrl + student.basic_data.profile_picture });
+          }
         });
-    };
-
-    componentDidMount() {
-        let user = accountServices.userValue;
-        if (user) {
-            this.setState({account_data: user.account})
-        }
-        else {
-          console.log("Oh no!");
-        }
+        hasFeed = <Button title="Feed" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/feed'><ProfileOutlined /></Link></Button>
+      }
+      else {
+        companyServices.getCompany(user.account.id);
+        const subscription = companyServices.companyObject.subscribe((company) => {
+          if (company) {
+            this.setState({ avatar: Config.backendUrl + company.basic_data.profile_picture });
+          }
+        });
+        hasFeed = <></>
       }
 
-	render(){
-		return(
-    <Header className="site-layout-background">
-      <div className="logo" style={{fontWeight:"bold"}}>
-          <img src={logo} style={{width:32, height:32, marginRight: 10, marginTop:-15}}></img>
-          THĂM NGÀN NETWORK
-      </div>
-		<span className="left-menu">
-		<Button type="text" style={{height: 64}}><QuestionCircleOutlined/></Button>
-			<Button type="text" style={{height: 64}}><BellOutlined/></Button>
-			<Dropdown overlay={menu} placement="bottomCenter"  icon={<UserOutlined />}>
-				<Button type="text" style={{height: 64}}>
-					<Avatar className="avatar-picture"/>
-                    <span className="username">{this.state.account_data.username}</span>
-				</Button>
-			</Dropdown>
-		</span>
-      
-    </Header>
-    
-			);
-	}
+    }
+    else {
+      console.log("Oh no!");
+    }
+  }
+
+  render() {
+    return (
+      <Affix offsetTop={0}>
+        <Header className="my-custom-header" style={{ backgroundColor: "#ffffff" }}>
+          {/* <div className="logo"> */}
+          <Space>
+            <Link to="/"><img src={logo} width="144" height="48" style={{ position: 'absolute', top: 8 }}></img></Link>
+            {/* <Title level={2} style={{ position: 'relative', top: 4 }}>LinkedOut</Title> */}
+          </Space>
+          {/* <Space>
+           
+            <Search
+            placeholder="Search St"
+            onSearch={value => console.log(value)}
+            style={{ width: 300, marginTop: 15, marginLeft: 30 }}
+            />
+          </Space> */}
+          {/* </div> */}
+          <span className="left-menu">
+            <Button title="Search" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/search'><FileSearchOutlined /></Link></Button>
+            <Button title="Home" type="text" style={{ height: 64, fontSize: "20px" }}><Link to='/'><HomeOutlined /></Link></Button>
+            {hasFeed}
+            <Button title="Profile" type="text" style={{ height: 64, fontSize: "20px" }}><Link to={{ pathname: '/profile', defaultTab: "Content" }}><UserOutlined /></Link></Button>
+            <Dropdown overlay={menu} placement="bottomCenter" icon={<UserOutlined />}>
+              <Button type="text" style={{ height: 64 }}>
+                {/* <Avatar size="large" className="avatar-picture" />
+                <span className="username">{this.state.account_data.username}</span> */}
+                <Avatar size="large" className="avatar-picture" className="username" src={this.state.avatar} alt=""></Avatar>
+              </Button>
+            </Dropdown>
+          </span>
+        </Header>
+      </Affix>
+    );
+  }
 }
 
 export { MyHeader };
+

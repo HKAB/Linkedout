@@ -8,6 +8,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.exceptions import ParseError
 from drf_yasg.utils import swagger_auto_schema
 
+from app.exceptions import InvalidInputFormat
 from app.models.company import Company
 from app.models.specialty import Specialty
 from app.services.company import get_company, create_company, update_company, set_profile_picture
@@ -21,7 +22,10 @@ class SpecialtyRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Specialty.objects.get(name=data)
+        try:
+            return Specialty.objects.get(name=data)
+        except:
+            raise ParseError('Specialty doesn\'t exist')
 
 
 class CompanyProfilePictureView(APIView):
@@ -53,7 +57,8 @@ class CompanyGetView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyGetOut'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'profile_picture',
+                      'specialties', 'description']
 
     permission_classes = [AllowAny]
     authentication_classes = []
@@ -77,7 +82,7 @@ class CompanyCreateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyCreateIn'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'specialties', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         specialties = SpecialtyRelatedField(
@@ -88,7 +93,8 @@ class CompanyCreateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyCreateOut'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'profile_picture',
+                      'specialties', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -97,7 +103,8 @@ class CompanyCreateView(APIView):
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = create_company(account=request.user, **serializer.validated_data)
+        result = create_company(account=request.user, **
+                                serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_201_CREATED)
 
 
@@ -111,7 +118,7 @@ class CompanyUpdateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyUpdateIn'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'specialties', 'description']
 
     class OutputSerializer(serializers.ModelSerializer):
         specialties = SpecialtyRelatedField(
@@ -122,7 +129,8 @@ class CompanyUpdateView(APIView):
         class Meta:
             model = Company
             ref_name = 'CompanyUpdateOut'
-            fields = ['name', 'website', 'profile_picture', 'specialties', 'description']
+            fields = ['name', 'website', 'profile_picture',
+                      'specialties', 'description']
 
     permission_classes = [IsAuthenticated]
 
@@ -131,5 +139,6 @@ class CompanyUpdateView(APIView):
     def put(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        result = update_company(account=request.user, **serializer.validated_data)
+        result = update_company(account=request.user, **
+                                serializer.validated_data)
         return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)

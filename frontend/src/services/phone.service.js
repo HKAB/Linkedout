@@ -1,32 +1,27 @@
-import { BehaviorSubject} from 'rxjs'
+import { fetchWrapper } from "helpers"
+import { Config } from '../config/consts'
 
-import { fetchWrapper } from "@/helpers"
-
-const phoneObject = new BehaviorSubject(null);
 
 function getPhone(id) {
-	return fetchWrapper.get(`http://127.0.0.1:8000/api/phone/list?id=${id}`)
-	.then(phone => {
-		phoneObject.next(phone);
-		return phone;
-	})
+  return fetchWrapper.get(Config.backendUrl + `/api/phone/list?id=${id}`)
 }
 
 function deletePhone(phone) {
-	return fetchWrapper._delete(`http://127.0.0.1:8000/api/phone/delete?phone=${phone}`)
+  return fetchWrapper.delete(Config.backendUrl + `/api/phone/delete`, { phone })
 }
 
 function createPhone(phone) {
-	return fetchWrapper.post(`http://127.0.0.1:8000/api/phone/create`, {phone})
+  return fetchWrapper.post(Config.backendUrl + `/api/phone/create`, { phone })
 }
 
-function updatePhone(old_phone, new_phone) {
-	return fetchWrapper.put(`http://127.0.0.1:8000/api/phone/update`, {old_phone, new_phone})
+function updatePhone(old_phone = "", new_phone) {
+  return fetchWrapper.put(Config.backendUrl + `/api/phone/update`, { old_phone, new_phone })
 }
 
 export {
-    getPhone,
-    deletePhone,
-    createPhone,
-    updatePhone
+  getPhone,
+  deletePhone,
+  createPhone,
+  updatePhone
 }
+

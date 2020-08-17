@@ -20,8 +20,8 @@ def create_company(*, account: Account, name: str, website: str, specialties: li
         raise InvalidInputFormat(
             "Account {} already has a company account.".format(account.id))
     c = Company(account=account, name=name, website=website, **kwargs)
-    c.specialties.add(*specialties)
     c.save()
+    c.specialties.add(*specialties)
     return c
 
 
@@ -30,6 +30,7 @@ def update_company(*, account: Account, name: str, website: str, specialties: li
     company_exist(account.id)
     c = Company.objects.filter(account=account)
     c.update(account=account, name=name, website=website, **kwargs)
+    c.first().specialties.clear()
     c.first().specialties.add(*specialties)
     return c.first()
 

@@ -5,3 +5,5 @@ mysqlclient
 djangorestframework
 django-cors-headers
 drf-yasg
+django-prometheus
+django-baton

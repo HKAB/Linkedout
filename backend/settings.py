@@ -27,12 +27,13 @@ SECRET_KEY = os.environ['DJANGO_CONFIG_SECRETKEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,9 +44,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'drf_yasg',
+    'django_prometheus',
+    'baton.autodiscover',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -89,7 +94,7 @@ CORS_ORIGIN_WHITELIST = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django_prometheus.db.backends.mysql',
         'NAME': os.environ['DJANGO_DATABASE_NAME'],
         'HOST': os.environ['DJANGO_DATABASE_HOST'],
         'USER': os.environ['DJANGO_DATABASE_USER'],
@@ -134,7 +139,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/backendstatic/'
 
 # rest_framework
 
@@ -147,5 +152,49 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES ': (
         'rest_framework.parsers.JSONParser',
+    ),
+}
+
+BATON = {
+    'SITE_HEADER': '<img src="https://i.imgur.com/RCeabui.png" width="180">',
+    'SITE_TITLE': 'LinkedOut',
+    'INDEX_TITLE': 'Site administration',
+    'SUPPORT_HREF': 'mailto:khoahockithuatmc@gmail.com',
+    'COPYRIGHT': 'Copyright © 2020 LinkedOut</a>',  # noqa
+    'POWERED_BY': '<a href="https://www.otto.to.it">Otto srl</a>',
+    'CONFIRM_UNSAVED_CHANGES': True,
+    'SHOW_MULTIPART_UPLOADING': True,
+    'ENABLE_IMAGES_PREVIEW': True,
+    'CHANGELIST_FILTERS_IN_MODAL': True,
+    'MENU_ALWAYS_COLLAPSED': False,
+    'MENU_TITLE': 'Menu',
+    'GRAVATAR_DEFAULT_IMG': 'identicon',
+    'MENU': (
+        {'type': 'title', 'label': 'main', 'apps': ('auth', )},
+        {
+            'type': 'app',
+            'name': 'auth',
+            'label': 'Authentication',
+            'icon': 'fa fa-lock',
+            'models': (
+                {
+                    'name': 'user',
+                    'label': 'Users'
+                },
+                {
+                    'name': 'group',
+                    'label': 'Groups'
+                },
+            )
+        },
+        # { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
+        # { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
+        # { 'type': 'free', 'label': 'Relax', 'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
+        # {'type': 'free', 'label': 'Relaxing', 'default_open': False, 'icon': 'fa fa-puzzle-piece', 'children': [
+        #     {'type': 'free', 'label': 'Tetris',
+        #         'url': 'https://tetris.com/play-tetris/'},
+        #     {'type': 'free', 'label': 'Guess what is this',
+        #         'url': 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'},
+        # ]},
     ),
 }

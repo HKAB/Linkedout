@@ -5,12 +5,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.parsers import MultiPartParser
+from rest_framework.exceptions import ParseError
 
-from app.services.post import list_post, create_post, update_post, delete_post
-from app.utils import inline_serializer
+from app.models.skill import Skill
+from app.models.post import Post
+from app.services.post import list_post, get_post, create_post, update_post, delete_post, set_post_picture
 
-'''
-class StudentRelatedField(serializers.RelatedField):
+
+class SkillRelatedField(serializers.RelatedField):
     def display_value(self, instance):
         return instance
 
@@ -18,8 +21,10 @@ class StudentRelatedField(serializers.RelatedField):
         return str(value)
 
     def to_internal_value(self, data):
-        return Student.objects.get(name=data)
-'''
+        try:
+            return Skill.objects.get(name=data)
+        except:
+            raise ParseError('Skill doesn\'t exist')
 
 
 class PostListView(APIView):
@@ -30,16 +35,14 @@ class PostListView(APIView):
             ref_name = 'PostListIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.Serializer):
-        id = serializers.IntegerField()
-        content = serializers.CharField()
-        published_date = serializers.DateField()
-        interested_students = serializers.ListField()
-        # interested_students=StudentRelatedField(queryset=Student.objects.all(),many=True)
+    class OutputSerializer(serializers.ModelSerializer):
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
         class Meta:
+            model = Post
             ref_name = 'PostListOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
+
     permission_classes = [AllowAny]
     authentication_classes = []
 
@@ -52,25 +55,50 @@ class PostListView(APIView):
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
 
 
-class PostCreateView(APIView):
+class PostGetView(APIView):
     class InputSerializer(serializers.Serializer):
-        content = serializers.CharField(required=True)
-        published_date = serializers.DateField(required=True)
-        interested_students = serializers.ListField()
+        id = serializers.IntegerField(required=True)
 
         class Meta:
+            ref_name = 'PostGetIn'
+            fields = ['id']
+
+    class OutputSerializer(serializers.ModelSerializer):
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
+
+        class Meta:
+            model = Post
+            ref_name = 'PostGetOut'
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
+
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    @swagger_auto_schema(query_serializer=InputSerializer, responses={200: OutputSerializer})
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request):
+        serializer = self.InputSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        result = get_post(**serializer.validated_data)
+        return Response(self.OutputSerializer(result).data, status=status.HTTP_200_OK)
+
+
+class PostCreateView(APIView):
+    class InputSerializer(serializers.ModelSerializer):
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
+
+        class Meta:
+            model = Post
             ref_name = 'PostCreateIn'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            fields = ['title', 'content', 'skills']
 
-    class OutputSerializer(serializers.Serializer):
-        id = serializers.IntegerField()
-        content = serializers.CharField()
-        published_date = serializers.DateField()
-        interested_students = serializers.ListField()
+    class OutputSerializer(serializers.ModelSerializer):
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
         class Meta:
+            model = Post
             ref_name = 'PostCreateOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
 
     permission_classes = [IsAuthenticated]
 
@@ -84,27 +112,23 @@ class PostCreateView(APIView):
 
 
 class PostUpdateView(APIView):
-    class InputSerializer(serializers.Serializer):
+    class InputSerializer(serializers.ModelSerializer):
         id = serializers.IntegerField(required=True)
-        post = inline_serializer(fields={
-            'content': serializers.CharField(required=True),
-            'published_date': serializers.DateField(required=True),
-            'interested_students': serializers.ListField(required=True),
-        })
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
         class Meta:
+            model = Post
             ref_name = 'PostUpdateIn'
-            fields = ['id', 'post']
+            fields = ['id', 'title', 'content', 'skills']
 
-    class OutputSerializer(serializers.Serializer):
-        id = serializers.IntegerField()
-        content = serializers.CharField()
-        published_date = serializers.DateField()
-        interested_students = serializers.ListField()
+    class OutputSerializer(serializers.ModelSerializer):
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
         class Meta:
-            ref_name = 'PostUpdateOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            model = Post
+            ref_name = 'PostCreateOut'
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
+
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer(many=True)})
@@ -124,15 +148,14 @@ class PostDeleteView(APIView):
             ref_name = 'PostDeleteIn'
             fields = ['id']
 
-    class OutputSerializer(serializers.Serializer):
-        id = serializers.IntegerField()
-        content = serializers.CharField()
-        published_date = serializers.DateField()
-        interested_students = serializers.ListField()
+    class OutputSerializer(serializers.ModelSerializer):
+        skills = SkillRelatedField(queryset=Skill.objects.all(), many=True)
 
         class Meta:
-            ref_name = 'PostDeleteOut'
-            fields = ['id', 'content', 'published_date', 'interested_students']
+            model = Post
+            ref_name = 'PostCreateOut'
+            fields = ['id', 'title', 'content', 'published_date', 'post_picture', 'skills']
+
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=InputSerializer, responses={200: OutputSerializer(many=True)})
@@ -142,3 +165,14 @@ class PostDeleteView(APIView):
         serializer.is_valid(raise_exception=True)
         result = delete_post(account=request.user, **serializer.validated_data)
         return Response(self.OutputSerializer(result, many=True).data, status=status.HTTP_200_OK)
+
+class PostPictureView(APIView):
+    parser_classes = (MultiPartParser,)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            set_post_picture(request.user, request.data['id'], request.data['file'])
+        except KeyError:
+            raise ParseError("'file' and/or 'id' field missing.")
+        return Response("Uploaded.", status=status.HTTP_201_CREATED)

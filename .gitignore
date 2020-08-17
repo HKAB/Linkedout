@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/django,react
-# Edit at https://www.toptal.com/developers/gitignore?templates=django,react
+# Created by https://www.toptal.com/developers/gitignore/api/react,django
+# Edit at https://www.toptal.com/developers/gitignore?templates=react,django
 
 ### Django ###
 *.log
@@ -68,6 +68,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+pytestdebug.log
 
 # Translations
 *.mo
@@ -83,6 +84,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+doc/_build/
 
 # PyBuilder
 target/
@@ -123,6 +125,8 @@ ENV/
 env.bak/
 venv.bak/
 
+!frontend/.env
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -159,7 +163,8 @@ psd
 thumb
 sketch
 
-# End of https://www.toptal.com/developers/gitignore/api/django,react
+# End of https://www.toptal.com/developers/gitignore/api/react,django
+
 
 # vscode stuff
 .vscode
@@ -168,6 +173,26 @@ sketch
 app/migrations/0*
 
 # media
-!media
-media/
-!media/profile/default.jpg
+#!media
+#media/
+#!media/profile/default.jpg
+#!media/post/default.jpg
+#!media/job/default.jpg
+#!media/icon/skill_default.jpg
+
+!/media/
+media/*
+
+!media/profile
+media/profile/*
+!media/profile/student_default_male.jpg
+!media/profile/student_default_female.jpg
+!media/profile/company_default.jpg
+
+!media/post
+media/post/*
+!media/post/default.jpg
+
+!media/job
+media/job/*
+!media/job/default.jpg

@@ -1,0 +1,34 @@
+{
+  "service": {
+    "name": "nginx",
+    "tags": [
+      "gateway",
+      "nginx",
+      "prod"
+    ],
+    "port": 80,
+    "connect": {
+      "sidecar_service": {
+        "proxy": {
+          "upstreams": [
+            {
+              "destination_name": "frontend",
+              "local_bind_port": 5000
+            },
+            {
+              "destination_name": "backend",
+              "local_bind_port": 5001
+            }
+          ]
+        }
+      }
+    },
+    "check": {
+      "id": "nginx",
+      "name": "nginx TCP on port 80",
+      "tcp": "localhost:80",
+      "interval": "10s",
+      "timeout": "1s"
+    }
+  }
+}

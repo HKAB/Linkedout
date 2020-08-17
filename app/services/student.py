@@ -1,8 +1,8 @@
 import os
 
+from app.exceptions import InvalidInputFormat
 from app.models.account import Account
 from app.models.student import Student
-from app.exceptions import InvalidInputFormat
 from backend.settings import MEDIA_ROOT
 
 
@@ -14,23 +14,31 @@ def get_student(*, id: int) -> Student:
     return s
 
 
-def create_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, **kwargs) -> Student:
+def create_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, gender: str, **kwargs) -> Student:
     student_account_check(account)
     if student_exist(account.id, raise_exception=False):
         raise InvalidInputFormat(
             "Account {} already has a student.".format(account.id))
+    profile_picture = None
+    if gender.lower() == "male":
+        profile_picture = 'profile/student_default_male.jpg'
+    elif gender.lower() == "female":
+        profile_picture = 'profile/student_default_female.jpg'
+    else:
+        profile_picture = 'profile/student_default_male.jpg'
+        print("Gender {} ???".format(gender))
     s = Student(account=account, firstname=firstname, lastname=lastname,
-                dateofbirth=dateofbirth, **kwargs)
+                dateofbirth=dateofbirth, gender=gender, profile_picture=profile_picture, **kwargs)
     s.save()
     return s
 
 
-def update_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, **kwargs) -> Student:
+def update_student(*, account: Account, firstname: str, lastname: str, dateofbirth: str, gender: str, **kwargs) -> Student:
     student_account_check(account)
     student_exist(account.id)
     s = Student.objects.filter(account=account)
-    s.update(account=account, firstname=firstname,
-             lastname=lastname, dateofbirth=dateofbirth, **kwargs)
+    s.update(account=account, firstname=firstname, lastname=lastname,
+             dateofbirth=dateofbirth, gender=gender, **kwargs)
     return s.first()
 
 
