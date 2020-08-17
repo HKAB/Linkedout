@@ -3,7 +3,7 @@ import { Avatar, Button, Card, Col, Empty, List, message, Modal, Row, Spin, Time
 import Meta from 'antd/lib/card/Meta';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { accountServices, followService, studentServices } from "services";
 import { Config } from "../../config/consts";
 import { dateHelper } from '../../helpers/date';
@@ -100,11 +100,11 @@ function ProfileContent(props) {
         studentServices.getStudent(user.account.id).then(() => {
           setIsLoading(false);
         })
-        .catch(() => {
-          setIsLoading(true);
-          message.error("Plz enter basic information!")
-          history.push("/create-profile");
-        });
+          .catch(() => {
+            setIsLoading(true);
+            message.error("Plz enter basic information!")
+            history.push("/create-profile");
+          });
 
         const subscription = studentServices.studentObject.subscribe((student) => {
           if (student) {
@@ -203,9 +203,9 @@ function ProfileContent(props) {
                   <List.Item.Meta
                     avatar={<a href={"/profile/company/" + item.id}><Avatar src={Config.backendUrl + item.profile_picture} /></a>}
                     title={<a href={"/profile/company/" + item.id}>{item.name}</a>}
-                    description={<div style={{ position: 'relative', marginTop: -12 }} className="company-info" id={item.id}>
-                      <div>{item.description}</div>
-                    </div>}
+                  // description={<div style={{ position: 'relative', marginTop: -12 }} className="company-info" id={item.id}>
+                  //   <div>{item.description}</div>
+                  // </div>}
                   />
                 </List.Item>
               )}
@@ -339,9 +339,9 @@ function ProfileContent(props) {
               <List.Item.Meta
                 avatar={<a href={"/profile/company/" + item.id}><Avatar src={Config.backendUrl + item.profile_picture} /></a>}
                 title={<a href={"/profile/company/" + item.id}>{item.name}</a>}
-                description={<div className="company-info" id={item.id}>
-                  <div>{item.description}</div>
-                </div>}
+              // description={<div className="company-info" id={item.id}>
+              //   <div>{item.description}</div>
+              // </div>}
               />
             </List.Item>
           )}
