@@ -28,7 +28,7 @@ def get_feed(*, account: Account) -> list:
 
     feed = list(sorted(chain(job_list, post_list),
                        key=lambda instance: instance.published_date, reverse=True))
-    feed = list(dict.fromkeys(list))
+    feed = list(dict.fromkeys(feed))
     return feed
 
 
