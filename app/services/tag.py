@@ -18,7 +18,7 @@ def get_skill_tag(*, query: str) -> dict:
     tag_contain_query = [s.name for s in tmp]
 
     return {
-        'tag': (tag_startwith_query + tag_contain_query)[:10]
+        'tag': (tag_startwith_query + tag_contain_query)
     }
 
 
@@ -32,7 +32,7 @@ def get_title_tag(*, query: str) -> dict:
     tag_contain_query = [t.name for t in temp]
 
     return {
-        'tag': (tag_startwith_query + tag_contain_query)[:10]
+        'tag': (tag_startwith_query + tag_contain_query)
     }
 
 
@@ -45,7 +45,7 @@ def get_school_tag(*, query: str) -> list:
         Q(name__icontains=q) & ~Q(name__istartswith=q))
     tag_contain_query = [{'name': t.name} for t in temp]
 
-    return (tag_startwith_query + tag_contain_query)[:10]
+    return (tag_startwith_query + tag_contain_query)
 
 
 def get_company_tag(*, query: str) -> dict:
@@ -59,7 +59,7 @@ def get_company_tag(*, query: str) -> dict:
     tag_contain_query = [
         {'name': t.name, 'logo': t.profile_picture} for t in temp]
 
-    return (tag_startwith_query + tag_contain_query)[:10]
+    return (tag_startwith_query + tag_contain_query)
 
 
 def get_specialty_tag(*, query: str) -> dict:
@@ -72,7 +72,7 @@ def get_specialty_tag(*, query: str) -> dict:
     tag_contain_query = [s.name for s in temp]
 
     return {
-        'tag': (tag_startwith_query + tag_contain_query)[:10]
+        'tag': (tag_startwith_query + tag_contain_query)
     }
 
 
@@ -86,5 +86,5 @@ def get_location_tag(*, query: str) -> dict:
     tag_contain_query = [s.name for s in temp]
 
     return {
-        'tag': (tag_startwith_query + tag_contain_query)[:10]
+        'tag': (tag_startwith_query + tag_contain_query)
     }
