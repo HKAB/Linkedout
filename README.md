@@ -37,7 +37,7 @@ Truy cập http://localhost/ để sử dụng trang web.
 ![sample.gif](sample.gif)
 
 Ngoài ra người dùng có thể truy cập một số dịch vụ khác.
-- MySQL Server: `localhost:3307`
+- MySQL Server: `localhost:3307` (tài khoản và mật khẩu `backend:backend`)
 - Consul Dashboard: http://localhost:8500/
 - Prometheus + Grafana Dashboard: http://localhost:8002/ (tài khoản và mật khẩu mặc định: `admin:admin`)
 - Admin UI: http://localhost/admin
@@ -46,7 +46,7 @@ Ngoài ra người dùng có thể truy cập một số dịch vụ khác.
 
 Có thể sử dụng dữ liệu mẫu tại đây: [Data-sample.sql](https://drive.google.com/file/d/1I3WYE6YC5bnQ2MvwNN2rMTv5WU2_apxo/view?usp=sharing)
 
-Import dữ liệu trên vào MySQL Server thông qua `localhost:3307`, database schema là `backend`.
+Import dữ liệu trên vào MySQL Server thông qua `localhost:3307`, database schema là `backend`, tài khoản và mật khẩu `backend:backend`.
 
 Trong bộ dữ liệu mẫu có:
 - 6 tài khoản sinh viên: `student1` - `student6`, mật khẩu giống tên tài khoản.
