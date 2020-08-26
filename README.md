@@ -34,7 +34,7 @@ sudo docker-compose up -d
 Truy cập http://localhost/ để sử dụng trang web.
 
 
-[![homede30fa302c51c609.gif](https://s7.gifyu.com/images/homede30fa302c51c609.gif)](https://gifyu.com/image/cOFY)
+![homede30fa302c51c609.gif](https://s7.gifyu.com/images/homede30fa302c51c609.gif)
 
 Ngoài ra người dùng có thể truy cập một số dịch vụ khác.
 - MySQL Server: `localhost:3307`
