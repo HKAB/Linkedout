@@ -5,7 +5,7 @@ services:
     image: consul:latest
     ports:
       - "8500:8500"
-      - "8600:8600"
+      # - "8600:8600"
     volumes:
       - "./deployment/consul-server/server.json:/consul/config/server.json"
     command:
@@ -36,8 +36,8 @@ services:
 
   frontend:
     build: ./frontend
-    ports:
-      - "3000:80"
+    # ports:
+    #   - "3000:80"
     volumes:
       - "./frontend/consul:/consul/config"
       - "./frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf"
@@ -46,8 +46,8 @@ services:
 
   backend:
     build: .
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     volumes:
       - "./media:/app/media"
     environment:

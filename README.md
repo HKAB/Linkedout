@@ -1,59 +1,55 @@
-# summer-weeb-1920H_PTUDW
+# Bài tập Phát Triển Ứng Dụng Web (INT3306 30)
 
-Project for 1920H_PTUDW class
+## Cài đặt và chạy
 
-## Backend
+### 1. Cài đặt
 
-### Prepare Database (MySql)
+Cài đặt `docker` và `docker-compose`.
 
-Install MySql database, then create database and grant permissions.
-
-```sql
-CREATE DATABASE backend CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-CREATE USER 'backend'@'%' IDENTIFIED BY 'backend';
-GRANT ALL PRIVILEGES ON backend.* TO 'backend'@'%';
-FLUSH PRIVILEGES;
-```
-
-### Prepare environment for backend application
-
-On Linux
-
+Linux (Debian based):
 ```bash
-export DJANGO_DATABASE_HOST="localhost"
-export DJANGO_DATABASE_NAME="backend"
-export DJANGO_DATABASE_USER="backend"
-export DJANGO_DATABASE_PASSWORD="backend"
-export DJANGO_CONFIG_SECRETKEY="ihateyou"
+apt install docker.io docker-compose
+```
+Windows:
+
+Cài đặt `Docker Desktop` dựa trên `wsl` hoặc `wsl2` theo [hướng dẫn](https://docs.docker.com/docker-for-windows/install/).
+
+### 2. Chạy
+
+Clone project từ github
+
+```
+git clone https://github.com/HKAB/summer-weeb-1920H_PTUDW
 ```
 
-On Windows
+Chạy project bằng `docker-compose`
 
-Go to Search -> type "env" -> `Edit the system environment variables` -> `Environment Variables...` -> `New...` -> Add the 5 variables above.
-
-### Installing dependencies
-
-```bash
-python -m pip install -r requirements.txt
+```
+cd summer-weeb-1920H_PTUDW
+sudo docker-compose up -d
 ```
 
-### Database migration
+## Sử dụng
 
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### Create superuser account for admin site
-
-```bash
-python manage.py createsuperuser
-```
-You will be prompted to enter a username, email address, and strong password.
+Truy cập http://localhost/ để sử dụng trang web.
 
 
-### Running backend service
+[![homede30fa302c51c609.gif](https://s7.gifyu.com/images/homede30fa302c51c609.gif)](https://gifyu.com/image/cOFY)
 
-```bash
-python manage.py runserver
-```
+Ngoài ra người dùng có thể truy cập một số dịch vụ khác.
+- MySQL Server: `localhost:3307`
+- Consul Dashboard: http://localhost:8500/
+- Prometheus + Grafana Dashboard: http://localhost:8002/ (tài khoản và mật khẩu mặc định: `admin:admin`)
+- Admin UI: http://localhost/admin
+
+## Dữ liệu mẫu
+
+Có thể sử dụng dữ liệu mẫu tại đây: [Data-sample.sql](https://drive.google.com/file/d/1I3WYE6YC5bnQ2MvwNN2rMTv5WU2_apxo/view?usp=sharing)
+
+Import dữ liệu trên vào MySQL Server thông qua `localhost:3307`, database schema là `backend`.
+
+Trong bộ dữ liệu mẫu có:
+- 6 tài khoản sinh viên: `student1` - `student6`, mật khẩu giống tên tài khoản.
+- 3 tài khoản doanh nghiệp: `company7` - `company9`, mật khẩu giống tên tài khoản.
+- Các tags về `Kỹ năng`, `Địa điểm`, `Trường Đại học`.
+- Tài khoản quản trị: `admin:admin` (Đăng nhập tại http://localhost/admin)
