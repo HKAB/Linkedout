@@ -1,5 +1,5 @@
 FROM consul
-FROM envoyproxy/envoy-alpine:v1.14.1
+FROM envoyproxy/envoy-alpine:v1.20.0
 FROM python:3.8
 
 WORKDIR /app

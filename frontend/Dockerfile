@@ -13,7 +13,7 @@ RUN npm run build
 FROM nginx
 
 COPY --from=consul /bin/consul /usr/local/bin/consul
-COPY --from=envoyproxy/envoy-alpine:v1.14.1 /usr/local/bin/envoy /usr/local/bin/envoy
+COPY --from=envoyproxy/envoy-alpine:v1.20.0 /usr/local/bin/envoy /usr/local/bin/envoy
 
 RUN apt update && \
     apt install -y prometheus-node-exporter
