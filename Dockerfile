@@ -8,6 +8,8 @@ COPY --from=1 /usr/local/bin/envoy /usr/local/bin/envoy
 COPY ./requirements.txt /app/requirements.txt
 RUN ["pip", "install", "-r", "requirements.txt"]
 
+EXPOSE 8000
+
 COPY ./consul /consul/config
 COPY ./backend /app/backend
 COPY ./app /app/app

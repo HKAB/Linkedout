@@ -1,9 +1,9 @@
-django
-pyjwt
-pillow
-mysqlclient
-djangorestframework==3.11.0
-django-cors-headers
-drf-yasg
+django==3.1
+pyjwt==1.7.1
+pillow==7.2.0
+mysqlclient==2.0.1
+djangorestframework==3.11.1
+django-cors-headers==3.4.0
+drf-yasg==1.17.1
 django-prometheus==2.1.0
-django-baton
+django-baton==1.10.8
